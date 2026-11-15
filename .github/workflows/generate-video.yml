@@ -25,10 +25,10 @@ on:
         description: 'LLM that writes the scene code'
         required: true
         type: choice
-        default: openrouter
-        options: [openrouter, openai, anthropic]
+        default: gemini
+        options: [gemini, mistral, cerebras, openrouter, openai, anthropic]
       model:
-        description: 'Model override (defaults: openrouter anthropic/claude-sonnet-4, openai gpt-4.1, anthropic claude-sonnet-4-20250514)'
+        description: 'Model override (defaults: gemini-2.5-flash, mistral-large-latest, qwen-3-coder-480b, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
         required: false
         type: string
       notes:
@@ -93,6 +93,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
           NOTES: ${{ inputs.notes }}
       - name: Upload story bundle
         uses: actions/upload-artifact@v4

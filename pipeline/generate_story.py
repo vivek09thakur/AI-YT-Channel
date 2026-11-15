@@ -17,14 +17,25 @@ except ImportError:
 import requests
 
 HERE = Path(__file__).parent
-DEFAULT_MODEL = {'openai': 'gpt-4.1', 'anthropic': 'claude-sonnet-4-20250514', 'openrouter': 'anthropic/claude-sonnet-4'}
-# OpenAI-compatible chat/completions endpoints
+DEFAULT_MODEL = {
+    'gemini': 'gemini-2.5-flash',                 # free tier via Google AI Studio
+    'mistral': 'mistral-large-latest',            # free "experiment" tier on La Plateforme
+    'cerebras': 'qwen-3-coder-480b',              # free tier, fast
+    'openrouter': 'anthropic/claude-sonnet-4',    # paid unless model ends with :free
+    'openai': 'gpt-4.1',
+    'anthropic': 'claude-sonnet-4-20250514',
+}
+# OpenAI-compatible chat/completions endpoints: provider -> (url, env var with the key, extra headers)
 OPENAI_COMPAT = {
+    'gemini': ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'GEMINI_API_KEY', {}),
+    'mistral': ('https://api.mistral.ai/v1/chat/completions', 'MISTRAL_API_KEY', {}),
+    'cerebras': ('https://api.cerebras.ai/v1/chat/completions', 'CEREBRAS_API_KEY', {}),
     'openai': ('https://api.openai.com/v1/chat/completions', 'OPENAI_API_KEY', {}),
     'openrouter': ('https://openrouter.ai/api/v1/chat/completions', 'OPENROUTER_API_KEY',
                    {'HTTP-Referer': 'https://github.com/vivek09thakur/AI-YT-Channel', 'X-Title': 'AI-YT-Channel'}),
 }
-NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invalid_api_key', 'Insufficient credits')
+NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invalid_api_key', 'Insufficient credits',
+            'API_KEY_INVALID', 'PERMISSION_DENIED')
 FILE_RE = re.compile(r'^=== FILE: (\S+) ===\s*$', re.M)
 
 
@@ -174,7 +185,7 @@ def main():
     ap.add_argument('--narration', required=True)
     ap.add_argument('--kit', required=True)
     ap.add_argument('--slug', required=True)
-    ap.add_argument('--provider', default='openai', choices=['openai', 'anthropic', 'openrouter'])
+    ap.add_argument('--provider', default='gemini', choices=list(DEFAULT_MODEL))
     ap.add_argument('--model', default='')
     ap.add_argument('--notes', default='', help='extra style/story notes from the user')
     ap.add_argument('--attempts', type=int, default=3)
