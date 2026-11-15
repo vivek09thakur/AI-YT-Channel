@@ -5,7 +5,7 @@ building the pages and running headless-Chrome frame tests; errors are fed back 
     python pipeline/generate_story.py --topic "Shiva: the Neelkanth" --narration work/narration.json \
         --kit .github/skills/shorts-story-video/shadow-puppet-kit --slug shiva-neelkanth --provider openai
 
-Env: OPENAI_API_KEY or ANTHROPIC_API_KEY (per --provider). Prints token usage per call.
+Env: OPENAI_API_KEY, ANTHROPIC_API_KEY or OPENROUTER_API_KEY (per --provider). Prints token usage per call.
 """
 import argparse, json, os, re, shutil, subprocess, sys, time
 from pathlib import Path
@@ -17,7 +17,14 @@ except ImportError:
 import requests
 
 HERE = Path(__file__).parent
-DEFAULT_MODEL = {'openai': 'gpt-4.1', 'anthropic': 'claude-sonnet-4-20250514'}
+DEFAULT_MODEL = {'openai': 'gpt-4.1', 'anthropic': 'claude-sonnet-4-20250514', 'openrouter': 'anthropic/claude-sonnet-4'}
+# OpenAI-compatible chat/completions endpoints
+OPENAI_COMPAT = {
+    'openai': ('https://api.openai.com/v1/chat/completions', 'OPENAI_API_KEY', {}),
+    'openrouter': ('https://openrouter.ai/api/v1/chat/completions', 'OPENROUTER_API_KEY',
+                   {'HTTP-Referer': 'https://github.com/vivek09thakur/AI-YT-Channel', 'X-Title': 'AI-YT-Channel'}),
+}
+NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invalid_api_key', 'Insufficient credits')
 FILE_RE = re.compile(r'^=== FILE: (\S+) ===\s*$', re.M)
 
 
@@ -34,14 +41,21 @@ def call_llm(provider, model, system, messages, max_tokens):
     """messages: [{'role': 'user'|'assistant', 'content': str}] -> (text, usage dict)."""
     for attempt in range(4):
         try:
-            if provider == 'openai':
-                r = requests.post('https://api.openai.com/v1/chat/completions', timeout=600,
-                                  headers={'Authorization': f'Bearer {os.environ["OPENAI_API_KEY"]}'},
+            if provider in OPENAI_COMPAT:
+                url, key, extra = OPENAI_COMPAT[provider]
+                if not os.environ.get(key):
+                    sys.exit(f'{key} is not set (needed for --provider {provider})')
+                r = requests.post(url, timeout=600,
+                                  headers={'Authorization': f'Bearer {os.environ[key]}', **extra},
                                   json={'model': model, 'temperature': 0.4, 'max_tokens': max_tokens,
                                         'messages': [{'role': 'system', 'content': system}] + messages})
                 r.raise_for_status(); j = r.json()
+                if 'error' in j:  # OpenRouter can return 200 with an error body
+                    sys.exit(f'LLM error: {json.dumps(j["error"])[:500]}')
                 return j['choices'][0]['message']['content'], j.get('usage', {})
             if provider == 'anthropic':
+                if not os.environ.get('ANTHROPIC_API_KEY'):
+                    sys.exit('ANTHROPIC_API_KEY is not set')
                 r = requests.post('https://api.anthropic.com/v1/messages', timeout=600,
                                   headers={'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01'},
                                   json={'model': model, 'max_tokens': max_tokens, 'temperature': 0.4, 'system': system, 'messages': messages})
@@ -51,7 +65,8 @@ def call_llm(provider, model, system, messages, max_tokens):
             sys.exit(f'unknown provider {provider}')
         except requests.HTTPError as e:
             body = e.response.text[:500]
-            if e.response.status_code in (429, 500, 502, 503, 529) and attempt < 3:
+            retryable = e.response.status_code in (429, 500, 502, 503, 529) and not any(k in body for k in NO_RETRY)
+            if retryable and attempt < 3:
                 wait = 20 * (attempt + 1); print(f'  {e.response.status_code}, retry in {wait}s: {body}', file=sys.stderr); time.sleep(wait); continue
             sys.exit(f'LLM error {e.response.status_code}: {body}')
         except requests.RequestException as e:
@@ -159,7 +174,7 @@ def main():
     ap.add_argument('--narration', required=True)
     ap.add_argument('--kit', required=True)
     ap.add_argument('--slug', required=True)
-    ap.add_argument('--provider', default='openai', choices=['openai', 'anthropic'])
+    ap.add_argument('--provider', default='openai', choices=['openai', 'anthropic', 'openrouter'])
     ap.add_argument('--model', default='')
     ap.add_argument('--notes', default='', help='extra style/story notes from the user')
     ap.add_argument('--attempts', type=int, default=3)

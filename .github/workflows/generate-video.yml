@@ -25,10 +25,10 @@ on:
         description: 'LLM that writes the scene code'
         required: true
         type: choice
-        default: openai
-        options: [openai, anthropic]
+        default: openrouter
+        options: [openrouter, openai, anthropic]
       model:
-        description: 'Model override (default gpt-4.1 / claude-sonnet-4-20250514)'
+        description: 'Model override (defaults: openrouter anthropic/claude-sonnet-4, openai gpt-4.1, anthropic claude-sonnet-4-20250514)'
         required: false
         type: string
       notes:
@@ -92,6 +92,7 @@ jobs:
           CI: 'true'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           NOTES: ${{ inputs.notes }}
       - name: Upload story bundle
         uses: actions/upload-artifact@v4

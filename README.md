@@ -5,13 +5,13 @@ Turns a topic + narration script into two finished story videos (YouTube 16:9 an
 ## How to generate a video
 
 1. Add repository secrets (Settings → Secrets and variables → Actions):
-   - `OPENAI_API_KEY` and/or `ANTHROPIC_API_KEY` (whichever provider you pick at run time)
+   - `OPENROUTER_API_KEY` (default provider; any model on [openrouter.ai](https://openrouter.ai), e.g. `anthropic/claude-sonnet-4`, `openai/gpt-4.1`, `google/gemini-2.5-pro`) and/or `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` for direct access
    - optional `AZURE_SPEECH_KEY` + variable `AZURE_SPEECH_REGION` for Azure neural voices; without them the free `edge-tts` engine is used (same `en-IN` voices)
 2. Actions → **Generate story video** → *Run workflow*:
    - `topic` – short title/theme, e.g. `Shiva drinks the Halahala poison`
    - `script` – the narration. One sentence per caption; separate paragraphs with a blank line, ` / ` or `|` (the web form is single-line, so ` / ` is handy there). Or set `script_file` to a path in the repo, e.g. `scripts/ramayan.txt`.
    - `voice` – `en-IN-Prabhat` (male, default), `en-IN-Neerja`, `en-IN-NeerjaExpressive`
-   - `provider` / `model` – `openai` (default `gpt-4.1`) or `anthropic` (default `claude-sonnet-4-20250514`)
+   - `provider` / `model` – `openrouter` (default `anthropic/claude-sonnet-4`), `openai` (default `gpt-4.1`) or `anthropic` (default `claude-sonnet-4-20250514`)
    - `notes` – optional art direction hints for the scene writer
 3. Wait ~25–35 min. The run summary shows download links. Outputs land in three places:
    - workflow artifacts `video-landscape` / `video-shorts` (30 days)
