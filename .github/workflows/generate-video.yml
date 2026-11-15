@@ -22,13 +22,13 @@ on:
         default: en-IN-PrabhatNeural
         options: [en-IN-PrabhatNeural, en-IN-NeerjaNeural, en-IN-NeerjaExpressiveNeural]
       provider:
-        description: 'LLM that writes the scene code'
+        description: 'LLM that writes the scene code (auto = first working key, free tiers first)'
         required: true
         type: choice
-        default: gemini
-        options: [gemini, mistral, cerebras, openrouter, openai, anthropic]
+        default: auto
+        options: [auto, gemini, mistral, cerebras, meta, openrouter, openai, anthropic]
       model:
-        description: 'Model override (defaults: gemini-2.5-flash, mistral-large-latest, qwen-3-coder-480b, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
+        description: 'Model override (defaults: gemini-2.5-flash, mistral-large-latest, qwen-3-coder-480b, Llama-4-Maverick, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
         required: false
         type: string
       notes:
@@ -70,6 +70,17 @@ jobs:
         run: |
           slug=$(echo "${{ inputs.topic }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
           echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
+      - name: Check LLM providers (keys, quota, credits)
+        id: llm
+        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "${{ inputs.model }}"
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
       - name: Prepare script
         run: |
           mkdir -p work
@@ -87,7 +98,7 @@ jobs:
       - name: Scene code (LLM, validated in headless Chrome)
         run: |
           python pipeline/generate_story.py --topic "${{ inputs.topic }}" --narration work/narration.json --kit "$KIT" \
-            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ inputs.provider }}" --model "${{ inputs.model }}" --notes "$NOTES"
+            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --notes "$NOTES"
         env:
           CI: 'true'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -96,6 +107,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
           NOTES: ${{ inputs.notes }}
       - name: Upload story bundle
         uses: actions/upload-artifact@v4

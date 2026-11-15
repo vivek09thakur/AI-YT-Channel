@@ -21,6 +21,7 @@ DEFAULT_MODEL = {
     'gemini': 'gemini-2.5-flash',                 # free tier via Google AI Studio
     'mistral': 'mistral-large-latest',            # free "experiment" tier on La Plateforme
     'cerebras': 'qwen-3-coder-480b',              # free tier, fast
+    'meta': 'Llama-4-Maverick-17B-128E-Instruct-FP8',  # Meta Llama API (free preview)
     'openrouter': 'anthropic/claude-sonnet-4',    # paid unless model ends with :free
     'openai': 'gpt-4.1',
     'anthropic': 'claude-sonnet-4-20250514',
@@ -30,6 +31,7 @@ OPENAI_COMPAT = {
     'gemini': ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'GEMINI_API_KEY', {}),
     'mistral': ('https://api.mistral.ai/v1/chat/completions', 'MISTRAL_API_KEY', {}),
     'cerebras': ('https://api.cerebras.ai/v1/chat/completions', 'CEREBRAS_API_KEY', {}),
+    'meta': ('https://api.llama.com/compat/v1/chat/completions', 'META_AI_API', {}),
     'openai': ('https://api.openai.com/v1/chat/completions', 'OPENAI_API_KEY', {}),
     'openrouter': ('https://openrouter.ai/api/v1/chat/completions', 'OPENROUTER_API_KEY',
                    {'HTTP-Referer': 'https://github.com/vivek09thakur/AI-YT-Channel', 'X-Title': 'AI-YT-Channel'}),
