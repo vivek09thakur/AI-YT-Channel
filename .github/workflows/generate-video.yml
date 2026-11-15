@@ -1,0 +1,220 @@
+name: Generate story video
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Topic / title of the story (e.g. "Shiva drinks the poison: Neelkanth")'
+        required: true
+        type: string
+      script:
+        description: 'Narration text. Sentences are split automatically; use " / " or a blank line between paragraphs. Leave empty to use script_file.'
+        required: false
+        type: string
+      script_file:
+        description: 'Path of a .txt in this repo with the narration (alternative to script), e.g. scripts/shiva.txt'
+        required: false
+        type: string
+      voice:
+        description: 'Indian English neural voice'
+        required: true
+        type: choice
+        default: en-IN-PrabhatNeural
+        options: [en-IN-PrabhatNeural, en-IN-NeerjaNeural, en-IN-NeerjaExpressiveNeural]
+      provider:
+        description: 'LLM that writes the scene code'
+        required: true
+        type: choice
+        default: openai
+        options: [openai, anthropic]
+      model:
+        description: 'Model override (default gpt-4.1 / claude-sonnet-4-20250514)'
+        required: false
+        type: string
+      notes:
+        description: 'Optional notes for the illustrator LLM (characters, colours, moments to show)'
+        required: false
+        type: string
+
+concurrency:
+  group: generate-video
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  KIT: .github/skills/shorts-story-video/shadow-puppet-kit
+
+jobs:
+  author:
+    name: Voice + scene code
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      slug: ${{ steps.slug.outputs.slug }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+          pip install -q -r pipeline/requirements.txt
+          cd "$KIT" && npm ci --silent
+          google-chrome --version
+      - name: Slug
+        id: slug
+        run: |
+          slug=$(echo "${{ inputs.topic }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
+          echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
+      - name: Prepare script
+        run: |
+          mkdir -p work
+          if [ -n "${{ inputs.script_file }}" ]; then cp "${{ inputs.script_file }}" work/script.txt
+          else printf '%s\n' "$SCRIPT_INPUT" > work/script.txt; fi
+          test -s work/script.txt || { echo "::error::no script given (script or script_file)"; exit 1; }
+          wc -w work/script.txt
+        env:
+          SCRIPT_INPUT: ${{ inputs.script }}
+      - name: Voice (Indian English TTS)
+        run: python pipeline/tts.py --script work/script.txt --voice "${{ inputs.voice }}" --out work
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+      - name: Scene code (LLM, validated in headless Chrome)
+        run: |
+          python pipeline/generate_story.py --topic "${{ inputs.topic }}" --narration work/narration.json --kit "$KIT" \
+            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ inputs.provider }}" --model "${{ inputs.model }}" --notes "$NOTES"
+        env:
+          CI: 'true'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTES: ${{ inputs.notes }}
+      - name: Upload story bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: story
+          retention-days: 7
+          path: |
+            work/voice.wav
+            work/voice.mp3
+            work/narration.json
+            work/script.txt
+            ${{ env.KIT }}/stories/${{ steps.slug.outputs.slug }}/
+            ${{ env.KIT }}/${{ steps.slug.outputs.slug }}.html
+            ${{ env.KIT }}/${{ steps.slug.outputs.slug }}_9x16.html
+            ${{ env.KIT }}/debug/*.png
+      - name: Commit story code to main (re-renderable)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p scripts && cp work/script.txt "scripts/${{ steps.slug.outputs.slug }}.txt"
+          git add "$KIT/stories/${{ steps.slug.outputs.slug }}" "scripts/${{ steps.slug.outputs.slug }}.txt"
+          git commit -m "story: ${{ steps.slug.outputs.slug }} (run ${{ github.run_number }})" || { echo "nothing to commit"; exit 0; }
+          git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"
+
+  render:
+    name: Render ${{ matrix.format }}
+    needs: author
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { format: landscape, vertical: '0', suffix: '' }
+          - { format: shorts, vertical: '1', suffix: '_9x16' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - uses: actions/download-artifact@v4
+        with: { name: story, path: bundle }
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+          cd "$KIT" && npm ci --silent
+      - name: Place story files
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          mkdir -p "$KIT/stories/$slug" work
+          cp -r "bundle/$KIT/stories/$slug/." "$KIT/stories/$slug/"
+          cp bundle/work/voice.wav bundle/work/narration.json work/
+          cd "$KIT" && python build.py player "$slug" && python build.py vertical "$slug"
+      - name: Render frames with headless Chrome
+        run: cd "$KIT" && node render.mjs render
+        env:
+          CI: 'true'
+          STORY: ${{ needs.author.outputs.slug }}
+          VERTICAL: ${{ matrix.vertical }}
+          OUT: ${{ github.workspace }}/out
+      - name: Mux voice + effects
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          python pipeline/mux.py --video "out/${slug}${{ matrix.suffix }}_video_only.mp4" --voice work/voice.wav --fx "out/${slug}_effects.wav" \
+            --out "out/${{ matrix.format }}.mp4" $([ "${{ matrix.format }}" = landscape ] && echo "--thumb out/thumb.jpg")
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_type,width,height -of default=nw=1 "out/${{ matrix.format }}.mp4"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ matrix.format }}
+          retention-days: 30
+          path: |
+            out/${{ matrix.format }}.mp4
+            out/thumb.jpg
+
+  publish:
+    name: Publish to videos branch
+    needs: [author, render]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: story, path: bundle }
+      - uses: actions/download-artifact@v4
+        with: { name: video-landscape, path: final }
+      - uses: actions/download-artifact@v4
+        with: { name: video-shorts, path: final }
+      - name: Collect
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          cp bundle/work/voice.mp3 bundle/work/narration.json final/
+          cp "bundle/$KIT/stories/$slug/meta.json" final/ || true
+          ls -la final
+      - name: Checkout videos branch
+        run: |
+          git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
+            || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
+      - name: Add video + rebuild overview
+        run: |
+          python main/pipeline/publish.py --root site --src final --slug "${{ needs.author.outputs.slug }}" --run "${{ github.run_number }}" \
+            --repo "${{ github.repository }}" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "video: ${{ needs.author.outputs.slug }} (run ${{ github.run_number }})"
+          git push origin videos
+      - name: Summary
+        run: |
+          slug="${{ needs.author.outputs.slug }}"; dir="videos/${slug}-${{ github.run_number }}"
+          raw="https://github.com/${{ github.repository }}/raw/videos/$dir"
+          {
+            echo "## Video ready: $slug"
+            echo
+            echo "| Format | Download |"; echo "|---|---|"
+            echo "| YouTube landscape (1280x720) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
+            echo "| YouTube Shorts (1080x1920) | [$dir/shorts.mp4]($raw/shorts.mp4) |"
+            echo
+            echo "Overview page: https://github.com/${{ github.repository }}/blob/videos/README.md (or enable GitHub Pages on the videos branch for index.html)"
+            echo
+            echo "Story code committed to \`${{ env.KIT }}/stories/$slug/\` on \`${{ github.ref_name }}\`; re-render any time with \`STORY=$slug node render.mjs render\`."
+          } >> "$GITHUB_STEP_SUMMARY"

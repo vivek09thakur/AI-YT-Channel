@@ -1,0 +1,8 @@
+**/node_modules/
+**/shadow-puppet-kit/out/
+**/shadow-puppet-kit/debug/*.png
+**/shadow-puppet-kit/*.html
+!**/shadow-puppet-kit/*_shell.html
+work/
+__pycache__/
+*.pyc

@@ -1,26 +1,51 @@
-// Render crow_shadow_play.html to MP4 with headless Chrome.
-//   NODE_PATH=<dir with puppeteer-core>/node_modules node render.mjs test     -> timing + console check, a few PNGs in debug/
-//   NODE_PATH=... node render.mjs render                                     -> ../../07_Export/R16_*.mp4
-//   VERTICAL=1 ... (test <t…> | render)                                       -> the 9:16 reel page instead
+﻿// Render a built page to MP4 with headless Chrome.
+//   node render.mjs test [t…]            -> timing + console check, PNGs of the given times in debug/
+//   node render.mjs render               -> <OUT>/<story>_video_only.mp4 + <OUT>/<story>_effects.wav
+//   VERTICAL=1 node render.mjs (test <t…> | render)   -> the 9:16 reel page instead
+// Env: STORY=<name> (default crow), CHROME=<path to chrome>, OUT=<export dir> (default ../../07_Export, else ./out).
+// Needs puppeteer-core: `npm install` in this folder (or NODE_PATH=<dir>/node_modules).
 import { createRequire } from 'module';
 import { spawn } from 'child_process';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { pathToFileURL, fileURLToPath } from 'url';
 
 const require = createRequire(import.meta.url);
 const puppeteer = require('puppeteer-core');
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const VID = path.resolve(HERE, '../..');
 const V = process.env.VERTICAL === '1';
-const PAGE = 'file://' + path.join(HERE, V ? 'crow_shadow_play_9x16.html' : 'crow_shadow_play.html');
+const STORY = process.env.STORY || 'crow';
+const BASE = STORY === 'crow' ? 'crow_shadow_play' : STORY;
+const PAGE = pathToFileURL(path.join(HERE, V ? `${BASE}_9x16.html` : `${BASE}.html`)).href;
 const FPS = 30;
 const mode = process.argv[2] || 'test';
 
+function findChrome() {
+  if (process.env.CHROME) return process.env.CHROME;
+  const c = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe'),
+    '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser',
+  ].find((p) => p && existsSync(p));
+  if (!c) throw new Error('Chrome not found: set CHROME=<path to chrome executable>');
+  return c;
+}
+function outDir() {
+  if (process.env.OUT) { mkdirSync(process.env.OUT, { recursive: true }); return process.env.OUT; }
+  const std = path.join(VID, '07_Export');
+  if (existsSync(std)) return std;
+  const local = path.join(HERE, 'out'); mkdirSync(local, { recursive: true }); return local;
+}
+mkdirSync(path.join(HERE, 'debug'), { recursive: true });
+
 const browser = await puppeteer.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  headless: 'new', args: ['--no-first-run', '--autoplay-policy=no-user-gesture-required', '--window-size=1280,800'],
+  executablePath: findChrome(),
+  headless: 'new', args: ['--no-first-run', '--autoplay-policy=no-user-gesture-required', '--window-size=1280,800', ...(process.env.CI ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])],
   userDataDir: process.env.CHROME_PROFILE,
+  protocolTimeout: 300000,
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1280, height: 800 });
@@ -31,13 +56,20 @@ await page.goto(PAGE, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction('window.READY === true', { timeout: 60000 });
 const D = await page.evaluate(() => window.DURATION);
 
-const grab = (t) => page.evaluate((t) => { window.seek(t); return document.getElementById('cv').toDataURL('image/png').split(',')[1]; }, t);
+// large 9:16 PNGs can occasionally stall the CDP round trip; retry the frame before giving up
+const grab = async (t) => {
+  for (let n = 0; ; n++) {
+    try { return await page.evaluate((t) => { window.seek(t); return document.getElementById('cv').toDataURL('image/png').split(',')[1]; }, t); }
+    catch (e) { if (n >= 2) throw e; console.error(`retry frame ${t}: ${e.message.split('\n')[0]}`); }
+  }
+};
 
 if (mode === 'test' && V) {
   for (const t of process.argv.slice(3).map(Number)) writeFileSync(path.join(HERE, `debug/v_${t}.png`), Buffer.from(await grab(t), 'base64'));
-  console.log('errors', JSON.stringify(errors));
+  console.log('DURATION', D, 'errors', JSON.stringify(errors));
 } else if (mode === 'test') {
-  const ms = await page.evaluate(() => { const r = []; for (const t of [2, 15, 25, 34, 39.8, 41.2, 47, 57]) { const a = performance.now(); window.seek(t); r.push([t, +(performance.now() - a).toFixed(1)]); } return r; });
+  const probe = process.argv.length > 3 ? process.argv.slice(3).map(Number) : [2, 15, 25, 34, 39.8, 41.2, 47, 57].filter((t) => t < D);
+  const ms = await page.evaluate((P) => { const r = []; for (const t of P) { const a = performance.now(); window.seek(t); r.push([t, +(performance.now() - a).toFixed(1)]); } return r; }, probe);
   console.log('DURATION', D, 'frame ms', JSON.stringify(ms));
   // play for a moment, then pause: the clock and the sound score must run without errors
   await page.click('#play'); await new Promise((r) => setTimeout(r, 1500)); await page.click('#play');
@@ -45,10 +77,11 @@ if (mode === 'test' && V) {
   for (const t of process.argv.slice(3).map(Number)) writeFileSync(path.join(HERE, `debug/p_${t}.png`), Buffer.from(await grab(t), 'base64'));
   console.log('errors', JSON.stringify(errors));
 } else {
-  const out = path.join(VID, '07_Export');
+  const out = outDir();
   const frames = Math.round(D * FPS);
+  const mp4 = path.join(out, V ? `${BASE}_9x16_video_only.mp4` : `${BASE}_video_only.mp4`);
   const ff = spawn('ffmpeg', ['-loglevel', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', path.join(out, V ? 'R16_9x16_video_only.mp4' : 'R16_video_only.mp4')], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', mp4], { stdio: ['pipe', 'inherit', 'inherit'] });
   const t0 = Date.now();
   for (let i = 0; i < frames; i++) {
     const buf = Buffer.from(await grab(i / FPS), 'base64');
@@ -66,7 +99,11 @@ if (mode === 'test' && V) {
   const pcm = Buffer.from(b64, 'base64'), hdr = Buffer.alloc(44);
   hdr.write('RIFF', 0); hdr.writeUInt32LE(36 + pcm.length, 4); hdr.write('WAVEfmt ', 8); hdr.writeUInt32LE(16, 16); hdr.writeUInt16LE(1, 20); hdr.writeUInt16LE(2, 22);
   hdr.writeUInt32LE(48000, 24); hdr.writeUInt32LE(48000 * 4, 28); hdr.writeUInt16LE(4, 32); hdr.writeUInt16LE(16, 34); hdr.write('data', 36); hdr.writeUInt32LE(pcm.length, 40);
-  writeFileSync(path.join(VID, '05_Audio/effects.wav'), Buffer.concat([hdr, pcm]));
-  console.log('done', frames, 'frames in', ((Date.now() - t0) / 1000).toFixed(0), 's; errors', JSON.stringify(errors));
+  const wav = existsSync(path.join(VID, '05_Audio')) ? path.join(VID, '05_Audio/effects.wav') : path.join(out, `${BASE}_effects.wav`);
+  writeFileSync(wav, Buffer.concat([hdr, pcm]));
+  // mux the effects under the picture so there is a ready-to-watch file too
+  const mux = spawn('ffmpeg', ['-loglevel', 'error', '-y', '-i', mp4, '-i', wav, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', mp4.replace('_video_only.mp4', '.mp4')], { stdio: 'inherit' });
+  await new Promise((r) => mux.on('close', r));
+  console.log('done', frames, 'frames in', ((Date.now() - t0) / 1000).toFixed(0), 's ->', mp4.replace('_video_only.mp4', '.mp4'), '; errors', JSON.stringify(errors));
 }
 await browser.close();
