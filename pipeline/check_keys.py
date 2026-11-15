@@ -18,6 +18,12 @@ from generate_story import DEFAULT_MODEL, OPENAI_COMPAT
 
 # order used for automatic fallback: free tiers first
 PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
+# tried in order when the default model returns 404 (retired / not available to new accounts)
+FALLBACK_MODELS = {
+    'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
+    'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
+    'meta': ['Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-3.3-70B-Instruct'],
+}
 KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
 PROBE_MSG = [{'role': 'user', 'content': 'Reply with the single word: ok'}]
 
@@ -32,13 +38,12 @@ def classify(status, body):
         if any(k in b for k in ('insufficient_quota', 'credit', 'billing', 'resource_exhausted', 'quota')):
             return 'exhausted', f'quota or credits exhausted ({status})'
         return 'ratelimit', f'rate limited right now ({status}), may work on retry'
+    if status == 404 or 'not_found' in b or 'no longer available' in b or 'does not exist' in b:
+        return 'nomodel', f'model not available ({status})'
     return 'error', f'HTTP {status}: {body[:120]}'
 
 
-def probe(provider, model):
-    key = os.environ.get(KEY_ENV[provider], '')
-    if not key:
-        return None
+def probe_once(provider, model, key):
     try:
         if provider == 'anthropic':
             r = requests.post('https://api.anthropic.com/v1/messages', timeout=60,
@@ -53,7 +58,23 @@ def probe(provider, model):
             state, note = 'error', r.text[:120]
     except requests.RequestException as e:
         state, note = 'error', f'request failed: {e}'[:120]
-    return {'provider': provider, 'model': model, 'state': state, 'note': note, 'credits': credits(provider, key)}
+    return state, note
+
+
+def probe(provider, model, allow_fallback=True):
+    key = os.environ.get(KEY_ENV[provider], '')
+    if not key:
+        return None
+    candidates = [model] + [m for m in FALLBACK_MODELS.get(provider, []) if m != model] if allow_fallback else [model]
+    tried = []
+    for m in candidates:
+        state, note = probe_once(provider, m, key)
+        if state != 'nomodel':
+            break
+        tried.append(m)
+    if tried and state != 'nomodel':
+        note += f" (skipped unavailable: {', '.join(tried)})"
+    return {'provider': provider, 'model': m, 'state': state, 'note': note, 'credits': credits(provider, key)}
 
 
 def credits(provider, key):
@@ -81,10 +102,10 @@ def main():
     rows = []
     for p in PRIORITY:
         model = a.model if (a.model and p == a.prefer) else DEFAULT_MODEL[p]
-        res = probe(p, model)
+        res = probe(p, model, allow_fallback=not (a.model and p == a.prefer))
         rows.append(res or {'provider': p, 'model': model, 'state': 'missing', 'note': f'secret {KEY_ENV[p]} not set', 'credits': '-'})
 
-    icon = {'ok': '✅', 'ratelimit': '⏳', 'exhausted': '❌', 'bad': '❌', 'error': '⚠️', 'missing': '➖'}
+    icon = {'ok': '✅', 'ratelimit': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
     lines = ['### LLM providers', '', '| Provider | Model | Status | Credits | Note |', '|---|---|---|---|---|']
     for r in rows:
         lines.append(f"| {r['provider']} | `{r['model']}` | {icon[r['state']]} {r['state']} | {r['credits']} | {r['note']} |")

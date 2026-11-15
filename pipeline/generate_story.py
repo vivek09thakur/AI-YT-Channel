@@ -18,7 +18,7 @@ import requests
 
 HERE = Path(__file__).parent
 DEFAULT_MODEL = {
-    'gemini': 'gemini-2.5-flash',                 # free tier via Google AI Studio
+    'gemini': 'gemini-3.8-flash',                 # free tier via Google AI Studio
     'mistral': 'mistral-large-latest',            # free "experiment" tier on La Plateforme
     'cerebras': 'qwen-3-coder-480b',              # free tier, fast
     'meta': 'Llama-4-Maverick-17B-128E-Instruct-FP8',  # Meta Llama API (free preview)
@@ -58,10 +58,12 @@ def call_llm(provider, model, system, messages, max_tokens):
                 url, key, extra = OPENAI_COMPAT[provider]
                 if not os.environ.get(key):
                     sys.exit(f'{key} is not set (needed for --provider {provider})')
+                body = {'model': model, 'max_tokens': max_tokens,
+                        'messages': [{'role': 'system', 'content': system}] + messages}
+                if provider != 'gemini':  # Gemini 3.x rejects sampling params
+                    body['temperature'] = 0.4
                 r = requests.post(url, timeout=600,
-                                  headers={'Authorization': f'Bearer {os.environ[key]}', **extra},
-                                  json={'model': model, 'temperature': 0.4, 'max_tokens': max_tokens,
-                                        'messages': [{'role': 'system', 'content': system}] + messages})
+                                  headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()
                 if 'error' in j:  # OpenRouter can return 200 with an error body
                     sys.exit(f'LLM error: {json.dumps(j["error"])[:500]}')
