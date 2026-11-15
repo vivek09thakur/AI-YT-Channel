@@ -1,0 +1,38 @@
+<meta charset="utf-8">
+<title>Kauwa Shadow Play</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=block">
+<style>
+  /* layout: the stage fills the window above a single control bar; the 16:9 canvas letterboxes inside it */
+  :root {
+    --bg: #0c0604; --bar: #1c0e07; --ink: #f4e3c4; --muted: #b8966c; --lamp: #f0a24a; --rule: #3e2413;
+    --display: "IM Fell English", Georgia, serif; --body: "Libre Baskerville", Georgia, serif;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px; display: flex; flex-direction: column; overflow: hidden; }
+  .stage { flex: 1; min-height: 0; display: grid; place-items: center; padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); position: relative; }
+  .stage canvas { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; aspect-ratio: 16 / 9; background: #000; }
+  .stage.drop::after { content: "Drop the voiceover here"; position: absolute; inset: 12px; border: 2px dashed var(--lamp); border-radius: 10px; display: grid; place-items: center; font-family: var(--display); font-size: 28px; color: var(--lamp); background: rgba(12, 6, 4, 0.7); }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; background: var(--bar); border-top: 1px solid var(--rule); padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  button, label.btn { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+  button:hover, label.btn:hover { border-color: var(--lamp); }
+  button:focus-visible, label.btn:focus-within, input:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+  #play { min-width: 5.5em; font-family: var(--display); font-size: 17px; }
+  #scrub { flex: 1 1 220px; min-width: 0; accent-color: var(--lamp); }
+  #time { font-variant-numeric: tabular-nums; color: var(--muted); min-width: 8.5em; text-align: right; }
+  .toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .toggle input { accent-color: var(--lamp); }
+  #vo-name { color: var(--muted); font-style: italic; max-width: 18em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  label.btn input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+</style>
+<div class="stage" id="stage"><canvas id="cv" width="1280" height="720" aria-label="Shadow puppet animation: Kauwa kabhi nahi bhoolta"></canvas></div>
+<div class="bar">
+  <button id="play" type="button">Play</button>
+  <input id="scrub" type="range" min="0" max="60.3" step="0.01" value="0" aria-label="Scrub">
+  <span id="time">0:00.0 / 1:00.3</span>
+  <label class="toggle"><input id="sound" type="checkbox" checked> Sound</label>
+  <label class="toggle"><input id="loop" type="checkbox" checked> Loop</label>
+  <label class="btn">Load voiceover<input id="vo" type="file" accept="audio/*"></label>
+  <span id="vo-name">no voiceover</span>
+</div>
