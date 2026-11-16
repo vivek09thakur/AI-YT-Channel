@@ -30,6 +30,20 @@ OPENAI_COMPAT = {
 }
 NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invalid_api_key', 'Insufficient credits',
             'API_KEY_INVALID', 'PERMISSION_DENIED')
+PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
+FALLBACK_MODELS = {
+    'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
+    'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
+    'meta': ['Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-3.3-70B-Instruct'],
+}
+KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
+RETRY_WAITS = (20, 40, 60, 90)
+
+
+class Unavailable(Exception):
+    pass
+
+
 FILE_RE = re.compile(r'^=== FILE: (\S+) ===\s*$', re.M)
 
 
@@ -46,7 +60,7 @@ GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta'
 def call_gemini(model, system, messages, max_tokens):
     key = os.environ.get('GEMINI_API_KEY')
     if not key:
-        sys.exit('GEMINI_API_KEY is not set (needed for --provider gemini)')
+        raise Unavailable('GEMINI_API_KEY is not set')
     contents = [{'role': 'model' if m['role'] == 'assistant' else 'user', 'parts': [{'text': m['content']}]} for m in messages]
 
     body = {'system_instruction': {'parts': [{'text': system}]}, 'contents': contents,
@@ -72,48 +86,75 @@ def call_gemini(model, system, messages, max_tokens):
                 usage = {'prompt_tokens': u.get('promptTokenCount'), 'completion_tokens': u.get('candidatesTokenCount'),
                          'thinking_tokens': u.get('thoughtsTokenCount')}
         if finish and finish not in ('STOP', 'MAX_TOKENS'):
-            sys.exit(f'Gemini stopped with finishReason={finish}')
+            raise Unavailable(f'Gemini stopped with finishReason={finish}')
         return ''.join(text), usage
     raise RuntimeError('unreachable')
 
 
 def call_llm(provider, model, system, messages, max_tokens):
-    for attempt in range(4):
+    for attempt in range(len(RETRY_WAITS) + 1):
         try:
             if provider == 'gemini':
                 return call_gemini(model, system, messages, max_tokens)
             if provider in OPENAI_COMPAT:
                 url, key, extra = OPENAI_COMPAT[provider]
                 if not os.environ.get(key):
-                    sys.exit(f'{key} is not set (needed for --provider {provider})')
+                    raise Unavailable(f'{key} is not set')
                 body = {'model': model, 'max_tokens': max_tokens, 'temperature': 0.4,
                         'messages': [{'role': 'system', 'content': system}] + messages}
                 r = requests.post(url, timeout=600,
                                   headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()
                 if 'error' in j:
-                    sys.exit(f'LLM error: {json.dumps(j["error"])[:500]}')
+                    raise Unavailable(f'LLM error: {json.dumps(j["error"])[:500]}')
                 return j['choices'][0]['message']['content'], j.get('usage', {})
             if provider == 'anthropic':
                 if not os.environ.get('ANTHROPIC_API_KEY'):
-                    sys.exit('ANTHROPIC_API_KEY is not set')
+                    raise Unavailable('ANTHROPIC_API_KEY is not set')
                 r = requests.post('https://api.anthropic.com/v1/messages', timeout=600,
                                   headers={'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01'},
                                   json={'model': model, 'max_tokens': max_tokens, 'temperature': 0.4, 'system': system, 'messages': messages})
                 r.raise_for_status(); j = r.json()
                 u = j.get('usage', {})
                 return ''.join(b.get('text', '') for b in j['content']), {'prompt_tokens': u.get('input_tokens'), 'completion_tokens': u.get('output_tokens')}
-            sys.exit(f'unknown provider {provider}')
+            raise Unavailable(f'unknown provider {provider}')
         except requests.HTTPError as e:
             body = e.response.text[:500]
             retryable = e.response.status_code in (429, 500, 502, 503, 529) and not any(k in body for k in NO_RETRY)
-            if retryable and attempt < 3:
-                wait = 20 * (attempt + 1); print(f'  {e.response.status_code}, retry in {wait}s: {body}', file=sys.stderr); time.sleep(wait); continue
-            sys.exit(f'LLM error {e.response.status_code}: {body}')
+            if retryable and attempt < len(RETRY_WAITS):
+                wait = RETRY_WAITS[attempt]; print(f'  {e.response.status_code}, retry in {wait}s: {body}', file=sys.stderr); time.sleep(wait); continue
+            raise Unavailable(f'LLM error {e.response.status_code}: {body}')
         except requests.RequestException as e:
-            if attempt < 3:
+            if attempt < len(RETRY_WAITS):
                 time.sleep(15); continue
-            sys.exit(f'LLM request failed: {e}')
+            raise Unavailable(f'LLM request failed: {e}')
+
+
+def candidates(provider, model):
+    seen, out = set(), []
+    def add(p, m):
+        if (p, m) not in seen and os.environ.get(KEY_ENV.get(p, '')):
+            seen.add((p, m)); out.append((p, m))
+    add(provider, model)
+    for m in FALLBACK_MODELS.get(provider, []):
+        add(provider, m)
+    for p in PRIORITY:
+        if p != provider:
+            add(p, DEFAULT_MODEL[p])
+    return out
+
+
+def call_with_fallback(provider, model, system, messages, max_tokens):
+    errors = []
+    for p, m in candidates(provider, model):
+        if (p, m) != (provider, model):
+            print(f'--- falling back to {p} {m}')
+        try:
+            text, usage = call_llm(p, m, system, messages, 24000 if p == 'anthropic' else max_tokens)
+            return text, usage, p, m
+        except Unavailable as e:
+            print(f'    {p} {m} unavailable: {str(e)[:300]}', file=sys.stderr); errors.append(f'{p} {m}: {str(e)[:200]}')
+    sys.exit('no LLM could answer:\n  ' + '\n  '.join(errors))
 
 
 def parse_files(text):
@@ -219,6 +260,7 @@ def main():
     ap.add_argument('--attempts', type=int, default=3)
     a = ap.parse_args()
     model = a.model or DEFAULT_MODEL[a.provider]
+    provider = a.provider
     kit = Path(a.kit).resolve()
     narr = json.loads(read(a.narration))
     sdir = kit / 'stories' / a.slug
@@ -238,8 +280,8 @@ def main():
     messages = [{'role': 'user', 'content': user}]
     total_in = total_out = 0
     for attempt in range(1, a.attempts + 1):
-        print(f'--- attempt {attempt}/{a.attempts} ({a.provider} {model})')
-        text, usage = call_llm(a.provider, model, system, messages, 24000 if a.provider == 'anthropic' else 16000)
+        print(f'--- attempt {attempt}/{a.attempts} ({provider} {model})')
+        text, usage, provider, model = call_with_fallback(provider, model, system, messages, 16000)
         total_in += usage.get('prompt_tokens') or 0; total_out += usage.get('completion_tokens') or 0
         print(f'    tokens in {usage.get("prompt_tokens")} out {usage.get("completion_tokens")}')
         files = parse_files(text)
@@ -252,7 +294,7 @@ def main():
             write_lines_js(narr, meta.get('kinds') or {}, sdir / 'lines.js')
             title = ' '.join(str(meta['title']).split())
             (sdir / 'meta.txt').write_text(f"title={title}\nparts=ref,lines,narration,story,sound_score,vertical\n", encoding='utf-8')
-            (sdir / 'meta.json').write_text(json.dumps({**meta, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'], 'provider': a.provider, 'model': model}, indent=1, ensure_ascii=False), encoding='utf-8')
+            (sdir / 'meta.json').write_text(json.dumps({**meta, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'], 'provider': provider, 'model': model}, indent=1, ensure_ascii=False), encoding='utf-8')
             report = validate(kit, a.slug, narr['duration'])
             if not report:
                 print(f'OK: stories/{a.slug} builds and renders without errors. tokens total in {total_in} out {total_out}')

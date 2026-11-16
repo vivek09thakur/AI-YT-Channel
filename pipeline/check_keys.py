@@ -5,16 +5,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 sys.path.insert(0, str(Path(__file__).parent))
 import requests
-from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE
-
-PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
-
-FALLBACK_MODELS = {
-    'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
-    'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
-    'meta': ['Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-3.3-70B-Instruct'],
-}
-KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
+from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE, PRIORITY, FALLBACK_MODELS, KEY_ENV
 PROBE_MSG = [{'role': 'user', 'content': 'Reply with the single word: ok'}]
 
 
