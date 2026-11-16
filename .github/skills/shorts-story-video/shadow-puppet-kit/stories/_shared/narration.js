@@ -1,10 +1,4 @@
-  // ---------- shared narration layer (any story) ----------
-  // Expects, from lines.js (generated from the voice track):
-  //   const DURATION = <seconds>;  const LINES = [[t0, 'text', kind?, t1?], ...]   kind: 'line' | 'big' | 'title' | 'tag'
-  // Expects, from story.js:
-  //   const TITLE = 'RAMAYAN'; const HOOK = ['line 1', 'line 2']; const FADE = 0.9;
-  //   const SCENES = [[0, sceneA], [t, sceneB], ...]   each scene: (ctx, W, Hh, t) => void, drawing a full 1280x720 frame
-  // Provides: lineAt, drawLines, stageFrame, explainerFrame and small scene helpers (pop, fade, cam, stars, WARM/DUSK/NIGHT).
+  
   const LINE_HOLD = 4.2;
   function lineAt(t) {
     for (let i = LINES.length - 1; i >= 0; i--) {
@@ -27,7 +21,7 @@
   function drawLines(c, W, Hh, t) {
     const tt = titleTime();
     if (t >= tt) {
-      // the title lands once and stays to the end; taglines sit under it
+      
       const dt = t - tt, s = 1.25 - 0.25 * EO(cl(dt / 0.9)), sz = fitFont(c, TITLE, 1150, 150, 14);
       c.save(); c.globalAlpha = cl(dt / 0.4); c.translate(W / 2, 140); c.scale(s, s);
       title(c, TITLE, 0, 0, sz, PAL.gold, { letter: '14px', glow: H.rgba(PAL.kesari, 0.9), blur: 40, stroke: PAL.deep, strokeW: 10 });
@@ -68,7 +62,6 @@
     if (!(o && o.noLines)) drawLines(ctx, W, Hh, t);
   }
 
-  // ---- helpers scenes may use
   const pop = (t, t0, d) => H.ease.back(cl((t - t0) / (d || 0.5)));
   const fade = (t, t0, d) => cl((t - t0) / (d || 0.6));
   function cam(c, W, Hh, k, px, py) { c.translate(W / 2 + (px || 0), Hh / 2 + (py || 0)); c.scale(1 + k, 1 + k); c.translate(-W / 2, -Hh / 2); }

@@ -1,4 +1,4 @@
-  // ---------- storyboard: one key frame per beat ----------
+  
   const PANELS = [
     { beat: 1, t: 6.5, flow: 'Night sky, stars, a sun waiting under the hills. Spears and banners rise from behind the near ridge on "the greatest war".', sound: 'Low gongs on each line, a slow rising hiss as the spears come up.' },
     { beat: 2, t: 15.5, flow: 'The sun rises and the sky turns amber. A haloed god and a mortal walk the ridge together. On "Adharma" the right side darkens and a dark crowned figure rises.', sound: 'Riser into the cut, temple bells, a sawtooth growl and a low gong for Adharma.' },
@@ -24,7 +24,7 @@
 
   async function runStoryboard() {
     const specs = ['400 104px "IM Fell English"', 'italic 400 44px "IM Fell English"'];
-    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09'))); await document.fonts.ready; } catch (e) { /* draw anyway */ }
+    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09'))); await document.fonts.ready; } catch (e) {  }
     const grid = document.getElementById('grid');
     for (const P of PANELS) {
       const B = BEATS.find((b) => b.n === P.beat);

@@ -1,10 +1,8 @@
-  // ---------- RAMAYAN: 2 minute cinematic trailer, flat 2D poster style ----------
-  // Scenes only. Narration timing lives in lines.js; captions, title, crossfades and the 9:16 reel come from stories/_shared/.
+  
   const TITLE = 'RAMAYAN';
   const HOOK = ['The greatest story', 'ever told.'];
   const REEL_SUBTITLE = 'A 2 minute trailer';
 
-  // scene boundaries (crossfades of FADE s start here)
   const SC = { dawn: 8.2, ayodhya: 18.0, rama: 24.2, exile: 36.4, walk: 48.2, ravana: 58.0, dharma: 76.4, forest: 85.0, shore: 87.4, leap: 90.0, lanka: 92.6, army: 95.4, battle: 103.5, title: 113.6 };
   const FADE = 0.9;
   const BEATS = [
@@ -22,8 +20,6 @@
     { n: 12, name: 'Title', t0: SC.title, t1: DURATION, vo: 'And one name... Will become eternal. RAMAYAN. The story of a prince. The journey of a god. And the eternal victory of Dharma.', screen: 'RAMAYAN over the temple at sunrise' },
   ];
 
-
-  // 1 ---- before time: night, a sun waiting under the hills, spears of a coming war
   function sceneCosmos(c, W, Hh, t) {
     const u = sm(0, SC.dawn, t);
     c.save(); cam(c, W, Hh, 0.06 * u);
@@ -32,14 +28,14 @@
     sun(c, 640, 600 - u * 30, 110, PAL.kesari, 4);
     cloudBank(c, W, 300, t, { seed: 3, n: 4, fill: H.rgba(PAL.maroon, 0.9), line: H.rgba(PAL.night, 0.6), speed: 4 });
     hills(c, W, Hh, 540, 90, PAL.maroon, 1); hills(c, W, Hh, 600, 70, PAL.deep, 2);
-    // spears and banners rising from behind the near ridge
+    
     const r = H.rng(8), w = fade(t, 4.4, 2.2);
     c.strokeStyle = PAL.ink; c.fillStyle = PAL.ink; c.lineWidth = 3;
     for (let i = 0; i < 46; i++) { const x = 20 + r() * (W - 40), h = (70 + r() * 120) * EO(cl(w * 1.4 - r() * 0.4)), y0 = 650 - 40 * Math.sin(x * 0.004 + 2); if (h < 2) continue; c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y0 - h); c.stroke(); c.beginPath(); c.moveTo(x - 6, y0 - h); c.lineTo(x, y0 - h - 22); c.lineTo(x + 6, y0 - h); c.closePath(); c.fill(); if (i % 5 === 0) { c.fillStyle = PAL.kumkum; c.beginPath(); c.moveTo(x, y0 - h + 2); c.lineTo(x + 26, y0 - h + 10); c.lineTo(x, y0 - h + 20); c.closePath(); c.fill(); c.fillStyle = PAL.ink; } }
     hills(c, W, Hh, 680, 40, PAL.ink, 3);
     c.restore();
   }
-  // 2 ---- dawn: gods walk among mortals; the shadow of adharma waits on the right
+  
   function sceneDawn(c, W, Hh, t) {
     const u = sm(SC.dawn, SC.dawn + 7, t), tt = t - SC.dawn;
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.dawn, SC.ayodhya, t));
@@ -50,7 +46,7 @@
     cloudBank(c, W, 250, t, { seed: 4, n: 5, fill: mixc(PAL.maroon, PAL.sandal, u * 0.85), line: mixc(PAL.night, PAL.saffron, u), speed: 5, spread: 120 });
     skyline(c, 640, 560, 0.55, mixc(PAL.indigo, PAL.burnt, u * 0.8), t);
     hills(c, W, Hh, 560, 60, mixc(PAL.maroon, PAL.burnt, u), 4); hills(c, W, Hh, 620, 70, mixc(PAL.deep, PAL.brown, u), 5);
-    // a god with a halo and a mortal, walking together on the ridge
+    
     const a = fade(t, 8.4, 1.0), gx = 300 + tt * 14;
     if (a > 0) {
       c.save(); c.globalAlpha = a;
@@ -58,7 +54,7 @@
       figure(c, { x: gx - 95, y: 652, s: 0.58, dir: 1, skin: PAL.sandal, cloth: PAL.cream, sash: PAL.burnt, crown: 'bun', pose: 'walk', ph: tt * 1.3 + 0.5 });
       c.restore();
     }
-    // the dark figure of Adharma rises on the right
+    
     const dk = EO(fade(t, 13.8, 1.4));
     if (dk > 0) {
       const g = c.createLinearGradient(W * 0.5, 0, W, 0); g.addColorStop(0, H.rgba(PAL.night, 0)); g.addColorStop(1, H.rgba(PAL.night, 0.55 * dk)); c.fillStyle = g; c.fillRect(0, 0, W, Hh);
@@ -67,7 +63,7 @@
     hills(c, W, Hh, 690, 30, PAL.deep, 6);
     c.restore();
   }
-  // 3 ---- Ayodhya: the pavilion temple, elephants, and a lotus of light for the birth
+  
   function sceneAyodhya(c, W, Hh, t) {
     const tt = t - SC.ayodhya;
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.ayodhya, SC.rama, t), 0, 20);
@@ -76,11 +72,11 @@
     cloudBank(c, W, 190, t, { seed: 11, n: 6, fill: PAL.sandal, line: PAL.saffron, speed: 6, spread: 140 });
     skyline(c, 200, 520, 0.45, mixc(PAL.brown, PAL.saffron, 0.45), t); skyline(c, 1080, 520, 0.45, mixc(PAL.brown, PAL.saffron, 0.45), t);
     hills(c, W, Hh, 540, 50, mixc(PAL.brown, PAL.saffron, 0.3), 7);
-    // the birth: rays and a lotus of light inside the pavilion
+    
     const b = pop(t, 21.5, 0.9);
     if (b > 0) { rays(c, 640, 430, 40, 420 * b, 20, PAL.cream, t, 0.4 * b); sun(c, 640, 440, 22 * b, PAL.cream, 5); lotus(c, 640, 470, 1.3 * b, PAL.lotus, PAL.cream); }
     temple(c, { x: 640, y: 560, s: 0.78, col: PAL.brown }, t);
-    // king and queen inside, turned to the lotus
+    
     figure(c, { x: 500, y: 560, s: 0.62, dir: 1, skin: PAL.sandal, cloth: PAL.kumkum, sash: PAL.gold, crown: 'king', pose: 'namaste' });
     figure(c, { x: 790, y: 560, s: 0.58, dir: -1, skin: PAL.sandal, cloth: PAL.marigold, sash: PAL.lotus, crown: 'long', face: 'woman', pose: 'namaste' });
     elephant(c, 150 + tt * 4, 630, 0.5, 1, PAL.deep, t); elephant(c, 1130 - tt * 4, 630, 0.5, -1, PAL.deep, t);
@@ -88,7 +84,7 @@
     hills(c, W, Hh, 660, 30, PAL.deep, 8);
     c.restore();
   }
-  // 4 ---- Rama: hero before the sun; RAMA; the innocent kneel
+  
   function sceneRama(c, W, Hh, t) {
     const tt = t - SC.rama;
     c.save(); cam(c, W, Hh, 0.08 * sm(SC.rama, SC.exile, t), 0, 40);
@@ -105,7 +101,7 @@
     hills(c, W, Hh, 712, 16, PAL.deep, 11);
     c.restore();
   }
-  // 5 ---- exile: the crown lifts away, the palace slides off, the forest comes to meet him
+  
   function sceneExile(c, W, Hh, t) {
     const u = sm(SC.exile, SC.walk, t), tt = t - SC.exile;
     c.save(); cam(c, W, Hh, 0.04 * u);
@@ -116,18 +112,18 @@
     const slide = EIO(sm(42.4, 45.5, t)) * 760;
     temple(c, { x: 300 - slide, y: 600, s: 0.5, col: PAL.brown }, t);
     flag(c, 300 - slide - 165, 600, 90, PAL.saffron, t, 1); flag(c, 300 - slide + 165, 600, 90, PAL.kumkum, t, -1);
-    // forest arrives from the right
+    
     const fin = EIO(sm(44.6, 47.6, t)) * 620, r = H.rng(20);
     for (let i = 0; i < 7; i++) tree(c, 1400 - fin + i * 110 + r() * 40, 650 + r() * 20, 1.0 + r() * 0.4, i % 2 ? PAL.tulsi : mixc(PAL.tulsi, PAL.deep, 0.45), { palm: i % 3 === 0 });
     hills(c, W, Hh, 660, 30, PAL.brown, 13);
-    // Rama: crowned and still, then bare-headed and walking
+    
     const crownOff = t >= 40.1, walk = sm(44.7, 45.3, t), x = 560 + EIO(sm(44.7, 48.2, t)) * 240;
     figure(c, { x, y: 690, s: 1.05, dir: 1, skin: PAL.rama, cloth: PAL.turmeric, sash: PAL.kumkum, crown: crownOff ? 'bun' : 'tall', bow: true, tilak: true, pose: walk > 0 ? 'walk' : 'stand', ph: (t - 44.7) * 1.3, arms: walk > 0 ? null : [[-0.45, 0.3], [0.3, 0.8]] });
     if (crownOff && t < 44) { const k = EO(fade(t, 40.1, 2.2)); c.save(); c.globalAlpha = 1 - sm(42.2, 44, t); crownOnly(c, x, 690 - 1.05 * 236 - k * 260, 1.05, k * 0.6); c.restore(); }
     hills(c, W, Hh, 700, 14, PAL.deep, 14);
     c.restore();
   }
-  // 6 ---- the three walk through the forest (parallax), river below
+  
   function sceneWalk(c, W, Hh, t) {
     const tt = t - SC.walk;
     c.save(); cam(c, W, Hh, 0.03 * sm(SC.walk, SC.ravana, t));
@@ -149,7 +145,7 @@
     ocean(c, W, Hh, 690, t, [PAL.peacock, mixc(PAL.peacock, PAL.cream, 0.2), mixc(PAL.peacock, PAL.cream, 0.38)]);
     c.restore();
   }
-  // 7 ---- Ravana: a dark forest, red eyes, the ten-headed king rises; golden Lanka; lightning
+  
   function sceneRavana(c, W, Hh, t) {
     const tt = t - SC.ravana;
     const fl = Math.max(Math.exp(-Math.max(0, t - 69.9) * 5) * (t > 69.9 ? 1 : 0), Math.exp(-Math.max(0, t - 72.4) * 5) * (t > 72.4 ? 1 : 0));
@@ -159,15 +155,15 @@
     streaks(c, W, Hh, t, { color: PAL.lotus, alpha: 0.14, seed: 24, n: 70 });
     sun(c, 640, 400, 90, PAL.vermilion, 3);
     cloudBank(c, W, 200, t, { seed: 25, n: 6, fill: PAL.maroon, line: PAL.night, speed: 9, spread: 140 });
-    // Lanka: a golden city across the water on the right
+    
     const lk = EO(fade(t, 65.2, 1.4));
     if (lk > 0) { c.save(); c.globalAlpha = lk; sun(c, 1000, 520, 20, PAL.gold, 12); skyline(c, 1000, 520, 0.42, PAL.gold, t); c.restore(); }
     ocean(c, W, Hh, 520, t, [PAL.indigo, mixc(PAL.indigo, PAL.maroon, 0.4), mixc(PAL.indigo, PAL.maroon, 0.7)]);
     hills(c, W, Hh, 600, 50, PAL.deep, 17);
-    // Ravana rises from behind the ridge
+    
     const rise = EO(fade(t, 62.9, 2.0)), ry = 700 + (1 - rise) * 520 + Math.sin(t * 1.2) * 3;
     if (rise > 0) ravana(c, { x: 640, y: ry, s: 1.3, dir: -1, mace: t > 66 });
-    // the forest in front, with eyes in the dark
+    
     const r = H.rng(26);
     for (let i = 0; i < 10; i++) tree(c, 40 + i * 135 + r() * 50, 720 + r() * 10, 1.3 + r() * 0.5, PAL.ink, { palm: i % 4 === 1 });
     const ey = fade(t, 60.6, 1.0);
@@ -177,7 +173,7 @@
     if (fl > 0.02) { bolt(c, t > 72.4 ? 900 : 360, 0, 420, t > 72.4 ? 31 : 30); c.fillStyle = H.rgba(PAL.cream, fl * 0.55); c.fillRect(0, 0, W, Hh); }
     c.restore();
   }
-  // 8 ---- the power of dharma: Rama draws the bow in close-up, Hanuman kneels, Sita in a ring of gold
+  
   function sceneDharma(c, W, Hh, t) {
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.dharma, SC.forest, t));
     sky(c, W, Hh, WARM); streaks(c, W, Hh, t, { seed: 27 });
@@ -194,7 +190,7 @@
     hills(c, W, Hh, 706, 16, PAL.deep, 19);
     c.restore();
   }
-  // 9a ---- Panchavati: a hut in the forest
+  
   function sceneForest(c, W, Hh, t) {
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.forest, SC.shore, t));
     sky(c, W, Hh, WARM); streaks(c, W, Hh, t, { seed: 29 });
@@ -203,7 +199,7 @@
     const r = H.rng(30);
     for (let i = 0; i < 9; i++) tree(c, 30 + i * 150 + r() * 60, 600 + r() * 20, 0.9 + r() * 0.4, mixc(PAL.tulsi, PAL.saffron, 0.15), { palm: i % 3 === 1 });
     hills(c, W, Hh, 620, 30, PAL.tulsi, 21);
-    // the hut: a thatched roof on posts
+    
     c.fillStyle = PAL.brown; c.fillRect(540, 560, 14, 110); c.fillRect(720, 560, 14, 110); c.fillStyle = PAL.sandal; c.beginPath(); c.moveTo(500, 580); c.lineTo(640, 470); c.lineTo(780, 580); c.closePath(); c.fill(); c.fillStyle = PAL.burnt; c.fillRect(500, 578, 280, 10);
     figure(c, { x: 660, y: 670, s: 0.75, dir: -1, skin: PAL.sandal, cloth: PAL.marigold, sash: PAL.lotus, crown: 'long', face: 'woman', pose: 'stand' });
     figure(c, { x: 420, y: 680, s: 0.8, dir: 1, skin: PAL.rama, cloth: PAL.turmeric, sash: PAL.kumkum, crown: 'bun', bow: true, tilak: true });
@@ -211,7 +207,7 @@
     c.fillStyle = PAL.deep; c.fillRect(0, 690, W, 40);
     c.restore();
   }
-  // 9b ---- the shore: three stand before the ocean
+  
   function sceneShore(c, W, Hh, t) {
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.shore, SC.leap, t));
     sky(c, W, Hh, DUSK); streaks(c, W, Hh, t, { seed: 31, alpha: 0.16 });
@@ -225,7 +221,7 @@
     figure(c, { x: 440, y: 655, s: 0.85, dir: 1, skin: PAL.kesari, cloth: PAL.kumkum, sash: PAL.gold, crown: 'cap', face: 'monkey', tail: true, mace: true });
     c.restore();
   }
-  // 9c ---- Hanuman's leap across the ocean
+  
   function sceneLeap(c, W, Hh, t) {
     const u = cl((t - SC.leap) / (SC.lanka - SC.leap + 0.6));
     c.save(); cam(c, W, Hh, 0.04 * u);
@@ -240,7 +236,7 @@
     c.restore();
     c.restore();
   }
-  // 9d ---- Lanka burns
+  
   function sceneLanka(c, W, Hh, t) {
     const tt = t - SC.lanka;
     c.save(); cam(c, W, Hh, 0.06 * sm(SC.lanka, SC.army, t));
@@ -257,7 +253,7 @@
     c.fillStyle = PAL.deep; c.fillRect(0, 640, W, 80); hills(c, W, Hh, 660, 30, PAL.ink, 22);
     c.restore();
   }
-  // 10 ---- the army rises, the bridge grows, arrows fill the sky
+  
   function sceneArmy(c, W, Hh, t) {
     const tt = t - SC.army;
     c.save(); cam(c, W, Hh, 0.05 * sm(SC.army, SC.battle, t));
@@ -266,12 +262,12 @@
     cloudBank(c, W, 220, t, { seed: 39, n: 5, fill: mixc(PAL.sandal, PAL.burnt, 0.3), line: PAL.burnt, speed: 7, spread: 100 });
     skyline(c, 1180, 520, 0.4, PAL.gold, t);
     ocean(c, W, Hh, 480, t, [PAL.krishna, PAL.peacock, mixc(PAL.peacock, PAL.cream, 0.25), mixc(PAL.peacock, PAL.cream, 0.45)]);
-    // arrows
+    
     const ar = fade(t, 100.7, 2.5), r = H.rng(41);
     if (ar > 0) { c.strokeStyle = PAL.deep; c.lineWidth = 3; for (let i = 0; i < 30; i++) { const u = cl(ar * 1.6 - r() * 0.6), x0 = 100 + r() * 400, x1 = x0 + 500 + r() * 400, h = 150 + r() * 200; if (u <= 0) continue; const x = lerp(x0, x1, u), y = 520 - Math.sin(u * Math.PI) * h, dxu = (x1 - x0) / 60, dyu = -Math.cos(u * Math.PI) * Math.PI * h / 60; c.beginPath(); c.moveTo(x, y); c.lineTo(x - dxu * 2.2, y - dyu * 2.2); c.stroke(); } }
     const br = EO(sm(97.7, 100.6, t));
     bridge(c, -20, 1080, 560, br, PAL.sandal);
-    // the vanaras: they rise from the left ridge and march out along the bridge
+    
     const rise = EO(fade(t, 95.6, 1.6)), march = Math.max(0, t - 97.4) * 70;
     for (let k = 0; k < 16; k++) { const x = 60 + k * 72 - 500 + march - (k % 2) * 20; if (x < -40 || x > -20 + 1100 * br + 30) continue; const yy = x < 180 ? 600 + (1 - rise) * 160 : 556; vanara(c, x, yy + (k % 3) * 3, 0.42 + (k % 3) * 0.04, 1, tt * 1.6 + k * 0.37, k % 4 === 0 ? PAL.kesari : PAL.burnt); }
     hills(c, W, Hh, 600, 50, PAL.brown, 23); hills(c, W, Hh, 660, 30, PAL.deep, 24);
@@ -279,7 +275,7 @@
     figure(c, { x: 140, y: 705, s: 0.95, dir: 1, skin: PAL.burnt, cloth: PAL.kumkum, sash: PAL.gold, crown: 'bun', bow: true });
     c.restore();
   }
-  // 11 ---- Rama faces Ravana under a split sky; the arrow
+  
   function sceneBattle(c, W, Hh, t) {
     const tt = t - SC.battle, rise = EO(fade(t, 109.7, 1.2)), draw = EO(fade(t, 109.7, 1.6));
     const shot = t > 111.6 ? cl((t - 111.6) / 0.45) : 0, hit = t > 112.05, win = EO(fade(t, 112.05, 1.4));
@@ -300,7 +296,7 @@
     void tt;
     c.restore();
   }
-  // 12 ---- title: the reference composition, sunrise behind the pavilion, the four inside
+  
   function sceneTitle(c, W, Hh, t) {
     const u = sm(SC.title, DURATION, t);
     c.save(); cam(c, W, Hh, 0.05 * u, 0, 10);

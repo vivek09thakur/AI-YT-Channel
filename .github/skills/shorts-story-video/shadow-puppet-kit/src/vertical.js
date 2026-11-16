@@ -1,7 +1,5 @@
-  // ---------- 9:16 reel (S3 landscape-in-reel layout) ----------
-  // Top bar: hook line. Middle: the 16:9 stage at full width (1080x608), not cropped. Bottom bar: Hinglish captions.
   const VW = 1080, VH = 1920, STAGE_Y = (VH - 608) / 2;
-  // caption chunks from the voiceover word times; *word* = emphasis
+
   const CAPS = [
     [0.01, 'Aapne kabhi kauwe ko'], [0.97, '*pareshan* kiya hai?'], [1.90, 'Woh aapka chehra'], [2.85, '*saalon* yaad rakhega…'],
     [4.20, 'aur apne doston ko'], [5.25, 'bhi bata dega.'], [6.20, 'Ye kahani nahi hai.'], [7.29, 'America ki'],
@@ -22,12 +20,11 @@
   const CAP_FONT = 'bold 66px "Helvetica Neue", Helvetica, Arial, sans-serif';
   const AMBER = '#ffb347', CREAM = '#fff4e2';
 
-  // the theatre surround: dark hide with the lace valance edge facing the stage
   function surround(ctx, t) {
     const g = ctx.createLinearGradient(0, 0, 0, VH);
     g.addColorStop(0, '#120703'); g.addColorStop(0.34, '#1e0d05'); g.addColorStop(0.66, '#1e0d05'); g.addColorStop(1, '#0d0502');
     ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
-    // a faint lamp spill on the hide just above and below the screen
+
     const f = 1 + 0.04 * NZ.n2(t * 6.1, 0.3);
     for (const [y, dir] of [[STAGE_Y, -1], [STAGE_Y + 608, 1]]) {
       const sg = ctx.createLinearGradient(0, y, 0, y + dir * 260);
@@ -43,7 +40,7 @@
     const c = captionAt(t);
     if (!c) return;
     const [i, dt] = c, words = CAPS[i][1].split(' ').map((w) => ({ w: w.replace(/\*/g, ''), hot: w.includes('*') }));
-    // join words that sit inside one *...* span
+
     let on = false; words.forEach((x, k) => { const raw = CAPS[i][1].split(' ')[k]; if (raw.startsWith('*')) on = true; x.hot = on; if (raw.endsWith('*') || raw.endsWith('*.') || raw.endsWith('*,')) on = false; });
     ctx.save(); ctx.font = CAP_FONT; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
     const space = ctx.measureText(' ').width, lines = [[]]; let lw = 0;

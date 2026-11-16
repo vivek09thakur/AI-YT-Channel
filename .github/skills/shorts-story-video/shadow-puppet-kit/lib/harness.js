@@ -1,13 +1,9 @@
-// Shared helpers + style registry for the style-frame explorations.
-// Every style is a pure function of time: draw(ctx, W, H, t). Same t => same pixels.
 (function () {
   const STYLES = (window.STYLES = window.STYLES || []);
   window.registerStyle = (s) => STYLES.push(s);
 
   const H = (window.H = {});
 
-  // ---------- seeded randomness ----------
-  // H.rng(seed) -> r() in [0,1). Extras: r.range(a,b), r.int(a,b), r.pick(arr), r.gauss(), r.chance(p)
   H.rng = function (seed = 1) {
     let a = typeof seed === 'string' ? hashStr(seed) : (seed >>> 0) || 1;
     const r = function () {
@@ -25,8 +21,6 @@
   };
   function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 
-  // ---------- gradient noise ----------
-  // H.makeNoise(seed) -> { n2(x,y), n3(x,y,z), fbm2(x,y,oct), fbm3(x,y,z,oct) }  (outputs roughly -1..1)
   H.makeNoise = function (seed = 1) {
     const r = H.rng(seed), p = new Uint8Array(512), perm = [...Array(256).keys()];
     for (let i = 255; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [perm[i], perm[j]] = [perm[j], perm[i]]; }
@@ -48,7 +42,6 @@
     return { n2, n3, fbm2, fbm3 };
   };
 
-  // ---------- math ----------
   H.lerp = (a, b, t) => a + (b - a) * t;
   H.clamp = (v, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, v));
   H.map = (v, a, b, c, d) => c + ((v - a) / (b - a)) * (d - c);
@@ -60,15 +53,12 @@
     back: (t) => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); },
   };
 
-  // ---------- color ----------
   H.hex = (h) => { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map((c) => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
   H.rgba = (hexOrArr, a = 1) => { const [r, g, b] = Array.isArray(hexOrArr) ? hexOrArr : H.hex(hexOrArr); return `rgba(${r | 0},${g | 0},${b | 0},${a})`; };
   H.mix = (c1, c2, t) => { const a = Array.isArray(c1) ? c1 : H.hex(c1), b = Array.isArray(c2) ? c2 : H.hex(c2); return [0, 1, 2].map((i) => a[i] + (b[i] - a[i]) * t); };
 
-  // ---------- canvas utilities ----------
-  // Offscreen canvas of the same logical size (use for layers, masks, compositing).
   H.layer = (W, H_, ) => { const c = document.createElement('canvas'); c.width = W; c.height = H_; return c; };
-  // Monochrome grain / film noise over the whole canvas. amount ~ 0.03-0.15
+
   H.grain = function (ctx, W, Hh, amount = 0.08, seed = 7, mono = true) {
     const img = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height), d = img.data, r = H.rng(seed), k = amount * 255;
     for (let i = 0; i < d.length; i += 4) {
@@ -78,7 +68,7 @@
     }
     ctx.putImageData(img, 0, 0);
   };
-  // Paper-ish texture tile: fills with base color + fibrous noise (cheap; drawn into ctx).
+
   H.paper = function (ctx, W, Hh, base = '#f3ecdc', seed = 3, strength = 0.06) {
     ctx.save(); ctx.fillStyle = base; ctx.fillRect(0, 0, W, Hh);
     const nz = H.makeNoise(seed), cell = 4, [br, bg, bb] = H.hex(base);
@@ -89,20 +79,18 @@
     }
     ctx.restore();
   };
-  // Vignette
+
   H.vignette = function (ctx, W, Hh, strength = 0.5, color = '0,0,0') {
     const g = ctx.createRadialGradient(W / 2, Hh / 2, Math.min(W, Hh) * 0.3, W / 2, Hh / 2, Math.hypot(W, Hh) * 0.6);
     g.addColorStop(0, `rgba(${color},0)`); g.addColorStop(1, `rgba(${color},${strength})`);
     ctx.save(); ctx.fillStyle = g; ctx.fillRect(0, 0, W, Hh); ctx.restore();
   };
 
-  // ---------- rendering entry ----------
-  // Renders style into canvas at logical 1280x720 (canvas can be any pixel size; it is scaled).
   H.W = 1280; H.H = 720;
   H.loadFonts = async function (style) {
     const specs = style.fonts || [];
     try { const sample = 'AaZz09' + (window.FONT_SAMPLE || '');
-      await Promise.all(specs.map((f) => document.fonts.load(f, sample))); await document.fonts.ready; } catch (e) { /* render anyway */ }
+      await Promise.all(specs.map((f) => document.fonts.load(f, sample))); await document.fonts.ready; } catch (e) {  }
   };
   H.render = function (style, canvas, t) {
     const ctx = canvas.getContext('2d', { willReadFrequently: !!style.readsPixels });

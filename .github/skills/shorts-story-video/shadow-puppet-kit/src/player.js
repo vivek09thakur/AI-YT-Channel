@@ -1,5 +1,3 @@
-  // ---------- player ----------
-  // With a voiceover loaded the audio element is the clock; without one the page keeps its own.
   const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
   const $ = (id) => document.getElementById(id);
   const fmt = (s) => { const m = Math.floor(s / 60), r = s - m * 60; return `${m}:${r.toFixed(1).padStart(4, '0')}`; };
@@ -12,7 +10,7 @@
     lastDrawn = t;
     $('scrub').value = t; $('time').textContent = `${fmt(t)} / ${fmt(DURATION)}`;
   }
-  // audio clock while the voice runs; our own clock before it loads and after it ends
+
   function now() {
     if (playing && audio && !audio.paused && !audio.ended) return audio.currentTime;
     return playing ? clockT + (performance.now() - clockAt) / 1000 : clockT;
@@ -47,7 +45,7 @@
   function loadVoice(src, name) {
     if (audio) { audio.pause(); URL.revokeObjectURL(audio.src); }
     audio = new Audio(src); audio.preload = 'auto';
-    // the voice ends before DURATION: carry on from its end on our own clock
+
     audio.addEventListener('ended', () => { if (playing) { clockT = audio.duration; clockAt = performance.now(); } });
     $('vo-name').textContent = name;
     if (playing) { const t = clockT = now(); clockAt = performance.now(); audio.addEventListener('loadedmetadata', () => { if (playing) { audio.currentTime = Math.min(t, audio.duration); audio.play().catch(() => {}); } }, { once: true }); }
@@ -65,7 +63,6 @@
   $('sound').addEventListener('change', () => { if (!$('sound').checked) soundOff(); else if (playing) soundOn(now()); });
   document.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); playing ? pause() : play(); } });
 
-  // for frame-by-frame rendering
   window.seek = (t) => { pause(); clockT = cl(t, 0, DURATION); draw(clockT); };
   window.DURATION = DURATION;
   window.scoreSound = scoreSound;
@@ -73,7 +70,7 @@
 
   (async () => {
     const specs = ['400 104px "IM Fell English"', 'italic 400 44px "IM Fell English"', 'italic 400 36px "IM Fell English"', '400 190px "Libre Baskerville"', '400 150px "Libre Baskerville"'];
-    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09 →+'))); await document.fonts.ready; } catch (e) { /* draw anyway */ }
+    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09 →+'))); await document.fonts.ready; } catch (e) {  }
     if (window.VOICE_DATA_URL) loadVoice(window.VOICE_DATA_URL, 'voice: Seed-VC Rasa male (built in)');
     draw(0.9);
     clockT = 0;

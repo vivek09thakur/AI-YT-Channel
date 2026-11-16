@@ -1,4 +1,3 @@
-  // ---------- storyboard: one key frame per beat ----------
   const PANELS = [
     { beat: 1, t: 5.6, flow: 'Opening. The oil lamp sputters alight on a tight close-up of the crow. On "pareshan" its head card swings round on its pin to face us and the screen shakes once. SAALON slams down as a red-gel stamp, throwing hide crumbs. Three crows slide in on rods, held a little back from the cloth (softer), and all swing their heads round to face us at once.', sound: 'Lamp whump and sputter · wooden head-snap + screen thud on "pareshan" · stamp slam on "saalon" (big) · hide rustle + three rod taps as the crows arrive · bronze note when they all turn.' },
     { beat: 2, t: 10.9, flow: 'Scene change: the lamp is turned down and up (the story jumps from "you" to the research). In the dark, the campus picture is pinned to the screen: a gothic library facade cut against a sky-blue gel, a crow on the gable. The name strip rises on its rod and types itself; REAL RESEARCH stamps across the corner.', sound: 'Lamp turned down/up (low swell) · rod tap as the strip rises · soft typing while the name types · stamp slam on "sach mein test kiya".' },
@@ -24,7 +23,7 @@
 
   async function runStoryboard() {
     const specs = ['400 104px "IM Fell English"', 'italic 400 44px "IM Fell English"', '400 190px "Libre Baskerville"'];
-    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09 →'))); await document.fonts.ready; } catch (e) { /* draw anyway */ }
+    try { await Promise.all(specs.map((f) => document.fonts.load(f, 'AaZz09 →'))); await document.fonts.ready; } catch (e) {  }
     const grid = document.getElementById('grid');
     for (const P of PANELS) {
       const B = BEATS.find((b) => b.n === P.beat);

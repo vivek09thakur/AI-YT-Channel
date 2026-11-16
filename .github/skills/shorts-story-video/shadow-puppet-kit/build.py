@@ -1,12 +1,4 @@
-﻿#!/usr/bin/env python3
-"""Inline lib/ + src/ into self-contained pages.
-   python build.py storyboard [story]  -> <story>_storyboard.html
-   python build.py player     [story]  -> <story>_play.html
-   python build.py vertical   [story]  -> <story>_9x16.html (render-only, 1080x1920)
-
-   story = a folder under stories/ holding ref.js, story.js, sound_score.js, vertical.js
-   (and optionally storyboard_runner.js). Default: the bundled crow story in src/.
-"""
+#!/usr/bin/env python3
 import sys
 from pathlib import Path
 
@@ -31,7 +23,7 @@ def story_cfg(name):
     if not d.is_dir():
         sys.exit(f'unknown story {name!r}: expected stories/{name}/')
     meta = {}
-    mf = d / 'meta.txt'  # optional: title=...  parts=ref,lines,narration,story,sound_score,vertical  (one key=value per line)
+    mf = d / 'meta.txt'
     if mf.exists():
         meta = dict(l.split('=', 1) for l in mf.read_text(encoding='utf-8').splitlines() if '=' in l)
     parts = [p.strip() for p in meta['parts'].split(',')] if 'parts' in meta else DEFAULT_PARTS
@@ -39,7 +31,6 @@ def story_cfg(name):
 
 
 def resolve(cfg, part):
-    """<story dir>/<part>.js, else stories/_shared/<part>.js."""
     own = f"{cfg['dir']}/{part}.js"
     if (HERE / own).exists():
         return own
@@ -54,7 +45,7 @@ def build(shell, parts, libs, out, voice=False, title=None):
     if title:
         body = body.replace('Kauwa Shadow Play', title)
     scripts = ''
-    if voice and VOICE.exists():  # bake the voiceover in so the page plays with it
+    if voice and VOICE.exists():
         import base64
         scripts += f'<script>window.VOICE_DATA_URL = "data:audio/mpeg;base64,{base64.b64encode(VOICE.read_bytes()).decode()}";</script>\n'
     scripts += ''.join(f'<script>\n{read(l)}\n</script>\n' for l in libs)

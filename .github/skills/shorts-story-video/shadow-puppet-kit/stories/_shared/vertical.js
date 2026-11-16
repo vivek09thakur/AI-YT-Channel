@@ -1,6 +1,4 @@
-  // ---------- shared 9:16 reel (any story) ----------
-  // Uses TITLE, HOOK (two short lines) and optional REEL_SUBTITLE from story.js, plus the narration layer.
-  // The 16:9 stage sits full width in the middle; the bars continue its sky colours (sampled each frame).
+  
   const VW = 1080, VH = 1920, STAGE_H = 608, STAGE_Y = (VH - STAGE_H) / 2 + 40;
   const CAP_FONT = `italic 400 60px ${FF}`;
   const SUBTITLE = typeof REEL_SUBTITLE !== 'undefined' ? REEL_SUBTITLE : 'A short story';

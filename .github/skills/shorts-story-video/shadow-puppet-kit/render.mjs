@@ -1,9 +1,4 @@
-﻿// Render a built page to MP4 with headless Chrome.
-//   node render.mjs test [t…]            -> timing + console check, PNGs of the given times in debug/
-//   node render.mjs render               -> <OUT>/<story>_video_only.mp4 + <OUT>/<story>_effects.wav
-//   VERTICAL=1 node render.mjs (test <t…> | render)   -> the 9:16 reel page instead
-// Env: STORY=<name> (default crow), CHROME=<path to chrome>, OUT=<export dir> (default ../../07_Export, else ./out).
-// Needs puppeteer-core: `npm install` in this folder (or NODE_PATH=<dir>/node_modules).
+
 import { createRequire } from 'module';
 import { spawn } from 'child_process';
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
@@ -56,7 +51,6 @@ await page.goto(PAGE, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction('window.READY === true', { timeout: 60000 });
 const D = await page.evaluate(() => window.DURATION);
 
-// large 9:16 PNGs can occasionally stall the CDP round trip; retry the frame before giving up
 const grab = async (t) => {
   for (let n = 0; ; n++) {
     try { return await page.evaluate((t) => { window.seek(t); return document.getElementById('cv').toDataURL('image/png').split(',')[1]; }, t); }
@@ -71,7 +65,7 @@ if (mode === 'test' && V) {
   const probe = process.argv.length > 3 ? process.argv.slice(3).map(Number) : [2, 15, 25, 34, 39.8, 41.2, 47, 57].filter((t) => t < D);
   const ms = await page.evaluate((P) => { const r = []; for (const t of P) { const a = performance.now(); window.seek(t); r.push([t, +(performance.now() - a).toFixed(1)]); } return r; }, probe);
   console.log('DURATION', D, 'frame ms', JSON.stringify(ms));
-  // play for a moment, then pause: the clock and the sound score must run without errors
+
   await page.click('#play'); await new Promise((r) => setTimeout(r, 1500)); await page.click('#play');
   console.log('after play/pause', await page.evaluate(() => document.getElementById('time').textContent), 'voice:', await page.evaluate(() => document.getElementById('vo-name').textContent));
   for (const t of process.argv.slice(3).map(Number)) writeFileSync(path.join(HERE, `debug/p_${t}.png`), Buffer.from(await grab(t), 'base64'));
@@ -89,7 +83,7 @@ if (mode === 'test' && V) {
     if (i % 150 === 0) console.log(`frame ${i}/${frames}  ${((Date.now() - t0) / 1000).toFixed(0)} s`);
   }
   ff.stdin.end(); await new Promise((r) => ff.on('close', r));
-  // effects score, voiceover mode, rendered offline to a 16-bit stereo WAV
+
   const b64 = await page.evaluate(async (D) => {
     const { inter, peak, sr } = await SOUND.renderOffline(window.scoreSound, D, 48000, { voiceover: true });
     const i16 = new Int16Array(inter.length); for (let i = 0; i < inter.length; i++) i16[i] = Math.max(-1, Math.min(1, inter[i])) * 32767;
@@ -101,7 +95,7 @@ if (mode === 'test' && V) {
   hdr.writeUInt32LE(48000, 24); hdr.writeUInt32LE(48000 * 4, 28); hdr.writeUInt16LE(4, 32); hdr.writeUInt16LE(16, 34); hdr.write('data', 36); hdr.writeUInt32LE(pcm.length, 40);
   const wav = existsSync(path.join(VID, '05_Audio')) ? path.join(VID, '05_Audio/effects.wav') : path.join(out, `${BASE}_effects.wav`);
   writeFileSync(wav, Buffer.concat([hdr, pcm]));
-  // mux the effects under the picture so there is a ready-to-watch file too
+
   const mux = spawn('ffmpeg', ['-loglevel', 'error', '-y', '-i', mp4, '-i', wav, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', mp4.replace('_video_only.mp4', '.mp4')], { stdio: 'inherit' });
   await new Promise((r) => mux.on('close', r));
   console.log('done', frames, 'frames in', ((Date.now() - t0) / 1000).toFixed(0), 's ->', mp4.replace('_video_only.mp4', '.mp4'), '; errors', JSON.stringify(errors));

@@ -1,6 +1,4 @@
-  // ---------- Flat 2D poster style (mid-century Indian mythology art) ----------
-  // Everything is flat colour: layered silhouettes, soft vertical gradients, scalloped clouds with thin horizontal
-  // stripe lines, geometric figures with almond eyes. No textures, no shadows; depth comes from overlapping layers.
+  
   const FF = '"IM Fell English"';
   const TAU = Math.PI * 2;
   const NZ = H.makeNoise(108);
@@ -14,7 +12,7 @@
     x.clearRect(0, 0, c.width, c.height);
     return c;
   }
-  // palette rooted in Hindu tradition (see SKILL.md section 2)
+  
   const PAL = {
     saffron: '#f08a24', kesari: '#ff7f11', turmeric: '#f6c445', marigold: '#ffa726', amber: '#f7a234',
     kumkum: '#c8102e', vermilion: '#e03e1e', maroon: '#6a1020', burnt: '#b4471a',
@@ -24,14 +22,12 @@
   };
   const mixc = (a, b, u) => H.rgba(H.mix(a, b, cl(u)));
 
-  // ---------- backgrounds ----------
-  // vertical gradient sky from a list of [stop, colour]
   function sky(c, W, Hh, stops) {
     const g = c.createLinearGradient(0, 0, 0, Hh);
     stops.forEach(([o, col]) => g.addColorStop(o, col));
     c.fillStyle = g; c.fillRect(0, 0, W, Hh);
   }
-  // thin horizontal streaks across the sky (the reference's signature), drifting very slowly
+  
   function streaks(c, W, Hh, t, o) {
     o = o || {};
     const r = H.rng(o.seed || 5), n = o.n || 90, col = o.color || PAL.cream, ymax = o.ymax == null ? Hh : o.ymax;
@@ -43,7 +39,7 @@
     }
     c.restore();
   }
-  // a sun (or moon) disc with a soft halo
+  
   function sun(c, x, y, r, col, halo) {
     c.save();
     const g = c.createRadialGradient(x, y, r * 0.8, x, y, r * (halo || 3));
@@ -52,7 +48,7 @@
     c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
     c.restore();
   }
-  // scalloped flat-bottomed cloud with stripe lines through it
+  
   function cloud(c, x, y, w, h, fill, line, seed) {
     const r = H.rng(seed || 1), n = Math.max(3, Math.round(w / (h * 0.9))), bw = w / n;
     c.save(); c.beginPath(); c.moveTo(x, y);
@@ -72,7 +68,7 @@
     }
     c.restore();
   }
-  // a bank of clouds along a line, drifting at `speed`
+  
   function cloudBank(c, W, y, t, o) {
     const r = H.rng(o.seed || 9), n = o.n || 5, span = W + 700;
     for (let i = 0; i < n; i++) {
@@ -81,13 +77,13 @@
       cloud(c, x, yy, w, h, o.fill, o.line, 100 + i + (o.seed || 0));
     }
   }
-  // rolling hills: a soft noise ridge filled down to the bottom
+  
   function hills(c, W, Hh, y, amp, col, seed, drift) {
     c.save(); c.fillStyle = col; c.beginPath(); c.moveTo(-10, Hh + 10); c.lineTo(-10, y);
     for (let x = -10; x <= W + 10; x += 12) c.lineTo(x, y - amp * (0.5 + 0.5 * NZ.fbm2((x + (drift || 0)) * 0.0022 + seed * 7, seed, 3)) - amp * 0.3 * Math.sin((x + (drift || 0)) * 0.004 + seed));
     c.lineTo(W + 10, Hh + 10); c.closePath(); c.fill(); c.restore();
   }
-  // layered water: wavy bands, each a little lighter, moving sideways
+  
   function ocean(c, W, Hh, y, t, cols) {
     c.save();
     for (let k = 0; k < cols.length; k++) {
@@ -98,7 +94,7 @@
     }
     c.restore();
   }
-  // stylised tree: trunk + round lobes (or a palm when o.palm)
+  
   function tree(c, x, y, s, col, o) {
     o = o || {};
     c.save(); c.translate(x, y); c.scale(s, s); c.fillStyle = col; c.strokeStyle = col;
@@ -111,7 +107,7 @@
     }
     c.restore();
   }
-  // a pennant flag on a pole, waving
+  
   function flag(c, x, y, h, col, t, dir) {
     c.save(); c.strokeStyle = PAL.deep; c.lineWidth = 3; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - h); c.stroke();
     c.fillStyle = PAL.deep; c.beginPath(); c.arc(x, y - h, 4, 0, TAU); c.fill();
@@ -119,7 +115,7 @@
     c.fillStyle = col; c.beginPath(); c.moveTo(x, y - h + 4); c.quadraticCurveTo(x + d * w * 0.5, y - h + 4 + wv, x + d * w, y - h + fh * 0.5 + wv * 1.4); c.lineTo(x, y - h + fh + 4); c.closePath(); c.fill();
     c.restore();
   }
-  // crescent-flag finial as on the reference's dome
+  
   function finial(c, x, y, s, col, t) {
     c.save(); c.translate(x, y); c.scale(s, s); c.fillStyle = col; c.strokeStyle = col;
     c.beginPath(); c.arc(0, -18, 14, 0, TAU); c.fill();
@@ -130,8 +126,7 @@
     c.beginPath(); c.moveTo(0, -130); c.lineTo(0, -144); c.stroke();
     c.restore();
   }
-  // The pavilion temple from the reference: floor, four pillars, wide eave, two slabs, scalloped band, onion dome, finial.
-  // o: x (centre), y (floor top), s, col (silhouette colour), lite (slightly lighter for band detail)
+  
   function temple(c, o, t) {
     const x = o.x, y = o.y, s = o.s || 1, col = o.col || PAL.brown, lite = o.lite || mixc(col, PAL.cream, 0.18);
     c.save(); c.translate(x, y); c.scale(s, s); c.fillStyle = col;
@@ -153,7 +148,7 @@
     finial(c, 0, -596, 1, col, t || 0);
     c.restore();
   }
-  // distant city skyline: domes, spires, flags (flat, one colour)
+  
   function skyline(c, x, y, s, col, t) {
     c.save(); c.translate(x, y); c.scale(s, s); c.fillStyle = col;
     const dome = (dx, w, h) => { c.beginPath(); c.moveTo(dx - w / 2, 0); c.lineTo(dx - w / 2, -h * 0.4); c.bezierCurveTo(dx - w / 2 - w * 0.1, -h * 0.75, dx - w * 0.25, -h * 0.95, dx, -h); c.bezierCurveTo(dx + w * 0.25, -h * 0.95, dx + w / 2 + w * 0.1, -h * 0.75, dx + w / 2, -h * 0.4); c.lineTo(dx + w / 2, 0); c.closePath(); c.fill(); c.fillRect(dx - 2, -h - 22, 4, 22); };
@@ -165,7 +160,7 @@
     [-470, -300, 320, 470].forEach((fx, i) => flag(c, fx, -30, 60 + (i % 2) * 20, PAL.saffron, t || 0, i < 2 ? 1 : -1));
     c.restore();
   }
-  // stylised lotus (for halos and ground ornaments)
+  
   function lotus(c, x, y, s, col, col2) {
     c.save(); c.translate(x, y); c.scale(s, s);
     for (const [n, r, cc] of [[9, 1, col], [7, 0.72, col2 || col]]) {
@@ -174,13 +169,13 @@
     }
     c.restore();
   }
-  // a ring of light rays (sunburst) behind a hero
+  
   function rays(c, x, y, r0, r1, n, col, t, alpha) {
     c.save(); c.translate(x, y); c.rotate((t || 0) * 0.05); c.globalAlpha = alpha == null ? 0.35 : alpha; c.fillStyle = col;
     for (let k = 0; k < n; k++) { const a = k * TAU / n, w = TAU / n * 0.42; c.beginPath(); c.moveTo(Math.cos(a - w) * r0, Math.sin(a - w) * r0); c.lineTo(Math.cos(a - w * 0.7) * r1, Math.sin(a - w * 0.7) * r1); c.lineTo(Math.cos(a + w * 0.7) * r1, Math.sin(a + w * 0.7) * r1); c.lineTo(Math.cos(a + w) * r0, Math.sin(a + w) * r0); c.closePath(); c.fill(); }
     c.restore();
   }
-  // flames: a cluster of licking teardrops, animated
+  
   function flames(c, x, y, s, t, seed, n) {
     const r = H.rng(seed || 3); n = n || 7;
     c.save(); c.translate(x, y); c.scale(s, s);
@@ -193,17 +188,13 @@
     }
     c.restore();
   }
-  // lightning bolt from (x,y) down `len`
+  
   function bolt(c, x, y, len, seed, col) {
     const r = H.rng(seed); c.save(); c.strokeStyle = col || PAL.cream; c.lineWidth = 4; c.lineJoin = 'miter'; c.beginPath(); c.moveTo(x, y);
     let yy = y, xx = x; while (yy < y + len) { yy += 30 + r() * 40; xx += (r() - 0.5) * 70; c.lineTo(xx, yy); }
     c.stroke(); c.lineWidth = 12; c.globalAlpha = 0.25; c.stroke(); c.restore();
   }
 
-  // ---------- figures ----------
-  // A geometric person, profile, feet at (x,y), ~260 units tall at s=1. dir 1 faces right.
-  // o: skin cloth sash crown('tall'|'king'|'bun'|'long'|'none'|'cap') pose('stand'|'walk'|'kneel'|'aim'|'raise'|'namaste')
-  //    ph(0..1 walk phase) bow draw(0..1) mace maceA tail face('man'|'monkey'|'woman') eyeCol glow tilak arms([[a,b],[a,b]])
   function figure(c, o) {
     const d = o.dir == null ? 1 : o.dir, skin = o.skin || PAL.rama, cloth = o.cloth || PAL.turmeric, sash = o.sash || PAL.kumkum;
     const gold = o.gold || PAL.gold, hair = o.hair || PAL.ink, pose = o.pose || 'stand', ph = o.ph || 0;
@@ -214,7 +205,7 @@
     const limb = (pts, w, col) => { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.stroke(); };
     const kneel = pose === 'kneel', hipY = kneel ? -60 : -108;
     const skinB = mixc(skin, PAL.ink, 0.18);
-    // legs (behind the dhoti)
+    
     if (kneel) {
       limb([[-6, hipY], [-4, -10], [40, -10]], 20, skin); limb([[8, hipY], [34, -58], [36, -8]], 20, skin);
       c.fillStyle = skin; c.beginPath(); c.arc(40, -8, 10, 0, TAU); c.fill();
@@ -227,18 +218,18 @@
         c.fillStyle = col; c.beginPath(); c.moveTo(fx - 8, fy); c.lineTo(fx + 26, fy); c.lineTo(fx + 26, fy - 6); c.lineTo(fx - 8, fy - 10); c.closePath(); c.fill();
       }
     }
-    // dhoti
+    
     const hem = kneel ? -14 : -48;
     c.fillStyle = cloth; c.beginPath(); c.moveTo(-26, hipY - 4); c.lineTo(26, hipY - 4); c.lineTo(34 + sw * 10, hem); c.lineTo(-36 - sw * 10, hem); c.closePath(); c.fill();
     c.fillStyle = gold; c.fillRect(-26, hipY - 6, 52, 6);
     c.strokeStyle = mixc(cloth, PAL.ink, 0.3); c.lineWidth = 2; c.beginPath(); c.moveTo(0, hipY); c.lineTo(sw * 6, hem); c.stroke();
-    // torso (wide shoulders, narrow waist)
+    
     const shY = hipY - 68;
     c.fillStyle = skin; c.beginPath(); c.moveTo(-30, shY); c.lineTo(30, shY); c.lineTo(22, hipY); c.lineTo(-22, hipY); c.closePath(); c.fill();
     if (o.face === 'woman') { c.fillStyle = sash; c.beginPath(); c.moveTo(-30, shY); c.lineTo(30, shY); c.lineTo(24, hipY - 30); c.lineTo(-24, hipY - 30); c.closePath(); c.fill(); }
     c.strokeStyle = sash; c.lineWidth = 9; c.beginPath(); c.moveTo(-24, shY + 4); c.lineTo(18, hipY - 6); c.stroke();
     c.strokeStyle = gold; c.lineWidth = 3; c.beginPath(); c.arc(0, shY + 2, 16, 0.2, Math.PI - 0.2); c.stroke();
-    // arms: [shoulder angle, elbow bend] in radians, 0 = hanging, positive = forward
+    
     let back = [0.25 - sw * 0.7, 0.9], front = [-0.25 + sw * 0.7, 0.9];
     if (pose === 'aim') { back = [-1.45, 0.2 + (o.draw || 0) * 0.1]; front = [-1.55, 0.05]; }
     if (pose === 'raise') { front = [-2.6, -0.4]; back = [0.2, 0.9]; }
@@ -270,7 +261,7 @@
     const fh = arm(front, skin, true);
     if (o.mace) { c.save(); c.translate(fh[0], fh[1]); c.rotate(o.maceA == null ? -0.5 : o.maceA); c.strokeStyle = PAL.brass; c.lineWidth = 8; c.beginPath(); c.moveTo(0, 14); c.lineTo(0, -80); c.stroke(); c.fillStyle = PAL.gold; c.beginPath(); c.arc(0, -108, 30, 0, TAU); c.fill(); c.fillStyle = PAL.brass; c.beginPath(); c.arc(0, -108, 18, 0, TAU); c.fill(); c.restore(); }
     if (o.tail) { c.strokeStyle = skin; c.lineWidth = 12; c.lineCap = 'round'; c.beginPath(); c.moveTo(-18, hipY + 4); c.bezierCurveTo(-90, hipY + 10, -110, hipY - 150, -40, hipY - 170); c.quadraticCurveTo(-10, hipY - 178, -22, hipY - 150); c.stroke(); }
-    // neck + head
+    
     const hy = shY - 40;
     c.fillStyle = skin; c.fillRect(-7, shY - 12, 14, 14);
     if (o.face === 'monkey') {
@@ -300,7 +291,7 @@
     c.fillStyle = gold; c.beginPath(); c.arc(-4, hy + 16, 4, 0, TAU); c.fill();
     c.restore();
   }
-  // Ravana: a broad dark figure with extra crowned heads fanned behind the central one and extra arms.
+  
   function ravana(c, o) {
     const d = o.dir == null ? -1 : o.dir, skin = o.skin || PAL.maroon, s = o.s || 1;
     const head = (col, dd) => {
@@ -325,11 +316,11 @@
     }
     c.restore();
   }
-  // a small monkey warrior for the vanara army
+  
   function vanara(c, x, y, s, dir, ph, col) {
     figure(c, { x, y, s, dir, skin: col || PAL.burnt, cloth: PAL.turmeric, sash: PAL.kumkum, crown: 'none', face: 'monkey', pose: 'walk', ph, tail: true, mace: true, maceA: -0.9 });
   }
-  // an elephant in procession dress, facing `dir`
+  
   function elephant(c, x, y, s, dir, col, t) {
     c.save(); c.translate(x, y); c.scale(s * (dir || 1), s); c.fillStyle = col || PAL.brown;
     c.beginPath(); c.ellipse(-40, -150, 130, 95, 0, 0, TAU); c.fill();
@@ -345,14 +336,14 @@
     c.fillStyle = PAL.cream; c.beginPath(); c.ellipse(124, -184, 8, 4, -0.2, 0, TAU); c.fill(); c.fillStyle = PAL.ink; c.beginPath(); c.arc(126, -184, 3, 0, TAU); c.fill();
     c.restore();
   }
-  // a crown by itself (lifted away in the exile scene)
+  
   function crownOnly(c, x, y, s, a) {
     c.save(); c.translate(x, y); c.rotate(a || 0); c.scale(s, s); c.fillStyle = PAL.gold;
     c.beginPath(); c.moveTo(-24, 0); c.lineTo(24, 0); c.lineTo(18, -26); c.lineTo(8, -36); c.lineTo(0, -80); c.lineTo(-8, -36); c.lineTo(-18, -26); c.closePath(); c.fill();
     c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, -20, 5, 0, TAU); c.fill(); c.fillStyle = PAL.brass; c.fillRect(-24, -4, 48, 4);
     c.restore();
   }
-  // bridge of stones across the water: prog 0..1 from x0 to x1
+  
   function bridge(c, x0, x1, y, prog, col) {
     const r = H.rng(44), n = 40, far = x0 + (x1 - x0) * prog;
     c.save(); c.fillStyle = col;
@@ -360,7 +351,6 @@
     c.restore();
   }
 
-  // ---------- text ----------
   function title(c, text, x, y, size, col, o) {
     o = o || {}; c.save(); c.font = `${o.italic ? 'italic ' : ''}400 ${size}px ${FF}`; c.textAlign = o.align || 'center'; c.textBaseline = 'alphabetic';
     if (o.glow) { c.shadowColor = o.glow; c.shadowBlur = o.blur || 30; }
@@ -368,7 +358,7 @@
     if (o.stroke) { c.lineWidth = o.strokeW || 6; c.strokeStyle = o.stroke; c.lineJoin = 'round'; c.strokeText(text, x, y); }
     c.fillStyle = col; c.fillText(text, x, y); c.restore();
   }
-  // word-wrapped lines, centred at (x,y) block centre; returns the line count
+  
   function wrapText(c, text, x, y, maxW, lh, font, col, o) {
     o = o || {}; c.save(); c.font = font; c.textAlign = 'center'; c.textBaseline = 'middle';
     const words = text.split(' '), lines = [[]]; let w = 0;

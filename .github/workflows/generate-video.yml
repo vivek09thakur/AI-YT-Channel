@@ -68,12 +68,15 @@ jobs:
       - name: Slug
         id: slug
         run: |
-          slug=$(echo "${{ inputs.topic }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
+          slug=$(printf '%s' "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
           echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
+        env:
+          TOPIC: ${{ inputs.topic }}
       - name: Check LLM providers (keys, quota, credits)
         id: llm
-        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "${{ inputs.model }}"
+        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "$MODEL"
         env:
+          MODEL: ${{ inputs.model }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -84,12 +87,13 @@ jobs:
       - name: Prepare script
         run: |
           mkdir -p work
-          if [ -n "${{ inputs.script_file }}" ]; then cp "${{ inputs.script_file }}" work/script.txt
+          if [ -n "$SCRIPT_FILE" ]; then cp "$SCRIPT_FILE" work/script.txt
           else printf '%s\n' "$SCRIPT_INPUT" > work/script.txt; fi
           test -s work/script.txt || { echo "::error::no script given (script or script_file)"; exit 1; }
           wc -w work/script.txt
         env:
           SCRIPT_INPUT: ${{ inputs.script }}
+          SCRIPT_FILE: ${{ inputs.script_file }}
       - name: Voice (Indian English TTS)
         run: python pipeline/tts.py --script work/script.txt --voice "${{ inputs.voice }}" --out work
         env:
@@ -97,10 +101,11 @@ jobs:
           AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
       - name: Scene code (LLM, validated in headless Chrome)
         run: |
-          python pipeline/generate_story.py --topic "${{ inputs.topic }}" --narration work/narration.json --kit "$KIT" \
+          python pipeline/generate_story.py --topic "$TOPIC" --narration work/narration.json --kit "$KIT" \
             --slug "${{ steps.slug.outputs.slug }}" --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --notes "$NOTES"
         env:
           CI: 'true'
+          TOPIC: ${{ inputs.topic }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

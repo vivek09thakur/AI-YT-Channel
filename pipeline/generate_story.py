@@ -132,8 +132,7 @@ def write_lines_js(narr, kinds, path):
     for L in narr['lines']:
         k = kinds.get(str(L['i']))
         rows.append(f"    [{L['t0']}, {js_str(L['text'])}, {js_str(k) if k else 'null'}, {L['t1']}],")
-    path.write_text('  // generated from the voice track: [start, text, kind, end]\n'
-                    f'  const DURATION = {dur};\n  const LINES = [\n' + '\n'.join(rows) + '\n  ];\n', encoding='utf-8')
+    path.write_text(f'  const DURATION = {dur};\n  const LINES = [\n' + '\n'.join(rows) + '\n  ];\n', encoding='utf-8')
 
 
 def run(cmd, cwd, env=None, timeout=900):

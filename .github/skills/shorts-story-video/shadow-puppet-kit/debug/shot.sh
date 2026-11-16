@@ -1,5 +1,4 @@
 #!/bin/zsh
-# debug/shot.sh 5.6 10.9 ...  -> debug/f_<t>.png
 cd "${0:A:h}/.." && python3 -c "
 import build; build.build('debug/frame_shell.html', ['src/ref.js','src/story.js','debug/frame_runner.js'], ['lib/harness.js'], 'debug/frame.html')" >/dev/null
 for t in "$@"; do

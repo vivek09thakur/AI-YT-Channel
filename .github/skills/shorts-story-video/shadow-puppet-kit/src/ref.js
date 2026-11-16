@@ -1,11 +1,6 @@
-  // ---------- Shadow Puppet Theatre (reference helpers, unchanged) ----------
-  // Black cut-out puppets with punched cut-work, pinned joints and rods, pressed against a backlit cloth screen.
-  // Pipeline per frame: lamp light on the cloth -> coloured gels (multiply) -> silhouettes (each puppet is drawn on
-  // its own scratch layer, holes punched with destination-out, then laid on the shadow layer, blurred if it is held
-  // away from the screen) -> cloth weave, light diffusion, grain.
   const INK = 'rgb(20,8,4)';
   const FF = '"IM Fell English"';
-  const NF = '"Libre Baskerville"'; // lining figures for the counters
+  const NF = '"Libre Baskerville"';
   const TAU = Math.PI * 2;
   const NZ = H.makeNoise(4242);
   const sm = H.smooth, cl = H.clamp, lerp = H.lerp, EO = H.ease.out, EIO = H.ease.inOut;
@@ -19,28 +14,26 @@
     return c;
   }
 
-  // ---------- small drawing helpers ----------
   function cut(p, fn) { p.save(); p.globalCompositeOperation = 'destination-out'; p.fillStyle = '#000'; p.strokeStyle = '#000'; fn(); p.restore(); }
   function dot(c, x, y, r) { c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill(); }
-  // teardrop: round end at (x,y), point at distance len along angle a
+
   function tear(c, x, y, len, w, a) {
     c.save(); c.translate(x, y); c.rotate(a);
     c.beginPath(); c.moveTo(0, -w / 2); c.quadraticCurveTo(len * 0.55, -w * 0.45, len, 0); c.quadraticCurveTo(len * 0.55, w * 0.45, 0, w / 2);
     c.arc(0, 0, w / 2, Math.PI / 2, Math.PI * 1.5); c.fill(); c.restore();
   }
-  // a pivot pin: a punched ring around a rivet head
+
   function pin(p, x, y, r) { r = r || 8; cut(p, () => dot(p, x, y, r)); p.fillStyle = INK; dot(p, x, y, r * 0.55); }
   const both = (cs, fn) => cs.forEach(fn);
   const wpt = (p, x, y) => { const q = p.getTransform().transformPoint(new DOMPoint(x, y)); return [q.x, q.y]; };
-  // a cubic bezier point / tangent
+
   const bz = (P, u) => { const v = 1 - u; return [v * v * v * P[0][0] + 3 * v * v * u * P[1][0] + 3 * v * u * u * P[2][0] + u * u * u * P[3][0], v * v * v * P[0][1] + 3 * v * v * u * P[1][1] + 3 * v * u * u * P[2][1] + u * u * u * P[3][1]]; };
   const bzA = (P, u) => { const a = bz(P, Math.max(0, u - 0.01)), b = bz(P, Math.min(1, u + 0.01)); return Math.atan2(b[1] - a[1], b[0] - a[0]); };
   const swing = (t, t0, amp, k, w) => (t > t0 ? amp * Math.exp(-(t - t0) * k) * Math.sin((t - t0) * w) : 0);
   const blinkAt = (t, list) => list.reduce((m, b) => Math.max(m, 1 - Math.abs((t - b) / 0.08)), 0);
 
-  // ---------- frame lifecycle ----------
   function begin(W, Hh) { return { W, Hh, S: lay('S', W, Hh), G: lay('G', W, Hh), rods: [] }; }
-  // draw one puppet: fn(p, g, rods) on a fresh scratch layer, then lay it on the shadow layer
+
   function pup(st, o, fn) {
     const P = lay('P', st.W, st.Hh), p = P.getContext('2d'), g = st.G.getContext('2d');
     p.fillStyle = INK; p.strokeStyle = INK;
@@ -70,7 +63,7 @@
       d[i] = v; d[i + 1] = v * 0.985; d[i + 2] = v * 0.97; d[i + 3] = 255;
     }
     x.putImageData(img, 0, 0);
-    // soft folds and slubs of the cloth (low-res, scaled up)
+
     const f = H.layer(160, 90), fx = f.getContext('2d'), fi = fx.createImageData(160, 90);
     for (let y = 0; y < 90; y++) for (let X = 0; X < 160; X++) {
       const v = 255 * (1 - 0.07 * (0.5 + 0.5 * NZ.fbm2(X * 0.05, y * 0.012, 3)) - 0.03 * (0.5 + 0.5 * NZ.n2(X * 0.4, y * 0.2)));
@@ -78,7 +71,7 @@
     }
     fx.putImageData(fi, 0, 0);
     x.globalCompositeOperation = 'multiply'; x.imageSmoothingEnabled = true; x.drawImage(f, 0, 0, W, Hh);
-    // a vertical seam in the cloth
+
     x.globalCompositeOperation = 'multiply'; x.fillStyle = 'rgba(200,190,180,1)'; x.fillRect(214, 0, 2, Hh); x.fillStyle = 'rgba(232,226,220,1)'; x.fillRect(211, 0, 7, Hh);
     LAY._weave = c; return c;
   }
@@ -91,7 +84,7 @@
   }
   function end(ctx, st, t) {
     const { W, Hh } = st;
-    // rods: thin sticks running down out of frame to the puppeteers, a little off the screen so a little soft
+
     if (st.rods.length) {
       const R = lay('R', W, Hh), r = R.getContext('2d');
       r.strokeStyle = INK; r.lineCap = 'round';
@@ -101,19 +94,18 @@
     }
     ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(st.G, 0, 0); ctx.restore();
     ctx.save(); ctx.filter = 'blur(0.7px)'; ctx.globalAlpha = 0.97; ctx.drawImage(st.S, 0, 0); ctx.restore();
-    // the cloth
+
     ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(weave(W, Hh), 0, 0); ctx.restore();
-    // light diffusing through the cloth: glow bleeding into the shadows and around the punched holes
+
     const hl = lay('half', W / 4, Hh / 4), hx = hl.getContext('2d');
     hx.filter = 'blur(5px)'; hx.drawImage(ctx.canvas, 0, 0, W / 4, Hh / 4);
     ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.13; ctx.drawImage(hl, 0, 0, W, Hh); ctx.restore();
-    // grain, shifted at 12 fps
+
     const fr = Math.floor(t * 12), gt = grainTile(fr % 3), gr = H.rng(fr + 5);
     ctx.save(); ctx.fillStyle = ctx.createPattern(gt, 'repeat'); ctx.translate(-gr() * 256, -gr() * 256); ctx.fillRect(0, 0, W + 256, Hh + 256); ctx.restore();
     H.vignette(ctx, W, Hh, 0.38, '20,5,2');
   }
 
-  // ---------- stage furniture (cached) ----------
   function valance(W) {
     if (LAY._val) return LAY._val;
     const c = H.layer(W, 80), p = c.getContext('2d');
@@ -127,12 +119,12 @@
     if (LAY._gnd) return LAY._gnd;
     const c = H.layer(W, 110), p = c.getContext('2d'), r = H.rng(31);
     p.fillStyle = INK; p.strokeStyle = INK; p.fillRect(0, 96, W, 14);
-    // filigree grass: thin curved blades
+
     for (let x = -10; x < W + 10; x += 5 + r() * 6) {
       const h = 14 + r() * 34 * (0.6 + 0.4 * Math.sin(x * 0.013) ** 2), lean = (r() - 0.5) * 22, w = 2 + r() * 2.5;
       p.beginPath(); p.moveTo(x - w, 100); p.quadraticCurveTo(x + lean * 0.3, 100 - h * 0.6, x + lean, 100 - h); p.quadraticCurveTo(x + lean * 0.3 + w * 0.6, 100 - h * 0.55, x + w, 100); p.fill();
     }
-    // curls, ferns, little flowers
+
     p.lineCap = 'round';
     for (let x = 60; x < W; x += 150 + r() * 90) {
       const dir = r() < 0.5 ? -1 : 1, h = 40 + r() * 26;
@@ -148,14 +140,13 @@
     }
     LAY._gnd = c; return c;
   }
-  // a fern frond cut from hide (local coords: base at 0,0, growing up)
+
   function fernShape(p) {
     p.fillStyle = INK; p.strokeStyle = INK; p.lineWidth = 10; p.lineCap = 'round';
     p.beginPath(); p.moveTo(0, 0); p.quadraticCurveTo(40, -200, 10, -360); p.stroke();
     for (let k = 1; k < 13; k++) { const q = k / 13, y = -q * 340, x = 40 * Math.sin(q * 2.4) - 4; tear(p, x, y, 110 * (1 - q * 0.6), 34 * (1 - q * 0.5), 0.2 - q * 0.3); tear(p, x, y, 90 * (1 - q * 0.6), 30 * (1 - q * 0.5), Math.PI - 0.4 + q * 0.2); }
   }
-  // explainer depth cue: the same fern held right up by the lamp, so its shadow is huge and very soft.
-  // The blurred sprite is cached once; per frame it is only rotated (sway) and laid on the shadow layer.
+
   const FERN_OX = 170, FERN_OY = 440;
   function nearFern(st, t, side, a) {
     if (!LAY._fern) {
@@ -176,7 +167,6 @@
     s.drawImage(ground(st.W), 0, st.Hh - 110);
   }
 
-  // a hanging tag with cut-out letters. o: x,y (hang pin) rot flip w h text size badge('x'|'v') badgeS
   function tag(p, g, o) {
     both([p, g], (c) => { c.save(); c.translate(o.x, o.y); c.rotate(o.rot || 0); });
     p.fillStyle = INK; p.strokeStyle = INK; p.lineWidth = 2;
@@ -203,7 +193,7 @@
     p.stroke();
     both([p, g], (c) => c.restore());
   }
-  // small label plaque with cut letters, hung on a string of length `hang` (0 = sits)
+
   function plaque(p, o) {
     p.save(); p.translate(o.x, o.y); p.rotate(o.rot || 0);
     p.font = `italic 400 ${o.size}px ${FF}`;
@@ -219,7 +209,7 @@
     });
     p.restore();
   }
-  // a growing vine-arrow (cut from one strip of hide): P = cubic bezier, prog 0..1
+
   function vine(p, P, prog, w) {
     if (prog <= 0.001) return;
     w = w || 7; p.fillStyle = INK; p.strokeStyle = INK; p.lineCap = 'round'; p.lineJoin = 'round';
@@ -227,26 +217,26 @@
     p.lineWidth = w; p.beginPath();
     for (let i = 0; i <= n; i++) { const q = bz(P, Math.min(prog, i / N)); if (i === 0) p.moveTo(q[0], q[1]); else p.lineTo(q[0], q[1]); }
     p.stroke();
-    // start curl
+
     const s0 = bz(P, 0), a0 = bzA(P, 0);
     p.lineWidth = 3.5; p.beginPath();
     for (let a = 0; a < 5.2; a += 0.25) { const r = 16 * (1 - a / 6), aa = a0 + Math.PI + a; p.lineTo(s0[0] + Math.cos(a0 + Math.PI) * 4 + Math.cos(aa) * r - Math.cos(a0 + Math.PI) * 16, s0[1] + Math.sin(a0 + Math.PI) * 4 + Math.sin(aa) * r - Math.sin(a0 + Math.PI) * 16); }
     p.stroke();
-    // leaves
+
     [0.18, 0.34, 0.5, 0.66, 0.8].forEach((u, i) => {
       if (u > prog - 0.06) return;
       const q = bz(P, u), a = bzA(P, u) + (i % 2 ? 1 : -1) * 0.9, gr = Math.min(1, (prog - u) / 0.12);
       tear(p, q[0], q[1], 26 * gr, 11 * gr, a);
       cut(p, () => { p.lineWidth = 1.4; p.beginPath(); p.moveTo(q[0] + Math.cos(a) * 5, q[1] + Math.sin(a) * 5); p.lineTo(q[0] + Math.cos(a) * 20 * gr, q[1] + Math.sin(a) * 20 * gr); p.stroke(); });
     });
-    // spade arrowhead
+
     const e = bz(P, prog), ea = bzA(P, prog);
     p.save(); p.translate(e[0], e[1]); p.rotate(ea);
     p.beginPath(); p.moveTo(30, 0); p.quadraticCurveTo(8, -6, -4, -19); p.quadraticCurveTo(2, -6, -6, 0); p.quadraticCurveTo(2, 6, -4, 19); p.quadraticCurveTo(8, 6, 30, 0); p.fill();
     cut(p, () => dot(p, 6, 0, 3.2));
     p.restore();
   }
-  // hanging intertitle card with cut-out lettering. o: x,y centre, w,h, s, rot (about the top), lines [{text,size,y,italic,arrow}]
+
   function titleCard(p, g, o) {
     both([p, g], (c) => { c.save(); c.translate(o.x, o.y - o.h / 2 * o.s); c.rotate(o.rot || 0); c.scale(o.s, o.s); c.translate(0, o.h / 2); });
     const w = o.w, h = o.h;

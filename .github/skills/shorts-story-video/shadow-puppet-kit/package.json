@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "shadow-puppet-kit",
   "private": true,
   "description": "Render tooling for the shorts-story-video kit (puppeteer-core + headless Chrome + ffmpeg).",

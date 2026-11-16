@@ -1,17 +1,8 @@
-// sound.js: a small synthesized sound kit for the style explainers. Plain Web Audio, no audio files.
-// Voiceover mode: SOUND.kit(ctx, { voiceover: true }) drops beds and music, plays anything marked minor
-// (play(..., { minor: true }), tone/noise { minor: true }, or scheduled inside k.withMinor(() => ...)) at about 60%
-// volume instead of full, and sits all effects a little lower, so the narration stays on top while the piece still
-// sounds alive. In the full mix, minor sounds play at full volume. Scores can read k.vo to branch further.
-// A style adds   explainerSound(k) { k.bed('room', 0, D); k.play('pop', 1.25); ... }   and the same
-// call schedules into a live AudioContext (the player) or an OfflineAudioContext (the video render).
-// Times are seconds on the explainer's own clock. Randomness is seeded, so every render is identical.
 (function () {
   'use strict';
   const SOUND = (window.SOUND = {});
   const TINY = 1e-4;
 
-  // seeded random in [0,1), keyed by any string
   function rand(key) {
     let h = 2166136261;
     for (let i = 0; i < key.length; i++) { h ^= key.charCodeAt(i); h = Math.imul(h, 16777619); }
@@ -19,7 +10,6 @@
     return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   }
 
-  // note names to Hz: 'A4' = 440, 'C#5', 'Eb3'
   const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
   function hz(n) {
     if (typeof n === 'number') return n;
@@ -32,17 +22,15 @@
   SOUND.kit = function (ctx, opts) {
     const o = opts || {};
     const VO = !!o.voiceover;
-    const MINOR = 0.6; // voiceover-mode volume for minor sounds
+    const MINOR = 0.6;
     let inMinor = false;
     const gainOf = (p, d) => (p.gain == null ? d : p.gain) * (VO && (p.minor || inMinor) ? MINOR : 1);
-    const T0 = (o.start || 0) - 0; // explainer time that maps to ctx time `base`
+    const T0 = (o.start || 0) - 0;
     const base = ctx.currentTime + (o.delay || 0);
-    // Start times snap to the sample grid (+ a quarter sample): in Chrome a source started a hair off the grid can
-    // spike to about twice its set level.
+
     const SR = ctx.sampleRate;
     const at = (t) => (Math.round((base + (t - T0)) * SR) + 0.25) / SR;
 
-    // ---- buses: sfx, amb, music -> compressor -> master; one shared reverb send
     const master = ctx.createGain(); master.gain.value = o.master == null ? 0.9 : o.master;
     const comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -16; comp.knee.value = 8; comp.ratio.value = 3; comp.attack.value = 0.004; comp.release.value = 0.18;
@@ -50,7 +38,6 @@
     const bus = {};
     for (const [name, g] of Object.entries({ sfx: VO ? 0.7 : 0.85, amb: 0.5, music: 0.45 })) { bus[name] = ctx.createGain(); bus[name].gain.value = g; bus[name].connect(comp); }
 
-    // generated room reverb: decaying stereo noise, darker toward the tail
     const verb = ctx.createConvolver();
     {
       const secs = 1.6, n = Math.floor(secs * ctx.sampleRate), ir = ctx.createBuffer(2, n, ctx.sampleRate);
@@ -62,7 +49,6 @@
     }
     const verbIn = ctx.createGain(); verbIn.gain.value = 0.9; verbIn.connect(verb); verb.connect(comp);
 
-    // seeded noise buffers: white, pink-ish and brown
     const noiseBuf = {};
     {
       const n = Math.floor(2.5 * ctx.sampleRate);
@@ -79,14 +65,12 @@
       }
     }
 
-    // ---- automation helpers
-    // a value or [[dt, value], ...] from the voice start; ramps are exponential (frequencies)
     function sweep(param, v, t) {
       if (!Array.isArray(v)) { param.setValueAtTime(v, t); return; }
       param.setValueAtTime(v[0][1], t + v[0][0]);
       for (let i = 1; i < v.length; i++) param.exponentialRampToValueAtTime(Math.max(v[i][1], 1), t + v[i][0]);
     }
-    // amplitude: linear attack to `gain`, optional hold, exponential release to silence by `dur`
+
     function shape(param, t, gain, dur, a, hold) {
       a = Math.min(a == null ? 0.004 : a, dur * 0.9);
       hold = Math.min(hold || 0, dur - a);
@@ -108,8 +92,6 @@
       return f;
     }
 
-    // ---- primitives
-    // tone(t, { f, type, dur, gain, a, hold, pan, verb, bus, filter, f2 (filter freq), q, detune })
     function tone(time, p) {
       const t = at(time), dur = p.dur || 0.2;
       if (t + dur < ctx.currentTime || (time < T0 - 0.001 && dur < 1.5)) return;
@@ -122,7 +104,7 @@
       node.connect(g); out(g, p);
       osc.start(t); osc.stop(t + dur + 0.02);
     }
-    // noise(t, { dur, color, filter, f, q, gain, a, hold, pan, verb, bus, rate })
+
     function noise(time, p) {
       const t = at(time), dur = p.dur || 0.2;
       if (t + dur < ctx.currentTime || (time < T0 - 0.001 && dur < 1.5)) return;
@@ -136,9 +118,8 @@
       src.start(t, off); src.stop(t + dur + 0.02);
     }
 
-    // ---- named sounds. play(name, t, opts): opts.gain scales the whole sound, opts.pan places it.
     const S = {
-      // UI / motion graphics
+
       pop: (t, o) => { tone(t, { f: [[0, o.f || 620], [0.07, (o.f || 620) * 0.45]], dur: 0.1, gain: 0.32 * o.g, pan: o.pan }); noise(t, { dur: 0.012, filter: 'highpass', f: 3000, gain: 0.12 * o.g, pan: o.pan }); },
       tick: (t, o) => noise(t, { dur: 0.018, filter: 'bandpass', f: o.f || 4200, q: 2.5, gain: 0.3 * o.g, pan: o.pan }),
       click: (t, o) => { tone(t, { f: o.f || 1900, type: 'square', dur: 0.02, gain: 0.08 * o.g, filter: 'lowpass', f2: 3000, pan: o.pan }); noise(t, { dur: 0.01, filter: 'highpass', f: 2500, gain: 0.15 * o.g, pan: o.pan }); },
@@ -159,8 +140,6 @@
       shutter: (t, o) => { S.click(t, o); noise(t + 0.06, { dur: 0.04, filter: 'bandpass', f: 2200, q: 1, gain: 0.2 * o.g, pan: o.pan }); },
       count: (t, o) => S.tick(t, { ...o, f: o.f || 5200, g: o.g * 0.7 }),
 
-      // hand-made media
-      // stroke: a pen/marker/chalk/pencil stroke over `dur` seconds. material sets the surface sound.
       stroke: (t, o) => {
         const d = o.dur || 0.4, m = o.material || 'marker', r = rand('stroke' + m + t);
         const M = {
@@ -176,7 +155,7 @@
           noise(t + x, { dur: gd, color: M.color, filter: M.filter || 'bandpass', f: M.f * (0.8 + r() * 0.4), q: M.q, gain: M.g * o.g * (0.6 + r() * 0.5), a: gd * 0.3, pan: (o.pan || 0) + (r() - 0.5) * 0.2 });
         }
       },
-      // paper: picking up / slapping down / turning a sheet
+
       paper: (t, o) => { const d = o.dur || 0.35, r = rand('paper' + t); for (let x = 0; x < d; x += 0.025 + r() * 0.03) noise(t + x, { dur: 0.05, filter: 'bandpass', f: 1200 + r() * 2600, q: 0.9, gain: 0.12 * o.g * (1 - x / d * 0.5), pan: o.pan }); },
       slap: (t, o) => { noise(t, { dur: 0.07, filter: 'highpass', f: 900, gain: 0.45 * o.g, a: 0.001, pan: o.pan }); tone(t, { f: [[0, 180], [0.06, 70]], dur: 0.1, gain: 0.25 * o.g, pan: o.pan }); },
       tape: (t, o) => { noise(t, { dur: o.dur || 0.5, filter: 'bandpass', f: [[0, 900], [o.dur || 0.5, 2200]], q: 1.8, gain: 0.18 * o.g, a: 0.02, pan: o.pan }); },
@@ -184,7 +163,6 @@
       roller: (t, o) => { const d = o.dur || 0.6; noise(t, { dur: d, color: 'brown', filter: 'bandpass', f: 380, q: 1.5, gain: 0.3 * o.g, a: 0.05, hold: d * 0.6, pan: o.pan }); for (let x = 0; x < d; x += 0.07) S.tock(t + x, { f: 300, g: o.g * 0.15, pan: o.pan }); },
       erase: (t, o) => { const d = o.dur || 0.6, r = rand('erase' + t); for (let x = 0; x < d; x += 0.06 + r() * 0.04) noise(t + x, { dur: 0.08, color: 'pink', filter: 'bandpass', f: 700 + r() * 500, q: 0.8, gain: 0.22 * o.g, a: 0.03, pan: (r() - 0.5) * 0.5 }); },
 
-      // machines and screens
       key: (t, o) => { const r = rand('key' + t); noise(t, { dur: 0.025, filter: 'bandpass', f: 2600 + r() * 1200, q: 2, gain: 0.25 * o.g, a: 0.001, pan: o.pan }); tone(t, { f: 160 + r() * 40, dur: 0.04, gain: 0.12 * o.g, pan: o.pan }); },
       typing: (t, o) => { const r = rand('typing' + t), n = o.n || 8, rate = o.rate || 0.09; for (let i = 0; i < n; i++) S.key(t + i * rate * (0.75 + r() * 0.5), { g: o.g * (0.7 + r() * 0.4), pan: o.pan }); },
       typebar: (t, o) => { S.key(t, o); noise(t + 0.008, { dur: 0.03, filter: 'bandpass', f: 1100, q: 4, gain: 0.35 * o.g, pan: o.pan }); },
@@ -192,7 +170,7 @@
       boot: (t, o) => { tone(t, { f: [[0, 80], [0.35, 1600]], type: 'sine', dur: 0.5, gain: 0.08 * o.g, a: 0.3 }); S.blip(t + 0.45, { ...o, f: 'C6', dur: 0.12 }); },
       crtOn: (t, o) => { noise(t, { dur: 0.25, filter: 'highpass', f: 2000, gain: 0.2 * o.g, a: 0.001 }); tone(t, { f: 15700, dur: 1.5, gain: 0.02 * o.g, a: 0.1, hold: 1 }); S.thud(t, { ...o, f: 90, g: o.g * 0.5 }); },
       neon: (t, o) => { const d = o.dur || 0.25, r = rand('neon' + t); for (let x = 0; x < d; x += 0.035 + r() * 0.04) tone(t + x, { f: 120, type: 'sawtooth', dur: 0.03, gain: 0.3 * o.g * (0.5 + r() * 0.5), filter: 'bandpass', f2: 1200, q: 1.2, pan: o.pan }); },
-      // chip (8-bit console) sounds: raw square/triangle, no filtering
+
       coin: (t, o) => { tone(t, { f: 'B5', type: 'square', dur: 0.07, gain: 0.07 * o.g, a: 0.001, hold: 0.06 }); tone(t + 0.07, { f: 'E6', type: 'square', dur: 0.3, gain: 0.07 * o.g, a: 0.001, hold: 0.1 }); },
       jump: (t, o) => tone(t, { f: [[0, 260], [0.16, 820]], type: 'square', dur: 0.18, gain: 0.07 * o.g, a: 0.001, hold: 0.12 }),
       hurt: (t, o) => { tone(t, { f: [[0, 600], [0.25, 90]], type: 'square', dur: 0.28, gain: 0.08 * o.g, a: 0.001, hold: 0.2 }); noise(t, { dur: 0.2, filter: 'lowpass', f: 1800, gain: 0.15 * o.g, rate: 0.25 }); },
@@ -208,10 +186,8 @@
       if (opts && opts.minor) withMinor(() => fn(t, o2)); else fn(t, o2);
     }
 
-    // everything scheduled inside fn counts as minor (quieter in voiceover mode)
     function withMinor(fn) { const was = inMinor; inMinor = true; try { fn(); } finally { inMinor = was; } }
 
-    // ---- beds: continuous sound under a stretch of time. bed(name, t0, t1, opts)
     function bed(name, t0, t1, p) {
       if (VO) return;
       p = p || {}; const g = p.gain == null ? 1 : p.gain, d = t1 - t0, fade = Math.min(0.4, d / 4);
@@ -225,8 +201,6 @@
       else throw new Error('unknown bed: ' + name);
     }
 
-    // ---- music: optional light beds that sit under the effects. music(name, t0, t1, { bpm, chords, gain })
-    // chords: list of note arrays, one per bar, cycled. e.g. [['C4','E4','G4','B4'], ['A3','C4','E4','G4']]
     function music(name, t0, t1, p) {
       if (VO) return;
       p = p || {}; const g = p.gain == null ? 1 : p.gain, bpm = p.bpm || 100, beat = 60 / bpm, bar = beat * 4;
@@ -252,15 +226,12 @@
     return { play, bed, music, tone, noise, withMinor, hz, vo: VO, sounds: Object.keys(S) };
   };
 
-  // Live playback for a player: SOUND.live(scoreFn, fromT, { voiceover, master }) starts the score from explainer time
-  // fromT right now and returns stop(). Call stop() on pause or seek, and SOUND.live again on play.
   SOUND.live = function (fn, fromT, opts) {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     fn(SOUND.kit(ctx, Object.assign({}, opts, { start: fromT || 0, delay: 0.03 })));
     return () => { try { ctx.close(); } catch (e) {} };
   };
 
-  // Render a style's explainerSound into an OfflineAudioContext; returns interleaved float stereo.
   SOUND.renderOffline = async function (fn, duration, sampleRate, kitOpts) {
     const sr = sampleRate || 48000, len = Math.ceil(duration * sr);
     const ctx = new OfflineAudioContext(2, len, sr);

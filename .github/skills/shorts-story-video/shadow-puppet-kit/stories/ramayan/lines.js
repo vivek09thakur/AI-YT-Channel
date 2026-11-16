@@ -1,4 +1,4 @@
-  // ---------- RAMAYAN: narration timing (hand-timed, no voice track) ----------
+  
   const DURATION = 124.5;
   const LINES = [
     [0.6, 'Before the beginning of time as we know it...'],
