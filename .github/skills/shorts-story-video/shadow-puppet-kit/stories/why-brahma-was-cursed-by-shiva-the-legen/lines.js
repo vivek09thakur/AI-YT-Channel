@@ -1,0 +1,20 @@
+  const DURATION = 117.07;
+  const LINES = [
+    [0.8, "According to Hindu mythology, Lord Brahma, the creator of the universe, once had five heads.", null, 7.92],
+    [9.02, "One day, Brahma and Lord Vishnu began arguing about who was the most powerful among them.", null, 16.25],
+    [16.8, "To settle their dispute, Lord Shiva appeared as an endless pillar of divine light,", null, 22.99],
+    [23.54, "stretching beyond the heavens and deep into the earth.", null, 27.13],
+    [28.23, "Shiva challenged Brahma and Vishnu to find the beginning and the end of this infinite pillar.", null, 34.56],
+    [35.11, "Vishnu travelled downward in search of its end, while Brahma flew upward to find its top.", null, 41.68],
+    [42.78, "After travelling for a long time, Vishnu accepted defeat and returned, admitting that he could not find the end.", null, 50.96],
+    [51.51, "But Brahma, desperate to win, falsely claimed that he had reached the top.", null, 56.89],
+    [57.44, "He even presented a Ketaki flower as false evidence.", null, 61.45],
+    [62.55, "Lord Shiva immediately recognized Brahma's lie.", null, 66.06],
+    [66.61, "Angered by his dishonesty and arrogance, Shiva manifested his fierce form, Bhairava, who severed Brahma's fifth head.", null, 75.35],
+    [76.45, "Shiva then cursed Brahma that he would not be widely worshipped on Earth in temples, unlike Lord Vishnu and Lord Shiva.", null, 85.34],
+    [85.89, "The Ketaki flower was also forbidden from being offered in Shiva worship.", null, 90.96],
+    [92.06, "This is why Brahma has very few temples dedicated to him,", null, 96.45],
+    [97.0, "while the Ketaki flower is traditionally avoided in the worship of Lord Shiva.", null, 102.29],
+    [103.39, "Moral of the story: Even the creator must respect truth.", "big", 107.64],
+    [108.19, "Pride and dishonesty have consequences, no matter how powerful a being may be.", "tag", 114.07],
+  ];
