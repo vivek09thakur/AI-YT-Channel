@@ -1,15 +1,4 @@
 #!/usr/bin/env python3
-"""Add a finished video to the `videos` branch checkout and regenerate the overview page.
-
-    python pipeline/publish.py --root <checkout of videos branch> --src <dir with landscape.mp4 shorts.mp4 voice.mp3 narration.json meta.json thumb.jpg> \
-        --slug shiva-neelkanth --run 123 --repo owner/name --run-url https://github.com/owner/name/actions/runs/123
-
-Layout on the branch:
-    videos/<slug>-<run>/landscape.mp4 | shorts.mp4 | voice.mp3 | thumb.jpg | narration.json | meta.json
-    videos.json        all entries, newest first
-    index.html         overview page with one card per video and two download buttons (works on GitHub Pages or locally)
-    README.md          the same list as Markdown with raw download links (renders directly on github.com)
-"""
 import argparse, datetime, html, json, shutil
 from pathlib import Path
 
@@ -20,7 +9,6 @@ def fmt_dur(s):
 
 def mb(p):
     return f'{p.stat().st_size / 1e6:.0f} MB'
-
 
 PAGE = '''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -113,7 +101,8 @@ def main():
     md = ['# Generated videos', '', 'Newest first. Landscape = YouTube 16:9, Shorts = 9:16. Open `index.html` (or enable GitHub Pages on this branch) for the overview page.', '',
           '| Date | Title | Topic | Length | Landscape | Shorts | Run |', '|---|---|---|---|---|---|---|']
     for e in entries:
-        md.append(f"| {e['date']} | **{e['title']}** | {e['topic']} | {fmt_dur(e['duration'] or 0)} | [download]({raw}/{e['dir']}/landscape.mp4) ({e['landscape_bytes'] / 1e6:.0f} MB) | [download]({raw}/{e['dir']}/shorts.mp4) ({e['shorts_bytes'] / 1e6:.0f} MB) | [#{e['run']}]({e['run_url']}) |")
+        t, tp = e['title'].replace('|', '\\|'), e['topic'].replace('|', '\\|')
+        md.append(f"| {e['date']} | **{t}** | {tp} | {fmt_dur(e['duration'] or 0)} | [download]({raw}/{e['dir']}/landscape.mp4) ({e['landscape_bytes'] / 1e6:.0f} MB) | [download]({raw}/{e['dir']}/shorts.mp4) ({e['shorts_bytes'] / 1e6:.0f} MB) | [#{e['run']}]({e['run_url']}) |")
     (root / 'README.md').write_text('\n'.join(md) + '\n', encoding='utf-8')
     print(f'published {entry["dir"]}; {len(entries)} videos listed')
 

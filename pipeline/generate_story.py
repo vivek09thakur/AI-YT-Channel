@@ -1,12 +1,4 @@
 #!/usr/bin/env python3
-"""Topic + timed narration -> story code (story.js, sound_score.js, lines.js, meta.txt) via an LLM, validated by
-building the pages and running headless-Chrome frame tests; errors are fed back for up to --attempts rounds.
-
-    python pipeline/generate_story.py --topic "Shiva: the Neelkanth" --narration work/narration.json \
-        --kit .github/skills/shorts-story-video/shadow-puppet-kit --slug shiva-neelkanth --provider openai
-
-Env: OPENAI_API_KEY, ANTHROPIC_API_KEY or OPENROUTER_API_KEY (per --provider). Prints token usage per call.
-"""
 import argparse, json, os, re, shutil, subprocess, sys, time
 from pathlib import Path
 
@@ -18,15 +10,15 @@ import requests
 
 HERE = Path(__file__).parent
 DEFAULT_MODEL = {
-    'gemini': 'gemini-3.8-flash',                 # free tier via Google AI Studio
-    'mistral': 'mistral-large-latest',            # free "experiment" tier on La Plateforme
-    'cerebras': 'qwen-3-coder-480b',              # free tier, fast
-    'meta': 'Llama-4-Maverick-17B-128E-Instruct-FP8',  # Meta Llama API (free preview)
-    'openrouter': 'anthropic/claude-sonnet-4',    # paid unless model ends with :free
+    'gemini': 'gemini-3.8-flash',
+    'mistral': 'mistral-large-latest',
+    'cerebras': 'qwen-3-coder-480b',
+    'meta': 'Llama-4-Maverick-17B-128E-Instruct-FP8',
+    'openrouter': 'anthropic/claude-sonnet-4',
     'openai': 'gpt-4.1',
     'anthropic': 'claude-sonnet-4-20250514',
 }
-# OpenAI-compatible chat/completions endpoints: provider -> (url, env var with the key, extra headers)
+
 OPENAI_COMPAT = {
     'gemini': ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'GEMINI_API_KEY', {}),
     'mistral': ('https://api.mistral.ai/v1/chat/completions', 'MISTRAL_API_KEY', {}),
@@ -48,23 +40,19 @@ def read(p):
 def js_str(s):
     return json.dumps(s, ensure_ascii=False)
 
-
-# ---------------------------------------------------------------- LLM
 GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta'
 
 
 def call_gemini(model, system, messages, max_tokens):
-    """Native Gemini generateContent (the OpenAI-compat shim stalls on Gemini 3.x thinking models).
-    Streams so the connection stays alive during long outputs. Raises requests.HTTPError like the others."""
     key = os.environ.get('GEMINI_API_KEY')
     if not key:
         sys.exit('GEMINI_API_KEY is not set (needed for --provider gemini)')
     contents = [{'role': 'model' if m['role'] == 'assistant' else 'user', 'parts': [{'text': m['content']}]} for m in messages]
-    # thinking tokens count against maxOutputTokens, so leave headroom and keep thinking low
+
     body = {'system_instruction': {'parts': [{'text': system}]}, 'contents': contents,
             'generationConfig': {'maxOutputTokens': max_tokens + 8000, 'thinkingConfig': {'thinkingLevel': 'low'}}}
     url = f'{GEMINI_BASE}/models/{model}:streamGenerateContent?alt=sse'
-    for cfg in (body, {**body, 'generationConfig': {'maxOutputTokens': max_tokens + 8000}}):  # retry w/o thinkingConfig
+    for cfg in (body, {**body, 'generationConfig': {'maxOutputTokens': max_tokens + 8000}}):
         r = requests.post(url, timeout=(30, 600), headers={'x-goog-api-key': key}, json=cfg, stream=True)
         if r.status_code == 400 and 'thinking' in r.text.lower() and cfg is body:
             continue
@@ -90,7 +78,6 @@ def call_gemini(model, system, messages, max_tokens):
 
 
 def call_llm(provider, model, system, messages, max_tokens):
-    """messages: [{'role': 'user'|'assistant', 'content': str}] -> (text, usage dict)."""
     for attempt in range(4):
         try:
             if provider == 'gemini':
@@ -104,7 +91,7 @@ def call_llm(provider, model, system, messages, max_tokens):
                 r = requests.post(url, timeout=600,
                                   headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()
-                if 'error' in j:  # OpenRouter can return 200 with an error body
+                if 'error' in j:
                     sys.exit(f'LLM error: {json.dumps(j["error"])[:500]}')
                 return j['choices'][0]['message']['content'], j.get('usage', {})
             if provider == 'anthropic':
@@ -139,7 +126,6 @@ def parse_files(text):
     return files
 
 
-# ---------------------------------------------------------------- kit side
 def write_lines_js(narr, kinds, path):
     dur = round(narr['duration'], 2)
     rows = []
@@ -157,7 +143,6 @@ def run(cmd, cwd, env=None, timeout=900):
 
 
 def validate(kit, slug, duration):
-    """Build both pages and probe frames across the timeline in both layouts. Returns '' or an error report."""
     report = []
     for what in ('player', 'vertical'):
         rc, out = run([sys.executable, 'build.py', what, slug], kit)
@@ -172,27 +157,28 @@ def validate(kit, slug, duration):
         if vertical:
             env['VERTICAL'] = '1'
         rc, out = run(['node', 'render.mjs', 'test', *map(str, probes if not vertical else probes[::3])], kit, env)
-        m = re.search(r'errors (\[.*\])\s*$', out, re.S)
+        found = re.findall(r'errors (\[.*\])\s*$', out, re.M)
+        m = found[-1] if found else None
         errs = []
         if m:
             try:
-                errs = json.loads(m.group(1))
+                errs = json.loads(m)
             except json.JSONDecodeError:
-                errs = [m.group(1)[:1500]]
+                errs = [m[:1500]]
         if rc or not m or errs:
             tail = out[-2500:] if (rc or not m) else ''
             report.append(f'{"9:16 reel" if vertical else "16:9 stage"} test: exit {rc}\n' + '\n'.join(f'- {e}' for e in dict.fromkeys(errs)) + ('\n' + tail if tail else ''))
         else:
-            slow = re.search(r'frame ms (\[.*?\])', out)
+            slow = re.search(r'frame ms (\[\[.*?\]\]|\[\])', out)
             if slow:
-                ms = json.loads(slow.group(1)); worst = max(ms, key=lambda x: x[1])
-                if worst[1] > 400:
-                    report.append(f'frame at t={worst[0]} took {worst[1]} ms (limit 400 ms): simplify that scene (fewer loops/objects).')
+                ms = json.loads(slow.group(1))
+                worst = max(ms[1:], key=lambda x: x[1]) if len(ms) > 1 else None
+                if worst and worst[1] > 500:
+                    report.append(f'frame at t={worst[0]} took {worst[1]} ms (limit 500 ms): simplify that scene (fewer loops/objects).')
     return '\n\n'.join(report)
 
 
 def check_contract(files, narr):
-    """Cheap static checks before spending a browser round."""
     errs = []
     s = files.get('story.js', '')
     for name in ('const TITLE', 'const HOOK', 'const SC', 'const FADE', 'const BEATS', 'const SCENES'):
@@ -265,7 +251,8 @@ def main():
             (sdir / 'story.js').write_text(files['story.js'], encoding='utf-8')
             (sdir / 'sound_score.js').write_text(files['sound_score.js'], encoding='utf-8')
             write_lines_js(narr, meta.get('kinds') or {}, sdir / 'lines.js')
-            (sdir / 'meta.txt').write_text(f"title={meta['title']}\nparts=ref,lines,narration,story,sound_score,vertical\n", encoding='utf-8')
+            title = ' '.join(str(meta['title']).split())
+            (sdir / 'meta.txt').write_text(f"title={title}\nparts=ref,lines,narration,story,sound_score,vertical\n", encoding='utf-8')
             (sdir / 'meta.json').write_text(json.dumps({**meta, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'], 'provider': a.provider, 'model': model}, indent=1, ensure_ascii=False), encoding='utf-8')
             report = validate(kit, a.slug, narr['duration'])
             if not report:

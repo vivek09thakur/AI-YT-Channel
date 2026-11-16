@@ -1,29 +1,18 @@
 #!/usr/bin/env python3
-"""Narration -> Indian English voice track with per-line timestamps.
-
-    python pipeline/tts.py --script script.txt --voice en-IN-PrabhatNeural --out work
-
-Writes work/voice.wav, work/voice.mp3 and work/narration.json:
-    {"voice": ..., "duration": 123.4, "lines": [{"i": 0, "text": ..., "t0": 0.8, "t1": 3.2, "para": true}, ...]}
-
-Engines: Azure Speech when AZURE_SPEECH_KEY (+ AZURE_SPEECH_REGION) are set, else edge-tts (free, no key).
-Both give the same Microsoft neural voices (en-IN-NeerjaNeural, en-IN-PrabhatNeural, ...).
-"""
-import argparse, asyncio, json, os, re, subprocess, sys
+import argparse, asyncio, html, json, os, re, subprocess, sys
 from pathlib import Path
 
-try:  # use the OS certificate store (corporate proxies); no-op if truststore is not installed
+try:
     import truststore; truststore.inject_into_ssl()
 except ImportError:
     pass
 
 SR = 48000
 LEAD_IN, GAP, PARA_GAP, ELLIPSIS_GAP, TAIL = 0.8, 0.55, 1.1, 0.35, 3.0
-MAX_WORDS = 22  # longer sentences are split at commas so captions stay readable
+MAX_WORDS = 22
 
 
 def split_script(text):
-    """Paragraphs -> sentences -> [{'text', 'para'}]; para marks the first line of a paragraph."""
     out = []
     for para in re.split(r'\n\s*\n|\s*(?<!\w)[/|](?!\w)\s*', text.strip()):
         para = ' '.join(para.split())
@@ -60,7 +49,6 @@ def to_pcm(path):
 
 
 def trim_silence(pcm, thresh=400):
-    """Strip leading/trailing near-silence so timestamps match the audible speech."""
     import array
     a = array.array('h'); a.frombytes(pcm)
     n = len(a); i, j = 0, n
@@ -78,7 +66,7 @@ async def edge_line(text, voice, rate, path):
 def azure_line(text, voice, rate, path):
     import requests
     key, region = os.environ['AZURE_SPEECH_KEY'], os.environ.get('AZURE_SPEECH_REGION', 'centralindia')
-    ssml = f'<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-IN"><voice name="{voice}"><prosody rate="{rate}">{text}</prosody></voice></speak>'
+    ssml = f'<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-IN"><voice name="{voice}"><prosody rate="{rate}">{html.escape(text, quote=False)}</prosody></voice></speak>'
     r = requests.post(f'https://{region}.tts.speech.microsoft.com/cognitiveservices/v1', data=ssml.encode('utf-8'), timeout=60,
                       headers={'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'riff-48khz-16bit-mono-pcm', 'User-Agent': 'ai-yt-channel'})
     r.raise_for_status()
@@ -112,7 +100,7 @@ def main():
                     asyncio.run(edge_line(L['text'], a.voice, a.rate, f))
                 if f.stat().st_size > 0:
                     break
-            except Exception as e:  # network hiccups: retry
+            except Exception as e:
                 print(f'  retry line {i}: {e}', file=sys.stderr)
         else:
             sys.exit(f'TTS failed for line {i}: {L["text"]!r}')

@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""Mux the rendered picture with the voice track and the synthesized effects bed.
-
-    python pipeline/mux.py --video out/<slug>_video_only.mp4 --voice work/voice.wav --fx out/<slug>_effects.wav --out landscape.mp4 [--thumb thumb.jpg --thumb-at 0.3]
-"""
 import argparse, subprocess
 from pathlib import Path
 

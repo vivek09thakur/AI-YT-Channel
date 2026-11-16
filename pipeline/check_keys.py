@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""Discover which LLM API keys are configured, probe each with a ~10-token request, report status and (where the
-provider exposes it) remaining credits, then pick the provider to use.
-
-    python pipeline/check_keys.py --prefer gemini [--model X]
-
-Writes a Markdown table to $GITHUB_STEP_SUMMARY (if set) and `provider=... model=...` lines to $GITHUB_OUTPUT.
-Exit 1 if no usable provider is found. Only OpenRouter has a balance API; for the others the probe only tells
-us valid / quota exhausted / invalid.
-"""
 import argparse, json, os, sys
 from pathlib import Path
 
@@ -16,9 +7,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 import requests
 from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE
 
-# order used for automatic fallback: free tiers first
 PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
-# tried in order when the default model returns 404 (retired / not available to new accounts)
+
 FALLBACK_MODELS = {
     'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
     'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
@@ -46,7 +36,7 @@ def classify(status, body):
 def probe_once(provider, model, key):
     try:
         if provider == 'gemini':
-            # metadata GET: instant, validates key + model availability (the compat chat endpoint stalls on 3.x)
+
             r = requests.get(f'{GEMINI_BASE}/models/{model}', timeout=30, headers={'x-goog-api-key': key})
             state, note = classify(r.status_code, r.text)
             if state == 'ok':
@@ -85,7 +75,6 @@ def probe(provider, model, allow_fallback=True):
 
 
 def credits(provider, key):
-    """Human-readable balance where the API exposes one."""
     try:
         if provider == 'openrouter':
             j = requests.get('https://openrouter.ai/api/v1/credits', timeout=30,

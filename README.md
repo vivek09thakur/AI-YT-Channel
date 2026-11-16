@@ -10,7 +10,7 @@ Turns a topic + narration script into two finished story videos (YouTube 16:9 an
 2. Actions → **Generate story video** → *Run workflow*:
    - `topic` – short title/theme, e.g. `Shiva drinks the Halahala poison`
    - `script` – the narration. One sentence per caption; separate paragraphs with a blank line, ` / ` or `|` (the web form is single-line, so ` / ` is handy there). Or set `script_file` to a path in the repo, e.g. `scripts/ramayan.txt`.
-   - `voice` – `en-IN-Prabhat` (male, default), `en-IN-Neerja`, `en-IN-NeerjaExpressive`
+   - `voice` – `en-IN-PrabhatNeural` (male, default), `en-IN-NeerjaNeural`, `en-IN-NeerjaExpressiveNeural`
    - `provider` / `model` – `auto` (default: probes every configured key and uses the first working one, free tiers first), or force `gemini` (`gemini-3.8-flash`, free), `mistral` (`mistral-large-latest`, free), `cerebras` (`qwen-3-coder-480b`, free), `meta` (Llama API, secret `META_AI_API`), `openrouter`, `openai`, `anthropic`. The run summary shows a table of every key: valid / quota exhausted / invalid, and the OpenRouter balance (the only provider that exposes credits via API).
    - `notes` – optional art direction hints for the scene writer
 3. Wait ~25–35 min. The run summary shows download links. Outputs land in three places:
@@ -21,7 +21,7 @@ Turns a topic + narration script into two finished story videos (YouTube 16:9 an
 CLI equivalent:
 
 ```sh
-gh workflow run generate-video.yml -f topic="Ramayan trailer" -f script_file=scripts/ramayan.txt -f voice=en-IN-Prabhat -f provider=openai
+gh workflow run generate-video.yml -f topic="Ramayan trailer" -f script_file=scripts/ramayan.txt -f voice=en-IN-PrabhatNeural
 ```
 
 ## Pipeline
