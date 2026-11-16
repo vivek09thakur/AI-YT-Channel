@@ -32,9 +32,16 @@ YOUR story.js, YOUR sound_score.js, then the shared 9:16 reel. So:
 
 - story.js MUST define: `const TITLE` (string), `const HOOK` (array of 1–2 short strings), `const REEL_SUBTITLE`,
   `const SC` (scene start times), `const FADE = 0.9`, `const BEATS` (array of {n, name, t0, t1, vo, screen}),
-  the scene functions `(c, W, Hh, t) => void`, and `const SCENES = [[0, sceneA], [SC.x, sceneB], ...]` sorted by time,
+  `const REEL_FOCUS` (see below), the scene functions `(c, W, Hh, t) => void`, and
+  `const SCENES = [[0, sceneA], [SC.x, sceneB], ...]` sorted by time,
   first entry at 0. Do NOT define DURATION, LINES, lineAt, drawLines, stageFrame, explainerFrame, reelFrame, pop, fade,
   cam, stars, WARM, DUSK, NIGHT, mixStops: they exist already (redeclaring a const is a fatal error).
+- The 9:16 Short is a full-frame crop of each 1280x720 scene: the frame shows the full 720 height and a 405 px wide
+  window centred on a focus point. `REEL_FOCUS` maps each `SC` key (and `open` for the scene at t = 0) to `[x, y]` or
+  to `(t) => [x, y]` in scene coordinates, so the window follows the subject (hero, sun, temple) and pans with moving
+  characters. Keep the main subject of every scene inside x ± 200 of its focus, and put the hero near x ≈ 640 or set the
+  focus explicitly. Captions sit in the bottom 400 px of the Short, so keep feet/ground near y 650–720 as in the example.
+  Omitted keys default to `[640, 400]`.
 - Each scene paints the whole 1280x720 frame opaquely (start with `sky(...)`), using only helpers from ref.js,
   narration.js, `H` (harness: `H.rng(seed)`, `H.rgba(col, a)`, `H.ease.{inOut,out,in,back}`, `H.vignette`) and standard
   canvas 2D. Animate with `t` (seconds). Scenes are called for any `t` inside their range and 0.9 s before it (crossfade),

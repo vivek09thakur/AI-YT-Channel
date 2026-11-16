@@ -65,8 +65,9 @@ async def edge_line(text, voice, rate, path):
 
 def azure_line(text, voice, rate, path):
     import requests
-    key, region = os.environ['AZURE_SPEECH_KEY'], os.environ.get('AZURE_SPEECH_REGION', 'centralindia')
-    ssml = f'<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-IN"><voice name="{voice}"><prosody rate="{rate}">{html.escape(text, quote=False)}</prosody></voice></speak>'
+    key, region = os.environ['AZURE_SPEECH_KEY'], os.environ.get('AZURE_SPEECH_REGION', 'eastus')
+    lang = '-'.join(voice.split('-')[:2])
+    ssml = f'<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="{lang}"><voice name="{voice}"><prosody rate="{rate}">{html.escape(text, quote=False)}</prosody></voice></speak>'
     r = requests.post(f'https://{region}.tts.speech.microsoft.com/cognitiveservices/v1', data=ssml.encode('utf-8'), timeout=60,
                       headers={'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'riff-48khz-16bit-mono-pcm', 'User-Agent': 'ai-yt-channel'})
     r.raise_for_status()
@@ -76,7 +77,7 @@ def azure_line(text, voice, rate, path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--script', required=True)
-    ap.add_argument('--voice', default='en-IN-PrabhatNeural')
+    ap.add_argument('--voice', default='en-US-AndrewNeural')
     ap.add_argument('--rate', default='-6%', help='speaking rate, e.g. -6%% for a cinematic pace')
     ap.add_argument('--out', default='work')
     a = ap.parse_args()

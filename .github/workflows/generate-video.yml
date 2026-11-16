@@ -16,11 +16,11 @@ on:
         required: false
         type: string
       voice:
-        description: 'Indian English neural voice'
+        description: 'Narration voice (neural)'
         required: true
         type: choice
-        default: en-IN-PrabhatNeural
-        options: [en-IN-PrabhatNeural, en-IN-NeerjaNeural, en-IN-NeerjaExpressiveNeural]
+        default: en-US-AndrewNeural
+        options: [en-US-AndrewNeural, en-US-GuyNeural, en-US-AvaNeural, en-GB-RyanNeural, en-GB-SoniaNeural, en-IN-PrabhatNeural, en-IN-NeerjaNeural]
       provider:
         description: 'LLM that writes the scene code (auto = first working key, free tiers first)'
         required: true
@@ -94,7 +94,7 @@ jobs:
         env:
           SCRIPT_INPUT: ${{ inputs.script }}
           SCRIPT_FILE: ${{ inputs.script_file }}
-      - name: Voice (Indian English TTS)
+      - name: Voice (neural TTS)
         run: python pipeline/tts.py --script work/script.txt --voice "${{ inputs.voice }}" --out work
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}

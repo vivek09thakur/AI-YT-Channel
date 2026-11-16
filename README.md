@@ -1,16 +1,16 @@
 # AI-YT-Channel
 
-Turns a topic + narration script into two finished story videos (YouTube 16:9 and Shorts 9:16) with Indian English voice-over, rendered entirely inside a GitHub Action. Visual style: flat 2D mid-century Indian mythology poster (see `.github/skills/shorts-story-video/`).
+Turns a topic + narration script into two finished story videos (YouTube 16:9 and a true full-frame 9:16 Short that follows the action) with English voice-over, rendered entirely inside a GitHub Action. Visual style: flat 2D mid-century Indian mythology poster (see `.github/skills/shorts-story-video/`).
 
 ## How to generate a video
 
 1. Add repository secrets (Settings → Secrets and variables → Actions):
    - an LLM key for the provider you pick. **Free options:** `GEMINI_API_KEY` (default; [aistudio.google.com/apikey](https://aistudio.google.com/apikey), Gemini 2.5 Flash free tier), `MISTRAL_API_KEY` ([console.mistral.ai](https://console.mistral.ai), free experiment tier), `CEREBRAS_API_KEY` ([cloud.cerebras.ai](https://cloud.cerebras.ai), free tier). Paid: `OPENROUTER_API_KEY` (any model, `:free` variants are free but rate‑limited), `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`.
-   - optional `AZURE_SPEECH_KEY` + variable `AZURE_SPEECH_REGION` for Azure neural voices; without them the free `edge-tts` engine is used (same `en-IN` voices)
+   - optional `AZURE_SPEECH_KEY` + variable `AZURE_SPEECH_REGION` for Azure neural voices; without them the free `edge-tts` engine is used (same voice names)
 2. Actions → **Generate story video** → *Run workflow*:
    - `topic` – short title/theme, e.g. `Shiva drinks the Halahala poison`
    - `script` – the narration. One sentence per caption; separate paragraphs with a blank line, ` / ` or `|` (the web form is single-line, so ` / ` is handy there). Or set `script_file` to a path in the repo, e.g. `scripts/ramayan.txt`.
-   - `voice` – `en-IN-PrabhatNeural` (male, default), `en-IN-NeerjaNeural`, `en-IN-NeerjaExpressiveNeural`
+   - `voice` – `en-US-AndrewNeural` (US male, default), `en-US-GuyNeural`, `en-US-AvaNeural`, `en-GB-RyanNeural`, `en-GB-SoniaNeural`, `en-IN-PrabhatNeural`, `en-IN-NeerjaNeural`
    - `provider` / `model` – `auto` (default: probes every configured key and uses the first working one, free tiers first), or force `gemini` (`gemini-3.8-flash`, free), `mistral` (`mistral-large-latest`, free), `cerebras` (`qwen-3-coder-480b`, free), `meta` (Llama API, secret `META_AI_API`), `openrouter`, `openai`, `anthropic`. The run summary shows a table of every key: valid / quota exhausted / invalid, and the OpenRouter balance (the only provider that exposes credits via API).
    - `notes` – optional art direction hints for the scene writer
 3. Wait ~25–35 min. The run summary shows download links. Outputs land in three places:
@@ -21,7 +21,7 @@ Turns a topic + narration script into two finished story videos (YouTube 16:9 an
 CLI equivalent:
 
 ```sh
-gh workflow run generate-video.yml -f topic="Ramayan trailer" -f script_file=scripts/ramayan.txt -f voice=en-IN-PrabhatNeural
+gh workflow run generate-video.yml -f topic="Ramayan trailer" -f script_file=scripts/ramayan.txt -f voice=en-US-AndrewNeural
 ```
 
 ## Pipeline
@@ -48,7 +48,7 @@ Any story works, not only Ramayan: the model writes new scenes on top of the sha
 ```sh
 pip install -r pipeline/requirements.txt
 cd .github/skills/shorts-story-video/shadow-puppet-kit && npm ci && cd -
-python pipeline/tts.py --script scripts/ramayan.txt --voice en-IN-PrabhatNeural --out work
+python pipeline/tts.py --script scripts/ramayan.txt --voice en-US-AndrewNeural --out work
 OPENAI_API_KEY=... python pipeline/generate_story.py --topic "Ramayan" --narration work/narration.json \
   --kit .github/skills/shorts-story-video/shadow-puppet-kit --slug ramayan2 --provider openai
 ```

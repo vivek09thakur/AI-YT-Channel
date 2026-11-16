@@ -46,12 +46,14 @@
   }
   function stageFrame(ctx, W, Hh, t) {
     let i = SCENES.length - 1; while (i > 0 && t < SCENES[i][0]) i--;
-    const [t0, fn] = SCENES[i];
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
+    const [t0, fn] = SCENES[i], k = ctx.canvas.width / W;
+    ctx.setTransform(k, 0, 0, k, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
     if (i > 0 && t < t0 + FADE) {
-      const A = lay('A', W, Hh), B = lay('B', W, Hh);
-      SCENES[i - 1][1](A.getContext('2d'), W, Hh, t); fn(B.getContext('2d'), W, Hh, t);
-      ctx.drawImage(A, 0, 0); ctx.save(); ctx.globalAlpha = EIO((t - t0) / FADE); ctx.drawImage(B, 0, 0); ctx.restore();
+      const A = lay('A', ctx.canvas.width, ctx.canvas.height), B = lay('B', ctx.canvas.width, ctx.canvas.height);
+      const ca = A.getContext('2d'), cb = B.getContext('2d');
+      ca.setTransform(k, 0, 0, k, 0, 0); cb.setTransform(k, 0, 0, k, 0, 0);
+      SCENES[i - 1][1](ca, W, Hh, t); fn(cb, W, Hh, t);
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(A, 0, 0); ctx.globalAlpha = EIO((t - t0) / FADE); ctx.drawImage(B, 0, 0); ctx.restore();
     } else fn(ctx, W, Hh, t);
     H.vignette(ctx, W, Hh, 0.32, '60,20,5');
     const bk = Math.max(1 - cl(t / 1.2), cl((t - (DURATION - 1.2)) / 1.2));

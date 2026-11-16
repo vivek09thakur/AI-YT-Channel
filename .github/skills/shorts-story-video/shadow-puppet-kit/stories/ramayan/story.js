@@ -5,6 +5,23 @@
 
   const SC = { dawn: 8.2, ayodhya: 18.0, rama: 24.2, exile: 36.4, walk: 48.2, ravana: 58.0, dharma: 76.4, forest: 85.0, shore: 87.4, leap: 90.0, lanka: 92.6, army: 95.4, battle: 103.5, title: 113.6 };
   const FADE = 0.9;
+  const REEL_FOCUS = {
+    open: [640, 400],
+    dawn: (t) => [lerp(360 + (t - SC.dawn) * 14, 1000, EIO(sm(13.4, 14.8, t))), 420],
+    ayodhya: [640, 420],
+    rama: [640, 440],
+    exile: (t) => [560 + EIO(sm(44.7, 48.2, t)) * 240, 430],
+    walk: [620, 430],
+    ravana: [640, 420],
+    dharma: (t) => [lerp(500, 760, EIO(sm(80.6, 82.0, t))), 400],
+    forest: [540, 430],
+    shore: [340, 430],
+    leap: (t) => [cl(lerp(-150, 1250, cl((t - SC.leap) / (SC.lanka - SC.leap + 0.6))), 200, 1080), 360],
+    lanka: [640, 380],
+    army: (t) => [lerp(300, 640, EIO(sm(97.4, 99.4, t))), 450],
+    battle: (t) => [lerp(420, 880, EIO(sm(111.5, 111.95, t))), 430],
+    title: [640, 470],
+  };
   const BEATS = [
     { n: 1, name: 'Before time', t0: 0, t1: SC.dawn, vo: 'Before the beginning of time as we know it... Before the greatest war ever witnessed...', screen: 'Night sky, a sun under the hills, spears rising' },
     { n: 2, name: 'A world of gods and mortals', t0: SC.dawn, t1: SC.ayodhya, vo: 'There existed a world where gods walked among mortals, where destiny shaped kingdoms, and where the eternal battle between Dharma and Adharma was about to begin.', screen: 'Sunrise, a god and a mortal walk, a shadow waits' },
