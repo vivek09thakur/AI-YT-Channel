@@ -14,7 +14,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 sys.path.insert(0, str(Path(__file__).parent))
 import requests
-from generate_story import DEFAULT_MODEL, OPENAI_COMPAT
+from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE
 
 # order used for automatic fallback: free tiers first
 PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
@@ -45,6 +45,13 @@ def classify(status, body):
 
 def probe_once(provider, model, key):
     try:
+        if provider == 'gemini':
+            # metadata GET: instant, validates key + model availability (the compat chat endpoint stalls on 3.x)
+            r = requests.get(f'{GEMINI_BASE}/models/{model}', timeout=30, headers={'x-goog-api-key': key})
+            state, note = classify(r.status_code, r.text)
+            if state == 'ok':
+                note = 'key valid, model available (quota not checked)'
+            return state, note
         if provider == 'anthropic':
             r = requests.post('https://api.anthropic.com/v1/messages', timeout=60,
                               headers={'x-api-key': key, 'anthropic-version': '2023-06-01'},

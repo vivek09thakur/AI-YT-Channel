@@ -50,18 +50,57 @@ def js_str(s):
 
 
 # ---------------------------------------------------------------- LLM
+GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta'
+
+
+def call_gemini(model, system, messages, max_tokens):
+    """Native Gemini generateContent (the OpenAI-compat shim stalls on Gemini 3.x thinking models).
+    Streams so the connection stays alive during long outputs. Raises requests.HTTPError like the others."""
+    key = os.environ.get('GEMINI_API_KEY')
+    if not key:
+        sys.exit('GEMINI_API_KEY is not set (needed for --provider gemini)')
+    contents = [{'role': 'model' if m['role'] == 'assistant' else 'user', 'parts': [{'text': m['content']}]} for m in messages]
+    # thinking tokens count against maxOutputTokens, so leave headroom and keep thinking low
+    body = {'system_instruction': {'parts': [{'text': system}]}, 'contents': contents,
+            'generationConfig': {'maxOutputTokens': max_tokens + 8000, 'thinkingConfig': {'thinkingLevel': 'low'}}}
+    url = f'{GEMINI_BASE}/models/{model}:streamGenerateContent?alt=sse'
+    for cfg in (body, {**body, 'generationConfig': {'maxOutputTokens': max_tokens + 8000}}):  # retry w/o thinkingConfig
+        r = requests.post(url, timeout=(30, 600), headers={'x-goog-api-key': key}, json=cfg, stream=True)
+        if r.status_code == 400 and 'thinking' in r.text.lower() and cfg is body:
+            continue
+        r.raise_for_status()
+        text, usage, finish = [], {}, None
+        for line in r.iter_lines(decode_unicode=True):
+            if not line or not line.startswith('data:'):
+                continue
+            chunk = json.loads(line[5:].strip())
+            for cand in chunk.get('candidates', []):
+                finish = cand.get('finishReason', finish)
+                for part in cand.get('content', {}).get('parts', []):
+                    if part.get('text') and not part.get('thought'):
+                        text.append(part['text'])
+            if 'usageMetadata' in chunk:
+                u = chunk['usageMetadata']
+                usage = {'prompt_tokens': u.get('promptTokenCount'), 'completion_tokens': u.get('candidatesTokenCount'),
+                         'thinking_tokens': u.get('thoughtsTokenCount')}
+        if finish and finish not in ('STOP', 'MAX_TOKENS'):
+            sys.exit(f'Gemini stopped with finishReason={finish}')
+        return ''.join(text), usage
+    raise RuntimeError('unreachable')
+
+
 def call_llm(provider, model, system, messages, max_tokens):
     """messages: [{'role': 'user'|'assistant', 'content': str}] -> (text, usage dict)."""
     for attempt in range(4):
         try:
+            if provider == 'gemini':
+                return call_gemini(model, system, messages, max_tokens)
             if provider in OPENAI_COMPAT:
                 url, key, extra = OPENAI_COMPAT[provider]
                 if not os.environ.get(key):
                     sys.exit(f'{key} is not set (needed for --provider {provider})')
-                body = {'model': model, 'max_tokens': max_tokens,
+                body = {'model': model, 'max_tokens': max_tokens, 'temperature': 0.4,
                         'messages': [{'role': 'system', 'content': system}] + messages}
-                if provider != 'gemini':  # Gemini 3.x rejects sampling params
-                    body['temperature'] = 0.4
                 r = requests.post(url, timeout=600,
                                   headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()
