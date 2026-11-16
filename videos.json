@@ -1,5 +1,18 @@
 [
  {
+  "dir": "videos/the-guardian-of-kashi-9",
+  "slug": "the-guardian-of-kashi",
+  "run": "9",
+  "run_url": "https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/43901998916",
+  "title": "THE GUARDIAN OF KASHI",
+  "topic": "THE GUARDIAN OF KASHI",
+  "duration": 97.77,
+  "voice": "en-GB-RyanNeural",
+  "date": "2026-11-16",
+  "landscape_bytes": 11778469,
+  "shorts_bytes": 16258188
+ },
+ {
   "dir": "videos/what-happened-after-lord-shiva-cut-off-b-7",
   "slug": "what-happened-after-lord-shiva-cut-off-b",
   "run": "7",

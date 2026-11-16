@@ -1,0 +1,20 @@
+{
+ "title": "THE GUARDIAN OF KASHI",
+ "hook": [
+  "The fierce protector",
+  "of the sacred city."
+ ],
+ "subtitle": "A 1.5 minute story",
+ "kinds": {
+  "1": "big",
+  "4": "big",
+  "8": "big",
+  "10": "big",
+  "23": "title"
+ },
+ "topic": "THE GUARDIAN OF KASHI",
+ "voice": "en-GB-RyanNeural",
+ "duration": 97.77,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}
