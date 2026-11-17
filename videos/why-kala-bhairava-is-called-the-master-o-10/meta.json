@@ -1,0 +1,19 @@
+{
+ "title": "KALA BHAIRAVA",
+ "hook": [
+  "The Master of Time",
+  "and eternal truth."
+ ],
+ "subtitle": "Lord of Time & Destiny",
+ "kinds": {
+  "1": "big",
+  "27": "title",
+  "28": "tag",
+  "31": "tag"
+ },
+ "topic": "Why Kala Bhairava Is Called the Master of Time",
+ "voice": "en-GB-RyanNeural",
+ "duration": 117.88,
+ "provider": "gemini",
+ "model": "gemini-3.8-flash"
+}
