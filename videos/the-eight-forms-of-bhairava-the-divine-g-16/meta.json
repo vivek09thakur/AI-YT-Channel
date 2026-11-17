@@ -1,0 +1,26 @@
+{
+ "title": "ASHTA BHAIRAVA",
+ "hook": [
+  "The Divine Guardians",
+  "of the Eight Directions"
+ ],
+ "subtitle": "A journey into the eight forms of Kala Bhairava",
+ "kinds": {
+  "0": "tag",
+  "4": "big",
+  "5": "big",
+  "6": "big",
+  "7": "big",
+  "8": "big",
+  "9": "big",
+  "10": "big",
+  "11": "big",
+  "21": "big",
+  "22": "title"
+ },
+ "topic": "THE EIGHT FORMS OF BHAIRAVA: The Divine Guardians of the Eight Directions",
+ "voice": "en-GB-RyanNeural",
+ "duration": 124.02,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}
