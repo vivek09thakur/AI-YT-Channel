@@ -63,6 +63,43 @@ async def edge_line(text, voice, rate, path):
     await edge_tts.Communicate(text, voice, rate=rate).save(str(path))
 
 
+FALLBACK_VOICES = {
+    'en': ['en-US-AndrewNeural', 'en-US-GuyNeural', 'en-GB-RyanNeural', 'en-US-ChristopherNeural'],
+    'hi': ['hi-IN-MadhurNeural', 'hi-IN-SwaraNeural'],
+}
+
+
+def voice_chain(voice):
+    chain = [voice] + [v for v in FALLBACK_VOICES.get(voice.split('-')[0], []) if v != voice]
+    return chain
+
+
+def synth_line(engine, text, voice, rate, path, line_no):
+    import random, time
+    voices = voice_chain(voice) if engine == 'edge' else [voice]
+    attempts = 0
+    for v in voices:
+        for k in range(4):
+            attempts += 1
+            try:
+                if engine == 'azure':
+                    azure_line(text, v, rate, path)
+                else:
+                    asyncio.run(edge_line(text, v, rate, path))
+                if path.exists() and path.stat().st_size > 0:
+                    if v != voice:
+                        print(f'  line {line_no}: used fallback voice {v}', file=sys.stderr)
+                    return v
+                raise RuntimeError('empty audio file')
+            except Exception as e:
+                wait = min(30, 2 ** k + random.uniform(0, 1.5))
+                print(f'  retry line {line_no} ({v}, attempt {attempts}): {e}; waiting {wait:.1f}s', file=sys.stderr)
+                if path.exists():
+                    path.unlink()
+                time.sleep(wait)
+    return None
+
+
 def azure_line(text, voice, rate, path):
     import requests
     key, region = os.environ['AZURE_SPEECH_KEY'], os.environ.get('AZURE_SPEECH_REGION', 'eastus')
@@ -93,18 +130,10 @@ def main():
     pcm_parts.append(silence(LEAD_IN)); t += LEAD_IN
     for i, L in enumerate(lines):
         f = out / 'lines' / f'{i:03d}.{"wav" if engine == "azure" else "mp3"}'
-        for attempt in range(3):
-            try:
-                if engine == 'azure':
-                    azure_line(L['text'], a.voice, a.rate, f)
-                else:
-                    asyncio.run(edge_line(L['text'], a.voice, a.rate, f))
-                if f.stat().st_size > 0:
-                    break
-            except Exception as e:
-                print(f'  retry line {i}: {e}', file=sys.stderr)
-        else:
+        if not synth_line(engine, L['text'], a.voice, a.rate, f, i):
             sys.exit(f'TTS failed for line {i}: {L["text"]!r}')
+        if engine == 'edge' and i + 1 < len(lines):
+            import time; time.sleep(0.6)
         pcm = trim_silence(to_pcm(f))
         dur = len(pcm) / 2 / SR
         if i > 0:
