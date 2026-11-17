@@ -245,6 +245,55 @@ def check_contract(files, narr):
                 errs.append(f'meta.json kinds: bad entry {k!r}: {v!r}')
     except json.JSONDecodeError as e:
         errs.append(f'meta.json is not valid JSON: {e}')
+    errs += check_scenes(s)
+    return errs
+
+
+SUBJECT_CALLS = re.compile(r'\b(figure|ravana|vanara|animal|elephant)\s*\(')
+
+
+def scene_bodies(s):
+    """Yield (name, body) for each `function sceneX(...) { ... }` in story.js (brace matched)."""
+    for m in re.finditer(r'function\s+(scene\w*)\s*\([^)]*\)\s*\{', s):
+        depth, i = 1, m.end()
+        while i < len(s) and depth:
+            depth += {'{': 1, '}': -1}.get(s[i], 0)
+            i += 1
+        yield m.group(1), s[m.start():i]
+
+
+def check_scenes(s):
+    """Every scene must draw a character/subject (last scene may be a title card) and must not bury it under hills."""
+    errs = []
+    scenes = list(scene_bodies(s))
+    # names in SCENES order, so the last one may be exempt
+    order = re.findall(r'\[\s*[^,\[\]]+,\s*(scene\w*)\s*\]', s)
+    last = order[-1] if order else None
+    num = r'(-?\d+(?:\.\d+)?)'
+    for name, body in scenes:
+        if name == last:
+            continue
+        subjects = list(SUBJECT_CALLS.finditer(body))
+        if not subjects:
+            errs.append(f'{name} draws no character or subject: every scene must call figure/ravana/vanara/animal/elephant (only the final title-card scene is exempt)')
+            continue
+        # feet y of subjects given as numeric literals; hills drawn afterwards may only cover a thin strip at the feet
+        feet = []
+        for m in subjects:
+            tail = body[m.end():m.end() + 400]
+            if m.group(1) in ('figure', 'ravana', 'animal'):
+                ym = re.search(r'\by\s*:\s*' + num + r'\s*[,}]', tail)
+            else:
+                ym = re.match(r'\s*c\s*,\s*[^,]+,\s*' + num + r'\s*,', tail)
+            if ym and float(ym.group(1)) <= 730:
+                feet.append((float(ym.group(1)), m.start()))
+        for hm in re.finditer(r'\bhills\s*\(\s*c\s*,\s*W\s*,\s*Hh\s*,\s*' + num + r'\s*,\s*' + num + r'\s*,', body):
+            hy, amp = float(hm.group(1)), float(hm.group(2))
+            top = hy - amp * 1.3
+            buried = [fy for fy, pos in feet if pos < hm.start() and top < fy - 24]
+            if buried:
+                errs.append(f'{name}: hills(y={hy:g}, amp={amp:g}) is drawn after a character whose feet are at y={min(buried):g}; it climbs to y~{top:g} and hides them. Draw hills before characters, or keep a foreground strip thin (amp <= 16, y >= feet).')
+                break
     return errs
 
 

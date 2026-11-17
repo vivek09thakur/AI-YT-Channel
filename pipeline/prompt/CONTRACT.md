@@ -67,6 +67,22 @@ YOUR story.js, YOUR sound_score.js, then the shared 9:16 reel. So:
   `PAL.sandal` for Shiva (add `tilak: true`, a crescent with `finial`/`crownOnly`), `PAL.sandal` for goddesses
   (`face: 'woman'`), `PAL.kesari` + `face: 'monkey'` + `tail: true` for Hanuman/vanaras, `PAL.burnt` for mortals.
   Demons: `ravana(...)` or dark `figure` with `skin: PAL.maroon`/`PAL.ink`, mace, glow red.
+- EVERY scene must show a character or the story's named subject (`figure`, `ravana`, `vanara`, `animal`, `elephant`,
+  or a primitive-built subject helper). The only exception is the final title-card scene. A scene of sky + sun + hills
+  alone is a failure: the viewer sees an empty poster. The opening scene (t = 0) must already show the hero or subject.
+- Draw order inside a scene: sky -> sun/rays/clouds -> far hills -> buildings -> near hills -> ground band ->
+  CHARACTERS AND SUBJECTS LAST. Never call `hills(...)` (or paint any ground shape) after a figure or animal whose feet
+  sit at or below that hill's baseline: it will bury them. If you want a foreground hill at y 680–720, draw it first and
+  put the feet on it (y ≈ 690–705).
+- Scale and contrast: a solo hero uses `s: 1.4–1.8`; two figures `s: 1.1–1.3`; crowds `0.7–0.9`. Animals via `animal`
+  use `s: 1.3–2.0` when they are the subject. Pale skins (`PAL.ash`, `PAL.sandal`, `PAL.cream`) need a dark backdrop:
+  a DUSK/NIGHT sky, or a `PAL.maroon`/`PAL.deep` hill band directly behind the torso, plus `glow`. Never put a pale
+  figure directly on an orange/yellow sky with nothing behind it.
+- Animals: `animal(c, { x, y, s, dir, kind, col, pose, ph, collar })` draws a flat four-legged silhouette, origin at the
+  feet, facing `+x` when `dir: 1`. `kind`: `dog` (Bhairava's vahana), `deer` (golden deer, forest), `bull` (Nandi: use
+  `col: PAL.cream`), `lion` (Durga's vahana: `col: PAL.turmeric`), `horse`. `pose`: `stand`, `walk` (pass `ph: t * 4`),
+  `sit` (dog/lion). `collar` is a gold band by default; pass `false` for wild animals. Height ≈ `110*s` (dog) to
+  `190*s` (horse). Do not improvise animals from loose ellipses.
 - `figure` geometry: origin at the feet, slender 8-head proportions, about `290*s` px tall with a tall crown and
   `100*s` wide at the shoulders (arms reach about `105*s` beyond); knee-length dhoti for men, long skirt for
   `face: 'woman'`. Faces and shoots
@@ -76,13 +92,14 @@ YOUR story.js, YOUR sound_score.js, then the shared 9:16 reel. So:
   depth-stacked bands (`hills` from far/light to near/dark), clouds (`cloudBank`), flags (`flag`), lotus for divinity,
   flames for destruction, `ocean` and `bridge` for sea crossings, `elephant` for royalty, `vanara` for armies,
   `crownOnly` for kingship, `bolt` for lightning, `title` for big words (but captions/title are already handled).
+  But composition never replaces the subject: light and hills frame a character, they do not stand in for one.
 - Movement: slow camera push (`cam`), parallax hills, walking figures (`pose: 'walk'` with `t`), rising suns, rays
   rotating, things popping in (`pop`) as their word is spoken. Avoid frantic motion; this is a poster coming alive.
 - Respect the subject: no gore, no mocking, iconography consistent with the tradition (Shiva: trishul-like staff via
-  `arms` + a drawn trident, snake optional, crescent, Nandi can be an `elephant`-like silhouette only if nothing else fits
-  — otherwise leave it out; Krishna: flute via a thin rect, peacock feather via `PAL.peacock` leaf shape; Durga: a lion
-  silhouette drawn with primitives; Ganesha: draw the elephant head with `elephant`-style primitives at figure scale).
-  When you draw something new, build it from primitives in a helper function inside story.js.
+  `arms` + a drawn trident, snake optional, crescent, Nandi via `animal({ kind: 'bull', col: PAL.cream })`; Bhairava:
+  `animal({ kind: 'dog' })` beside him; Krishna: flute via a thin rect, peacock feather via `PAL.peacock` leaf shape;
+  Durga: `animal({ kind: 'lion', col: PAL.turmeric })`; Ganesha: draw the elephant head with `elephant`-style primitives
+  at figure scale). When you draw something new, build it from primitives in a helper function inside story.js.
 
 ## Fix loop
 

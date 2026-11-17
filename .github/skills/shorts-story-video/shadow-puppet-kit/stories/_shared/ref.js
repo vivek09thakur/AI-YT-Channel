@@ -376,6 +376,62 @@
     c.fillStyle = PAL.cream; c.beginPath(); c.ellipse(124, -184, 8, 4, -0.2, 0, TAU); c.fill(); c.fillStyle = PAL.ink; c.beginPath(); c.arc(126, -184, 3, 0, TAU); c.fill();
     c.restore();
   }
+
+  // Four-legged animal silhouette. Origin at the feet, faces +x when dir 1. kind: dog | deer | bull | lion | horse.
+  // pose: stand | walk (swings legs with ph) | sit (dog/lion). Height about 110*s (dog) to 190*s (horse).
+  function animal(c, o) {
+    const kind = o.kind || 'dog', s = o.s || 1, dir = o.dir || 1, col = o.col || PAL.brown, ph = o.ph || 0, pose = o.pose || 'stand';
+    const K = { dog: { bl: 52, bh: 24, by: 62, leg: 11, nk: 14, hr: 17, sn: 13, ear: 'flop' },
+      deer: { bl: 56, bh: 24, by: 96, leg: 8, nk: 50, hr: 13, sn: 12, ear: 'point' },
+      bull: { bl: 78, bh: 38, by: 78, leg: 16, nk: 20, hr: 22, sn: 18, ear: 'point' },
+      lion: { bl: 70, bh: 32, by: 72, leg: 14, nk: 18, hr: 20, sn: 15, ear: 'round' },
+      horse: { bl: 72, bh: 30, by: 118, leg: 10, nk: 56, hr: 15, sn: 16, ear: 'point' } }[kind];
+    const sit = pose === 'sit';
+    c.save(); c.translate(o.x, o.y); c.scale(s * dir, s); c.lineCap = 'round'; c.lineJoin = 'round';
+    c.fillStyle = col; c.strokeStyle = col;
+    const by = sit ? K.by * 0.72 : K.by, tilt = sit ? -0.35 : 0;
+    // legs: tapered capsules; front pair at +x, hind pair at -x
+    const legs = [[-K.bl * 0.62, 1], [-K.bl * 0.42, -1], [K.bl * 0.42, 1], [K.bl * 0.62, -1]];
+    legs.forEach(([lx, sgn], i) => {
+      const front = i >= 2;
+      if (sit && !front) { c.lineWidth = K.leg; c.beginPath(); c.moveTo(lx, -by * 0.5); c.lineTo(lx + K.bl * 0.55, -K.leg * 0.5); c.stroke(); return; }
+      const sw = pose === 'walk' ? Math.sin(ph + (front ? Math.PI : 0) + (sgn > 0 ? 0 : 0.9)) * 0.28 : 0;
+      const top = -by + K.bh * 0.4 - (sit ? 10 : 0), fx = lx + Math.sin(sw) * by * 0.9, kx = (lx + fx) / 2 + (front ? 2 : -5), ky = top / 2;
+      c.lineWidth = K.leg; c.beginPath(); c.moveTo(lx, top); c.lineTo(kx, ky); c.lineTo(fx, -2); c.stroke();
+      c.lineWidth = K.leg * 0.7; c.beginPath(); c.moveTo(fx, -3); c.lineTo(fx + 7, -3); c.stroke();
+    });
+    // body
+    c.save(); c.translate(0, -by); c.rotate(tilt); c.beginPath(); c.ellipse(0, 0, K.bl, K.bh, 0, 0, TAU); c.fill();
+    if (kind === 'bull') { c.beginPath(); c.ellipse(K.bl * 0.35, -K.bh * 0.85, K.bl * 0.3, K.bh * 0.6, 0, 0, TAU); c.fill(); }
+    c.restore();
+    // tail
+    c.lineWidth = K.leg * 0.6; c.beginPath(); c.moveTo(-K.bl * 0.9, -by - K.bh * 0.3);
+    if (kind === 'dog') c.quadraticCurveTo(-K.bl * 1.25, -by - K.bh * 1.6, -K.bl * 0.95, -by - K.bh * 1.9);
+    else if (kind === 'horse') c.quadraticCurveTo(-K.bl * 1.3, -by + K.bh * 0.5, -K.bl * 1.1, -by + K.bh * 2.2);
+    else c.quadraticCurveTo(-K.bl * 1.2, -by + K.bh * 0.4, -K.bl * 1.05, -by + K.bh * 1.6);
+    c.stroke();
+    if (kind === 'lion') { c.beginPath(); c.arc(-K.bl * 1.05, -by + K.bh * 1.6, 7, 0, TAU); c.fill(); }
+    // neck + head
+    const nx = K.bl * 0.8, ny = -by - K.bh * 0.2 - (sit ? 16 : 0), hx = nx + K.nk * 0.55, hy = ny - K.nk - (sit ? 6 : 0);
+    c.lineWidth = K.hr * (K.nk > 40 ? 1.2 : 1.5); c.beginPath(); c.moveTo(nx, ny); c.lineTo(hx, hy); c.stroke();
+    if (kind === 'horse') { c.fillStyle = PAL.ink; c.beginPath(); c.moveTo(nx - 6, ny - 4); c.lineTo(hx - 8, hy - K.hr); c.lineTo(hx + 4, hy - K.hr * 1.3); c.lineTo(hx + 2, hy + 4); c.closePath(); c.fill(); c.fillStyle = col; }
+    if (kind === 'lion') { c.fillStyle = PAL.burnt; c.beginPath(); c.arc(hx, hy, K.hr * 1.9, 0, TAU); c.fill(); c.fillStyle = col; }
+    c.beginPath(); c.arc(hx, hy, K.hr, 0, TAU); c.fill();
+    c.beginPath(); c.ellipse(hx + K.hr * 0.9, hy + K.hr * 0.25, K.sn, K.sn * 0.6, 0.15, 0, TAU); c.fill();
+    c.fillStyle = PAL.ink; c.beginPath(); c.arc(hx + K.hr * 0.9 + K.sn * 0.8, hy + K.hr * 0.1, 3, 0, TAU); c.fill(); c.fillStyle = col;
+    // ears / horns / antlers
+    if (K.ear === 'flop') { c.beginPath(); c.ellipse(hx - K.hr * 0.5, hy + K.hr * 0.2, K.hr * 0.4, K.hr * 0.8, 0.3, 0, TAU); c.fill(); }
+    else if (K.ear === 'round') { c.beginPath(); c.arc(hx - K.hr * 0.4, hy - K.hr * 0.9, K.hr * 0.4, 0, TAU); c.fill(); }
+    else { c.beginPath(); c.moveTo(hx - K.hr * 0.7, hy - K.hr * 0.5); c.lineTo(hx - K.hr * 0.9, hy - K.hr * 1.7); c.lineTo(hx - K.hr * 0.1, hy - K.hr * 0.9); c.closePath(); c.fill(); }
+    if (kind === 'bull') { c.strokeStyle = PAL.sandal; c.lineWidth = 6; c.beginPath(); c.moveTo(hx - K.hr * 0.3, hy - K.hr * 0.8); c.quadraticCurveTo(hx - K.hr * 0.2, hy - K.hr * 2.4, hx + K.hr * 0.9, hy - K.hr * 2.2); c.stroke(); c.strokeStyle = col; }
+    if (kind === 'deer') { c.lineWidth = 3; c.beginPath(); c.moveTo(hx - 2, hy - K.hr); c.lineTo(hx - 10, hy - K.hr * 3.2); c.moveTo(hx - 7, hy - K.hr * 2.2); c.lineTo(hx - 18, hy - K.hr * 2.9); c.moveTo(hx - 2, hy - K.hr); c.lineTo(hx + 10, hy - K.hr * 3); c.moveTo(hx + 5, hy - K.hr * 2.1); c.lineTo(hx + 16, hy - K.hr * 2.6); c.stroke(); }
+    // eye
+    c.fillStyle = PAL.cream; c.beginPath(); c.ellipse(hx + K.hr * 0.35, hy - K.hr * 0.2, K.hr * 0.32, K.hr * 0.18, -0.2, 0, TAU); c.fill();
+    c.fillStyle = PAL.ink; c.beginPath(); c.arc(hx + K.hr * 0.4, hy - K.hr * 0.2, K.hr * 0.12, 0, TAU); c.fill();
+    // collar / garland
+    if (o.collar !== false) { c.strokeStyle = o.collar || PAL.gold; c.lineWidth = 4; c.beginPath(); c.arc(nx + K.nk * 0.2, ny - K.nk * 0.4, K.hr * 0.95, 0.4, Math.PI - 0.2); c.stroke(); }
+    c.restore();
+  }
   
   function crownOnly(c, x, y, s, a) {
     c.save(); c.translate(x, y); c.rotate(a || 0); c.scale(s, s); c.fillStyle = PAL.gold;

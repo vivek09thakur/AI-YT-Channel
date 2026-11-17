@@ -50,6 +50,9 @@
     c.strokeStyle = PAL.ink; c.fillStyle = PAL.ink; c.lineWidth = 3;
     for (let i = 0; i < 46; i++) { const x = 20 + r() * (W - 40), h = (70 + r() * 120) * EO(cl(w * 1.4 - r() * 0.4)), y0 = 650 - 40 * Math.sin(x * 0.004 + 2); if (h < 2) continue; c.beginPath(); c.moveTo(x, y0); c.lineTo(x, y0 - h); c.stroke(); c.beginPath(); c.moveTo(x - 6, y0 - h); c.lineTo(x, y0 - h - 22); c.lineTo(x + 6, y0 - h); c.closePath(); c.fill(); if (i % 5 === 0) { c.fillStyle = PAL.kumkum; c.beginPath(); c.moveTo(x, y0 - h + 2); c.lineTo(x + 26, y0 - h + 10); c.lineTo(x, y0 - h + 20); c.closePath(); c.fill(); c.fillStyle = PAL.ink; } }
     hills(c, W, Hh, 680, 40, PAL.ink, 3);
+    // lone archer silhouette against the sun: the hero is on screen from the first frame
+    const fw = fade(t, 1.2, 2.5);
+    if (fw > 0) { c.save(); c.globalAlpha = fw; figure(c, { x: 640, y: 714, s: 1.35, dir: 1, skin: PAL.ink, cloth: PAL.ink, sash: PAL.ink, gold: PAL.ink, crown: 'tall', pose: 'aim', bow: true, draw: 0.5, glow: PAL.kesari, eyeCol: PAL.ink }); c.restore(); }
     c.restore();
   }
   
