@@ -2,13 +2,13 @@
  "title": "BHAIRAVA'S DOG",
  "hook": [
   "The fierce guardian",
-  "and his faithful companion."
+  "and his loyal companion."
  ],
- "subtitle": "The Mystery of Kala Bhairava",
+ "subtitle": "The Mystery of Bhairava's Dog",
  "kinds": {
   "1": "big",
   "14": "tag",
-  "16": "tag"
+  "18": "title"
  },
  "topic": "The Mystery of Bhairava's Dog: Why Does Kala Bhairava Ride a Dog?",
  "voice": "en-GB-RyanNeural",

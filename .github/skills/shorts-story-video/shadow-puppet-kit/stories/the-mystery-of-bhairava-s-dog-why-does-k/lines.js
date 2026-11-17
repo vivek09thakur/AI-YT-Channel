@@ -16,7 +16,7 @@
     [74.83, "it is also about protecting the vulnerable.", null, 77.09],
     [78.19, "That is why the image of Kala Bhairava with his dog continues to inspire devotion across generations.", "tag", 84.21],
     [85.31, "But Bhairava's mysteries do not end here.", null, 87.69],
-    [88.79, "Why do devotees worship him on Ashtami…", "tag", 91.24],
+    [88.79, "Why do devotees worship him on Ashtami…", null, 91.24],
     [92.14, "and what makes Kalashtami so sacred?", null, 94.4],
-    [95.5, "That is the story of our next episode.", null, 97.67],
+    [95.5, "That is the story of our next episode.", "title", 97.67],
   ];
