@@ -100,6 +100,82 @@ def synth_line(engine, text, voice, rate, path, line_no):
     return None
 
 
+async def edge_whole(text, voice, rate, path):
+    """One request for the whole script; returns word boundaries [(start_s, end_s, word)]."""
+    import edge_tts
+    words, audio = [], bytearray()
+    async for chunk in edge_tts.Communicate(text, voice, rate=rate, boundary='WordBoundary').stream():
+        if chunk['type'] == 'audio':
+            audio += chunk['data']
+        elif chunk['type'] == 'WordBoundary':
+            words.append((chunk['offset'] / 1e7, (chunk['offset'] + chunk['duration']) / 1e7, chunk['text']))
+    if not audio or not words:
+        raise RuntimeError('no audio or no word boundaries received')
+    path.write_bytes(audio)
+    return words
+
+
+def map_words_to_lines(words, lines):
+    """Walk the word boundaries along the joined script and return per-line (start_s, end_s)."""
+    joined, spans, pos = '', [], 0
+    for L in lines:
+        if joined:
+            joined += ' '; pos += 1
+        spans.append((pos, pos + len(L['text']))); joined += L['text']; pos += len(L['text'])
+    low, cursor, bounds = joined.lower(), 0, [None] * len(lines)
+    li = 0
+    for s, e, w in words:
+        w = w.strip().lower()
+        if not w:
+            continue
+        idx = low.find(w, cursor)
+        if idx < 0 or idx - cursor > 120:
+            continue
+        cursor = idx + len(w)
+        while li < len(spans) - 1 and idx >= spans[li + 1][0]:
+            li += 1
+        b = bounds[li]
+        bounds[li] = (s if b is None else b[0], e)
+    missing = [i for i, b in enumerate(bounds) if b is None]
+    if missing:
+        raise RuntimeError(f'no word timestamps for lines {missing[:5]}')
+    return bounds
+
+
+def synth_whole(lines, voice, rate, out):
+    """Whole-script synthesis with retries + fallback voices; returns (voice_used, [pcm per line]) or None."""
+    import random, time
+    text = ' '.join(L['text'] for L in lines)
+    path = out / 'voice_raw.mp3'
+    attempts = 0
+    for v in voice_chain(voice):
+        for k, base in enumerate((3, 8, 20, 40)):
+            attempts += 1
+            try:
+                words = asyncio.run(edge_whole(text, v, rate, path))
+                bounds = map_words_to_lines(words, lines)
+                pcm = to_pcm(path)
+                total = len(pcm) / 2 / SR
+                cuts = [0.0] + [(bounds[i][1] + bounds[i + 1][0]) / 2 for i in range(len(bounds) - 1)] + [total]
+                parts = []
+                for i in range(len(lines)):
+                    a, b = int(cuts[i] * SR) * 2, int(cuts[i + 1] * SR) * 2
+                    seg = trim_silence(pcm[a:b])
+                    if len(seg) < SR * 2 // 5:
+                        raise RuntimeError(f'line {i} segment too short ({len(seg) / 2 / SR:.2f}s)')
+                    parts.append(seg)
+                if v != voice:
+                    print(f'  whole script: used fallback voice {v}', file=sys.stderr)
+                return v, parts
+            except Exception as e:
+                wait = base + random.uniform(0, 2)
+                print(f'  retry whole script ({v}, attempt {attempts}): {e}; waiting {wait:.1f}s', file=sys.stderr)
+                if path.exists():
+                    path.unlink()
+                time.sleep(wait)
+    return None
+
+
 def azure_line(text, voice, rate, path):
     import requests
     key, region = os.environ['AZURE_SPEECH_KEY'], os.environ.get('AZURE_SPEECH_REGION', 'eastus')
@@ -117,6 +193,8 @@ def main():
     ap.add_argument('--voice', default='en-US-AndrewNeural')
     ap.add_argument('--rate', default='-6%', help='speaking rate, e.g. -6%% for a cinematic pace')
     ap.add_argument('--out', default='work')
+    ap.add_argument('--mode', default='auto', choices=['auto', 'whole', 'lines'],
+                    help='edge engine only: whole = one request for the full script (default, avoids throttling), lines = one request per line')
     a = ap.parse_args()
     out = Path(a.out); (out / 'lines').mkdir(parents=True, exist_ok=True)
     lines = split_script(Path(a.script).read_text(encoding='utf-8-sig'))
@@ -125,16 +203,30 @@ def main():
     engine = 'azure' if os.environ.get('AZURE_SPEECH_KEY') else 'edge'
     print(f'{len(lines)} lines, voice {a.voice}, engine {engine}')
 
+    voice_used, whole = a.voice, None
+    if engine == 'edge' and a.mode in ('auto', 'whole'):
+        whole = synth_whole(lines, a.voice, a.rate, out)
+        if whole:
+            voice_used, whole = whole
+            print(f'  whole-script synthesis ok ({voice_used})')
+        elif a.mode == 'whole':
+            sys.exit('TTS failed (whole-script mode)')
+        else:
+            print('  whole-script synthesis failed; falling back to per-line requests', file=sys.stderr)
+
     pcm_parts, t, meta = [], 0.0, []
     silence = lambda sec: b'\x00\x00' * int(sec * SR)
     pcm_parts.append(silence(LEAD_IN)); t += LEAD_IN
     for i, L in enumerate(lines):
-        f = out / 'lines' / f'{i:03d}.{"wav" if engine == "azure" else "mp3"}'
-        if not synth_line(engine, L['text'], a.voice, a.rate, f, i):
-            sys.exit(f'TTS failed for line {i}: {L["text"]!r}')
-        if engine == 'edge' and i + 1 < len(lines):
-            import time; time.sleep(0.6)
-        pcm = trim_silence(to_pcm(f))
+        if whole:
+            pcm = whole[i]
+        else:
+            f = out / 'lines' / f'{i:03d}.{"wav" if engine == "azure" else "mp3"}'
+            if not synth_line(engine, L['text'], a.voice, a.rate, f, i):
+                sys.exit(f'TTS failed for line {i}: {L["text"]!r}')
+            if engine == 'edge' and i + 1 < len(lines):
+                import time; time.sleep(0.6)
+            pcm = trim_silence(to_pcm(f))
         dur = len(pcm) / 2 / SR
         if i > 0:
             gap = PARA_GAP if L['para'] else GAP
@@ -150,7 +242,7 @@ def main():
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 's16le', '-ar', str(SR), '-ac', '1', '-i', str(raw), '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', str(out / 'voice.wav')], check=True)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(out / 'voice.wav'), '-c:a', 'libmp3lame', '-b:a', '160k', str(out / 'voice.mp3')], check=True)
     raw.unlink()
-    (out / 'narration.json').write_text(json.dumps({'voice': a.voice, 'engine': engine, 'duration': round(t, 2), 'lines': meta}, indent=1, ensure_ascii=False), encoding='utf-8')
+    (out / 'narration.json').write_text(json.dumps({'voice': voice_used, 'engine': engine, 'duration': round(t, 2), 'lines': meta}, indent=1, ensure_ascii=False), encoding='utf-8')
     print(f'voice {t:.1f}s -> {out / "voice.mp3"}')
 
 
