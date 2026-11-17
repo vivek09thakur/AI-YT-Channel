@@ -67,6 +67,9 @@ YOUR story.js, YOUR sound_score.js, then the shared 9:16 reel. So:
   `PAL.sandal` for Shiva (add `tilak: true`, a crescent with `finial`/`crownOnly`), `PAL.sandal` for goddesses
   (`face: 'woman'`), `PAL.kesari` + `face: 'monkey'` + `tail: true` for Hanuman/vanaras, `PAL.burnt` for mortals.
   Demons: `ravana(...)` or dark `figure` with `skin: PAL.maroon`/`PAL.ink`, mace, glow red.
+- `figure` geometry: origin at the feet, about `340*s` px tall with a tall crown and `90*s` wide; faces and shoots
+  toward `+x` when `dir: 1` (`pose: 'aim'` with `bow: true, draw: 0..1` puts the bow in the extended hand and the arrow
+  flies toward `dir`). Crowns: `bun`, `long` (flowing hair, goddesses), `tall`, `king`, `cap`, `none`.
 - Lean on composition and light instead of detail: sun behind the hero (`sun` + `rays`), temple (`temple`), hills in
   depth-stacked bands (`hills` from far/light to near/dark), clouds (`cloudBank`), flags (`flag`), lotus for divinity,
   flames for destruction, `ocean` and `bridge` for sea crossings, `elephant` for royalty, `vanara` for armies,

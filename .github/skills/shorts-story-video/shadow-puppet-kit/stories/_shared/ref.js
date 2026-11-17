@@ -195,128 +195,151 @@
     c.stroke(); c.lineWidth = 12; c.globalAlpha = 0.25; c.stroke(); c.restore();
   }
 
+  const FK = 0.66;
   function figure(c, o) {
     const d = o.dir == null ? 1 : o.dir, skin = o.skin || PAL.rama, cloth = o.cloth || PAL.turmeric, sash = o.sash || PAL.kumkum;
-    const gold = o.gold || PAL.gold, hair = o.hair || PAL.ink, pose = o.pose || 'stand', ph = o.ph || 0;
-    const sw = pose === 'walk' ? Math.sin(ph * TAU) : 0, lift = pose === 'walk' ? Math.abs(Math.cos(ph * TAU)) * 4 : 0;
-    c.save(); c.translate(o.x, o.y - lift); c.scale((o.s || 1) * d, o.s || 1);
-    if (o.glow) { const g = c.createRadialGradient(0, -130, 20, 0, -130, 220); g.addColorStop(0, H.rgba(o.glow, 0.55)); g.addColorStop(1, H.rgba(o.glow, 0)); c.fillStyle = g; c.fillRect(-240, -380, 480, 420); }
-    c.lineJoin = 'miter'; c.lineCap = 'butt';
-    const limb = (pts, w, col) => { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.stroke(); };
-    const kneel = pose === 'kneel', hipY = kneel ? -60 : -108;
-    const skinB = mixc(skin, PAL.ink, 0.18);
-    
+    const gold = o.gold || PAL.gold, hair = o.hair || PAL.ink, pose = o.pose || 'stand', ph = o.ph || 0, s = o.s || 1;
+    const sw = pose === 'walk' ? Math.sin(ph * TAU) : 0, lift = pose === 'walk' ? Math.abs(Math.cos(ph * TAU)) * 5 : 0;
+    const skinS = mixc(skin, PAL.ink, 0.28), clothS = mixc(cloth, PAL.ink, 0.25), lite = mixc(skin, PAL.cream, 0.3);
+    const poly = (pts, col) => { c.fillStyle = col; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); c.fill(); };
+    const tri = (x, y, w, h, col) => poly([[x - w / 2, y], [x + w / 2, y], [x, y - h]], col);
+    const limb = (x0, y0, x1, y1, w0, w1, col) => { const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L; poly([[x0 + nx * w0, y0 + ny * w0], [x1 + nx * w1, y1 + ny * w1], [x1 - nx * w1, y1 - ny * w1], [x0 - nx * w0, y0 - ny * w0]], col); };
+    c.save(); c.translate(o.x, o.y - lift); c.scale(s * d * FK, s * FK);
+    const kneel = pose === 'kneel', dy = kneel ? 76 : 0;
+    const hipY = -168 + dy, waistY = -190 + dy, shY = -290 + dy, neckY = -312 + dy, hy = -352 + dy;
+    if (o.glow) { const g = c.createRadialGradient(0, hy + 140, 20, 0, hy + 140, 300); g.addColorStop(0, H.rgba(o.glow, 0.5)); g.addColorStop(1, H.rgba(o.glow, 0)); c.fillStyle = g; c.fillRect(-330, hy - 200, 660, 560); }
+    const monkey = o.face === 'monkey', woman = o.face === 'woman';
+
+    if (o.tail) { c.strokeStyle = skin; c.lineWidth = 16; c.lineCap = 'round'; c.beginPath(); c.moveTo(-26, hipY + 10); c.bezierCurveTo(-110, hipY + 16, -130, hipY - 110, -70, hipY - 140); c.quadraticCurveTo(-36, hipY - 152, -46, hipY - 118); c.stroke(); }
+    if (o.bow) { c.save(); c.translate(-50, shY + 10); c.rotate(-0.22); poly([[-9, -24], [9, -24], [12, 96], [-12, 96]], PAL.burnt); c.fillStyle = gold; c.fillRect(-10, -24, 20, 7); c.fillRect(-11, 60, 22, 6); for (const k of [-7, 0, 7]) { c.strokeStyle = PAL.deep; c.lineWidth = 2; c.beginPath(); c.moveTo(k, -24); c.lineTo(k * 1.5, -70); c.stroke(); tri(k * 1.5, -66, 10, 16, PAL.cream); } c.restore(); }
+
+    const foot = (fx, fy, col) => { poly([[fx - 8, fy], [fx + 36, fy], [fx + 40, fy - 4], [fx + 10, fy - 12], [fx - 8, fy - 10]], col); c.fillStyle = gold; c.fillRect(fx - 7, fy - 20, 15, 5); };
     if (kneel) {
-      limb([[-6, hipY], [-4, -10], [40, -10]], 20, skin); limb([[8, hipY], [34, -58], [36, -8]], 20, skin);
-      c.fillStyle = skin; c.beginPath(); c.arc(40, -8, 10, 0, TAU); c.fill();
+      limb(6, hipY + 16, -34, -10, 16, 10, skinS); limb(-34, -10, 40, -4, 10, 8, skinS); foot(40, 0, skinS);
+      limb(-6, hipY + 16, 44, hipY + 60, 16, 11, skin); limb(44, hipY + 60, 46, -2, 11, 8, skin); foot(46, 0, skin);
     } else {
-      const a1 = sw * 0.55, a2 = -sw * 0.55;
-      for (const [a, k] of [[a2, 1], [a1, 0]]) {
-        const kx = Math.sin(a) * 52, ky = hipY + Math.cos(a) * 52, bend = pose === 'walk' ? Math.max(0, -Math.sin(a)) * 0.8 : 0;
-        const fx = kx + Math.sin(a + bend) * 52, fy = ky + Math.cos(a + bend) * 52, col = k ? skinB : skin;
-        limb([[k ? 6 : -6, hipY], [kx, ky], [fx, fy]], 18, col);
-        c.fillStyle = col; c.beginPath(); c.moveTo(fx - 8, fy); c.lineTo(fx + 26, fy); c.lineTo(fx + 26, fy - 6); c.lineTo(fx - 8, fy - 10); c.closePath(); c.fill();
+      for (const [a, back] of [[-sw * 0.55, 1], [sw * 0.55, 0]]) {
+        const col = back ? skinS : skin, kx = Math.sin(a) * 70, ky = hipY + 20 + Math.cos(a) * 70, bend = pose === 'walk' ? Math.max(0, -Math.sin(a)) * 0.7 : 0.03;
+        const fx = kx + Math.sin(a + bend) * 76, fy = ky + Math.cos(a + bend) * 76;
+        limb(back ? 8 : -8, hipY + 20, kx, ky, 16, 9, col); limb(kx, ky, fx, fy, 9, 6, col); foot(fx, fy, col);
       }
     }
-    
-    const hem = kneel ? -14 : -48;
-    c.fillStyle = cloth; c.beginPath(); c.moveTo(-26, hipY - 4); c.lineTo(26, hipY - 4); c.lineTo(34 + sw * 10, hem); c.lineTo(-36 - sw * 10, hem); c.closePath(); c.fill();
-    c.fillStyle = gold; c.fillRect(-26, hipY - 6, 52, 6);
-    c.strokeStyle = mixc(cloth, PAL.ink, 0.3); c.lineWidth = 2; c.beginPath(); c.moveTo(0, hipY); c.lineTo(sw * 6, hem); c.stroke();
-    
-    const shY = hipY - 68;
-    c.fillStyle = skin; c.beginPath(); c.moveTo(-30, shY); c.lineTo(30, shY); c.lineTo(22, hipY); c.lineTo(-22, hipY); c.closePath(); c.fill();
-    if (o.face === 'woman') { c.fillStyle = sash; c.beginPath(); c.moveTo(-30, shY); c.lineTo(30, shY); c.lineTo(24, hipY - 30); c.lineTo(-24, hipY - 30); c.closePath(); c.fill(); }
-    c.strokeStyle = sash; c.lineWidth = 9; c.beginPath(); c.moveTo(-24, shY + 4); c.lineTo(18, hipY - 6); c.stroke();
-    c.strokeStyle = gold; c.lineWidth = 3; c.beginPath(); c.arc(0, shY + 2, 16, 0.2, Math.PI - 0.2); c.stroke();
-    
-    let back = [0.25 - sw * 0.7, 0.9], front = [-0.25 + sw * 0.7, 0.9];
-    if (pose === 'aim') { back = [-1.45, 0.2 + (o.draw || 0) * 0.1]; front = [-1.55, 0.05]; }
+    const hem = kneel ? hipY + 40 : -52;
+    poly([[-32, waistY], [32, waistY], [58 + sw * 14, hem], [-62 - sw * 14, hem]], cloth);
+    poly([[-10, waistY], [12, waistY], [26 + sw * 8, hem], [-14 + sw * 8, hem]], clothS);
+    poly([[-32, waistY], [-20, waistY], [-42 - sw * 14, hem], [-62 - sw * 14, hem]], clothS);
+    if (!monkey) poly([[-30, waistY + 4], [-16, waistY + 4], [-70 - sw * 20, hem + 12], [-96 - sw * 26, hem + 22], [-60 - sw * 16, hem - 18]], sash);
+    poly([[-36, waistY - 10], [36, waistY - 10], [34, waistY + 4], [-34, waistY + 4]], gold);
+    poly([[-10, waistY - 16], [10, waistY - 16], [6, waistY + 10], [-6, waistY + 10]], PAL.kumkum);
+    poly([[-64, shY], [64, shY], [34, waistY], [-34, waistY]], skin);
+    poly([[-64, shY], [-34, shY], [-26, waistY], [-34, waistY]], skinS);
+    if (woman) poly([[-64, shY], [64, shY], [40, waistY - 36], [-40, waistY - 36]], sash);
+    else if (!monkey) { poly([[-28, shY + 10], [28, shY + 10], [22, shY + 52], [-22, shY + 52]], gold); poly([[-20, shY + 18], [20, shY + 18], [15, shY + 44], [-15, shY + 44]], PAL.kumkum); poly([[-8, shY + 24], [8, shY + 24], [6, shY + 38], [-6, shY + 38]], gold); }
+    if (!monkey) poly([[-58, shY + 4], [-40, shY + 4], [20, waistY - 10], [8, waistY - 10]], sash);
+    c.fillStyle = PAL.ink; for (let i = 0; i <= 12; i++) { const a = 0.2 + (Math.PI - 0.4) * i / 12; c.beginPath(); c.arc(Math.cos(a) * 36, shY - 6 + Math.sin(a) * 30, 2.6, 0, TAU); c.fill(); }
+
+    let back = [0.3 - sw * 0.6, 0.7], front = [-0.3 + sw * 0.6, 0.7], target = null;
+    if (pose === 'aim') { back = [1.2, -2.8]; front = [1.55, -0.05]; }
     if (pose === 'raise') { front = [-2.6, -0.4]; back = [0.2, 0.9]; }
-    if (pose === 'namaste') { front = [-0.9, 2.0]; back = [-0.9, 2.0]; }
-    if (pose === 'kneel') { front = [-1.0, 1.4]; back = [-0.6, 1.2]; }
-    if (o.arms) { front = o.arms[0]; back = o.arms[1]; }
-    const handAt = (A, sx) => { const ex = sx + Math.sin(A[0]) * 48, ey = shY + 6 + Math.cos(A[0]) * 48; return [ex, ey, ex + Math.sin(A[0] + A[1]) * 44, ey + Math.cos(A[0] + A[1]) * 44]; };
+    if (pose === 'namaste') target = [40, shY + 60];
+    if (pose === 'kneel') target = [60, shY + 90];
+    if (o.arms) { front = o.arms[0]; back = o.arms[1]; target = null; }
+    const L1 = 70, L2 = 64;
+    const handAt = (A, sx) => { const ex = sx + Math.sin(A[0]) * L1, ey = shY + 10 + Math.cos(A[0]) * L1; return [ex, ey, ex + Math.sin(A[0] + A[1]) * L2, ey + Math.cos(A[0] + A[1]) * L2]; };
+    const ik = (sx, tx, ty) => { const sy = shY + 10, dx = tx - sx, dyy = ty - sy, D = Math.min(Math.hypot(dx, dyy), L1 + L2 - 1), a = Math.acos(cl((L1 * L1 + D * D - L2 * L2) / (2 * L1 * D), -1, 1)), b = Math.atan2(dyy, dx) + a; return [sx + Math.cos(b) * L1, sy + Math.sin(b) * L1, tx, ty]; };
     const arm = (A, col, isFront) => {
-      const sx = isFront ? 4 : -4, [ex, ey, hx, hy] = handAt(A, sx);
-      limb([[sx, shY + 6], [ex, ey], [hx, hy]], 15, col);
-      c.strokeStyle = gold; c.lineWidth = 4; c.beginPath(); c.moveTo(lerp(sx, ex, 0.8) - 8, lerp(shY + 6, ey, 0.8)); c.lineTo(lerp(sx, ex, 0.8) + 8, lerp(shY + 6, ey, 0.8)); c.stroke();
-      c.fillStyle = col; c.beginPath(); c.arc(hx, hy, 9, 0, TAU); c.fill();
-      return [hx, hy];
+      const sx = isFront ? 46 : -46, [ex, ey, hx, hy2] = target ? ik(sx, target[0], target[1]) : handAt(A, sx);
+      limb(sx, shY + 10, ex, ey, 15, 10, col); limb(ex, ey, hx, hy2, 10, 6, col);
+      const dl = Math.hypot(hx - ex, hy2 - ey) || 1, ux = (hx - ex) / dl, uy = (hy2 - ey) / dl;
+      poly([[hx - uy * 7, hy2 + ux * 7], [hx + uy * 7, hy2 - ux * 7], [hx + ux * 26 + uy * 2, hy2 + uy * 26 - ux * 2], [hx + ux * 18 - uy * 9, hy2 + uy * 18 + ux * 9]], col);
+      c.fillStyle = gold; c.save(); c.translate(lerp(sx, ex, 0.5), lerp(shY + 10, ey, 0.5)); c.rotate(Math.atan2(ey - shY - 10, ex - sx)); c.fillRect(-5, -14, 10, 28); c.restore();
+      c.fillStyle = PAL.ink; c.save(); c.translate(lerp(ex, hx, 0.85), lerp(ey, hy2, 0.85)); c.rotate(Math.atan2(hy2 - ey, hx - ex)); c.fillRect(-3, -9, 6, 18); c.restore();
+      return [hx, hy2];
     };
-    const bh = arm(back, skinB, false);
+    const bh = arm(back, skinS, false);
     if (o.bow) {
-      const fh0 = handAt(front, 4).slice(2), R = 92, dr = o.draw || 0;
-      c.save(); c.translate(fh0[0], fh0[1]);
-      c.strokeStyle = PAL.brass; c.lineWidth = 7; c.lineCap = 'round'; c.beginPath(); c.arc(-R * 0.55, 0, R, -1.15, 1.15); c.stroke();
-      const tx = -R * 0.55 + Math.cos(1.15) * R, ty = Math.sin(1.15) * R, nock = [lerp(-R * 0.55 + R, bh[0] - fh0[0], dr), lerp(0, bh[1] - fh0[1], dr)];
-      c.strokeStyle = PAL.sandal; c.lineWidth = 2; c.beginPath(); c.moveTo(tx, -ty); c.lineTo(nock[0], nock[1]); c.lineTo(tx, ty); c.stroke();
-      if (dr > 0.05) {
-        c.strokeStyle = PAL.deep; c.lineWidth = 3.5; c.beginPath(); c.moveTo(nock[0], nock[1]); c.lineTo(nock[0] + 150, nock[1] * 0.2); c.stroke();
-        c.fillStyle = PAL.ash; c.beginPath(); c.moveTo(nock[0] + 150, nock[1] * 0.2); c.lineTo(nock[0] + 130, nock[1] * 0.2 - 8); c.lineTo(nock[0] + 130, nock[1] * 0.2 + 8); c.closePath(); c.fill();
-        c.fillStyle = PAL.kumkum; c.beginPath(); c.moveTo(nock[0], nock[1]); c.lineTo(nock[0] + 18, nock[1] - 7); c.lineTo(nock[0] + 18, nock[1] + 7); c.closePath(); c.fill();
-      }
+      const fh = handAt(front, 46).slice(2), R = 118, dr = o.draw || 0;
+      c.save(); c.translate(fh[0], fh[1]);
+      c.strokeStyle = PAL.brass; c.lineWidth = 9; c.beginPath(); c.arc(-R * 0.5, 0, R, -1.2, 1.2); c.stroke();
+      c.strokeStyle = PAL.kumkum; c.beginPath(); c.arc(-R * 0.5, 0, R, -0.22, 0.22); c.stroke();
+      const tx = -R * 0.5 + Math.cos(1.2) * R, ty = Math.sin(1.2) * R;
+      tri(tx, -ty - 6, 10, 16, PAL.brass); c.save(); c.translate(tx, ty + 6); c.scale(1, -1); tri(0, 0, 10, 16, PAL.brass); c.restore();
+      const nock = [lerp(tx, bh[0] - fh[0], dr), lerp(0, bh[1] - fh[1], dr)];
+      c.strokeStyle = PAL.cream; c.lineWidth = 2; c.beginPath(); c.moveTo(tx, -ty); c.lineTo(nock[0], nock[1]); c.lineTo(tx, ty); c.stroke();
+      if (dr > 0.05) { const ax = nock[0] + 230 - nock[0] * 0.4, ay = nock[1] * 0.3; c.strokeStyle = PAL.deep; c.lineWidth = 3; c.beginPath(); c.moveTo(nock[0], nock[1]); c.lineTo(ax, ay); c.stroke(); c.save(); c.translate(ax, ay); c.rotate(Math.PI / 2); tri(0, 0, 12, 22, PAL.cream); c.restore(); poly([[nock[0], nock[1] - 7], [nock[0] + 22, nock[1]], [nock[0], nock[1] + 7]], PAL.kumkum); }
       c.restore();
     }
     const fh = arm(front, skin, true);
-    if (o.mace) { c.save(); c.translate(fh[0], fh[1]); c.rotate(o.maceA == null ? -0.5 : o.maceA); c.strokeStyle = PAL.brass; c.lineWidth = 8; c.beginPath(); c.moveTo(0, 14); c.lineTo(0, -80); c.stroke(); c.fillStyle = PAL.gold; c.beginPath(); c.arc(0, -108, 30, 0, TAU); c.fill(); c.fillStyle = PAL.brass; c.beginPath(); c.arc(0, -108, 18, 0, TAU); c.fill(); c.restore(); }
-    if (o.tail) { c.strokeStyle = skin; c.lineWidth = 12; c.lineCap = 'round'; c.beginPath(); c.moveTo(-18, hipY + 4); c.bezierCurveTo(-90, hipY + 10, -110, hipY - 150, -40, hipY - 170); c.quadraticCurveTo(-10, hipY - 178, -22, hipY - 150); c.stroke(); }
-    
-    const hy = shY - 40;
-    c.fillStyle = skin; c.fillRect(-7, shY - 12, 14, 14);
-    if (o.face === 'monkey') {
-      c.beginPath(); c.arc(0, hy, 24, 0, TAU); c.fill();
-      c.fillStyle = mixc(skin, PAL.cream, 0.55); c.beginPath(); c.ellipse(16, hy + 4, 18, 13, 0, 0, TAU); c.fill();
-      c.fillStyle = skin; c.beginPath(); c.arc(-14, hy - 6, 10, 0, TAU); c.fill();
+    if (o.mace) { c.save(); c.translate(fh[0], fh[1]); c.rotate(o.maceA == null ? -0.5 : o.maceA); poly([[-6, 20], [6, 20], [4, -86], [-4, -86]], PAL.brass); c.fillStyle = gold; c.beginPath(); c.arc(0, -118, 34, 0, TAU); c.fill(); c.fillStyle = PAL.brass; c.beginPath(); c.arc(0, -118, 21, 0, TAU); c.fill(); c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, -118, 7, 0, TAU); c.fill(); c.restore(); }
+
+    poly([[-13, neckY], [13, neckY], [17, shY + 2], [-17, shY + 2]], skin);
+    poly([[-13, neckY + 1], [13, neckY + 1], [0, neckY + 10]], skinS);
+    if (monkey) {
+      poly([[-28, hy - 30], [16, hy - 34], [30, hy - 14], [46, hy + 2], [44, hy + 16], [26, hy + 26], [4, hy + 38], [-18, hy + 32], [-30, hy + 8]], skin);
+      poly([[-28, hy - 30], [-16, hy - 30], [-18, hy + 32], [-30, hy + 8]], skinS);
+      poly([[18, hy - 6], [46, hy + 2], [44, hy + 16], [26, hy + 26], [12, hy + 20]], mixc(skin, PAL.cream, 0.55));
+      c.fillStyle = skin; c.beginPath(); c.arc(-22, hy - 18, 11, 0, TAU); c.fill(); c.fillStyle = mixc(skin, PAL.cream, 0.4); c.beginPath(); c.arc(-22, hy - 18, 5, 0, TAU); c.fill();
+      poly([[2, hy - 14], [26, hy - 16], [26, hy - 11], [2, hy - 9]], PAL.ink);
+      poly([[4, hy - 6], [24, hy - 8], [16, hy + 2]], PAL.cream); c.fillStyle = PAL.ink; c.beginPath(); c.arc(16, hy - 5, 3.4, 0, TAU); c.fill();
+      c.fillStyle = PAL.ink; c.beginPath(); c.arc(44, hy + 6, 3, 0, TAU); c.fill();
+      poly([[26, hy + 18], [40, hy + 16], [30, hy + 22]], PAL.kumkum);
     } else {
-      c.beginPath(); c.arc(0, hy, 23, 0, TAU); c.fill();
-      c.beginPath(); c.moveTo(20, hy - 8); c.lineTo(36, hy + 1); c.lineTo(20, hy + 5); c.closePath(); c.fill();
-      c.fillStyle = PAL.kumkum; c.beginPath(); c.moveTo(18, hy + 10); c.lineTo(28, hy + 12); c.lineTo(18, hy + 14); c.closePath(); c.fill();
+      poly([[-26, hy - 34], [14, hy - 36], [24, hy - 22], [27, hy - 12], [42, hy + 2], [27, hy + 8], [31, hy + 17], [23, hy + 30], [2, hy + 40], [-18, hy + 32], [-28, hy + 6]], skin);
+      poly([[-26, hy - 34], [-14, hy - 34], [-16, hy + 30], [-18, hy + 32], [-28, hy + 6]], skinS);
+      poly([[-28, hy - 36], [16, hy - 38], [24, hy - 22], [-4, hy - 24], [-27, hy - 18]], hair);
+      poly([[-27, hy - 6], [-19, hy - 2], [-20, hy + 14], [-30, hy + 10]], skinS);
+      c.fillStyle = gold; c.beginPath(); c.arc(-24, hy + 18, 5, 0, TAU); c.fill(); tri(-24, hy + 32, 8, -10, gold);
+      poly([[4, hy - 16], [27, hy - 18], [27, hy - 13], [4, hy - 11]], PAL.ink);
+      poly([[5, hy - 7], [26, hy - 9], [17, hy + 2]], PAL.cream);
+      c.fillStyle = o.eyeCol || PAL.ink; c.beginPath(); c.arc(17, hy - 6, 3.6, 0, TAU); c.fill();
+      c.fillStyle = lite; c.beginPath(); c.arc(14, hy + 14, 4, 0, TAU); c.fill();
+      poly([[22, hy + 15], [31, hy + 17], [23, hy + 22]], PAL.kumkum);
     }
-    c.save(); c.translate(10, hy - 4); c.rotate(-0.15); c.fillStyle = PAL.cream; c.beginPath(); c.ellipse(0, 0, 9, 4, 0, 0, TAU); c.fill(); c.fillStyle = o.eyeCol || PAL.ink; c.beginPath(); c.arc(2, 0, 3.2, 0, TAU); c.fill(); c.restore();
-    c.strokeStyle = hair; c.lineWidth = 2.5; c.beginPath(); c.moveTo(2, hy - 11); c.lineTo(18, hy - 8); c.stroke();
-    if (o.tilak) { c.fillStyle = PAL.kumkum; c.fillRect(4, hy - 20, 3, 12); }
-    c.fillStyle = hair;
-    if (o.face !== 'monkey') { c.beginPath(); c.arc(0, hy - 2, 24, Math.PI * 0.95, Math.PI * 1.95); c.fill(); }
+    if (o.tilak) poly([[-2, hy - 32], [4, hy - 32], [2, hy - 18], [0, hy - 18]], PAL.kumkum);
     const crown = o.crown || 'bun';
-    if (crown === 'bun') { c.beginPath(); c.arc(-18, hy - 16, 11, 0, TAU); c.fill(); c.fillStyle = gold; c.beginPath(); c.arc(-18, hy - 16, 4, 0, TAU); c.fill(); }
-    if (crown === 'long') { c.beginPath(); c.moveTo(-22, hy - 8); c.quadraticCurveTo(-40, hy + 40, -26, hy + 90); c.lineTo(-8, hy + 60); c.lineTo(-10, hy); c.closePath(); c.fill(); c.fillStyle = gold; c.beginPath(); c.arc(-16, hy - 20, 4, 0, TAU); c.fill(); }
+    if (crown === 'bun' && !monkey) { poly([[-30, hy - 30], [-6, hy - 30], [-10, hy - 60], [-26, hy - 60]], hair); c.fillStyle = gold; c.fillRect(-28, hy - 46, 20, 5); }
+    if (crown === 'long') { poly([[-26, hy - 32], [-8, hy - 32], [-14, hy + 20], [-10, hy + 110], [-34, hy + 130], [-44, hy + 60], [-36, hy]], hair); c.fillStyle = gold; c.beginPath(); c.arc(-14, hy - 30, 5, 0, TAU); c.fill(); }
     if (crown === 'tall' || crown === 'king') {
-      c.fillStyle = gold; c.beginPath(); c.moveTo(-24, hy - 18); c.lineTo(24, hy - 18); c.lineTo(18, hy - 44); c.lineTo(8, hy - 54); c.lineTo(0, hy - (crown === 'king' ? 96 : 80)); c.lineTo(-8, hy - 54); c.lineTo(-18, hy - 44); c.closePath(); c.fill();
-      c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, hy - 36, 5, 0, TAU); c.fill();
-      c.fillStyle = PAL.brass; c.fillRect(-24, hy - 22, 48, 4);
-      if (crown === 'king') { c.fillStyle = gold; for (const sx of [-1, 1]) { c.beginPath(); c.moveTo(sx * 18, hy - 44); c.lineTo(sx * 34, hy - 62); c.lineTo(sx * 14, hy - 52); c.closePath(); c.fill(); } }
+      const tiers = crown === 'king' ? 5 : 4;
+      poly([[-32, hy - 28], [32, hy - 28], [28, hy - 42], [-28, hy - 42]], gold);
+      poly([[-32, hy - 28], [32, hy - 28], [30, hy - 34], [-30, hy - 34]], PAL.kumkum);
+      for (let i = 0; i < tiers; i++) { const w = 48 - i * 10, y0 = hy - 42 - i * 22; poly([[-w / 2, y0], [w / 2, y0], [w / 2 - 6, y0 - 22], [-w / 2 + 6, y0 - 22]], i % 2 ? PAL.brass : gold); c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, y0 - 11, 3.5, 0, TAU); c.fill(); }
+      tri(0, hy - 42 - tiers * 22, 14, 26, gold); c.fillStyle = PAL.cream; c.beginPath(); c.arc(0, hy - 42 - tiers * 22 - 30, 4, 0, TAU); c.fill();
+      poly([[-34, hy - 44], [-26, hy - 44], [-44, hy - 72], [-52, hy - 66]], gold); poly([[34, hy - 44], [26, hy - 44], [44, hy - 72], [52, hy - 66]], gold);
+      if (crown === 'king') { poly([[-40, hy - 50], [-30, hy - 50], [-56, hy - 100], [-66, hy - 90]], PAL.brass); poly([[40, hy - 50], [30, hy - 50], [56, hy - 100], [66, hy - 90]], PAL.brass); }
     }
-    if (crown === 'cap') { c.fillStyle = gold; c.beginPath(); c.arc(0, hy - 6, 25, Math.PI, 0); c.fill(); c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, hy - 28, 5, 0, TAU); c.fill(); }
-    c.fillStyle = gold; c.beginPath(); c.arc(-4, hy + 16, 4, 0, TAU); c.fill();
+    if (crown === 'cap') { c.fillStyle = gold; c.beginPath(); c.arc(-2, hy - 20, 32, Math.PI, 0); c.fill(); poly([[-34, hy - 20], [30, hy - 20], [30, hy - 12], [-34, hy - 12]], PAL.brass); c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(-2, hy - 40, 5, 0, TAU); c.fill(); }
     c.restore();
   }
-  
+
   function ravana(c, o) {
-    const d = o.dir == null ? -1 : o.dir, skin = o.skin || PAL.maroon, s = o.s || 1;
+    const d = o.dir == null ? -1 : o.dir, skin = o.skin || PAL.maroon, s = o.s || 1, K = 1.15 * FK;
+    const poly = (pts, col) => { c.fillStyle = col; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]); c.closePath(); c.fill(); };
     const head = (col, dd) => {
-      c.save(); c.scale(dd, 1); c.fillStyle = col; c.beginPath(); c.arc(0, 0, 23, 0, TAU); c.fill();
-      c.beginPath(); c.moveTo(20, -8); c.lineTo(36, 1); c.lineTo(20, 5); c.closePath(); c.fill();
-      c.fillStyle = PAL.kumkum; c.beginPath(); c.ellipse(10, -4, 7, 3.5, -0.15, 0, TAU); c.fill();
-      c.fillStyle = PAL.ink; c.beginPath(); c.arc(0, -2, 24, Math.PI * 0.95, Math.PI * 1.95); c.fill();
-      c.strokeStyle = PAL.ink; c.lineWidth = 4; c.beginPath(); c.moveTo(14, 12); c.quadraticCurveTo(26, 10, 30, 18); c.stroke();
-      c.fillStyle = PAL.gold; c.beginPath(); c.moveTo(-22, -18); c.lineTo(22, -18); c.lineTo(14, -44); c.lineTo(0, -64); c.lineTo(-14, -44); c.closePath(); c.fill();
+      c.save(); c.scale(dd, 1);
+      poly([[-26, -34], [14, -36], [24, -22], [27, -12], [42, 2], [27, 8], [31, 17], [23, 30], [2, 40], [-18, 32], [-28, 6]], col);
+      poly([[-28, -36], [16, -38], [24, -22], [-4, -24], [-27, -18]], PAL.ink);
+      poly([[4, -16], [27, -18], [27, -13], [4, -11]], PAL.ink);
+      poly([[5, -7], [26, -9], [17, 2]], PAL.kumkum); c.fillStyle = PAL.ink; c.beginPath(); c.arc(17, -6, 3.4, 0, TAU); c.fill();
+      poly([[10, 18], [34, 14], [36, 22], [12, 26]], PAL.ink);
+      poly([[-32, -28], [32, -28], [26, -46], [14, -60], [0, -84], [-14, -60], [-26, -46]], PAL.gold); c.fillStyle = PAL.kumkum; c.beginPath(); c.arc(0, -48, 5, 0, TAU); c.fill();
       c.restore();
     };
     c.save(); c.translate(o.x, o.y); c.scale(s * d, s);
     for (let k = 4; k >= 1; k--) for (const sd of [-1, 1]) {
-      c.save(); c.translate(sd * k * 30, -248 + k * 7); c.scale(0.9 - k * 0.07, 0.9 - k * 0.07);
+      c.save(); c.translate(sd * k * 24 * K, -352 * K + k * 5); c.scale(K * (0.86 - k * 0.08), K * (0.86 - k * 0.08));
       head(mixc(skin, PAL.ink, 0.1 + k * 0.08), sd);
       c.restore();
     }
     figure(c, { x: 0, y: 0, s: 1.15, dir: 1, skin, cloth: PAL.ink, sash: PAL.gold, crown: 'king', pose: o.pose || 'stand', arms: o.arms || [[-0.9, -0.9], [0.9, -1.4]], eyeCol: PAL.kumkum, mace: o.mace });
-    c.strokeStyle = mixc(skin, PAL.ink, 0.2); c.lineWidth = 15; c.lineCap = 'butt';
+    c.strokeStyle = mixc(skin, PAL.ink, 0.2); c.lineWidth = 14 * K; c.lineCap = 'butt';
     for (const [a1, a2, sd] of [[-2.3, -0.6, 1], [2.3, 0.6, -1], [-1.9, -1.4, 1], [1.9, 1.4, -1]]) {
-      c.beginPath(); c.moveTo(sd * 6, -196); c.lineTo(sd * 6 + Math.sin(a1) * 52, -196 + Math.cos(a1) * 52); c.lineTo(sd * 6 + Math.sin(a1) * 52 + Math.sin(a2) * 48, -196 + Math.cos(a1) * 52 + Math.cos(a2) * 48); c.stroke();
+      const x0 = sd * 40 * K, y0 = -280 * K, L1 = 70 * K, L2 = 64 * K;
+      c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + Math.sin(a1) * L1, y0 + Math.cos(a1) * L1); c.lineTo(x0 + Math.sin(a1) * L1 + Math.sin(a2) * L2, y0 + Math.cos(a1) * L1 + Math.cos(a2) * L2); c.stroke();
     }
     c.restore();
   }
-  
+
   function vanara(c, x, y, s, dir, ph, col) {
     figure(c, { x, y, s, dir, skin: col || PAL.burnt, cloth: PAL.turmeric, sash: PAL.kumkum, crown: 'none', face: 'monkey', pose: 'walk', ph, tail: true, mace: true, maceA: -0.9 });
   }
