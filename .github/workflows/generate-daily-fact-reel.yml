@@ -35,7 +35,7 @@ on:
         default: auto
         options: [auto, gemini, mistral, cerebras, meta, openrouter, openai, anthropic]
       model:
-        description: 'Model override (defaults: gemini-3.8-flash, mistral-large-latest, qwen-3-coder-480b, Llama-4-Maverick, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
+        description: 'Model override (defaults: gemini-3.8-flash, mistral-large-latest, qwen-3-coder-480b, muse-spark-1.3, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
         required: false
         type: string
       notes:

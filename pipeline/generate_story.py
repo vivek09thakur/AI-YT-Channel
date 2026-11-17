@@ -13,7 +13,7 @@ DEFAULT_MODEL = {
     'gemini': 'gemini-3.8-flash',
     'mistral': 'mistral-large-latest',
     'cerebras': 'qwen-3-coder-480b',
-    'meta': 'Llama-4-Maverick-17B-128E-Instruct-FP8',
+    'meta': 'muse-spark-1.3',
     'openrouter': 'anthropic/claude-sonnet-4',
     'openai': 'gpt-4.1',
     'anthropic': 'claude-sonnet-4-20250514',
@@ -23,7 +23,7 @@ OPENAI_COMPAT = {
     'gemini': ('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'GEMINI_API_KEY', {}),
     'mistral': ('https://api.mistral.ai/v1/chat/completions', 'MISTRAL_API_KEY', {}),
     'cerebras': ('https://api.cerebras.ai/v1/chat/completions', 'CEREBRAS_API_KEY', {}),
-    'meta': ('https://api.llama.com/compat/v1/chat/completions', 'META_AI_API', {}),
+    'meta': ('https://api.meta.ai/v1/chat/completions', 'META_AI_API', {}),
     'openai': ('https://api.openai.com/v1/chat/completions', 'OPENAI_API_KEY', {}),
     'openrouter': ('https://openrouter.ai/api/v1/chat/completions', 'OPENROUTER_API_KEY',
                    {'HTTP-Referer': 'https://github.com/vivek09thakur/AI-YT-Channel', 'X-Title': 'AI-YT-Channel'}),
@@ -34,8 +34,10 @@ PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'an
 FALLBACK_MODELS = {
     'gemini': ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-3.5-flash-lite'],
     'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
-    'meta': ['Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-3.3-70B-Instruct'],
+    'meta': ['muse-spark-1.3', 'muse-wonder-1.0', 'muse-ember-1.0'],
 }
+# Reasoning models: thinking tokens count against max_tokens and temperature is not a supported knob.
+REASONING_BODY = {'meta': {'reasoning_effort': 'low'}}
 KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
 RETRY_WAITS = (20, 40, 60, 90)
 
@@ -100,8 +102,11 @@ def call_llm(provider, model, system, messages, max_tokens):
                 url, key, extra = OPENAI_COMPAT[provider]
                 if not os.environ.get(key):
                     raise Unavailable(f'{key} is not set')
-                body = {'model': model, 'max_tokens': max_tokens, 'temperature': 0.4,
-                        'messages': [{'role': 'system', 'content': system}] + messages}
+                body = {'model': model, 'max_tokens': max_tokens, 'messages': [{'role': 'system', 'content': system}] + messages}
+                if provider in REASONING_BODY:
+                    body.update(REASONING_BODY[provider]); body['max_tokens'] = max_tokens * 2
+                else:
+                    body['temperature'] = 0.4
                 r = requests.post(url, timeout=600,
                                   headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()

@@ -5,7 +5,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 sys.path.insert(0, str(Path(__file__).parent))
 import requests
-from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE, PRIORITY, FALLBACK_MODELS, KEY_ENV
+from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE, PRIORITY, FALLBACK_MODELS, KEY_ENV, REASONING_BODY
 PROBE_MSG = [{'role': 'user', 'content': 'Reply with the single word: ok'}]
 
 
@@ -39,8 +39,10 @@ def probe_once(provider, model, key):
                               json={'model': model, 'max_tokens': 5, 'messages': PROBE_MSG})
         else:
             url, _, extra = OPENAI_COMPAT[provider]
-            r = requests.post(url, timeout=60, headers={'Authorization': f'Bearer {key}', **extra},
-                              json={'model': model, 'max_tokens': 5, 'messages': PROBE_MSG})
+            body = {'model': model, 'max_tokens': 5, 'messages': PROBE_MSG}
+            if provider in REASONING_BODY:
+                body.update(REASONING_BODY[provider], reasoning_effort='minimal', max_tokens=64)
+            r = requests.post(url, timeout=60, headers={'Authorization': f'Bearer {key}', **extra}, json=body)
         state, note = classify(r.status_code, r.text)
         if state == 'ok' and 'error' in r.text[:200] and '"choices"' not in r.text:
             state, note = 'error', r.text[:120]
@@ -75,7 +77,7 @@ def credits(provider, key):
     except Exception:
         pass
     return {'gemini': 'free tier (no balance API)', 'mistral': 'free tier (no balance API)',
-            'cerebras': 'free tier (no balance API)', 'meta': 'free preview (no balance API)',
+            'cerebras': 'free tier (no balance API)', 'meta': 'pay-as-you-go; see dev.meta.ai → Billing',
             'openai': 'not exposed by API; see platform.openai.com/usage',
             'anthropic': 'not exposed by API; see console.anthropic.com'}.get(provider, '-')
 
