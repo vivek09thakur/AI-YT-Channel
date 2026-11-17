@@ -1,0 +1,80 @@
+name: Cleanup old videos
+
+# Standalone housekeeping for the `videos` branch only. Never touches main, story code or the generate workflow.
+on:
+  schedule:
+    - cron: '30 2 * * 1'   # Mondays 02:30 UTC
+  workflow_dispatch:
+    inputs:
+      keep_days:
+        description: 'Keep videos published within this many days'
+        required: true
+        type: number
+        default: 7
+      dry_run:
+        description: 'Only report what would be removed'
+        required: true
+        type: boolean
+        default: false
+
+concurrency:
+  group: cleanup-videos
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Keep last ${{ inputs.keep_days || 7 }} days
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Checkout videos branch
+        id: branch
+        run: |
+          if git clone --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"; echo "no videos branch yet, nothing to clean"
+          fi
+      - name: Remove old videos and rebuild overview
+        if: steps.branch.outputs.exists == 'true'
+        run: |
+          python main/pipeline/cleanup_videos.py --root site --repo "${{ github.repository }}" \
+            --keep-days "${{ inputs.keep_days || 7 }}" --summary cleanup.json \
+            $([ "${{ inputs.dry_run }}" = "true" ] && echo "--dry-run")
+      - name: Commit and push
+        if: steps.branch.outputs.exists == 'true' && inputs.dry_run != true
+        run: |
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && { echo "nothing to remove"; exit 0; }
+          git commit -m "cleanup: keep last ${{ inputs.keep_days || 7 }} days of videos (run ${{ github.run_number }})"
+          for i in 1 2 3; do
+            git pull --rebase origin videos && git push origin videos && exit 0
+            echo "push failed (another run published meanwhile), retry $i"; sleep 20
+          done
+          exit 1
+      - name: Summary
+        if: always() && steps.branch.outputs.exists == 'true'
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          p = pathlib.Path('cleanup.json')
+          if not p.exists():
+              print('## Cleanup did not run'); raise SystemExit
+          r = json.loads(p.read_text())
+          print(f"## Cleanup old videos{' (dry run)' if r['dry_run'] else ''}")
+          print()
+          print(f"Cutoff **{r['cutoff']}**, kept **{r['kept']}**, {'would remove' if r['dry_run'] else 'removed'} **{len(r['removed'])}** ({r['freed_mb']} MB)")
+          print()
+          for d in r['removed']:
+              print(f'- `{d}`')
+          PY
