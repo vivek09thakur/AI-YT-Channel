@@ -228,13 +228,18 @@ def main():
             + 'Write meta.json, data.ts and scenes.tsx for this narration.')
     messages = [{'role': 'user', 'content': user}]
     total_in = total_out = 0
+    files = {}
     for attempt in range(1, a.attempts + 1):
         print(f'--- attempt {attempt}/{a.attempts} ({provider} {model})')
-        text, usage, provider, model = call_with_fallback(provider, model, system, messages, 16000)
+        # always start from the preferred model: a 503 fallback on one attempt should not downgrade the rest
+        text, usage, used_provider, used_model = call_with_fallback(provider, model, system, messages, 16000)
         total_in += usage.get('prompt_tokens') or 0; total_out += usage.get('completion_tokens') or 0
         print(f'    tokens in {usage.get("prompt_tokens")} out {usage.get("completion_tokens")}')
-        files = parse_files(text)
+        new = parse_files(text)
+        files = {**files, **new}
         errs = [f'missing block for {m}' for m in ('meta.json', 'data.ts', 'scenes.tsx') if m not in files]
+        if not new:
+            errs = ['your reply contained no `=== FILE: name ===` blocks; reply with the three files only, no prose'] + errs
         meta = {}
         if not errs:
             try:
@@ -259,14 +264,14 @@ def main():
                 shutil.copy2(project / 'src' / f, out / f)
             shutil.copy2(a.narration, out / 'narration.json')
             meta = {**meta, 'topic': a.topic, 'page_name': a.page_name, 'voice': narr.get('voice'), 'duration': narr['duration'],
-                    'provider': provider, 'model': model, 'attempts': attempt, 'input_tokens': total_in, 'output_tokens': total_out}
+                    'provider': used_provider, 'model': used_model, 'attempts': attempt, 'input_tokens': total_in, 'output_tokens': total_out}
             (out / 'meta.json').write_text(json.dumps(meta, indent=1, ensure_ascii=False), encoding='utf-8')
             (project / 'meta.json').write_text(json.dumps(meta, indent=1, ensure_ascii=False), encoding='utf-8')
             print(f'OK: facts/{a.slug} passes checks, tsc and stills. tokens total in {total_in} out {total_out}')
             return
         print('    problems:\n' + '\n'.join(f'      {e[:400]}' for e in errs))
         messages += [{'role': 'assistant', 'content': text},
-                     {'role': 'user', 'content': 'The checks reported these problems. Return all three files again, complete and corrected:\n\n' + '\n'.join(errs)}]
+                     {'role': 'user', 'content': 'The checks reported these problems. Return ALL THREE files again (meta.json, data.ts, scenes.tsx), each complete inside its own `=== FILE: name ===` block, no prose:\n\n' + '\n'.join(errs)}]
     sys.exit(f'gave up after {a.attempts} attempts')
 
 

@@ -32,7 +32,7 @@ NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invali
             'API_KEY_INVALID', 'PERMISSION_DENIED')
 PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
 FALLBACK_MODELS = {
-    'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'],
+    'gemini': ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-3.5-flash-lite'],
     'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
     'meta': ['Llama-4-Maverick-17B-128E-Instruct-FP8', 'Llama-4-Scout-17B-16E-Instruct-FP8', 'Llama-3.3-70B-Instruct'],
 }
@@ -328,14 +328,19 @@ def main():
             + 'Write meta.json, story.js and sound_score.js for this narration.')
     messages = [{'role': 'user', 'content': user}]
     total_in = total_out = 0
+    files = {}
     for attempt in range(1, a.attempts + 1):
         print(f'--- attempt {attempt}/{a.attempts} ({provider} {model})')
-        text, usage, provider, model = call_with_fallback(provider, model, system, messages, 16000)
+        # always start from the preferred model: a 503 fallback on one attempt should not downgrade the rest
+        text, usage, used_provider, used_model = call_with_fallback(provider, model, system, messages, 16000)
         total_in += usage.get('prompt_tokens') or 0; total_out += usage.get('completion_tokens') or 0
         print(f'    tokens in {usage.get("prompt_tokens")} out {usage.get("completion_tokens")}')
-        files = parse_files(text)
+        new = parse_files(text)
+        files = {**files, **new}
         missing = [f for f in ('meta.json', 'story.js', 'sound_score.js') if f not in files]
         errs = [f'missing block for {m}' for m in missing] or check_contract(files, narr)
+        if not new:
+            errs = ['your reply contained no `=== FILE: name ===` blocks; reply with the three files only, no prose'] + errs
         if not errs:
             meta = json.loads(files['meta.json'])
             (sdir / 'story.js').write_text(files['story.js'], encoding='utf-8')
@@ -343,7 +348,7 @@ def main():
             write_lines_js(narr, meta.get('kinds') or {}, sdir / 'lines.js')
             title = ' '.join(str(meta['title']).split())
             (sdir / 'meta.txt').write_text(f"title={title}\nparts=ref,lines,narration,story,sound_score,vertical\n", encoding='utf-8')
-            (sdir / 'meta.json').write_text(json.dumps({**meta, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'], 'provider': provider, 'model': model}, indent=1, ensure_ascii=False), encoding='utf-8')
+            (sdir / 'meta.json').write_text(json.dumps({**meta, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'], 'provider': used_provider, 'model': used_model}, indent=1, ensure_ascii=False), encoding='utf-8')
             report = validate(kit, a.slug, narr['duration'])
             if not report:
                 print(f'OK: stories/{a.slug} builds and renders without errors. tokens total in {total_in} out {total_out}')
@@ -352,7 +357,7 @@ def main():
             errs = [report]
         print('    problems:\n' + '\n'.join(f'      {e[:400]}' for e in errs))
         messages += [{'role': 'assistant', 'content': text},
-                     {'role': 'user', 'content': 'The build/test reported these problems. Return all three files again, complete and corrected:\n\n' + '\n'.join(errs)}]
+                     {'role': 'user', 'content': 'The build/test reported these problems. Return ALL THREE files again (meta.json, story.js, sound_score.js), each complete inside its own `=== FILE: name ===` block, no prose:\n\n' + '\n'.join(errs)}]
     sys.exit(f'gave up after {a.attempts} attempts; last files are in stories/{a.slug} for inspection')
 
 

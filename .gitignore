@@ -12,3 +12,5 @@ __pycache__/
 **/daily-fact-reel/template/public/
 **/daily-fact-reel/template/out/
 **/daily-fact-reel/template/debug/
+
+**/daily-fact-reel/template/meta.json
