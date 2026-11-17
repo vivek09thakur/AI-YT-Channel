@@ -6,3 +6,6 @@
 work/
 __pycache__/
 *.pyc
+**/shadow-puppet-kit/debug/*.js
+**/shadow-puppet-kit/debug/*.mjs
+**/shadow-puppet-kit/debug/*.html
