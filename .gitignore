@@ -9,3 +9,6 @@ __pycache__/
 **/shadow-puppet-kit/debug/*.js
 **/shadow-puppet-kit/debug/*.mjs
 **/shadow-puppet-kit/debug/*.html
+**/daily-fact-reel/template/public/
+**/daily-fact-reel/template/out/
+**/daily-fact-reel/template/debug/

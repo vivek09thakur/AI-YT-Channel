@@ -1,0 +1,23 @@
+{
+  "name": "daily-fact-reel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion project for the daily fact reel action (based on the bhul-bill-video-builder kit)",
+  "scripts": {
+    "prepare-assets": "node prepare.mjs",
+    "typecheck": "tsc --noEmit",
+    "still": "remotion still src/index.ts StoryVideo",
+    "render": "remotion render src/index.ts StoryVideo"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/hind-siliguri": "^5.2.5",
+    "@fontsource/noto-serif-bengali": "^5.2.5",
+    "@remotion/cli": "^4.0.539",
+    "@types/react": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.539",
+    "typescript": "^7.0.2"
+  }
+}

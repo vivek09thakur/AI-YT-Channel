@@ -1,0 +1,259 @@
+name: Generate daily fact reel
+
+# Separate from "Generate story video": own kit (.github/skills/daily-fact-reel), own scripts (pipeline/facts/),
+# own concurrency group and its own facts/ folder + facts.json on the videos branch. Nothing here touches the other workflows.
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Title / topic of the fact (used for the slug and the overview page)'
+        required: true
+        type: string
+      script:
+        description: 'English narration text (voice is generated). Sentences split on . ! ?; blank line or " / " = paragraph. Leave empty to use script_file.'
+        required: false
+        type: string
+      script_file:
+        description: 'Path of a .txt in this repo with the narration (alternative to script), e.g. scripts/facts/octopus.txt'
+        required: false
+        type: string
+      voice:
+        description: 'Neural voice'
+        required: true
+        type: choice
+        default: en-US-AndrewNeural
+        options: [en-US-AndrewNeural, en-US-GuyNeural, en-US-AvaNeural, en-GB-RyanNeural, en-GB-SoniaNeural, en-IN-PrabhatNeural, en-IN-NeerjaNeural]
+      page_name:
+        description: 'Page / channel name shown as a small pill at the top (empty = no watermark)'
+        required: false
+        type: string
+      provider:
+        description: 'LLM that writes the scene code (auto = first working key, free tiers first)'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, gemini, mistral, cerebras, meta, openrouter, openai, anthropic]
+      model:
+        description: 'Model override (defaults: gemini-3.8-flash, mistral-large-latest, qwen-3-coder-480b, Llama-4-Maverick, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
+        required: false
+        type: string
+      notes:
+        description: 'Optional notes for the scene writer (objects, places, comparisons to show)'
+        required: false
+        type: string
+
+concurrency:
+  group: generate-daily-fact-reel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  KIT: .github/skills/daily-fact-reel
+  PROJECT: work/reel
+
+jobs:
+  author:
+    name: Voice + scene code
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      slug: ${{ steps.slug.outputs.slug }}
+      total: ${{ steps.narr.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ${{ env.KIT }}/template/package-lock.json
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg rsync > /dev/null
+          pip install -q -r pipeline/facts/requirements.txt
+          mkdir -p "$PROJECT" && rsync -a --exclude node_modules --exclude out --exclude public "$KIT/template/" "$PROJECT/"
+          cd "$PROJECT" && npm ci --silent
+          google-chrome --version
+      - name: Slug
+        id: slug
+        run: |
+          slug=$(printf '%s' "$TOPIC" | iconv -f utf-8 -t ascii//TRANSLIT 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
+          [ -n "$slug" ] || slug="fact-$(date -u +%Y%m%d-%H%M)"
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          echo "slug: $slug"
+        env:
+          TOPIC: ${{ inputs.topic }}
+      - name: Check LLM providers (keys, quota, credits)
+        id: llm
+        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "$MODEL"
+        env:
+          MODEL: ${{ inputs.model }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+      - name: Narration (neural TTS)
+        id: narr
+        run: |
+          mkdir -p work
+          if [ -n "$SCRIPT_FILE" ]; then cp "$SCRIPT_FILE" work/script.txt
+          else printf '%s\n' "$SCRIPT_INPUT" > work/script.txt; fi
+          test -s work/script.txt || { echo "::error::no script given (script or script_file)"; exit 1; }
+          python pipeline/tts.py --script work/script.txt --voice "$VOICE" --out work
+          total=$(python -c "import json;print(json.load(open('work/narration.json'))['duration'])")
+          echo "total=$total" >> "$GITHUB_OUTPUT"
+          echo "TOTAL = $total s"
+        env:
+          SCRIPT_INPUT: ${{ inputs.script }}
+          SCRIPT_FILE: ${{ inputs.script_file }}
+          VOICE: ${{ inputs.voice }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+      - name: Prepare project assets (fonts, sfx, voice, rms)
+        run: |
+          cd "$PROJECT"
+          node prepare.mjs "${{ steps.narr.outputs.total }}"
+          cp ../voice.mp3 public/voice.mp3
+          python tools/make_rms.py public/voice.mp3 src/rms.json
+      - name: Scene code (LLM, checked with tsc + headless Chrome stills)
+        run: |
+          python pipeline/facts/generate_fact_reel.py --topic "$TOPIC" --narration work/narration.json --project "$PROJECT" --kit "$KIT" \
+            --slug "${{ steps.slug.outputs.slug }}" --page-name "$PAGE_NAME" --notes "$NOTES" \
+            --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --chrome "$(which google-chrome)"
+        env:
+          CI: 'true'
+          TOPIC: ${{ inputs.topic }}
+          PAGE_NAME: ${{ inputs.page_name }}
+          NOTES: ${{ inputs.notes }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+      - name: Upload fact bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fact-bundle
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            work/voice.mp3
+            work/narration.json
+            work/script.txt
+            ${{ env.KIT }}/facts/${{ steps.slug.outputs.slug }}/
+            ${{ env.PROJECT }}/debug/sheet.png
+      - name: Commit scene code to main (re-renderable)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p scripts/facts && cp work/script.txt "scripts/facts/${{ steps.slug.outputs.slug }}.txt" && git add scripts/facts
+          git add "$KIT/facts/${{ steps.slug.outputs.slug }}"
+          git commit -m "fact reel: ${{ steps.slug.outputs.slug }} (run ${{ github.run_number }})" || { echo "nothing to commit"; exit 0; }
+          git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"
+
+  render:
+    name: Render 9:16 reel
+    needs: author
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ${{ env.KIT }}/template/package-lock.json
+      - uses: actions/download-artifact@v4
+        with: { name: fact-bundle, path: bundle }
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg rsync > /dev/null
+          pip install -q numpy
+          mkdir -p "$PROJECT" && rsync -a --exclude node_modules --exclude out --exclude public "$KIT/template/" "$PROJECT/"
+          cd "$PROJECT" && npm ci --silent
+      - name: Place fact files
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          cp "bundle/$KIT/facts/$slug/data.ts" "bundle/$KIT/facts/$slug/scenes.tsx" "bundle/$KIT/facts/$slug/brand.ts" "$PROJECT/src/"
+          cd "$PROJECT"
+          node prepare.mjs "${{ needs.author.outputs.total }}"
+          cp ../../bundle/work/voice.mp3 public/voice.mp3
+          python tools/make_rms.py public/voice.mp3 src/rms.json
+          npx tsc --noEmit
+      - name: Render with Remotion (headless Chrome)
+        run: |
+          cd "$PROJECT"
+          npx remotion render src/index.ts StoryVideo out/reel.mp4 --codec h264 --crf 20 --overwrite \
+            --concurrency "$(nproc)" --gl swangle --browser-executable "$(which google-chrome)" --log warn
+          ls -la out
+      - name: Finalize (h264 + loudnorm + thumbnail)
+        run: |
+          python pipeline/facts/finalize_reel.py --in "$PROJECT/out/reel.mp4" --out final/reel.mp4 --thumb final/thumb.jpg --total "${{ needs.author.outputs.total }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fact-video
+          retention-days: 30
+          path: |
+            final/reel.mp4
+            final/thumb.jpg
+
+  publish:
+    name: Publish to videos branch
+    needs: [author, render]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: fact-bundle, path: bundle }
+      - uses: actions/download-artifact@v4
+        with: { name: fact-video, path: final }
+      - name: Collect
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          cp bundle/work/voice.mp3 bundle/work/narration.json final/
+          cp "bundle/$KIT/facts/$slug/meta.json" final/ || true
+          ls -la final
+      - name: Checkout videos branch
+        run: |
+          git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
+            || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
+      - name: Add reel + rebuild facts overview
+        run: |
+          python main/pipeline/facts/publish_fact_reel.py --root site --src final --slug "${{ needs.author.outputs.slug }}" --run "${{ github.run_number }}" \
+            --repo "${{ github.repository }}" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fact reel: ${{ needs.author.outputs.slug }} (run ${{ github.run_number }})"
+          for i in 1 2 3; do git push origin videos && break || { git pull --rebase origin videos; sleep 5; }; done
+      - name: Summary
+        run: |
+          slug="${{ needs.author.outputs.slug }}"; dir="facts/${slug}-${{ github.run_number }}"
+          raw="https://github.com/${{ github.repository }}/raw/videos/$dir"
+          {
+            echo "## Fact reel ready: $slug"
+            echo
+            echo "| Format | Download |"; echo "|---|---|"
+            echo "| Reel 9:16 (1080x1920, ${{ needs.author.outputs.total }} s) | [$dir/reel.mp4]($raw/reel.mp4) |"
+            echo
+            echo "Overview: https://github.com/${{ github.repository }}/blob/videos/facts/README.md"
+            echo
+            echo "Scene code committed to \`${{ env.KIT }}/facts/$slug/\` on \`${{ github.ref_name }}\`; copy data.ts/scenes.tsx/brand.ts into the template's src/ to re-render."
+          } >> "$GITHUB_STEP_SUMMARY"
