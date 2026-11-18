@@ -1,0 +1,91 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 67.2,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Did you know that Lord Shiva has a form in which he appears as a young child?",
+   "t0": 0.8,
+   "t1": 4.66,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "This divine form is known as Batuk Bhairav.",
+   "t0": 5.21,
+   "t1": 7.89,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Batuk Bhairav is considered the child form of Lord Bhairav, who is a fierce manifestation of Lord Shiva.",
+   "t0": 8.44,
+   "t1": 14.3,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "He symbolizes protection, courage, strength, and divine blessings.",
+   "t0": 14.85,
+   "t1": 19.25,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "According to Hindu beliefs, Lord Shiva manifested as Bhairav to destroy evil and protect righteousness.",
+   "t0": 19.8,
+   "t1": 25.96,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "Batuk Bhairav represents the gentler, childlike aspect of this divine energy.",
+   "t0": 26.51,
+   "t1": 31.25,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "But why do devotees worship Batuk Bhairav?",
+   "t0": 31.8,
+   "t1": 34.45,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "It is believed that worshipping him protects devotees from fear, negative energies, and obstacles in life.",
+   "t0": 35.0,
+   "t1": 41.06,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "People pray to him for courage, peace, prosperity, and protection from unseen difficulties.",
+   "t0": 41.61,
+   "t1": 47.51,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Devotees especially worship Batuk Bhairav on Sundays, Tuesdays, and Ashtami, considering these days auspicious.",
+   "t0": 48.06,
+   "t1": 55.5,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "Batuk Bhairav teaches us that divine protection is always with those who have faith, courage, and devotion.",
+   "t0": 56.05,
+   "t1": 62.12,
+   "para": false
+  },
+  {
+   "i": 11,
+   "text": "Jai Batuk Bhairav!",
+   "t0": 62.67,
+   "t1": 64.2,
+   "para": false
+  }
+ ]
+}
