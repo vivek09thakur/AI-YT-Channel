@@ -39,7 +39,8 @@ export const SFX: [string, number, number][] = [ ... ];
   the source of truth: do not paraphrase, do not drop or add words; you may drop a trailing full stop). Mark 1-2 key
   words per caption with `{word}` (rendered red). Insert `\n` to break into at most 2 lines of <= 34 characters each
   (count without braces). A line longer than 68 characters must be split into two captions at a comma or pause, each
-  with its own time range inside the line's range (second caption starts where the first ends).
+  with its own time range inside the line's range (second caption starts where the first ends). If your captions break
+  these typography rules the pipeline rebuilds CAPS mechanically from the narration, so put your effort into the scenes.
   Quoted speech gets `who: 'Name'` and the text in quotation marks.
 - **SPEAK**: for every character that speaks, their speaking windows `[start, end]` (seconds). The mouth animation
   only runs inside these windows and only while the voice is loud, so it is safe to be generous (+0.2 s). A narrator

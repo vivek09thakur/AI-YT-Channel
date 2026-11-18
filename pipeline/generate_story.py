@@ -32,14 +32,15 @@ NO_RETRY = ('insufficient_quota', 'credit_balance_exhausted', 'billing', 'invali
             'API_KEY_INVALID', 'PERMISSION_DENIED')
 PRIORITY = ['gemini', 'mistral', 'cerebras', 'meta', 'openrouter', 'openai', 'anthropic']
 FALLBACK_MODELS = {
-    'gemini': ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-3.5-flash-lite'],
+    # gemini-3.7-flash routes to 3.8-flash (same quota) and 2.5-flash is retired for new users -> only distinct models listed
+    'gemini': ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'],
     'cerebras': ['qwen-3-coder-480b', 'qwen-3-235b-a22b-instruct-2507', 'gpt-oss-120b', 'llama-3.3-70b'],
     'meta': ['muse-spark-1.3', 'muse-wonder-1.0', 'muse-ember-1.0'],
 }
 # Reasoning models: thinking tokens count against max_tokens and temperature is not a supported knob.
 REASONING_BODY = {'meta': {'reasoning_effort': 'low'}}
 KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
-RETRY_WAITS = (20, 40, 60, 90)
+RETRY_WAITS = (15, 30, 45)  # per model; a 503 storm then costs 1.5 min before the next fallback model is tried
 
 
 class Unavailable(Exception):
@@ -135,10 +136,14 @@ def call_llm(provider, model, system, messages, max_tokens):
             raise Unavailable(f'LLM request failed: {e}')
 
 
+DEAD = set()  # (provider, model) that returned quota-exhausted / not-found in this process; skipped on later attempts
+DEAD_MARKS = ('404', 'no longer available', 'quota', 'billing', 'credit', 'resource_exhausted', 'not_found')
+
+
 def candidates(provider, model):
     seen, out = set(), []
     def add(p, m):
-        if (p, m) not in seen and os.environ.get(KEY_ENV.get(p, '')):
+        if (p, m) not in seen and (p, m) not in DEAD and os.environ.get(KEY_ENV.get(p, '')):
             seen.add((p, m)); out.append((p, m))
     add(provider, model)
     for m in FALLBACK_MODELS.get(provider, []):
@@ -158,7 +163,10 @@ def call_with_fallback(provider, model, system, messages, max_tokens):
             text, usage = call_llm(p, m, system, messages, 24000 if p == 'anthropic' else max_tokens)
             return text, usage, p, m
         except Unavailable as e:
-            print(f'    {p} {m} unavailable: {str(e)[:300]}', file=sys.stderr); errors.append(f'{p} {m}: {str(e)[:200]}')
+            msg = str(e)
+            if any(k in msg.lower() for k in DEAD_MARKS):
+                DEAD.add((p, m))
+            print(f'    {p} {m} unavailable: {msg[:300]}', file=sys.stderr); errors.append(f'{p} {m}: {msg[:200]}')
     sys.exit('no LLM could answer:\n  ' + '\n  '.join(errors))
 
 

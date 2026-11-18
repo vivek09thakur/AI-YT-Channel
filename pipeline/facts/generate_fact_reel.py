@@ -52,6 +52,77 @@ def block(src, name):
     return rest[:n.start()] if n else rest
 
 
+STOP = set('''the a an and or but so if then than that this these those there here it its is are was were be been being
+have has had do does did not no yes with from into onto over under about after before while when where which who whom
+whose what why how all any each every some many much more most few less least very just also only even still yet too
+can could will would shall should may might must of to in on at by for as up out off down our your their his her my me
+we you they them he she him i us one two three because into like than them he's it's isn't don't doesn't'''.split())
+CAP_WRAP = 34
+
+
+def wrap_rows(text, width=CAP_WRAP):
+    rows, cur = [], ''
+    for w in text.split():
+        if cur and len(cur) + 1 + len(w) > width:
+            rows.append(cur); cur = w
+        else:
+            cur = f'{cur} {w}' if cur else w
+    if cur:
+        rows.append(cur)
+    return rows
+
+
+def mark_key(rows):
+    """Wrap the most 'important' word of a caption in {braces}: longest non-stopword, ties -> earlier."""
+    best = None
+    for ri, r in enumerate(rows):
+        for wi, w in enumerate(r.split()):
+            core = w.strip(PUNCT)
+            if len(core) >= 4 and core.lower() not in STOP and (best is None or len(core) > best[0]):
+                best = (len(core), ri, wi)
+    if best is None:
+        return rows
+    _, ri, wi = best
+    ws = rows[ri].split()
+    w = ws[wi]
+    lead = w[:len(w) - len(w.lstrip(PUNCT))]
+    core = w.strip(PUNCT)
+    trail = w[len(lead) + len(core):]
+    ws[wi] = f'{lead}{{{core}}}{trail}'
+    return rows[:ri] + [' '.join(ws)] + rows[ri + 1:]
+
+
+def ts_str(s):
+    return "'" + s.replace('\\', '\\\\').replace("'", "\\'") + "'"
+
+
+def auto_caps(narr):
+    """Deterministic CAPS from narration.json: wrap at CAP_WRAP, <=2 rows per caption, long lines split into several
+    captions with time shared in proportion to their character count. Used when the LLM's captions fail the checks."""
+    out = []
+    for L in narr['lines']:
+        rows = wrap_rows(L['text'])
+        chunks = [rows[i:i + 2] for i in range(0, len(rows), 2)] or [['']]
+        weights = [len(' '.join(c)) or 1 for c in chunks]
+        t, span = L['t0'], L['t1'] - L['t0']
+        for c, w in zip(chunks, weights):
+            e = t + span * w / sum(weights)
+            text = ts_str(chr(1).join(mark_key(c))).replace(chr(1), '\\n')  # \x01 keeps the row break out of the escaper
+            out.append(f'  {{ s: {t:.2f}, e: {e:.2f}, t: {text} }},')
+            t = e
+    return 'export const CAPS: Cap[] = [\n' + '\n'.join(out) + '\n];\n'
+
+
+def replace_caps(src, new_block):
+    m = re.search(r'export const CAPS\b', src)
+    if not m:
+        return src
+    rest = src[m.end():]
+    n = re.search(r'\nexport ', rest)
+    end = m.end() + (n.start() + 1 if n else len(rest))
+    return src[:m.start()] + new_block + src[end:]
+
+
 def check_data(src, narr):
     errs = []
     total = narr['duration']
@@ -247,7 +318,14 @@ def main():
             except json.JSONDecodeError as e:
                 errs.append(f'meta.json is not valid JSON: {e}')
         if not errs:
-            errs = (check_data(files['data.ts'], narr) + check_scenes(files['scenes.tsx'], narr)
+            errs = check_data(files['data.ts'], narr)
+            if any('caption' in e.lower() for e in errs) and 'export const CAPS' in files['data.ts']:
+                # weak models rarely get the caption typography right; captions are mechanical, so rebuild them from the narration
+                files['data.ts'] = replace_caps(files['data.ts'], auto_caps(narr))
+                print(f'    captions rebuilt from narration ({len(errs)} caption problems fixed automatically)')
+                errs = check_data(files['data.ts'], narr)
+        if not errs:
+            errs = (check_scenes(files['scenes.tsx'], narr)
                 + english_only(files['data.ts'], narr, 'data.ts') + english_only(files['scenes.tsx'], narr, 'scenes.tsx'))
         if not errs:
             (project / 'src' / 'data.ts').write_text(files['data.ts'], encoding='utf-8')
