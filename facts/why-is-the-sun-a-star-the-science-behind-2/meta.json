@@ -1,0 +1,16 @@
+{
+ "title": "Why Is the Sun a Star?",
+ "description": "Discover why our dazzling daytime Sun is actually a star, powered by nuclear fusion at the center of the solar system.",
+ "characters": {
+  "astronomer": "Young stargazer in dark navy jacket with warm beige skin and round glasses"
+ },
+ "topic": "Why Is the Sun a Star? The Science Behind Our Solar System",
+ "page_name": "",
+ "voice": "en-GB-RyanNeural",
+ "duration": 63.69,
+ "provider": "gemini",
+ "model": "gemini-3.8-flash",
+ "attempts": 3,
+ "input_tokens": 85058,
+ "output_tokens": 26919
+}

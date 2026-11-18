@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily fact reels</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600;700&family=Noto+Serif+Bengali:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#E6DDCB;--beige:#DDCFB7;--ink:#2B1D14;--red:#C8451E;--card:#F6EFE8;--night:#1C1917;--teal:#2C483B}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--beige);min-height:100vh;color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif}
+  header{text-align:center;padding:52px 20px 24px}
+  h1{font-family:"Noto Serif Bengali",serif;font-weight:800;font-size:clamp(34px,6vw,64px);margin:0;color:var(--ink)}
+  header p{margin:10px 0 0;opacity:.75}
+  main{max-width:1180px;margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:24px}
+  .card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(43,29,20,.18);display:flex;flex-direction:column;border:3px solid var(--ink)}
+  .card img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:var(--night)}
+  .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .title{font-family:"Noto Serif Bengali",serif;font-weight:800;font-size:20px;margin:0}
+  .meta{font-size:13px;opacity:.75;margin:0}
+  .btn{margin-top:auto;text-align:center;text-decoration:none;padding:11px 14px;border-radius:12px;font-weight:700;font-size:14px;background:var(--red);color:#fff;border:2px solid var(--ink)}
+  .small{display:flex;gap:12px;font-size:12px}
+  .small a{color:var(--teal)}
+  .empty{grid-column:1/-1;text-align:center;opacity:.7;padding:60px 0}
+  footer{text-align:center;opacity:.7;padding:0 20px 40px;font-size:13px}
+</style></head>
+<body>
+<header><h1>Daily fact reels</h1><p>9:16 animated fact reels (1080x1920, 30 fps). Newest first.</p></header>
+<main>
+<article class="card">
+  <img src="why-is-the-sun-a-star-the-science-behind-2/thumb.jpg" alt="Why Is the Sun a Star?" loading="lazy">
+  <div class="body">
+    <h2 class="title">Why Is the Sun a Star?</h2>
+    <p class="meta">Why Is the Sun a Star? The Science Behind Our Solar System</p>
+    <p class="meta">1:03 &middot; 2026-11-18 &middot; <a href="https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/44242912791">run #2</a></p>
+    <a class="btn" href="why-is-the-sun-a-star-the-science-behind-2/reel.mp4" download>Download reel (8 MB)</a>
+    <div class="small"><a href="why-is-the-sun-a-star-the-science-behind-2/voice.mp3">voice</a><a href="why-is-the-sun-a-star-the-science-behind-2/narration.json">timings</a><a href="https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/facts/why-is-the-sun-a-star-the-science-behind-2/reel.mp4">raw link</a></div>
+  </div>
+</article>
+</main>
+<footer>Each card links to the workflow run that made it. Scene code lives on main under .github/skills/daily-fact-reel/facts/.</footer>
+</body></html>
