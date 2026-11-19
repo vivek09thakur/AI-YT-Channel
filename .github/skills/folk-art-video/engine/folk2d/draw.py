@@ -9,7 +9,7 @@ Everything is drawn at SS x for anti-aliasing and reduced in finish().
 """
 import math, os, glob
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageChops
 
 W, H = 1080, 1920
 SS = int(os.environ.get("FOLK_SS", "2"))
@@ -168,12 +168,37 @@ class Canvas:
         P = [self.T(x, y, par) for x, y in pts]
         if len(P) < 2: return
         ol, olw = resolve_ol(fill, ol, olw)
-        if fill is not None and len(P) >= 3: self.d.polygon(P, fill=fill)
+        if fill is not None and len(P) >= 3:
+            if len(fill) == 4 and fill[3] < 255: self._blend_poly(P, fill)
+            else: self.d.polygon(P, fill=fill)
         if ol: self.d.line(P + [P[0]], fill=ol, width=max(1, int(self.S(olw, par))), joint="curve")
+    def _blend_poly(self, P, fill):
+        """translucent fill: Pillow does not blend RGBA colours on RGBA images, so composite a bbox-sized layer"""
+        x0, y0 = int(min(p[0] for p in P)) - 1, int(min(p[1] for p in P)) - 1
+        x1, y1 = int(max(p[0] for p in P)) + 2, int(max(p[1] for p in P)) + 2
+        x0, y0 = max(x0, 0), max(y0, 0); x1, y1 = min(x1, self.img.width), min(y1, self.img.height)
+        if x1 <= x0 or y1 <= y0: return
+        lay = Image.new("RGBA", (x1 - x0, y1 - y0), (0, 0, 0, 0))
+        ImageDraw.Draw(lay).polygon([(x - x0, y - y0) for x, y in P], fill=tuple(fill))
+        self.img.alpha_composite(lay, (x0, y0))
     def ell(self, cx, cy, rx, ry, fill, ol=INK, olw=5, par=1.0):
         x, y = self.T(cx, cy, par); a, b = abs(self.S(rx, par)), abs(self.S(ry, par))
         ol, olw = resolve_ol(fill, ol, olw)
         self.d.ellipse([x - a, y - b, x + a, y + b], fill=fill, outline=ol, width=max(1, int(self.S(olw, par))) if ol else 0)
+    def clip_ell(self, clip_pts, cx, cy, rx, ry, fill, par=1.0):
+        """ellipse clipped to a polygon (L-mode mask over the polygon's bbox) - lets an oversized pupil sit in the eye corner"""
+        P = [self.T(x, y, par) for x, y in clip_pts]
+        if len(P) < 3: return
+        x0, y0 = max(int(min(p[0] for p in P)) - 1, 0), max(int(min(p[1] for p in P)) - 1, 0)
+        x1, y1 = min(int(max(p[0] for p in P)) + 2, self.img.width), min(int(max(p[1] for p in P)) + 2, self.img.height)
+        if x1 <= x0 or y1 <= y0: return
+        mask = Image.new("L", (x1 - x0, y1 - y0), 0)
+        ImageDraw.Draw(mask).polygon([(x - x0, y - y0) for x, y in P], fill=255)
+        lay = Image.new("RGBA", mask.size, (0, 0, 0, 0))
+        x, y = self.T(cx, cy, par); a, b = abs(self.S(rx, par)), abs(self.S(ry, par))
+        ImageDraw.Draw(lay).ellipse([x - a - x0, y - b - y0, x + a - x0, y + b - y0], fill=tuple(fill[:3]) + (255,))
+        lay.putalpha(ImageChops.multiply(lay.getchannel("A"), mask))
+        self.img.alpha_composite(lay, (x0, y0))
     def rrect(self, x0, y0, x1, y1, rad, fill, ol=INK, olw=5, par=1.0):
         a = self.T(x0, y0, par); b = self.T(x1, y1, par)
         box = [min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])]
@@ -265,4 +290,39 @@ class Canvas:
         for i, ln in enumerate(lines):
             self._blit_text(ln, OW / 2 * SS, (y0 + (17 + lh * (i + 0.5)) * sc) * SS, size * SS, (255, 246, 226), (20, 12, 44), 5 * SS * OLW_K, scale=sc, alpha=a)
     def finish(self):
-        return self.img.reduce(SS).convert("RGB") if SS > 1 else self.img.convert("RGB")
+        im = self.img.reduce(SS).convert("RGB") if SS > 1 else self.img.convert("RGB")
+        return grade(im) if GRADE != "none" else im
+
+# ---------- colour grade ----------
+# FOLK_GRADE=series (default): cinematic "series" look - desaturated, darker midtones, plum shadows / amber highlights,
+# fine film grain. FOLK_GRADE=none keeps the raw bright colours.  FOLK_GRADE_K scales the strength (1.0 default).
+GRADE = os.environ.get("FOLK_GRADE", "series").strip().lower()
+GRADE_K = clamp(float(os.environ.get("FOLK_GRADE_K", "1.0")), 0.0, 2.0)
+_GRAIN = None
+_LUT = None
+def _lut():
+    global _LUT
+    if _LUT is None:
+        xs = np.linspace(0, 1, 256)
+        y = xs ** (1 + 0.10 * GRADE_K)                                         # darker midtones
+        y = 0.5 + (y - 0.5) * (1 + 0.10 * GRADE_K)                             # a little more contrast
+        y = y * (1 - 0.06 * GRADE_K) + 0.02 * GRADE_K                           # lift blacks slightly, pull whites off peak
+        _LUT = np.clip(y, 0, 1)
+    return _LUT
+def grade(im):
+    """series tone: desaturate, tone curve, split tone, grain"""
+    global _GRAIN
+    a = np.asarray(im, dtype=np.float32) / 255.0
+    lum = a @ np.array([0.299, 0.587, 0.114], dtype=np.float32)
+    a = lum[..., None] + (a - lum[..., None]) * (1 - 0.22 * GRADE_K)           # desaturate
+    a = _lut()[np.clip((a * 255).astype(np.int32), 0, 255)]
+    lum = a @ np.array([0.299, 0.587, 0.114], dtype=np.float32)
+    sh = np.clip(1 - lum * 1.6, 0, 1)[..., None]; hi = np.clip(lum * 1.6 - 0.6, 0, 1)[..., None]
+    a = a + (np.array([0.16, 0.08, 0.26], dtype=np.float32) - a) * sh * 0.22 * GRADE_K       # plum shadows
+    a = a + (np.array([1.0, 0.86, 0.62], dtype=np.float32) - a) * hi * 0.14 * GRADE_K        # amber highlights
+    h, w = lum.shape
+    if _GRAIN is None or _GRAIN.shape[0] < h + 256 or _GRAIN.shape[1] < w + 256:
+        _GRAIN = np.random.RandomState(7).normal(0, 1, (h + 256, w + 256)).astype(np.float32)
+    oy, ox = np.random.randint(0, 256, 2)
+    a = a + _GRAIN[oy:oy + h, ox:ox + w, None] * 0.018 * GRADE_K
+    return Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8), "RGB")

@@ -45,6 +45,12 @@ Do not use one generic puppet for every character. Design from role and story:
 - Ordinary people: regional garments, practical accessories, varied ages and proportions.
 Build a named character sheet before scene design. Keep each design consistent across the whole film.
 
+## Head and face language (graphic-novel flat vector)
+- Men are drawn in profile, head tilted ~25 deg skyward: full round cranium, one straight diagonal from hairline through brow to a sharp upturned nose tip, a white triangular smile wedge cut into the profile edge, a chin that juts forward over open space with a straight jaw underside; the neck front meets the jaw halfway back beneath the ear. Only the nose tip, chin point, sideburn hook and mouth wedge are sharp; everything else is a smooth curve.
+- Male eye: large wedge sclera under a thin separate arched brow, dark pupil tucked into the front/upper corner with a visible white crescent behind it. Black hair cap covers the whole back of the skull down to the nape, with a sideburn hook round the ear and a teardrop bun high on the upper-back crown.
+- Women are frontal: short, broad heart-shaped face widest at the cheekbones tapering to a small V chin, hairline arching from a centre parting down to the outer eye corners, leaf-shaped winged eyes with thin floating brows, slim vertical nose shadow, small crescent smile. Black hair curves in around the jaw, then sweeps out behind the shoulders. Veiled women (Sita) wear a translucent cream dupatta dome over a thin black hair band with a gold maang tikka.
+- Shoulders and necks are compact: the jawline sits close to the collarbones, never floating above them. Women have slender necks and gently sloping shoulders.
+
 ## Caption treatment
 Use concise, natural Devanagari captions. Prefer 3-8 words per card, one line where possible and no more than two. Use bold cream/white type with a restrained dark plum rounded plate, readable outline/shadow and generous padding. A single important word may use saffron/gold. Keep captions away from faces and key action. Do not shrink long sentences into tiny text; split them at natural spoken pauses. Proofread every line against the final script and inspect on a phone-sized preview.
 

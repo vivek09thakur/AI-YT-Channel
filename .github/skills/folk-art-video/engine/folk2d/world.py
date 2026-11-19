@@ -14,6 +14,7 @@ SKY = {
 }
 GOLD = (255, 196, 60); SAFFRON = (255, 150, 48); CREAM = (255, 240, 208); CRIMSON = (188, 34, 62)
 EMERALD = (26, 150, 104); AZURE = (70, 140, 224); PLUM = (84, 44, 124); TEAL = (20, 128, 134)
+RAYS_K = float(os.environ.get("FOLK_RAYS_K", "0.6"))          # strength of rays_burst translucency (series tone keeps bursts soft)
 
 def sky(c, kind="night"):
     if isinstance(kind, str):
@@ -148,12 +149,16 @@ def drop(c, x, y, r=14, col=(210, 30, 50), par=1.0):
     c.poly([(x, y - r * 2), (x + r * 0.9, y - r * 0.3), (x, y + r), (x - r * 0.9, y - r * 0.3)], col, INK, 3, par); c.ell(x, y - r * 0.2, r * 0.9, r * 0.9, col, INK, 3, par)
 
 def rays_burst(c, x, y, f, r0=120, r1=None, n=18, col=(255, 230, 150, 70), par=0.2, spin=0.4):
+    """translucent sun rays (the alpha in col is honoured; the series grade keeps them soft)"""
     if r1 is None: r1 = 1400 + XPAD
+    col = tuple(col); a_ = int(col[3] * RAYS_K) if len(col) > 3 else int(70 * RAYS_K)
+    lay = Image.new("RGBA", c.img.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
     for i in range(n):
         if i % 2: continue
         a = math.radians(i * 360 / n + f * spin); w = math.radians(360 / n * 0.5)
         P = [c.T(x + r0 * math.cos(a), y + r0 * math.sin(a), par), c.T(x + r1 * math.cos(a - w), y + r1 * math.sin(a - w), par), c.T(x + r1 * math.cos(a + w), y + r1 * math.sin(a + w), par)]
-        c.d.polygon(P, fill=col)
+        ld.polygon(P, fill=col[:3] + (a_,))
+    c.img.alpha_composite(lay)
 
 def swirl(c, x, y, f, s=1.0, par=0.0, col=(255, 230, 150)):
     """thought / dream swirl bubble"""
