@@ -1,0 +1,16 @@
+{
+ "title": "How Stars Are Born in Deep Space",
+ "description": "Discover the cosmic journey of how stellar nebulae collapse under gravity to ignite nuclear fusion and create shining stars.",
+ "characters": {
+  "astronomer": "Curious stargazer with dark brown coat, beige trousers, spectacles and neat dark hair"
+ },
+ "topic": "How Are Stars Formed? The Birth of Stars in Space",
+ "page_name": "",
+ "voice": "en-GB-RyanNeural",
+ "duration": 61.62,
+ "provider": "gemini",
+ "model": "gemini-3.8-flash",
+ "attempts": 2,
+ "input_tokens": 47574,
+ "output_tokens": 17373
+}

@@ -1,0 +1,84 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 61.62,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Have you ever wondered how stars are born in the vast darkness of space?",
+   "t0": 0.8,
+   "t1": 4.38,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "The story begins inside enormous clouds of gas and dust called nebulae.",
+   "t0": 4.93,
+   "t1": 9.08,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "These clouds contain mostly hydrogen gas, the main ingredient needed to create stars.",
+   "t0": 9.63,
+   "t1": 15.06,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "Over millions of years, gravity slowly pulls the gas and dust together, forming a dense and increasingly hot core.",
+   "t0": 15.61,
+   "t1": 22.18,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "As more material gathers, the temperature and pressure at the center continue to rise.",
+   "t0": 22.73,
+   "t1": 27.41,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "Eventually, the core becomes hot enough to trigger a powerful process called nuclear fusion.",
+   "t0": 27.96,
+   "t1": 33.09,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "Hydrogen atoms begin combining to form helium, releasing enormous amounts of energy in the form of heat and light.",
+   "t0": 33.64,
+   "t1": 39.76,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "And just like that, a new star is born!",
+   "t0": 40.31,
+   "t1": 42.98,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "Some stars shine for millions or even billions of years, depending on their size and mass.",
+   "t0": 43.53,
+   "t1": 48.91,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Isn't it amazing that the stars lighting up our night sky were once just clouds of gas and dust?",
+   "t0": 49.46,
+   "t1": 54.51,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "Every star has a beginning, and it all starts with gravity!",
+   "t0": 55.06,
+   "t1": 58.62,
+   "para": false
+  }
+ ]
+}
