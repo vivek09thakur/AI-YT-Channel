@@ -44,27 +44,23 @@ permissions:
   contents: write
 
 env:
-  KIT: .github/skills/shorts-story-video/shadow-puppet-kit
+  KIT: .github/skills/folk-art-video
 
 jobs:
   author:
     name: Voice + scene code
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     outputs:
       slug: ${{ steps.slug.outputs.slug }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '22' }
       - name: Install tools
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
-          pip install -q -r pipeline/requirements.txt
-          cd "$KIT" && npm ci --silent
-          google-chrome --version
+          pip install -q -r pipeline/requirements.txt -r pipeline/folk/requirements.txt
       - name: Slug
         id: slug
         run: |
@@ -99,9 +95,11 @@ jobs:
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
-      - name: Scene code (LLM, validated in headless Chrome)
+      - name: Phrase timeline
+        run: python pipeline/folk/phrases.py --narration work/narration.json --out work/phrases.json
+      - name: Scene code (LLM, validated by rendering sample frames in both aspects)
         run: |
-          python pipeline/generate_story.py --topic "$TOPIC" --narration work/narration.json --kit "$KIT" \
+          python pipeline/folk/generate_folk.py --topic "$TOPIC" --narration work/narration.json --phrases work/phrases.json --kit "$KIT" \
             --slug "${{ steps.slug.outputs.slug }}" --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --notes "$NOTES"
         env:
           CI: 'true'
@@ -115,19 +113,19 @@ jobs:
           META_AI_API: ${{ secrets.META_AI_API }}
           NOTES: ${{ inputs.notes }}
       - name: Upload story bundle
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: story
           retention-days: 7
+          if-no-files-found: ignore
           path: |
             work/voice.wav
             work/voice.mp3
             work/narration.json
+            work/phrases.json
             work/script.txt
             ${{ env.KIT }}/stories/${{ steps.slug.outputs.slug }}/
-            ${{ env.KIT }}/${{ steps.slug.outputs.slug }}.html
-            ${{ env.KIT }}/${{ steps.slug.outputs.slug }}_9x16.html
-            ${{ env.KIT }}/debug/*.png
       - name: Commit story code to main (re-renderable)
         run: |
           git config user.name "github-actions[bot]"
@@ -141,45 +139,38 @@ jobs:
     name: Render ${{ matrix.format }}
     needs: author
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { format: landscape, vertical: '0', suffix: '' }
-          - { format: shorts, vertical: '1', suffix: '_9x16' }
+          - { format: landscape, thumb: '--thumb' }
+          - { format: shorts, thumb: '' }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '22' }
       - uses: actions/download-artifact@v4
         with: { name: story, path: bundle }
       - name: Install tools
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
-          cd "$KIT" && npm ci --silent
+          pip install -q -r pipeline/folk/requirements.txt
+          nproc
       - name: Place story files
         run: |
           slug="${{ needs.author.outputs.slug }}"
           mkdir -p "$KIT/stories/$slug" work
           cp -r "bundle/$KIT/stories/$slug/." "$KIT/stories/$slug/"
-          cp bundle/work/voice.wav bundle/work/narration.json work/
-          cd "$KIT" && python build.py player "$slug" && python build.py vertical "$slug"
-      - name: Render frames with headless Chrome
-        run: cd "$KIT" && node render.mjs render
-        env:
-          CI: 'true'
-          STORY: ${{ needs.author.outputs.slug }}
-          VERTICAL: ${{ matrix.vertical }}
-          OUT: ${{ github.workspace }}/out
-      - name: Mux voice + effects
+          cp bundle/work/voice.wav work/
+          test -s "$KIT/stories/$slug/story.py" && test -s "$KIT/stories/$slug/phrases.json"
+      - name: Render frames + soundtrack + encode
         run: |
-          slug="${{ needs.author.outputs.slug }}"
-          python pipeline/mux.py --video "out/${slug}${{ matrix.suffix }}_video_only.mp4" --voice work/voice.wav --fx "out/${slug}_effects.wav" \
-            --out "out/${{ matrix.format }}.mp4" $([ "${{ matrix.format }}" = landscape ] && echo "--thumb out/thumb.jpg")
+          python pipeline/folk/render_folk.py --story "$KIT/stories/${{ needs.author.outputs.slug }}" --voice work/voice.wav \
+            --aspect "${{ matrix.format }}" --out out --kit "$KIT" ${{ matrix.thumb }}
           ffprobe -v error -show_entries format=duration -show_entries stream=codec_type,width,height -of default=nw=1 "out/${{ matrix.format }}.mp4"
+        env:
+          FOLK_SS: '2'
       - uses: actions/upload-artifact@v4
         with:
           name: video-${{ matrix.format }}
@@ -187,6 +178,7 @@ jobs:
           path: |
             out/${{ matrix.format }}.mp4
             out/thumb.jpg
+            out/sheet_${{ matrix.format }}.jpg
 
   publish:
     name: Publish to videos branch
@@ -232,10 +224,10 @@ jobs:
             echo "## Video ready: $slug"
             echo
             echo "| Format | Download |"; echo "|---|---|"
-            echo "| YouTube landscape (1280x720) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
+            echo "| YouTube landscape (1920x1080) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
             echo "| YouTube Shorts (1080x1920) | [$dir/shorts.mp4]($raw/shorts.mp4) |"
             echo
             echo "Overview page: https://github.com/${{ github.repository }}/blob/videos/README.md (or enable GitHub Pages on the videos branch for index.html)"
             echo
-            echo "Story code committed to \`${{ env.KIT }}/stories/$slug/\` on \`${{ github.ref_name }}\`; re-render any time with \`STORY=$slug node render.mjs render\`."
+            echo "Story code committed to \`${{ env.KIT }}/stories/$slug/\` on \`${{ github.ref_name }}\` (folk-art engine); re-render any time with \`python pipeline/folk/render_folk.py --story $KIT/stories/$slug --voice voice.wav --aspect shorts\`."
           } >> "$GITHUB_STEP_SUMMARY"
