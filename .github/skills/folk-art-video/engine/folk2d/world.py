@@ -1,4 +1,4 @@
-"""folk2d.world - folk-art backdrops, ornaments and FX. Everything is flat shapes with a dark plum outline."""
+"""folk2d.world - folk-art backdrops, ornaments and FX. Everything is flat shapes with a thin self-tinted outline (see draw.resolve_ol)."""
 import math, random
 from .draw import *
 

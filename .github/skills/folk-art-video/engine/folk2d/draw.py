@@ -50,6 +50,18 @@ def hexc(h): h = h.lstrip('#'); return tuple(int(h[i:i + 2], 16) for i in (0, 2,
 def mixc(a, b, t): return tuple(int(lerp(x, y, t)) for x, y in zip(a, b))
 def shade(c, k): return tuple(int(clamp(v * k, 0, 255)) for v in c)
 
+# ---------- outline style ----------
+# FOLK_OUTLINE=soft (default): no heavy black borders; INK outlines become a thin, darker tint of the shape's own fill.
+# FOLK_OUTLINE=ink: the classic thick dark-plum line.   FOLK_OUTLINE_W scales every outline/stroke width.
+OUTLINE = os.environ.get("FOLK_OUTLINE", "soft").strip().lower()
+OLW_K = float(os.environ.get("FOLK_OUTLINE_W", "0.45" if OUTLINE == "soft" else "1.0"))
+def resolve_ol(fill, ol, olw):
+    """-> (outline colour or None, outline width in the caller's units)"""
+    if not ol or olw <= 0: return None, 0
+    if OUTLINE == "soft" and fill is not None and tuple(ol[:3]) == INK:
+        ol = mixc(shade(tuple(fill[:3]), 0.6), INK, 0.3)
+    return tuple(ol[:3]), olw * OLW_K
+
 # ---------- fonts ----------
 _FONT_CACHE = {}
 _FONT_PATH = {}
@@ -146,15 +158,18 @@ class Canvas:
     def poly(self, pts, fill, ol=INK, olw=5, par=1.0):
         P = [self.T(x, y, par) for x, y in pts]
         if len(P) < 2: return
+        ol, olw = resolve_ol(fill, ol, olw)
         if fill is not None and len(P) >= 3: self.d.polygon(P, fill=fill)
         if ol: self.d.line(P + [P[0]], fill=ol, width=max(1, int(self.S(olw, par))), joint="curve")
     def ell(self, cx, cy, rx, ry, fill, ol=INK, olw=5, par=1.0):
         x, y = self.T(cx, cy, par); a, b = abs(self.S(rx, par)), abs(self.S(ry, par))
+        ol, olw = resolve_ol(fill, ol, olw)
         self.d.ellipse([x - a, y - b, x + a, y + b], fill=fill, outline=ol, width=max(1, int(self.S(olw, par))) if ol else 0)
     def rrect(self, x0, y0, x1, y1, rad, fill, ol=INK, olw=5, par=1.0):
         a = self.T(x0, y0, par); b = self.T(x1, y1, par)
         box = [min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])]
         rad = min(self.S(rad, par), (box[2] - box[0]) / 2, (box[3] - box[1]) / 2)
+        ol, olw = resolve_ol(fill, ol, olw)
         self.d.rounded_rectangle(box, radius=max(0, rad), fill=fill, outline=ol, width=max(1, int(self.S(olw, par))) if ol else 0)
     def line(self, pts, color, w=4, par=1.0):
         if len(pts) < 2: return
@@ -170,6 +185,7 @@ class Canvas:
             ang = math.atan2(y2 - y1, x2 - x1) + math.pi / 2; nx, ny = math.cos(ang), math.sin(ang)
             self.d.polygon([(x1 + nx * ra, y1 + ny * ra), (x2 + nx * rb, y2 + ny * rb), (x2 - nx * rb, y2 - ny * rb), (x1 - nx * ra, y1 - ny * ra)], fill=col)
             self.d.ellipse([x1 - ra, y1 - ra, x1 + ra, y1 + ra], fill=col); self.d.ellipse([x2 - rb, y2 - rb, x2 + rb, y2 + rb], fill=col)
+        ol, olw = resolve_ol(fill, ol, olw)
         if ol: shape(r1 + olw, r2 + olw, ol)
         shape(r1, r2, fill)
     def dots(self, pts, r, color, par=1.0):
@@ -194,6 +210,7 @@ class Canvas:
     def text(self, s, x, y, size, fill=(255, 240, 210), ol=INK, olw=6, scale=1.0, alpha=1.0, par=0.0, bold=True, anchor="mm"):
         k = self.Z(par)
         px, py = self.T(x, y, par)
+        ol, olw = resolve_ol(None, ol, olw)          # text keeps a dark edge for legibility, just thinner
         self._blit_text(str(s), px, py, size * k * SS, fill, ol, olw * k * SS, scale, alpha, bold)
     def wrap(self, s, size, maxw):
         """wrap s into lines no wider than maxw (same units as size)"""
@@ -237,6 +254,6 @@ class Canvas:
         ld.rounded_rectangle([x0 * SS, y0 * SS, x1 * SS, (y0 + hh * sc) * SS], radius=30 * SS, fill=(14, 10, 40, int(190 * a)))
         self.img.alpha_composite(lay)
         for i, ln in enumerate(lines):
-            self._blit_text(ln, OW / 2 * SS, (y0 + (17 + lh * (i + 0.5)) * sc) * SS, size * SS, (255, 246, 226), (20, 12, 44), 5 * SS, scale=sc, alpha=a)
+            self._blit_text(ln, OW / 2 * SS, (y0 + (17 + lh * (i + 0.5)) * sc) * SS, size * SS, (255, 246, 226), (20, 12, 44), 5 * SS * OLW_K, scale=sc, alpha=a)
     def finish(self):
         return self.img.reduce(SS).convert("RGB") if SS > 1 else self.img.convert("RGB")
