@@ -51,13 +51,15 @@ def mixc(a, b, t): return tuple(int(lerp(x, y, t)) for x, y in zip(a, b))
 def shade(c, k): return tuple(int(clamp(v * k, 0, 255)) for v in c)
 
 # ---------- outline style ----------
-# FOLK_OUTLINE=soft (default): no heavy black borders; INK outlines become a thin, darker tint of the shape's own fill.
-# FOLK_OUTLINE=ink: the classic thick dark-plum line.   FOLK_OUTLINE_W scales every outline/stroke width.
-OUTLINE = os.environ.get("FOLK_OUTLINE", "soft").strip().lower()
-OLW_K = float(os.environ.get("FOLK_OUTLINE_W", "0.45" if OUTLINE == "soft" else "1.0"))
+# FOLK_OUTLINE=none (default): pure flat colour, no outlines at all - shapes are separated only by their fills.
+# FOLK_OUTLINE=soft: thin lines in a darker tint of the fill.   FOLK_OUTLINE=ink: the classic thick dark-plum line.
+# FOLK_OUTLINE_W scales every outline/stroke width.
+OUTLINE = os.environ.get("FOLK_OUTLINE", "none").strip().lower()
+OLW_K = float(os.environ.get("FOLK_OUTLINE_W", {"none": "0.4", "soft": "0.45"}.get(OUTLINE, "1.0")))
 def resolve_ol(fill, ol, olw):
-    """-> (outline colour or None, outline width in the caller's units)"""
+    """-> (outline colour or None, outline width in the caller's units). fill=None marks text, which keeps a thin dark edge."""
     if not ol or olw <= 0: return None, 0
+    if OUTLINE == "none" and fill is not None: return None, 0
     if OUTLINE == "soft" and fill is not None and tuple(ol[:3]) == INK:
         ol = mixc(shade(tuple(fill[:3]), 0.6), INK, 0.3)
     return tuple(ol[:3]), olw * OLW_K
@@ -144,6 +146,13 @@ class Canvas:
         d = np.clip(1 - np.sqrt(xx * xx + yy * yy), 0, 1)
         a = Image.fromarray((255 * alpha * d ** 2).astype(np.uint8)).resize((2 * pr, 2 * pr), Image.BICUBIC)
         self.img.paste(Image.new("RGB", a.size, tuple(color[:3])), (int(px - pr), int(py - pr)), a)
+    def shadow(self, x, y, rx, ry, alpha=0.3, color=(24, 12, 34), par=1.0):
+        """soft elliptical ground shadow (world coords)"""
+        px, py = self.T(x, y, par); a_ = max(2, int(self.S(rx, par))); b_ = max(2, int(self.S(ry, par)))
+        n = 64; yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]
+        d = np.clip(1 - np.sqrt(xx * xx + yy * yy), 0, 1)
+        m = Image.fromarray((255 * alpha * np.sqrt(d)).astype(np.uint8)).resize((2 * a_, 2 * b_), Image.BICUBIC)
+        self.img.paste(Image.new("RGB", m.size, tuple(color[:3])), (int(px - a_), int(py - b_)), m)
     def vignette(self, strength=0.45):
         if strength not in _VIG:
             n = 128; yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]

@@ -90,7 +90,7 @@ def temple(c, x, y, s=1.0, par=0.7, col=(240, 200, 150)):
     for i in range(4): c.rrect(x - (150 - i * 16) * s, y - (i + 1) * 26 * s, x + (150 - i * 16) * s, y - i * 26 * s, 4, shade(col, 1 - i * 0.04), INK, 5, par)
     c.rrect(x - 90 * s, y - 330 * s, x + 90 * s, y - 104 * s, 6, col, INK, 6, par)
     c.poly([(x - 100 * s, y - 330 * s), (x - 60 * s, y - 420 * s), (x - 24 * s, y - 500 * s), (x, y - 590 * s), (x + 24 * s, y - 500 * s), (x + 60 * s, y - 420 * s), (x + 100 * s, y - 330 * s)], shade(col, 0.93), INK, 6, par)
-    c.line([(x, y - 590 * s), (x, y - 640 * s)], INK, 5, par); c.poly([(x, y - 640 * s), (x + 56 * s, y - 622 * s), (x, y - 604 * s)], SAFFRON, INK, 4, par)
+    c.line([(x, y - 590 * s), (x, y - 640 * s)], (104, 70, 44), 5, par); c.poly([(x, y - 640 * s), (x + 56 * s, y - 622 * s), (x, y - 604 * s)], SAFFRON, INK, 4, par)
     c.rrect(x - 34 * s, y - 250 * s, x + 34 * s, y - 104 * s, 30, (110, 50, 60), INK, 5, par)
 
 def throne(c, x, y, s=1.0, par=0.8):
@@ -163,7 +163,7 @@ def paper_plane(c, x, y, s=1.0, rot=-20, par=0.0):
     r = math.radians(rot)
     def R(px, py): return (x + (px * math.cos(r) - py * math.sin(r)) * s, y + (px * math.sin(r) + py * math.cos(r)) * s)
     c.poly([R(-90, 10), R(110, 0), R(-30, 70)], (255, 244, 214), INK, 5, par); c.poly([R(-90, 10), R(110, 0), R(-30, -50)], (240, 214, 170), INK, 5, par)
-    c.line([R(-90, 10), R(-30, 70)], INK, 4, par)
+    c.line([R(-90, 10), R(-30, 70)], (214, 190, 150), 4, par)
 
 def follow_button(c, x, y, t, label="Follow", done="Following", par=0.0):
     k = prog(t, 0.55, 0.75); lab = done if k > 0.5 else label
@@ -203,7 +203,7 @@ def palace(c, x, y, s=1.0, par=0.7, col=(240, 214, 160), dome=(255, 196, 60)):
     for dx, h, w in ((-300, 440, 90), (300, 440, 90), (0, 560, 130), (-150, 380, 70), (150, 380, 70)):
         c.rrect(x + (dx - w) * s, y - h * s, x + (dx + w) * s, y - 200 * s, 6, col, INK, 6, par)
         c.ell(x + dx * s, y - h * s, (w + 14) * s, (w + 14) * s * 0.9, dome, INK, 6, par)
-        c.line([(x + dx * s, y - (h + w + 10) * s), (x + dx * s, y - (h + w + 60) * s)], INK, 5, par); c.poly([(x + dx * s, y - (h + w + 60) * s), (x + (dx + 40) * s, y - (h + w + 46) * s), (x + dx * s, y - (h + w + 32) * s)], SAFFRON, INK, 4, par)
+        c.line([(x + dx * s, y - (h + w + 10) * s), (x + dx * s, y - (h + w + 60) * s)], (104, 70, 44), 5, par); c.poly([(x + dx * s, y - (h + w + 60) * s), (x + (dx + 40) * s, y - (h + w + 46) * s), (x + dx * s, y - (h + w + 32) * s)], SAFFRON, INK, 4, par)
         for k in range(-1, 2): c.rrect(x + (dx + k * 40 - 12) * s, y - (h - 60) * s, x + (dx + k * 40 + 12) * s, y - (h - 110) * s, 12, (110, 50, 60), INK, 4, par)
     c.rrect(x - 70 * s, y - 180 * s, x + 70 * s, y, 60, (110, 50, 60), INK, 6, par)
     for i in range(-4, 5): c.dots([(x + i * 90 * s, y - 120 * s)], 9 * s, dome, par)

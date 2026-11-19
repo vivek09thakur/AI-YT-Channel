@@ -30,7 +30,7 @@ Reply with exactly these blocks and nothing else (no prose, no markdown outside 
 
 ## Design language
 
-- Palette: deep indigo/plum skies, saffron and gold ornaments, cream skin highlights, crimson accents. Use the constants `GOLD, SAFFRON, CREAM, CRIMSON, INK` and the sky presets. Shapes get a thin outline in a darker tint of their own fill automatically (no heavy black borders); do not pass extra outline widths to compensate.
+- Palette: deep indigo/plum skies, saffron and gold ornaments, cream skin highlights, crimson accents. Use the constants `GOLD, SAFFRON, CREAM, CRIMSON, INK` and the sky presets. The look is pure flat colour: shapes have NO outlines (any `ol`/outline-width argument you pass is ignored), so separate things by contrasting fills, not by borders.
 - Composition: ground line at `GY = 1560`; characters stand with feet on `GY` (`draw_char(c, x, GY, scale, ...)`); a scale of 1.4-1.7 is a hero close-up, 1.0-1.3 mid, 0.5-0.8 background. Head top is about `425*scale` above the feet.
 - Movement comes from: the slow camera (`cam()` zoom/pan per shot, impact `kicks`), pose changes at phrase starts (`T.start(...)`), scale pops (`pop()`), `sparks/ring_wave/rays_burst`, animated set pieces (`fire, rain, lightning, ocean, flag`), walking/flying characters (`lerp` their x with `prog()`), and 2-4 word pop titles on key nouns.
 - Each shot: a `sky(...)`, far layer (`stars/moon/sun/mountain/hills/clouds`), mid layer (`temple/palace/tree/hut/cave/pillar/flag`), `ground`, then characters, then effects, then titles.

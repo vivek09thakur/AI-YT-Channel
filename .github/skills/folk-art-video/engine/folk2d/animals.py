@@ -92,7 +92,7 @@ def draw_animal(c, kind, x, y, s=1.0, f=0, flip=False, par=1.0, col=None):
     elif k == "snake":
         col = col or (40, 150, 90); d = shade(col, 0.8)
         pts = [(-240 + i * 24, -40 - abs(math.sin(i * 0.3 + f * 0.1)) * 50) for i in range(18)] + [(190, -140), (200, -230)]
-        line(pts, INK, 36); line(pts, col, 28)
+        line(pts, shade(col, 0.8), 34); line(pts, col, 28)
         for i in range(0, 18, 2): dot(pts[i][0], pts[i][1], 6, GOLD)
         ell(200, -250, 60, 40, col, INK, 4); ell(200, -250, 40, 26, shade(col, 1.2), None, 0)        # hood
         eye(214, -256, 7); line([(240, -240), (275, -230 + sw * 6)], CRIMSON, 4)

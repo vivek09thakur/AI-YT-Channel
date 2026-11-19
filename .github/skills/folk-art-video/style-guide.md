@@ -2,7 +2,7 @@
 
 ## Look
 - Minimalist flat 2D vector illustration inspired by Indian folk art (Madhubani, Pattachitra, miniature painting), simplified for digital media.
-- Thin outlines in a darker tint of each shape's own colour (no heavy black borders), geometric stylised shapes. Characters have cylindrical limbs, large expressive profile eyes, dot-patterned textiles and traditional jewelry. Set `FOLK_OUTLINE=ink` to get the classic thick dark-plum line back.
+- Pure flat colour, no outlines anywhere: shapes are separated only by contrasting fills, plus one darker tone on the shadow side and a soft ground shadow under each figure. Characters are geometric cut-outs: square hair block framing a squared face, long heavy-lidded almond eyes with a thick brow, straight tapering limbs with flat ends, bead strands (necklace, armbands) and a wide diagonal sash. Set `FOLK_OUTLINE=soft` or `ink` to bring outlines back.
 - Lighting is flat. Use soft radial glows and sunburst rays for key moments only.
 
 ## Palette
