@@ -3,7 +3,7 @@
 
 Renders one aspect of a folk2d story to <out>/<aspect>.mp4:
   frames (engine/render.py, all cores, errors -> previous frame)  ->  music + sfx stems (audio.py)  ->  mix.py  ->  finish_audio.py
-  ->  ffmpeg H.264 CRF 18 + AAC  ->  QA (duration, freeze/black detect as warnings)  ->  optional thumb.jpg (landscape)
+  ->  ffmpeg H.264 CRF 28 (1.6 Mbps cap, ~25-30 MB per 2 min) + AAC  ->  QA (duration, freeze/black detect as warnings)  ->  optional thumb.jpg (landscape)
 Exit 1 only if frames or the mp4 could not be produced at all."""
 import argparse, json, os, re, shutil, subprocess, sys, time
 from pathlib import Path
@@ -65,7 +65,9 @@ def main():
     # 3. encode
     mp4 = out / f'{a.aspect}.mp4'
     sh(['ffmpeg', '-y', '-v', 'error', '-framerate', '30', '-i', frames / 'f%04d.jpg', '-i', adir / 'final_audio.wav', '-map', '0:v:0', '-map', '1:a:0',
-        '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-movflags', '+faststart', '-shortest', mp4])
+        # flat-colour art survives CRF 28 with no visible loss; the rate cap keeps a 2-minute video around 25-30 MB in either aspect
+        '-c:v', 'libx264', '-preset', 'medium', '-crf', '28', '-maxrate', '1600k', '-bufsize', '3200k', '-pix_fmt', 'yuv420p',
+        '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', mp4])
     dur = ffprobe_duration(mp4); vdur = ffprobe_duration(a.voice)
     if dur <= 0: sys.exit('mp4 has no duration')
     if abs(dur - vdur) > 1.0: print(f'::warning::video is {dur:.2f}s but the voice is {vdur:.2f}s', flush=True)
