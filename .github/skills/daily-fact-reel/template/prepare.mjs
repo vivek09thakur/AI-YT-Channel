@@ -18,6 +18,13 @@ for (const [pkg, file] of FONTS) {
   if (!fs.existsSync(src)) throw new Error(`font missing: ${src} (run npm install)`);
   fs.copyFileSync(src, path.join('public/fonts', file));
 }
+// pre-baked film-grain tiles (see tools/bake-grain.mjs) used by src/chrome.tsx
+fs.mkdirSync('public/grain', { recursive: true });
+for (const i of [1, 2, 3]) {
+  const src = path.join('assets', `grain-${i}.png`);
+  if (!fs.existsSync(src)) throw new Error(`grain tile missing: ${src} (run node tools/bake-grain.mjs)`);
+  fs.copyFileSync(src, path.join('public/grain', `grain-${i}.png`));
+}
 const pad = Number(process.argv[2] || 66);
 execFileSync(process.execPath, ['gen-sfx.mjs'], { stdio: 'inherit', env: { ...process.env, PAD_DUR: String(pad) } });
-console.log(`fonts: ${FONTS.length} copied to public/fonts; sfx generated (pad ${Math.ceil(pad)} s)`);
+console.log(`fonts: ${FONTS.length} copied to public/fonts; grain tiles copied to public/grain; sfx generated (pad ${Math.ceil(pad)} s)`);

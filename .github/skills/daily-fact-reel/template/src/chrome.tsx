@@ -89,8 +89,34 @@ export const Overlay: React.FC = () => {
           })}
         </div>
       </div>
-      <AbsoluteFill style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(30,15,5,0.22) 100%)', pointerEvents: 'none' }} />
-      <AbsoluteFill style={{ opacity: 0.1, mixBlendMode: 'multiply', pointerEvents: 'none', backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='${(f % 3) + 1}'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")` }} />
+      <FilmLook f={f} />
     </AbsoluteFill>
+  );
+};
+
+// Vignette + film grain in ONE static compositor layer per grain phase. The three 300x300 tiles in public/grain/
+// are the old per-frame feTurbulence filter baked once at its 0.1 opacity (tools/bake-grain.mjs); they are black
+// with alpha, so the old "multiply" blend equals normal blending and the blend mode is dropped. All three layers stay
+// mounted (raster cached via will-change) and only their opacity toggles with the original (f % 3) + 1 schedule.
+const VIGNETTE = 'radial-gradient(ellipse at center, transparent 55%, rgba(30,15,5,0.22) 100%)';
+const GRAIN_TILES = [1, 2, 3].map((i) => staticFile(`grain/grain-${i}.png`));
+
+const useGrainPreload = () => {
+  const [h] = useState(() => delayRender('grain'));
+  useEffect(() => {
+    Promise.all(GRAIN_TILES.map((src) => new Promise<void>((res) => { const im = new Image(); im.onload = () => res(); im.onerror = () => res(); im.src = src; })))
+      .then(() => continueRender(h));
+  }, [h]);
+};
+
+const FilmLook: React.FC<{ f: number }> = ({ f }) => {
+  useGrainPreload();
+  const cur = f % 3;
+  return (
+    <>
+      {GRAIN_TILES.map((src, i) => (
+        <AbsoluteFill key={i} style={{ opacity: i === cur ? 1 : 0, pointerEvents: 'none', backgroundImage: `url("${src}"), ${VIGNETTE}`, backgroundRepeat: 'repeat, no-repeat', backgroundSize: '300px 300px, 100% 100%', willChange: 'transform' }} />
+      ))}
+    </>
   );
 };
