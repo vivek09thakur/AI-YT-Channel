@@ -14,24 +14,84 @@ GitHub Actions that create finished YouTube videos from a script or from a topic
 
 ## Get started
 
-1. Fork or clone this repo
+Everything runs in GitHub Actions. On your computer you only need the GitHub CLI to add secrets and start runs. Replace OWNER/REPO with the path of this repo as shown in the browser address bar.
 
-2. Add the secrets
+1. Install and log in to the GitHub CLI
 
-   At least one LLM key is needed for story videos and fact reels. The NotebookLM token is needed for NotebookLM shorts.
+   ```bash
+   winget install GitHub.cli
+   gh auth login
+   gh repo view OWNER/REPO
+   ```
+
+2. Add at least one LLM key (needed for story videos and fact reels, free tiers first)
 
    ```bash
    gh secret set GEMINI_API_KEY -R OWNER/REPO
+   gh secret set MISTRAL_API_KEY -R OWNER/REPO
+   gh secret set CEREBRAS_API_KEY -R OWNER/REPO
+   ```
+
+   Each command asks you to paste the value.
+
+3. Optional: better voices and a minutes guard
+
+   ```bash
+   gh secret set AZURE_SPEECH_KEY -R OWNER/REPO
+   gh variable set AZURE_SPEECH_REGION -R OWNER/REPO --body centralindia
+   gh secret set BILLING_TOKEN -R OWNER/REPO
+   gh variable set ACTIONS_INCLUDED_MINUTES -R OWNER/REPO --body 2000
+   ```
+
+4. NotebookLM short (needed only for that workflow)
+
+   Use a throwaway Google account. A browser opens once.
+
+   ```bash
+   pip install "notebooklm-py[headless,browser]"
+   notebooklm login --master-token --account throwaway@gmail.com
    gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO < ~/.notebooklm/profiles/default/master_token.json
    ```
 
-   See the Secrets section for the full list.
+   On Windows PowerShell the last line is
 
-3. Run a workflow
+   ```powershell
+   Get-Content "$env:USERPROFILE\.notebooklm\profiles\default\master_token.json" -Raw | gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO
+   ```
 
-   Open the Actions tab, pick a workflow, click Run workflow and fill in the form.
+5. Optional: auto upload of NotebookLM shorts
 
-4. Get the video
+   Setup steps for the Google and Meta side are in `pipeline/notebooklm/README.md`. Then:
+
+   ```bash
+   gh secret set YT_CLIENT_ID -R OWNER/REPO
+   gh secret set YT_CLIENT_SECRET -R OWNER/REPO
+   gh secret set YT_REFRESH_TOKEN -R OWNER/REPO
+   gh secret set IG_USER_ID -R OWNER/REPO
+   gh secret set IG_ACCESS_TOKEN -R OWNER/REPO
+   ```
+
+6. Check the setup
+
+   ```bash
+   gh secret list -R OWNER/REPO
+   gh variable list -R OWNER/REPO
+   gh workflow run "Pre-run check only" -R OWNER/REPO
+   gh run watch -R OWNER/REPO
+   ```
+
+7. Start a run
+
+   From the Actions tab, or from the terminal
+
+   ```bash
+   gh workflow run "Generate story video" -R OWNER/REPO -f topic="Shiva drinks the poison" -f script_file=my_script.txt
+   gh workflow run "Generate daily fact reel" -R OWNER/REPO -f topic="Why the sky is blue" -f script="Sentence one. Sentence two."
+   gh workflow run "NotebookLM short (auto topic)" -R OWNER/REPO
+   gh run list -R OWNER/REPO --limit 5
+   ```
+
+8. Get the video
 
    Open the `videos` branch. Each run has its own folder with the mp4 files, a thumbnail and a meta.json. The run summary also shows direct download links.
 
