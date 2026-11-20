@@ -59,7 +59,7 @@ on:
         required: true
         type: choice
         default: auto
-        options: [auto, off]
+        options: [auto, 'off']
       yt_privacy:
         description: 'YouTube privacy for the uploaded Short'
         required: true
