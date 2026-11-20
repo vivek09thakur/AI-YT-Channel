@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       keep_days:
-        description: 'Keep videos published within this many days'
+        description: 'Keep videos (and their narration scripts) published within this many days'
         required: true
         type: number
         default: 7

@@ -10,10 +10,10 @@ It is fully separate from the story-video pipeline:
 | Scripts | `pipeline/*.py` | `pipeline/facts/*.py` |
 | LLM contract | `pipeline/prompt/CONTRACT.md` | `pipeline/prompt/CONTRACT_FACT_REEL.md` |
 | Scene code on main | `.github/skills/shorts-story-video/...` | `.github/skills/daily-fact-reel/facts/<slug>/` |
-| Script copy on main | `scripts/<slug>.txt` | `scripts/facts/<slug>.txt` |
+| Narration script (on `videos` branch) | `scripts/<slug>-<run>.txt` | `scripts/facts/<slug>-<run>.txt` |
 | Output on `videos` branch | `videos/`, `videos.json`, `index.html` | `facts/`, `facts.json`, `facts/index.html` |
 
-Shared, read-only: `pipeline/tts.py`, `pipeline/check_keys.py`, `pipeline/precheck.py`, `pipeline/generate_story.py` (imported for the LLM client only). `cleanup-old-videos` never touches `facts/`.
+Shared, read-only: `pipeline/tts.py`, `pipeline/check_keys.py`, `pipeline/precheck.py`, `pipeline/generate_story.py` (imported for the LLM client only). `cleanup-old-videos` never touches `facts/`; it does prune `scripts/**` older than the keep window.
 
 ## Run it
 

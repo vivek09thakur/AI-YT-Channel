@@ -28,7 +28,7 @@ stories/<slug>/     generated: story.py meta.json phrases.json narration.json sh
 
 ```powershell
 $env:PYTHONPATH = ".github/skills/folk-art-video/engine"
-python pipeline/tts.py --script scripts/ramayan.txt --voice en-US-AndrewNeural --out work
+python pipeline/tts.py --script my_script.txt --voice en-US-AndrewNeural --out work   # past scripts: videos branch, scripts/
 python pipeline/folk/phrases.py --narration work/narration.json --out work/phrases.json
 python pipeline/folk/check_story.py --story stories/x/story.py --phrases work/phrases.json --kit .github/skills/folk-art-video --sheet work/sheet.jpg
 python pipeline/folk/render_folk.py --story .github/skills/folk-art-video/stories/x --voice work/voice.wav --aspect shorts --out out

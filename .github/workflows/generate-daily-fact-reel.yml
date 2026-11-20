@@ -15,7 +15,7 @@ on:
         required: false
         type: string
       script_file:
-        description: 'Path of a .txt in this repo with the narration (alternative to script), e.g. scripts/facts/octopus.txt'
+        description: 'Path of a .txt in this repo with the narration (alternative to script). Past scripts are kept on the videos branch under scripts/facts/'
         required: false
         type: string
       voice:
@@ -178,7 +178,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          mkdir -p scripts/facts && cp work/script.txt "scripts/facts/${{ steps.slug.outputs.slug }}.txt" && git add scripts/facts
           git add "$KIT/facts/${{ steps.slug.outputs.slug }}"
           git commit -m "fact reel: ${{ steps.slug.outputs.slug }} (run ${{ github.run_number }})" || { echo "nothing to commit"; exit 0; }
           git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"
@@ -257,8 +256,9 @@ jobs:
         run: |
           git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
             || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
-      - name: Add reel + rebuild facts overview
+      - name: Add reel + script + rebuild facts overview
         run: |
+          mkdir -p site/scripts/facts && cp bundle/work/script.txt "site/scripts/facts/${{ needs.author.outputs.slug }}-${{ github.run_number }}.txt"
           python main/pipeline/facts/publish_fact_reel.py --root site --src final --slug "${{ needs.author.outputs.slug }}" --run "${{ github.run_number }}" \
             --repo "${{ github.repository }}" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           cd site
