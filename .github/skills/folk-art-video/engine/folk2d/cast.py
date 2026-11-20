@@ -360,7 +360,7 @@ def _draw_front(c, g, par):
                 poly([(hx + e * 3, hy - 4), (hx + e * 8, hy - 9), (hx + e * 15, hy - 4), (hx + e * 8, hy)], o['eye']); dot(hx + e * 9, hy - 4, 2.6, PUPIL)
             poly([(hx - 5, hy + 12), (hx + 5, hy + 12), (hx + 3, hy + 15), (hx - 3, hy + 15)], MOUTH)
     plant = planted_prop(p)
-    if plant: prop(plant, Wd(-64, -226), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff stands behind the seated figure
+    if plant: prop(plant, Wd(-64, -150), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff stands behind the seated figure
     _legs_dhoti(c, g, par, False)
     if fem:
         chest = smooth([(-48, -322), (-40, -340), (0, -346), (40, -340), (48, -322), (40, -298), (20, -272), (26, -248, 'k'), (-26, -248, 'k'), (-20, -272), (-40, -298)]); shx = 42
@@ -589,7 +589,7 @@ def _draw_side(c, g, par):
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
         if holdv: prop(holdv, h, d2, s, c, par, sx)
     plant = planted_prop(p)
-    if plant: prop(plant, Wd(-52, -226), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff planted behind the seated figure
+    if plant: prop(plant, Wd(-52, -150), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff planted behind the seated figure
     _legs_dhoti(c, g, par, True)
     arm(*p['armL'], p['holdL'], -1)
     Hd_ = _Hd_fn(g, 1.0, SIDE_LIFT, SIDE_ROT)
