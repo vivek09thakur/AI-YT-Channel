@@ -1,0 +1,77 @@
+{
+ "voice": "en-US-AndrewNeural",
+ "engine": "edge",
+ "duration": 59.11,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Have you ever wondered why the sky looks blue instead of purple, green, or red?",
+   "t0": 0.8,
+   "t1": 5.46,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "The answer lies in something called Rayleigh Scattering!",
+   "t0": 6.01,
+   "t1": 8.7,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Sunlight may look white, but it is actually made up of different colours, each with a different wavelength.",
+   "t0": 9.25,
+   "t1": 15.08,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "When sunlight enters Earth's atmosphere, it collides with tiny gas molecules in the air.",
+   "t0": 15.63,
+   "t1": 21.3,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "These molecules scatter shorter wavelengths of light, like blue, much more strongly than longer wavelengths, like red.",
+   "t0": 21.85,
+   "t1": 29.36,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "That's why blue light spreads across the sky, making it appear blue to our eyes!",
+   "t0": 29.91,
+   "t1": 35.22,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "But here's something interesting…",
+   "t0": 35.77,
+   "t1": 37.06,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "During sunrise and sunset, sunlight travels through more atmosphere.",
+   "t0": 37.96,
+   "t1": 42.5,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "Much of the blue light gets scattered away, allowing more red and orange light to reach our eyes.",
+   "t0": 43.05,
+   "t1": 49.1,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "So, the next time you look at a blue sky, remember — you're witnessing the science of light in action!",
+   "t0": 49.65,
+   "t1": 56.11,
+   "para": false
+  }
+ ]
+}

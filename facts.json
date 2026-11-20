@@ -1,5 +1,18 @@
 [
  {
+  "dir": "facts/why-is-the-sky-blue-the-science-behind-i-6",
+  "slug": "why-is-the-sky-blue-the-science-behind-i",
+  "run": "6",
+  "run_url": "https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/44779581203",
+  "title": "Why Is the Sky Blue?",
+  "topic": "Why Is the Sky Blue? The Science Behind Its Beautiful Colour",
+  "duration": 59.11,
+  "voice": "en-US-AndrewNeural",
+  "page_name": "@daily.facts.challenge",
+  "date": "2026-11-20",
+  "reel_bytes": 5866987
+ },
+ {
   "dir": "facts/what-is-a-black-hole-the-mysterious-mons-5",
   "slug": "what-is-a-black-hole-the-mysterious-mons",
   "run": "5",
