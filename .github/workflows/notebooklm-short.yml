@@ -3,6 +3,8 @@ name: NotebookLM short (auto topic)
 # Fully automatic: picks a random unpublished topic from pipeline/notebooklm/topics.json (science, technology, ai, space,
 # physics), lets NotebookLM research it on the web, generates a 9:16 Video Overview and publishes it to the videos branch
 # under nlm/. Independent of the other workflows: own scripts (pipeline/notebooklm/), own index (nlm.json), own folder.
+# Jobs: precheck (token present + works, quota, leftover notebooks, upload targets) -> make -> publish -> upload (optional:
+# YouTube Short / Instagram Reel, only for platforms whose secrets are set; see pipeline/notebooklm/README.md).
 #
 # One-time setup (see pipeline/notebooklm/README.md): with a DEDICATED/throwaway Google account run
 #   pip install "notebooklm-py[headless,browser]"
@@ -52,6 +54,18 @@ on:
         required: true
         type: boolean
         default: false
+      upload:
+        description: 'Upload to YouTube / Instagram (auto = every platform whose secrets are set; off = skip)'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, off]
+      yt_privacy:
+        description: 'YouTube privacy for the uploaded Short'
+        required: true
+        type: choice
+        default: public
+        options: [public, unlisted, private]
 
 concurrency:
   group: notebooklm-short
@@ -67,12 +81,104 @@ env:
   FORMAT: ${{ inputs.format || 'short' }}
   STYLE: ${{ inputs.style || 'auto' }}
   KEEP_NOTEBOOK: ${{ inputs.keep_notebook == true && '1' || '' }}
+  UPLOAD: ${{ inputs.upload || 'auto' }}
+  YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
   # Closing call to action spoken at the end of every video (edit here to change the wording).
   CTA_LINE: "If you learned something new, support us by subscribing to the channel and following us for more."
 
 jobs:
+  precheck:
+    name: Precheck (token, quota, leftovers, upload targets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      yt: ${{ steps.targets.outputs.yt }}
+      ig: ${{ steps.targets.outputs.ig }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Master token secret present and valid JSON
+        env:
+          NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
+        run: |
+          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see pipeline/notebooklm/README.md)"; exit 1; }
+          python -c "import json,os; d=json.loads(os.environ['NOTEBOOKLM_MASTER_TOKEN_JSON']); assert isinstance(d, dict) and d, 'empty'" \
+            || { echo "::error::NOTEBOOKLM_MASTER_TOKEN_JSON is not a JSON object - paste the whole master_token.json file"; exit 1; }
+          echo "master token secret: present"
+
+      - name: Install notebooklm-py
+        run: pip install -q "notebooklm-py[headless]" && notebooklm --version
+
+      - name: Master token works (mint session + network test)
+        env:
+          NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
+        run: |
+          umask 077
+          mkdir -p ~/.notebooklm/profiles/default
+          printf '%s' "$NOTEBOOKLM_MASTER_TOKEN_JSON" > ~/.notebooklm/profiles/default/master_token.json
+          chmod 600 ~/.notebooklm/profiles/default/master_token.json
+          unset NOTEBOOKLM_MASTER_TOKEN_JSON
+          notebooklm login --master-token-refresh || notebooklm auth refresh --verify
+          notebooklm auth check --test --json | tee work_auth.json
+          python -c "import json,sys; d=json.load(open('work_auth.json')); sys.exit(0 if d.get('status')=='ok' else 1)" \
+            || { echo "::error::NotebookLM auth failed - re-mint the master token (notebooklm login --master-token)"; exit 1; }
+          rm -f work_auth.json
+
+      - name: Quota check
+        run: |
+          notebooklm usage --json > usage.json || { echo "::warning::usage meter unavailable"; echo '{}' > usage.json; }
+          python - <<'PY'
+          import json
+          d = json.load(open('usage.json'))
+          if d.get('status') != 'ready':
+              print('usage meter:', d.get('status', 'unknown'), '- continuing')
+              raise SystemExit(0)
+          for w in d.get('windows', []):
+              print(f"{w['kind']}: {w.get('used_percent', 0):.1f}% used, resets {w.get('resets_at')}")
+          if d.get('is_exhausted'):
+              print('::error::NotebookLM compute quota exhausted for this account')
+              raise SystemExit(1)
+          PY
+
+      - name: Sweep leftover notebooks from earlier runs
+        if: env.KEEP_NOTEBOOK == ''
+        run: |
+          notebooklm list --json > notebooks.json || echo '[]' > notebooks.json
+          python pipeline/notebooklm/sweep_notebooks.py --notebooks notebooks.json --topics pipeline/notebooklm/topics.json > sweep.txt
+          cat sweep.txt
+          while read -r id; do
+            [ -n "$id" ] && { notebooklm delete -n "$id" -y --json >/dev/null && echo "deleted leftover notebook $id" || echo "::warning::could not delete leftover notebook $id"; }
+          done < <(grep '^DELETE ' sweep.txt | cut -d' ' -f2)
+
+      - name: Detect upload targets
+        id: targets
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          yt=false; ig=false
+          if [ "$UPLOAD" = "off" ]; then
+            echo "upload: off (workflow input)"
+          else
+            if [ -n "$YT_CLIENT_ID" ] && [ -n "$YT_CLIENT_SECRET" ] && [ -n "$YT_REFRESH_TOKEN" ]; then yt=true; echo "YouTube upload: enabled (privacy $YT_PRIVACY)";
+            else echo "::notice::YouTube upload skipped - set secrets YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN to enable"; fi
+            if [ -n "$IG_USER_ID" ] && [ -n "$IG_ACCESS_TOKEN" ]; then ig=true; echo "Instagram upload: enabled";
+            else echo "::notice::Instagram upload skipped - set secrets IG_USER_ID, IG_ACCESS_TOKEN to enable"; fi
+          fi
+          echo "yt=$yt" >> "$GITHUB_OUTPUT"; echo "ig=$ig" >> "$GITHUB_OUTPUT"
+
+      - name: Remove credentials
+        if: always()
+        run: rm -rf ~/.notebooklm
+
   make:
     name: Research + Video Overview
+    needs: precheck
     runs-on: ubuntu-latest
     timeout-minutes: 75
     outputs:
@@ -106,22 +212,6 @@ jobs:
           python -c "import json,sys; d=json.load(open('work_auth.json')); sys.exit(0 if d.get('status')=='ok' else 1)" \
             || { echo "::error::NotebookLM auth failed - re-mint the master token"; exit 1; }
           rm -f work_auth.json
-
-      - name: Quota check
-        run: |
-          notebooklm usage --json > usage.json || { echo "::warning::usage meter unavailable"; echo '{}' > usage.json; }
-          python - <<'PY'
-          import json
-          d = json.load(open('usage.json'))
-          if d.get('status') != 'ready':
-              print('usage meter:', d.get('status', 'unknown'), '- continuing')
-              raise SystemExit(0)
-          for w in d.get('windows', []):
-              print(f"{w['kind']}: {w.get('used_percent', 0):.1f}% used, resets {w.get('resets_at')}")
-          if d.get('is_exhausted'):
-              print('::error::NotebookLM compute quota exhausted for this account')
-              raise SystemExit(1)
-          PY
 
       - name: Fetch published index (to avoid repeats)
         run: |
@@ -171,10 +261,12 @@ jobs:
           echo "duration=$dur" >> "$GITHUB_OUTPUT"
           ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 final/reel.mp4
           ffmpeg -v error -y -ss 1 -i final/reel.mp4 -frames:v 1 -q:v 3 final/thumb.jpg
-          notebooklm ask --json "Return ONLY a JSON object with keys title (catchy YouTube Shorts title phrased as a question, max 60 characters), description (2 sentences explaining what the viewer will learn, followed by this exact sentence: 'Subscribe and follow us for more.') and hashtags (array of 5 lowercase tags without #)." > ask.json \
+          notebooklm ask --json "Return ONLY a JSON object with keys title (catchy YouTube Shorts title phrased as a question, max 60 characters), description (2 sentences explaining what the viewer will learn, followed by this exact sentence: 'Subscribe and follow us for more.') and hashtags (array of 12 lowercase single-word tags without #, most relevant first)." > ask.json \
             || echo '{}' > ask.json
           python pipeline/notebooklm/make_meta.py --topic "${{ steps.pick.outputs.topic }}" --genre "${{ steps.pick.outputs.genre }}" \
-            --slug "${{ steps.pick.outputs.slug }}" --format "$FORMAT" --ask ask.json --sources sources.json --notebook "${{ steps.nb.outputs.id }}" --out final/meta.json
+            --slug "${{ steps.pick.outputs.slug }}" --format "$FORMAT" --ask ask.json --sources sources.json --notebook "${{ steps.nb.outputs.id }}" \
+            --cta "$CTA_LINE" --out final/meta.json
+          echo "--- caption_youtube.txt ---"; cat final/caption_youtube.txt; echo; echo "--- caption_instagram.txt ---"; cat final/caption_instagram.txt; echo
           ls -la final
 
       - uses: actions/upload-artifact@v4
@@ -236,4 +328,67 @@ jobs:
             echo "| Thumbnail | [$dir/thumb.jpg]($raw/thumb.jpg) |"
             echo
             echo "Overview: https://github.com/${{ github.repository }}/blob/videos/nlm/README.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  upload:
+    name: Upload (YouTube / Instagram, optional)
+    needs: [precheck, make, publish]
+    # publish may be skipped (publish=false) - still upload if the video was made and at least one target is configured
+    if: ${{ !cancelled() && needs.make.result == 'success' && (needs.precheck.outputs.yt == 'true' || needs.precheck.outputs.ig == 'true') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: nlm-short, path: final }
+
+      - name: Upload to YouTube
+        id: yt
+        if: needs.precheck.outputs.yt == 'true'
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          pip install -q google-api-python-client google-auth
+          python pipeline/notebooklm/upload_youtube.py --video final/reel.mp4 --meta final/meta.json --privacy "$YT_PRIVACY" --out yt.json
+          echo "url=$(python -c "import json;print(json.load(open('yt.json')).get('url',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Instagram (Reel)
+        id: ig
+        if: needs.precheck.outputs.ig == 'true'
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST || 'graph.facebook.com' }}
+        run: |
+          # The Graph API needs a PUBLIC video URL. Use the videos-branch raw URL when the repo is public,
+          # otherwise park the file for ~1 h on tmpfiles.org (the reel is about to be public anyway).
+          url=""
+          if [ "${{ needs.publish.result }}" = "success" ]; then
+            raw="https://github.com/${{ github.repository }}/raw/videos/nlm/${{ needs.make.outputs.slug }}-${{ github.run_number }}/reel.mp4"
+            curl -fsSLI -o /dev/null "$raw" && url="$raw" && echo "using repo raw URL"
+          fi
+          if [ -z "$url" ]; then
+            url=$(curl -fsS -F "file=@final/reel.mp4" https://tmpfiles.org/api/v1/upload | python -c "import json,sys;u=json.load(sys.stdin)['data']['url'];print(u.replace('tmpfiles.org/','tmpfiles.org/dl/',1))")
+            echo "using temporary public host"
+          fi
+          test -n "$url" || { echo "::error::no public URL for the video"; exit 1; }
+          python pipeline/notebooklm/upload_instagram.py --video-url "$url" --meta final/meta.json --out ig.json
+          echo "url=$(python -c "import json;print(json.load(open('ig.json')).get('permalink',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Uploads"
+            echo
+            echo "| Platform | Result |"; echo "|---|---|"
+            [ "${{ needs.precheck.outputs.yt }}" = "true" ] && echo "| YouTube | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |" || echo "| YouTube | skipped (secrets not set) |"
+            [ "${{ needs.precheck.outputs.ig }}" = "true" ] && echo "| Instagram | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |" || echo "| Instagram | skipped (secrets not set) |"
+            echo
+            echo "<details><summary>YouTube caption</summary>"; echo; echo '```'; cat final/caption_youtube.txt; echo; echo '```'; echo "</details>"
+            echo "<details><summary>Instagram caption</summary>"; echo; echo '```'; cat final/caption_instagram.txt; echo; echo '```'; echo "</details>"
           } >> "$GITHUB_STEP_SUMMARY"

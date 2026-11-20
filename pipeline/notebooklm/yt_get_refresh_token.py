@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""One-time helper: mint a YouTube refresh token for the upload step (run on your own machine, not in CI).
+
+1. Google Cloud console -> create a project -> enable "YouTube Data API v3"
+2. APIs & Services -> OAuth consent screen -> External, add your channel's Google account as a test user
+3. Credentials -> Create credentials -> OAuth client ID -> Desktop app -> copy client id + secret
+4. pip install google-auth-oauthlib
+   python pipeline/notebooklm/yt_get_refresh_token.py --client-id ... --client-secret ...
+   (a browser opens; sign in with the CHANNEL's Google account and allow "upload videos")
+5. store the printed refresh token + the client id/secret as repo secrets YT_REFRESH_TOKEN, YT_CLIENT_ID, YT_CLIENT_SECRET
+
+Refresh tokens issued while the consent screen is in "Testing" expire after 7 days; publish the consent screen
+(Publishing status -> In production) to make it long-lived. No Google review is needed for your own channel, but
+videos uploaded through an unverified app are forced to PRIVATE by YouTube until the app passes verification.
+"""
+import argparse
+
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--client-id', required=True)
+    ap.add_argument('--client-secret', required=True)
+    a = ap.parse_args()
+    cfg = {'installed': {'client_id': a.client_id, 'client_secret': a.client_secret,
+                         'auth_uri': 'https://accounts.google.com/o/oauth2/auth',
+                         'token_uri': 'https://oauth2.googleapis.com/token',
+                         'redirect_uris': ['http://localhost']}}
+    flow = InstalledAppFlow.from_client_config(cfg, SCOPES)
+    creds = flow.run_local_server(port=0, access_type='offline', prompt='consent')
+    print('\nYT_REFRESH_TOKEN =', creds.refresh_token)
+    print('store it:  gh secret set YT_REFRESH_TOKEN -R <owner>/<repo>  (paste when prompted)')
+
+
+if __name__ == '__main__':
+    main()
