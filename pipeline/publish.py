@@ -53,12 +53,25 @@ CARD = '''<article class="card">
     <p class="meta">{topic}</p>
     <p class="meta">{dur} &middot; {voice} &middot; {date} &middot; <a href="{run_url}">run #{run}</a></p>
     <div class="btns">
-      <a class="btn land" href="{dir}/landscape.mp4" download>Download landscape ({land_mb})</a>
-      <a class="btn short" href="{dir}/shorts.mp4" download>Download Shorts ({short_mb})</a>
+{btns}
     </div>
-    <div class="small"><a href="{dir}/voice.mp3">voice only</a><a href="{dir}/narration.json">timings</a><a href="{raw}/{dir}/landscape.mp4">raw link (landscape)</a><a href="{raw}/{dir}/shorts.mp4">raw link (shorts)</a></div>
+    <div class="small"><a href="{dir}/voice.mp3">voice only</a><a href="{dir}/narration.json">timings</a>{raw_links}</div>
   </div>
 </article>'''
+
+
+def _links(e, raw):
+    """download buttons / raw links / markdown cells only for the formats that were rendered"""
+    btns, raws, cells = [], [], []
+    for key, fn, cls, label in (('landscape_bytes', 'landscape.mp4', 'land', 'landscape'), ('shorts_bytes', 'shorts.mp4', 'short', 'Shorts')):
+        if e.get(key):
+            mb = f"{e[key] / 1e6:.0f} MB"
+            btns.append(f'      <a class="btn {cls}" href="{e["dir"]}/{fn}" download>Download {label} ({mb})</a>')
+            raws.append(f'<a href="{raw}/{e["dir"]}/{fn}">raw link ({label.lower()})</a>')
+            cells.append(f"[download]({raw}/{e['dir']}/{fn}) ({mb})")
+        else:
+            cells.append('-')
+    return '\n'.join(btns), ''.join(raws), cells
 
 
 def main():
@@ -92,9 +105,12 @@ def main():
     idx.write_text(json.dumps(entries, indent=1, ensure_ascii=False), encoding='utf-8')
 
     raw = f'https://github.com/{a.repo}/raw/{a.branch}'
-    cards = [CARD.format(dir=e['dir'], title=html.escape(e['title']), topic=html.escape(e['topic']), dur=fmt_dur(e['duration'] or 0), voice=html.escape(e['voice']),
-                         date=e['date'], run=e['run'], run_url=e['run_url'] or '#', land_mb=f"{e['landscape_bytes'] / 1e6:.0f} MB", short_mb=f"{e['shorts_bytes'] / 1e6:.0f} MB", raw=raw)
-             for e in entries] or ['<p class="empty">No videos yet.</p>']
+    cards = []
+    for e in entries:
+        btns, raw_links, _ = _links(e, raw)
+        cards.append(CARD.format(dir=e['dir'], title=html.escape(e['title']), topic=html.escape(e['topic']), dur=fmt_dur(e['duration'] or 0), voice=html.escape(e['voice']),
+                                 date=e['date'], run=e['run'], run_url=e['run_url'] or '#', btns=btns, raw_links=raw_links))
+    cards = cards or ['<p class="empty">No videos yet.</p>']
     (root / 'index.html').write_text(PAGE.replace('%CARDS%', '\n'.join(cards)), encoding='utf-8')
     (root / '.nojekyll').write_text('', encoding='utf-8')
 
@@ -102,7 +118,8 @@ def main():
           '| Date | Title | Topic | Length | Landscape | Shorts | Run |', '|---|---|---|---|---|---|---|']
     for e in entries:
         t, tp = e['title'].replace('|', '\\|'), e['topic'].replace('|', '\\|')
-        md.append(f"| {e['date']} | **{t}** | {tp} | {fmt_dur(e['duration'] or 0)} | [download]({raw}/{e['dir']}/landscape.mp4) ({e['landscape_bytes'] / 1e6:.0f} MB) | [download]({raw}/{e['dir']}/shorts.mp4) ({e['shorts_bytes'] / 1e6:.0f} MB) | [#{e['run']}]({e['run_url']}) |")
+        _, _, (land, short) = _links(e, raw)
+        md.append(f"| {e['date']} | **{t}** | {tp} | {fmt_dur(e['duration'] or 0)} | {land} | {short} | [#{e['run']}]({e['run_url']}) |")
     (root / 'README.md').write_text('\n'.join(md) + '\n', encoding='utf-8')
     print(f'published {entry["dir"]}; {len(entries)} videos listed')
 

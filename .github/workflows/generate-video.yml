@@ -15,6 +15,12 @@ on:
         description: 'Path of a .txt in this repo with the narration (alternative to script), e.g. scripts/shiva.txt'
         required: false
         type: string
+      formats:
+        description: 'Which video(s) to render (shorts = 9:16 only, landscape = 16:9 only; one format halves render minutes)'
+        required: true
+        type: choice
+        default: both
+        options: [both, shorts, landscape]
       voice:
         description: 'Narration voice (neural)'
         required: true
@@ -53,6 +59,7 @@ jobs:
     timeout-minutes: 60
     outputs:
       slug: ${{ steps.slug.outputs.slug }}
+      matrix: ${{ steps.formats.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -68,6 +75,19 @@ jobs:
           echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
         env:
           TOPIC: ${{ inputs.topic }}
+      - name: Render matrix from formats input
+        id: formats
+        run: |
+          # thumb.jpg is grabbed from the first rendered format
+          case "$FORMATS" in
+            shorts)    m='[{"format":"shorts","thumb":"--thumb"}]' ;;
+            landscape) m='[{"format":"landscape","thumb":"--thumb"}]' ;;
+            *)         m='[{"format":"landscape","thumb":"--thumb"},{"format":"shorts","thumb":""}]' ;;
+          esac
+          echo "matrix=$m" >> "$GITHUB_OUTPUT"
+          echo "rendering: $m"
+        env:
+          FORMATS: ${{ inputs.formats }}
       - name: Check LLM providers (keys, quota, credits)
         id: llm
         run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "$MODEL"
@@ -143,9 +163,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { format: landscape, thumb: '--thumb' }
-          - { format: shorts, thumb: '' }
+        include: ${{ fromJson(needs.author.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -193,9 +211,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with: { name: story, path: bundle }
       - uses: actions/download-artifact@v4
-        with: { name: video-landscape, path: final }
-      - uses: actions/download-artifact@v4
-        with: { name: video-shorts, path: final }
+        with: { pattern: 'video-*', merge-multiple: true, path: final }
       - name: Collect
         run: |
           slug="${{ needs.author.outputs.slug }}"
@@ -224,8 +240,8 @@ jobs:
             echo "## Video ready: $slug"
             echo
             echo "| Format | Download |"; echo "|---|---|"
-            echo "| YouTube landscape (1920x1080) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
-            echo "| YouTube Shorts (1080x1920) | [$dir/shorts.mp4]($raw/shorts.mp4) |"
+            [ -f final/landscape.mp4 ] && echo "| YouTube landscape (1920x1080) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
+            [ -f final/shorts.mp4 ] && echo "| YouTube Shorts (1080x1920) | [$dir/shorts.mp4]($raw/shorts.mp4) |"
             echo
             echo "Overview page: https://github.com/${{ github.repository }}/blob/videos/README.md (or enable GitHub Pages on the videos branch for index.html)"
             echo
