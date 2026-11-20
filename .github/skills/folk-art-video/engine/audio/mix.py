@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """mix.py voice music.wav sfx.wav [out.wav]
-Music at exactly -6 dB (50 % level) of the voice's gated loudness, SFX at -6 dB with peaks capped at 0.7 x the voice peak.
+Music at -6 dB (50 % level) of the voice's gated loudness (or the level in music_level.txt next to music.wav, e.g. -14 for sparse bells),
+SFX at -6 dB with peaks capped at 0.7 x the voice peak.
 The voice is never touched. No ducking, no compression: one gain per stem, plus a peak cap on the SFX stem only."""
 import sys
 import numpy as np
@@ -20,8 +21,11 @@ def peak_cap(x, ceiling, block=0.004):
 if __name__ == "__main__":
     v = read_wav(sys.argv[1]); m = stereo(read_wav(sys.argv[2])); s = stereo(read_wav(sys.argv[3])); out = sys.argv[4] if len(sys.argv) > 4 else "mix.wav"
     n = v.shape[1]; m = np.pad(m, ((0, 0), (0, max(0, n - m.shape[1]))))[:, :n]; s = np.pad(s, ((0, 0), (0, max(0, n - s.shape[1]))))[:, :n]
+    lvl = os.path.join(os.path.dirname(os.path.abspath(sys.argv[2])), "music_level.txt")       # written by audio.py: -6 for a score, quieter for sparse bells
+    music_db = float(open(lvl).read().strip()) if os.path.exists(lvl) else -6.0
     Lv, Lm, Ls = lufs(v), lufs(m), lufs(s)
-    m = m * 10 ** ((Lv - 6.0 - Lm) / 20); s = s * 10 ** ((Lv - 6.0 - Ls) / 20)
+    m = m * 10 ** ((Lv + music_db - Lm) / 20) if np.abs(m).max() > 0 else m
+    s = s * 10 ** ((Lv - 6.0 - Ls) / 20) if np.abs(s).max() > 0 else s
     vpk = np.abs(v).max(); s = peak_cap(s, 0.7 * vpk); mix = v + m + s
     write_wav(out, mix / max(1.0, np.abs(mix).max()))   # only scaled if it would clip; finish_audio re-measures
     print(f"voice {Lv:.2f} LUFS  peak {20 * np.log10(vpk):.2f} dBFS")

@@ -37,7 +37,7 @@ Reply with exactly these blocks and nothing else (no prose, no markdown outside 
 - Vary the sky and setting between shots; mirror the story (dawn for births, storm/fire for villains, heaven/night for gods, day for journeys).
 - Villains: `ravana` (ten heads), `demon`, `kali`/`bhairava` as fierce gods. Heroes: `rama, sita, lakshmana, hanuman, krishna, arjuna, shiva, vishnu, durga, ganesha ...`. Humans: `king, queen, sage, warrior, villager, woman, child, devotee`.
 - Expressions: `expr="neutral"|"smile"|"stern"|"sad"|"shock"|"closed"`; mouth movement `mouth=0..1` while that character speaks.
-- Sound: one cue at nearly every phrase start (`chime/bell/sparkle` for divine moments, `dhol/thunk/rumble/slice` for war and villains, `whoosh/riser` for transitions, `heart` for sadness, `pop` for titles). Set `MUSIC` so the drone stops during the darkest stretch and comes back at the turning point.
+- Sound: one cue at nearly every phrase start (`chime/bell/sparkle` for divine moments, `dhol/thunk/rumble/slice` for war and villains, `whoosh/riser` for transitions, `heart` for sadness, `pop` for titles). Leave `MUSIC = dict(style="bells")` unless asked for a continuous score.
 
 ## Engine API (`from folk2d import *`)
 
@@ -60,7 +60,7 @@ Animals (`draw_animal(c, kind, x, y, s, f, flip=False, par=1.0)`): `elephant hor
 
 Timeline (`T = Timeline()`): `T.total` (frame count), `T.start(sub)`, `T.end(sub)`, `T.word(sub, n)` (frame when word n of that phrase is spoken), `T.span(a, b=None)`, `T.sub(f) -> (text, t)` for the subtitle, `T.text(sub)`. `sub` is any distinctive verbatim substring of a phrase (case-insensitive).
 
-Sound: `CUES = [(frame, name, gain), ...]` sorted by frame, names: `whoosh riser thunk chime bell sparkle slice dhol rumble swell heart pop click drip` (aliases `boom, impact, hit, thunder, drum, drums, gong, temple_bell, twinkle, shimmer, magic, swish, swoosh, wind, sword, cut, arrow, heartbeat, roar, ding, tap, water, splash, fire, crowd, rise, bow`). `MUSIC = dict(stop=frame, back=frame, sa=146.83, mood="bright"|"dark"|"calm", tempo=60..100)`.
+Sound: `CUES = [(frame, name, gain), ...]` sorted by frame, names: `whoosh riser thunk chime bell sparkle slice dhol rumble swell heart pop click drip` (aliases `boom, impact, hit, thunder, drum, drums, gong, temple_bell, twinkle, shimmer, magic, swish, swoosh, wind, sword, cut, arrow, heartbeat, roar, ding, tap, water, splash, fire, crowd, rise, bow`). `MUSIC = dict(style="bells", sa=146.83)` - the default `bells` style has no continuous music, only a soft temple-bell ring in the pauses between sentences (placed automatically). Use `style="score", stop=frame, back=frame, mood="bright"|"dark"|"calm", tempo=60..100` only if the channel owner's notes ask for a continuous background score.
 
 ## Example story.py
 

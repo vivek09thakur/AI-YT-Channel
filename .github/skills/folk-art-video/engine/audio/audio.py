@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """audio.py voice.(mp3|wav) [out_dir] [--story path/story.py]  -> music.wav + sfx.wav stems (voice untouched). Reads CUES / MUSIC from the story.
 CUES   = [(frame, "whoosh", gain), ...]        names: whoosh riser thunk chime bell sparkle slice dhol rumble swell heart pop click drip
-MUSIC  = dict(stop=frame|None, back=frame|None, sa=146.83, mood="bright"|"dark"|"calm", tempo=76)
-         music = tanpura + bansuri phrase + soft tabla; stops on the twist, drone stays, returns later.
+MUSIC  = dict(style="bells"|"score"|"none", stop=frame|None, back=frame|None, sa=146.83, mood="bright"|"dark"|"calm", tempo=76)
+         bells (default): no continuous bed - a soft temple-bell ring in the natural pauses between sentences (found from the voice),
+                          at most one every BELL_GAP s, plus one at the start and one at the end.
+         score:           tanpura + bansuri phrase + soft tabla; stops on the twist, drone stays, returns later (stop / back / mood / tempo).
+         FOLK_MUSIC env overrides the style for a whole render.
 Unknown cue names are skipped with a warning (never fatal)."""
 import sys, os, importlib.util, subprocess, argparse
 import numpy as np
@@ -22,6 +25,35 @@ PHRASES = {
 def load_story(path):
     spec = importlib.util.spec_from_file_location("story", path); S = importlib.util.module_from_spec(spec)
     sys.path.insert(0, os.path.dirname(os.path.abspath(path))); sys.path.insert(0, os.path.dirname(HERE)); spec.loader.exec_module(S); return S
+
+BELL_GAP = 5.0        # s, minimum spacing between rings
+BELL_PAUSE = 0.45     # s, a pause in the narration must be at least this long to get a ring
+BELL_DB = -18.0       # bells vs voice loudness in the mix (continuous score uses -6)
+
+def speech_pauses(voice, dur):
+    """start times (s) of silences >= BELL_PAUSE in the narration: 20 ms RMS envelope, threshold 30 dB under its peak"""
+    x = read_wav(voice).mean(0); hop = int(0.02 * SR); nb = len(x) // hop
+    rms = np.sqrt((x[:nb * hop].reshape(nb, hop) ** 2).mean(1)); thr = rms.max() * 10 ** (-30 / 20)
+    quiet = rms < thr; out = []; i = 0
+    while i < nb:
+        if quiet[i]:
+            j = i
+            while j < nb and quiet[j]: j += 1
+            if (j - i) * hop / SR >= BELL_PAUSE and i > 0: out.append(i * hop / SR)
+            i = j
+        else: i += 1
+    return out
+
+def bells(voice, dur, sa):
+    """soft temple-bell rings: one at the start, one just after each sentence that ends in a real pause (spaced >= BELL_GAP), one at the end"""
+    n = int(dur * SR); out = np.zeros(n); times = [0.4]; last = 0.4
+    for t in speech_pauses(voice, dur):
+        if t - last >= BELL_GAP and t < dur - 3.0: times.append(t + 0.12); last = t
+    if dur - 2.6 - last >= 2.5: times.append(dur - 2.6)
+    for k, t in enumerate(times):
+        w = I.bell(sa * (4 if k % 2 == 0 else 3), 3.0, 0.6); s = int(t * SR); e = min(n, s + len(w))
+        if s < n: out[s:e] += w[:e - s]
+    return out, len(times)
 
 def main(voice, out=".", story=None):
     story = story or os.path.join(HERE, "..", "story.py")
@@ -44,6 +76,24 @@ def main(voice, out=".", story=None):
     try: sa = float(M.get("sa", 146.83))
     except Exception: sa = 146.83
     if not (60 <= sa <= 400): sa = 146.83
+    style = (os.environ.get("FOLK_MUSIC") or str(M.get("style", "bells"))).strip().lower()
+    if style not in ("bells", "score", "none"): style = "bells"
+    os.makedirs(out, exist_ok=True)
+    stop = back = None; level_db = -6.0
+    if style == "bells":
+        music, rings = bells(voice, dur, sa); level_db = BELL_DB
+        print(f"music: bells style, {rings} rings")
+    elif style == "none":
+        print("music: none")
+    else:
+        music, stop, back = score(M, dur, n, sa, fps)
+    with open(os.path.join(out, "music_level.txt"), "w") as fh: fh.write(f"{level_db}\n")
+    write_wav(os.path.join(out, "music.wav"), norm(music, 0.8) if np.abs(music).max() > 0 else music); write_wav(os.path.join(out, "sfx.wav"), norm(sfx, 0.9) if np.abs(sfx).max() > 0 else sfx)
+    print(f"stems: {dur:.2f}s, {used} sfx cues used, {len(skipped)} skipped, music style={style} stop={stop} back={back}")
+    for s_ in skipped[:10]: print("  skipped cue:", s_)
+
+def score(M, dur, n, sa, fps):
+    """continuous bed: tanpura drone + bansuri phrase + soft tabla, gated by MUSIC stop/back"""
     drone = I.tanpura(dur, sa) * 1.0
     phrase = PHRASES.get(str(M.get("mood", "bright")).lower(), PHRASES["bright"])
     mel = np.zeros(n); t0 = 1.5; k = 0
@@ -68,10 +118,7 @@ def main(voice, out=".", story=None):
             b = int(back / fps * SR); fb = min(n - b, int(0.4 * SR)); gate[b:] = 1.0; gate[b:b + fb] = np.linspace(0, 1, fb)
     music = (mel * 0.9 + pulse * 0.45) * gate + drone * (0.45 + 0.55 * gate)
     fade = np.minimum(1, np.minimum(np.arange(n) / (1.0 * SR), (n - np.arange(n)) / (1.5 * SR))); music *= fade
-    os.makedirs(out, exist_ok=True)
-    write_wav(os.path.join(out, "music.wav"), norm(music, 0.8)); write_wav(os.path.join(out, "sfx.wav"), norm(sfx, 0.9) if np.abs(sfx).max() > 0 else sfx)
-    print(f"stems: {dur:.2f}s, {used} sfx cues used, {len(skipped)} skipped, music stop={stop} back={back}")
-    for s_ in skipped[:10]: print("  skipped cue:", s_)
+    return music, stop, back
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("voice"); ap.add_argument("out", nargs="?", default="."); ap.add_argument("--story", default=None)
