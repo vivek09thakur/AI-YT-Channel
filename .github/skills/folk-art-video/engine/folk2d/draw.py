@@ -109,11 +109,68 @@ def font(size, bold=True):
     _FONT_CACHE[key] = f; return f
 
 _GRAD = {}; _VIG = {}; _FLASH = {}
+# Per-process caches of things that are identical from frame to frame (sources for paste are kept in RGBA so paste()
+# does not convert a full-frame image every call).  Bounded dicts: oldest entry is dropped once cap is reached.
+_GLOW_BASE = {}; _GLOW = {}; _SHADOW = {}; _SOLID = {}; _SOLID_FULL = {}; _TEXT = {}; _HALO = {}
+def _memo(d, key, make, cap=24):
+    v = d.get(key)
+    if v is None:
+        if len(d) >= cap: del d[next(iter(d))]
+        v = d[key] = make()
+    return v
+def _solid(size, color):
+    """RGBA constant-colour image (a paste source; same pixels as the RGB image Pillow would convert on the fly)"""
+    size, color = tuple(size), tuple(color[:3]); full = size == (OW * SS, OH * SS)
+    return _memo(_SOLID_FULL if full else _SOLID, (size, color), lambda: Image.new("RGBA", size, color + (255,)), 4 if full else 8)
+def _radial(n, fn):
+    yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]
+    return fn(np.clip(1 - np.sqrt(xx * xx + yy * yy), 0, 1))
+def _vig_pieces(mask, color, strip=32):
+    """split a full-frame L mask into (x, y, solid RGBA, mask crop) pieces that skip the mask's zero region.
+    paste() with mask 0 is an exact identity, so pasting only the pieces is bit-identical to one full-frame paste
+    while touching ~2/3 of the pixels (the vignette is 0 inside a central ellipse; each row's zero set is one run)."""
+    a = np.asarray(mask); h, w = a.shape; pieces = []
+    for y0 in range(0, h, strip):
+        rows = a[y0:y0 + strip]
+        if not rows.any(): continue
+        zx0, zx1 = 0, w                                     # zero rectangle shared by every row of the strip (intersection of the runs)
+        for r in rows:
+            zc = np.flatnonzero(r == 0)
+            if len(zc) == 0 or zc[-1] - zc[0] + 1 != len(zc): zx0, zx1 = 0, 0; break        # no zeros / not one contiguous run -> paste the full row
+            zx0, zx1 = max(zx0, zc[0]), min(zx1, zc[-1] + 1)
+        spans = [(0, w)] if zx0 >= zx1 else [(0, int(zx0)), (int(zx1), w)]
+        for x0, x1 in spans:
+            if x1 <= x0: continue
+            box = (x0, y0, x1, min(h, y0 + strip))
+            pieces.append((x0, y0, Image.new("RGBA", (box[2] - x0, box[3] - y0), tuple(color[:3]) + (255,)), mask.crop(box)))
+    return pieces
+_BLANK = {}
 class Canvas:
     def __init__(self):
-        self.img = Image.new("RGBA", (OW * SS, OH * SS), (0, 0, 0, 255))
-        self.d = ImageDraw.Draw(self.img, "RGBA")
+        # the frame image is created on first use: a story's first call is normally gradient(), which then just copies the
+        # cached gradient instead of filling a black canvas and pasting over it (Image.new with a colour is a slow per-pixel fill)
+        self._img = None; self._d = None; self._abox = None
         self.cam = dict(x=W / 2, y=H / 2, zoom=1.0, roll=0.0)
+    def _set_img(self, im):
+        self._img = im; self._d = ImageDraw.Draw(im, "RGBA")
+    @property
+    def img(self):
+        if self._img is None: self._set_img(_memo(_BLANK, (OW * SS, OH * SS), lambda: Image.new("RGBA", (OW * SS, OH * SS), (0, 0, 0, 255)), 1).copy())
+        return self._img
+    @img.setter
+    def img(self, im): self._set_img(im)
+    @property
+    def d(self):
+        if self._d is None: self.img
+        return self._d
+    def alpha_mark(self, cx, cy, rad, ry=None):
+        """record that a translucent (alpha < 255) colour was written STRAIGHT into the canvas (self.d with an RGBA fill, or
+        paste() of a non-opaque RGBA source) around screen pixel (cx, cy) within rad (x) / ry (y) pixels; finish() needs
+        the premultiplied reduce only inside this bbox"""
+        if ry is None: ry = rad
+        x0, y0, x1, y1 = int(cx - rad) - 1, int(cy - ry) - 1, int(cx + rad) + 2, int(cy + ry) + 2
+        b = self._abox
+        self._abox = (x0, y0, x1, y1) if b is None else (min(b[0], x0), min(b[1], y0), max(b[2], x1), max(b[3], y1))
 
     # ----- camera: parallax factor p (1 = world, 0 = glued to screen)
     @staticmethod
@@ -138,37 +195,40 @@ class Canvas:
             arr = np.zeros((OH * SS, 1, 3), np.uint8)
             for ch in range(3):
                 arr[:, 0, ch] = np.interp(ys, [s[0] for s in stops], [s[1][ch] for s in stops])
-            _GRAD[key] = Image.fromarray(arr).resize((OW * SS, OH * SS))
-        self.img.paste(_GRAD[key], (0, 0))
+            _GRAD[key] = Image.fromarray(arr).resize((OW * SS, OH * SS)).convert("RGBA")
+        if self._img is None: self._set_img(_GRAD[key].copy())
+        else: self.img.paste(_GRAD[key], (0, 0))
     def glow(self, x, y, r, color, alpha=0.8, par=1.0):
         px, py = self.T(x, y, par); pr = max(2, int(self.S(r, par)))
-        n = 96; yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]
-        d = np.clip(1 - np.sqrt(xx * xx + yy * yy), 0, 1)
-        a = Image.fromarray((255 * alpha * d ** 2).astype(np.uint8)).resize((2 * pr, 2 * pr), Image.BICUBIC)
-        self.img.paste(Image.new("RGB", a.size, tuple(color[:3])), (int(px - pr), int(py - pr)), a)
+        base = _memo(_GLOW_BASE, alpha, lambda: Image.fromarray(_radial(96, lambda d: (255 * alpha * d ** 2).astype(np.uint8))))
+        a = _memo(_GLOW, (pr, alpha), lambda: base.resize((2 * pr, 2 * pr), Image.BICUBIC))
+        self.img.paste(_solid(a.size, color), (int(px - pr), int(py - pr)), a)
     def shadow(self, x, y, rx, ry, alpha=0.3, color=(24, 12, 34), par=1.0):
         """soft elliptical ground shadow (world coords)"""
         px, py = self.T(x, y, par); a_ = max(2, int(self.S(rx, par))); b_ = max(2, int(self.S(ry, par)))
-        n = 64; yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]
-        d = np.clip(1 - np.sqrt(xx * xx + yy * yy), 0, 1)
-        m = Image.fromarray((255 * alpha * np.sqrt(d)).astype(np.uint8)).resize((2 * a_, 2 * b_), Image.BICUBIC)
-        self.img.paste(Image.new("RGB", m.size, tuple(color[:3])), (int(px - a_), int(py - b_)), m)
+        base = _memo(_GLOW_BASE, ("sh", alpha), lambda: Image.fromarray(_radial(64, lambda d: (255 * alpha * np.sqrt(d)).astype(np.uint8))))
+        m = _memo(_SHADOW, (a_, b_, alpha), lambda: base.resize((2 * a_, 2 * b_), Image.BICUBIC), 64)
+        self.img.paste(_solid(m.size, color), (int(px - a_), int(py - b_)), m)
     def vignette(self, strength=0.45):
         if strength not in _VIG:
             n = 128; yy, xx = np.mgrid[-1:1:n * 1j, -1:1:n * 1j]
             d = np.clip((np.sqrt(xx * xx * 0.8 + yy * yy * 0.6) - 0.55) / 0.9, 0, 1)
             m = Image.fromarray((255 * strength * d ** 1.5).astype(np.uint8)).resize((OW * SS, OH * SS), Image.BICUBIC)
-            _VIG[strength] = m
-        self.img.paste(Image.new("RGB", (OW * SS, OH * SS), (10, 6, 24)), (0, 0), _VIG[strength])
+            _VIG[strength] = _vig_pieces(m, (10, 6, 24))
+        for x, y, src, mask in _VIG[strength]: self.img.paste(src, (x, y), mask)
     def flash(self, a, color=(255, 255, 255)):
         # ImageDraw does not alpha-blend onto an RGBA image (it would overwrite with a translucent white that finish() flattens to pure white)
         a = min(clamp(a), 0.55)                                                                                                            # never a blank white frame; stories tend to ask for ~0.85
         if a <= 0.01: return
-        key = (tuple(color[:3]), int(255 * a))
-        if key not in _FLASH: _FLASH[key] = (Image.new("RGB", (OW * SS, OH * SS), key[0]), Image.new("L", (OW * SS, OH * SS), key[1]))
-        self.img.paste(_FLASH[key][0], (0, 0), _FLASH[key][1])
+        m = _memo(_FLASH, int(255 * a), lambda: Image.new("L", (OW * SS, OH * SS), int(255 * a)), 8)
+        self.img.paste(_solid(self.img.size, color), (0, 0), m)
 
     # ----- primitives (all take world coords)
+    @staticmethod
+    def _tl(c): return c is not None and len(c) == 4 and c[3] < 255          # translucent colour: ImageDraw writes its alpha straight into the canvas
+    def _mark_pts(self, P, w=0):
+        xs = [p[0] for p in P]; ys = [p[1] for p in P]
+        self.alpha_mark((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, (max(xs) - min(xs)) / 2 + w, (max(ys) - min(ys)) / 2 + w)
     def poly(self, pts, fill, ol=INK, olw=5, par=1.0):
         P = [self.T(x, y, par) for x, y in pts]
         if len(P) < 2: return
@@ -176,7 +236,10 @@ class Canvas:
         if fill is not None and len(P) >= 3:
             if len(fill) == 4 and fill[3] < 255: self._blend_poly(P, fill)
             else: self.d.polygon(P, fill=fill)
-        if ol: self.d.line(P + [P[0]], fill=ol, width=max(1, int(self.S(olw, par))), joint="curve")
+        if ol:
+            wd = max(1, int(self.S(olw, par)))
+            if self._tl(ol): self._mark_pts(P, wd)
+            self.d.line(P + [P[0]], fill=ol, width=wd, joint="curve")
     def _blend_poly(self, P, fill):
         """translucent fill: Pillow does not blend RGBA colours on RGBA images, so composite a bbox-sized layer"""
         x0, y0 = int(min(p[0] for p in P)) - 1, int(min(p[1] for p in P)) - 1
@@ -189,7 +252,9 @@ class Canvas:
     def ell(self, cx, cy, rx, ry, fill, ol=INK, olw=5, par=1.0):
         x, y = self.T(cx, cy, par); a, b = abs(self.S(rx, par)), abs(self.S(ry, par))
         ol, olw = resolve_ol(fill, ol, olw)
-        self.d.ellipse([x - a, y - b, x + a, y + b], fill=fill, outline=ol, width=max(1, int(self.S(olw, par))) if ol else 0)
+        wd = max(1, int(self.S(olw, par))) if ol else 0
+        if self._tl(fill) or self._tl(ol): self.alpha_mark(x, y, a + wd, b + wd)
+        self.d.ellipse([x - a, y - b, x + a, y + b], fill=fill, outline=ol, width=wd)
     def clip_ell(self, clip_pts, cx, cy, rx, ry, fill, par=1.0):
         """ellipse clipped to a polygon (L-mode mask over the polygon's bbox) - lets an oversized pupil sit in the eye corner"""
         P = [self.T(x, y, par) for x, y in clip_pts]
@@ -209,10 +274,14 @@ class Canvas:
         box = [min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])]
         rad = min(self.S(rad, par), (box[2] - box[0]) / 2, (box[3] - box[1]) / 2)
         ol, olw = resolve_ol(fill, ol, olw)
-        self.d.rounded_rectangle(box, radius=max(0, rad), fill=fill, outline=ol, width=max(1, int(self.S(olw, par))) if ol else 0)
+        wd = max(1, int(self.S(olw, par))) if ol else 0
+        if self._tl(fill) or self._tl(ol): self._mark_pts([(box[0], box[1]), (box[2], box[3])], wd)
+        self.d.rounded_rectangle(box, radius=max(0, rad), fill=fill, outline=ol, width=wd)
     def line(self, pts, color, w=4, par=1.0):
         if len(pts) < 2: return
-        self.d.line([self.T(x, y, par) for x, y in pts], fill=color, width=max(1, int(self.S(w, par))), joint="curve")
+        P = [self.T(x, y, par) for x, y in pts]; wd = max(1, int(self.S(w, par)))
+        if self._tl(color): self._mark_pts(P, wd)
+        self.d.line(P, fill=color, width=wd, joint="curve")
     def arc(self, cx, cy, rx, ry, a0, a1, color, w=4, par=1.0):
         pts = [(cx + rx * math.cos(math.radians(a)), cy + ry * math.sin(math.radians(a))) for a in np.linspace(a0, a1, 24)]
         self.line(pts, color, w, par)
@@ -221,6 +290,7 @@ class Canvas:
         def shape(ra, rb, col):
             (x1, y1), (x2, y2) = self.T(*p1, par), self.T(*p2, par)
             ra, rb = abs(self.S(ra, par)), abs(self.S(rb, par))
+            if self._tl(col): self._mark_pts([(x1, y1), (x2, y2)], max(ra, rb))
             ang = math.atan2(y2 - y1, x2 - x1) + math.pi / 2; nx, ny = math.cos(ang), math.sin(ang)
             self.d.polygon([(x1 + nx * ra, y1 + ny * ra), (x2 + nx * rb, y2 + ny * rb), (x2 - nx * rb, y2 - ny * rb), (x1 - nx * ra, y1 - ny * ra)], fill=col)
             self.d.ellipse([x1 - ra, y1 - ra, x1 + ra, y1 + ra], fill=col); self.d.ellipse([x2 - rb, y2 - rb, x2 + rb, y2 + rb], fill=col)
@@ -228,31 +298,47 @@ class Canvas:
         if ol: shape(r1 + olw, r2 + olw, ol)
         shape(r1, r2, fill)
     def dots(self, pts, r, color, par=1.0):
+        tl = self._tl(color)
         for x, y in pts:
-            a, b = self.T(x, y, par); rr = abs(self.S(r, par)); self.d.ellipse([a - rr, b - rr, a + rr, b + rr], fill=color)
+            a, b = self.T(x, y, par); rr = abs(self.S(r, par))
+            if tl: self.alpha_mark(a, b, rr)
+            self.d.ellipse([a - rr, b - rr, a + rr, b + rr], fill=color)
 
     # ----- text
-    def _blit_text(self, s, px, py, size_px, fill, ol, olw_px, scale=1.0, alpha=1.0, bold=True, glow=False):
-        """draw a text block centred at screen pixel (px, py); sizes already in output pixels * SS"""
-        if not s or size_px < 2: return
+    @staticmethod
+    def _text_sprite(s, size_px, fill, ol, olw_px, bold):
+        """text block rendered on a transparent RGBA sprite, cropped to its bbox (None if nothing was drawn)"""
         f = font(size_px, bold)
         tw = max(int(OW * SS), int(f.getlength(s) + size_px * 2))
         tmp = Image.new("RGBA", (tw, int(size_px * 3)), (0, 0, 0, 0))
         td = ImageDraw.Draw(tmp)
         td.text((tw / 2, size_px * 1.5), s, font=f, fill=tuple(fill[:3]) + (255,), anchor="mm", stroke_width=int(olw_px) if ol else 0, stroke_fill=(tuple(ol[:3]) if ol else tuple(fill[:3])) + (255,))
         bb = tmp.getbbox()
-        if not bb: return
-        tmp = tmp.crop(bb)
+        return tmp.crop(bb) if bb else None
+    @staticmethod
+    def _halo(tmp, size_px):
+        # soft dark halo behind big titles so they stay legible over busy art and bright sprites
+        pad = int(size_px * 0.45); r = size_px * 0.16
+        a = Image.new("L", (tmp.width + 2 * pad, tmp.height + 2 * pad), 0); a.paste(tmp.getchannel("A"), (pad, pad))
+        a = a.filter(ImageFilter.GaussianBlur(r)).point(lambda v: min(255, int(v * 1.6 * 0.72)))
+        halo = Image.new("RGBA", a.size, (12, 8, 30, 255)); halo.putalpha(a)
+        return halo
+    def _blit_text(self, s, px, py, size_px, fill, ol, olw_px, scale=1.0, alpha=1.0, bold=True, glow=False):
+        """draw a text block centred at screen pixel (px, py); sizes already in output pixels * SS"""
+        if not s or size_px < 2: return
+        tkey = (s, size_px, tuple(fill[:3]), tuple(ol[:3]) if ol else None, int(olw_px) if ol else 0, bold)
+        tmp = _memo(_TEXT, tkey, lambda: self._text_sprite(s, size_px, fill, ol, olw_px, bold), 64)
+        if tmp is None: return
         if scale != 1.0: tmp = tmp.resize((max(1, int(tmp.width * scale)), max(1, int(tmp.height * scale))), Image.LANCZOS)
-        if alpha < 1: tmp.putalpha(tmp.getchannel("A").point(lambda v: int(v * clamp(alpha))))
+        if alpha < 1:
+            if scale == 1.0: tmp = tmp.copy()                       # never mutate the cached sprite
+            tmp.putalpha(tmp.getchannel("A").point(lambda v: int(v * clamp(alpha))))
         if glow and size_px >= 40 * SS:
-            # soft dark halo behind big titles so they stay legible over busy art and bright sprites
-            pad = int(size_px * 0.45); r = size_px * 0.16
-            a = Image.new("L", (tmp.width + 2 * pad, tmp.height + 2 * pad), 0); a.paste(tmp.getchannel("A"), (pad, pad))
-            a = a.filter(ImageFilter.GaussianBlur(r)).point(lambda v: min(255, int(v * 1.6 * 0.72)))
-            halo = Image.new("RGBA", a.size, (12, 8, 30, 255)); halo.putalpha(a)
+            halo = _memo(_HALO, (tkey, scale, alpha), lambda: self._halo(tmp, size_px), 16)
             self.img.alpha_composite(halo, (int(px - halo.width / 2), int(py - halo.height / 2)))
-        self.img.paste(tmp, (int(px - tmp.width / 2), int(py - tmp.height / 2)), tmp)
+        tx, ty = int(px - tmp.width / 2), int(py - tmp.height / 2)
+        self.alpha_mark(tx + tmp.width / 2, ty + tmp.height / 2, tmp.width / 2, tmp.height / 2)     # paste(tmp, mask=tmp) leaves alpha < 255 on the anti-aliased edges
+        self.img.paste(tmp, (tx, ty), tmp)
     def text(self, s, x, y, size, fill=(255, 240, 210), ol=INK, olw=6, scale=1.0, alpha=1.0, par=0.0, bold=True, anchor="mm", glow=True):
         k = self.Z(par)
         px, py = self.T(x, y, par)
@@ -296,13 +382,35 @@ class Canvas:
         cy = (OH - 70 - hh / 2) if ASPECT == "landscape" else (top + hh / 2)
         x0, x1 = OW / 2 - plate_w / 2 * sc, OW / 2 + plate_w / 2 * sc
         y0 = cy - hh / 2 * sc
-        lay = Image.new("RGBA", (OW * SS, OH * SS), (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
-        ld.rounded_rectangle([x0 * SS, y0 * SS, x1 * SS, (y0 + hh * sc) * SS], radius=30 * SS, fill=(14, 10, 40, int(190 * a)))
-        self.img.alpha_composite(lay)
+        box = [x0 * SS, y0 * SS, x1 * SS, (y0 + hh * sc) * SS]
+        # plate layer only as big as the plate: an EVEN whole-pixel offset keeps Pillow's round-half-even of the .5 edge coordinates identical
+        bx, by = (int(box[0]) - 2) & ~1, (int(box[1]) - 2) & ~1; bw, bh = int(box[2]) + 4 - bx, int(box[3]) + 4 - by
+        if bx < 0 or by < 0 or bx + bw > OW * SS or by + bh > OH * SS: bx = by = 0; bw, bh = OW * SS, OH * SS   # off-frame plate: keep Pillow's own clipping
+        lay = Image.new("RGBA", (bw, bh), (0, 0, 0, 0)); ld = ImageDraw.Draw(lay)
+        ld.rounded_rectangle([box[0] - bx, box[1] - by, box[2] - bx, box[3] - by], radius=30 * SS, fill=(14, 10, 40, int(190 * a)))
+        self.img.alpha_composite(lay, (bx, by))
         for i, ln in enumerate(lines):
             self._blit_text(ln, OW / 2 * SS, (y0 + (17 + lh * (i + 0.5)) * sc) * SS, size * SS, (255, 246, 226), (20, 12, 44), 5 * SS * OLW_K, scale=sc, alpha=a)
     def finish(self):
-        im = self.img.reduce(SS).convert("RGB") if SS > 1 else self.img.convert("RGB")
+        im = self.img
+        if SS > 1:
+            # Image.reduce() on RGBA round-trips through premultiplied RGBa (two full-frame converts, ~3x the reduce itself).
+            # Premultiplication only matters where alpha < 255; Canvas primitives always write alpha 255, and the world.py
+            # effects that draw RGBA fills straight onto self.d register their bbox with alpha_mark().  So reduce the frame
+            # with the core op and redo just that bbox exactly (bit-identical), unless the bbox is most of the frame.
+            bb = self._abox
+            if bb: bb = (max(0, bb[0]), max(0, bb[1]), min(im.width, bb[2]), min(im.height, bb[3]))
+            if bb and (bb[2] <= bb[0] or bb[3] <= bb[1]): bb = None
+            if bb and (bb[2] - bb[0]) * (bb[3] - bb[1]) > 0.4 * im.width * im.height: im = im.reduce(SS)
+            else:
+                try:
+                    red = im._new(im.im.reduce((SS, SS), (0, 0, im.width, im.height)))
+                    if bb:
+                        x0, y0 = bb[0] // SS * SS, bb[1] // SS * SS; x1, y1 = -(-bb[2] // SS) * SS, -(-bb[3] // SS) * SS
+                        red.paste(im.crop((x0, y0, x1, y1)).reduce(SS), (x0 // SS, y0 // SS))
+                    im = red
+                except Exception: im = im.reduce(SS)
+        im = im.convert("RGB")
         return grade(im) if GRADE != "none" else im
 
 # ---------- colour grade ----------
@@ -349,6 +457,7 @@ def _grain(w, h):
         _GRAIN = Image.fromarray(np.clip(g, 0, 255).astype(np.uint8), "L").convert("RGB")        # noise stored around 128
     return _GRAIN
 SHADOW_TONE, HIGHLIGHT_TONE = ((52, 18, 34), (226, 186, 118)) if FOLK else ((41, 20, 66), (255, 219, 158))   # maroon / ochre vs plum / amber
+_TONE = {}
 def grade(im):
     """tone grade: desaturate, tone curve (+ warm tint for folk), split tone, grain.
     Same maths as the original float pipeline but run through Pillow's C ops (blend / point / composite / add),
@@ -357,8 +466,11 @@ def grade(im):
     im = im.point(_lut())
     lum = im.convert("L")
     sh, hi = _masks()
-    im = Image.composite(Image.new("RGB", im.size, SHADOW_TONE), im, lum.point(sh))
-    im = Image.composite(Image.new("RGB", im.size, HIGHLIGHT_TONE), im, lum.point(hi))
+    # Image.composite(tone, im, mask) == im.copy().paste(tone, None, mask); im is already a fresh intermediate, so paste in place
+    im.paste(_memo(_TONE, (im.size, SHADOW_TONE), lambda: Image.new("RGB", im.size, SHADOW_TONE), 4), None, lum.point(sh))
+    im.paste(_memo(_TONE, (im.size, HIGHLIGHT_TONE), lambda: Image.new("RGB", im.size, HIGHLIGHT_TONE), 4), None, lum.point(hi))
     w, h = im.size
-    ox, oy = np.random.randint(0, 256, 2)[::-1]
+    if _GRAIN_OFF: ox, oy = _GRAIN_OFF                                   # FOLK_GRAIN_OFF="x,y": fixed grain offset (deterministic renders for tests)
+    else: ox, oy = np.random.randint(0, 256, 2)[::-1]
     return ImageChops.add(im, _grain(w, h).crop((ox, oy, ox + w, oy + h)), 1.0, -128)
+_GRAIN_OFF = tuple(int(v) % 256 for v in os.environ["FOLK_GRAIN_OFF"].split(",")) if os.environ.get("FOLK_GRAIN_OFF") else None

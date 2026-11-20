@@ -29,7 +29,8 @@ def stars(c, f, n=70, seed=3, par=0.05, ymax=1100):
     for i in range(n):
         x, y, s = r.uniform(-XPAD, W + XPAD), r.uniform(60 - XPAD * 0.3, ymax), r.uniform(2.5, 7)
         tw = 0.6 + 0.4 * math.sin(f * 0.12 + i * 1.7)
-        c.d.regular_polygon((*c.T(x, y, par), c.S(s * tw, par) * 1.6), 4, rotation=45, fill=(255, 244, 200, int(230 * tw)))
+        p = c.T(x, y, par); rad = c.S(s * tw, par) * 1.6; c.alpha_mark(p[0], p[1], rad)
+        c.d.regular_polygon((*p, rad), 4, rotation=45, fill=(255, 244, 200, int(230 * tw)))
 
 def sun(c, x, y, r, f=0, rays=True, par=0.3, col=(255, 190, 70)):
     c.glow(x, y, r * 3.2, (255, 170, 80), 0.75, par)
@@ -137,13 +138,15 @@ def sparks(c, x, y, f, f0, n=14, seed=1, col=(255, 220, 120), reach=170, par=1.0
     for i in range(n):
         a = r.uniform(0, 6.28); d = reach * ease_out(t) * r.uniform(0.5, 1)
         sz = max(0.5, 9 * (1 - t) * r.uniform(0.6, 1.2))
-        c.d.regular_polygon((*c.T(x + math.cos(a) * d, y + math.sin(a) * d - 30 * t, par), max(1.0, c.S(sz, par) * 1.6)), 4, rotation=45, fill=col + (int(255 * (1 - t)),))
+        p = c.T(x + math.cos(a) * d, y + math.sin(a) * d - 30 * t, par); rad = max(1.0, c.S(sz, par) * 1.6); c.alpha_mark(p[0], p[1], rad)
+        c.d.regular_polygon((*p, rad), 4, rotation=45, fill=col + (int(255 * (1 - t)),))
 
 def ring_wave(c, x, y, f, f0, r=300, col=(255, 230, 150), par=1.0, life=24):
     t = (f - f0) / life
     if 0 <= t <= 1:
-        rr = r * ease_out(t); a = c.T(x, y, par); s = c.S(rr, par)
-        c.d.ellipse([a[0] - s, a[1] - s, a[0] + s, a[1] + s], outline=col + (int(255 * (1 - t)),), width=max(2, int(c.S(10 * (1 - t) + 2, par))))
+        rr = r * ease_out(t); a = c.T(x, y, par); s = c.S(rr, par); w = max(2, int(c.S(10 * (1 - t) + 2, par)))
+        c.alpha_mark(a[0], a[1], s + w)
+        c.d.ellipse([a[0] - s, a[1] - s, a[0] + s, a[1] + s], outline=col + (int(255 * (1 - t)),), width=w)
 
 def drop(c, x, y, r=14, col=(210, 30, 50), par=1.0):
     c.poly([(x, y - r * 2), (x + r * 0.9, y - r * 0.3), (x, y + r), (x - r * 0.9, y - r * 0.3)], col, INK, 3, par); c.ell(x, y - r * 0.2, r * 0.9, r * 0.9, col, INK, 3, par)
@@ -229,8 +232,9 @@ def rain(c, f, n=120, seed=5, par=0.9, col=(200, 220, 255, 170), slant=0.25):
     for i in range(n):
         x0 = r.uniform(-XPAD - 200, W + XPAD + 200); sp = r.uniform(26, 44); L = r.uniform(40, 90)
         y0 = (r.uniform(0, H) + f * sp) % (H + 400) - 200
-        a, b = c.T(x0, y0, par), c.T(x0 - L * slant, y0 + L, par)
-        c.d.line([a, b], fill=col, width=max(1, int(c.S(3, par))))
+        a, b = c.T(x0, y0, par), c.T(x0 - L * slant, y0 + L, par); w = max(1, int(c.S(3, par)))
+        c.alpha_mark((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, abs(a[0] - b[0]) / 2 + w, abs(a[1] - b[1]) / 2 + w)
+        c.d.line([a, b], fill=col, width=w)
 
 def lightning(c, x, y0, y1, f, f0, seed=1, par=0.8, life=8):
     """jagged bolt visible for `life` frames after f0 (pair with flash + 'thunk'/'rumble' cue)"""
