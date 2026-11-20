@@ -1,0 +1,147 @@
+{
+ "voice": "en-US-AndrewNeural",
+ "engine": "edge",
+ "duration": 101.9,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Imagine a place in space where nothing can escape, not even light.",
+   "t0": 0.8,
+   "t1": 5.16,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "Sounds impossible, right?",
+   "t0": 5.71,
+   "t1": 7.0,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "But such a place really exists.",
+   "t0": 7.55,
+   "t1": 9.24,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "It is called a Black Hole!",
+   "t0": 9.79,
+   "t1": 11.13,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "A black hole is an extremely powerful region in space where gravity is so strong that anything coming too close gets pulled inside.",
+   "t0": 11.68,
+   "t1": 20.34,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "But how are black holes formed?",
+   "t0": 20.89,
+   "t1": 22.41,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "When a massive star runs out of its nuclear fuel, it can no longer support itself against its own gravity.",
+   "t0": 22.96,
+   "t1": 29.42,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "Its core collapses under its enormous weight.",
+   "t0": 29.97,
+   "t1": 32.56,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "If the remaining core is massive enough, it collapses into an incredibly dense region, creating a black hole.",
+   "t0": 33.11,
+   "t1": 40.31,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "But here's the most fascinating part.",
+   "t0": 40.86,
+   "t1": 42.71,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "A black hole has a boundary called the Event Horizon.",
+   "t0": 43.26,
+   "t1": 46.34,
+   "para": false
+  },
+  {
+   "i": 11,
+   "text": "Once anything crosses this boundary, it cannot escape, not even light.",
+   "t0": 46.89,
+   "t1": 51.66,
+   "para": false
+  },
+  {
+   "i": 12,
+   "text": "That's why black holes appear completely dark.",
+   "t0": 52.21,
+   "t1": 54.66,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "But don't imagine them as giant cosmic vacuum cleaners.",
+   "t0": 55.21,
+   "t1": 58.5,
+   "para": false
+  },
+  {
+   "i": 14,
+   "text": "They don't randomly swallow everything in the universe.",
+   "t0": 59.05,
+   "t1": 62.07,
+   "para": false
+  },
+  {
+   "i": 15,
+   "text": "Objects can orbit around them, just like planets orbit the Sun, as long as they stay at a safe distance.",
+   "t0": 62.62,
+   "t1": 69.25,
+   "para": false
+  },
+  {
+   "i": 16,
+   "text": "Scientists cannot see black holes directly, but they can detect them by observing how they affect nearby stars, gas, and light.",
+   "t0": 69.8,
+   "t1": 78.21,
+   "para": false
+  },
+  {
+   "i": 17,
+   "text": "And here's something mind-blowing: some black holes are millions or even billions of times more massive than our Sun!",
+   "t0": 78.76,
+   "t1": 85.81,
+   "para": false
+  },
+  {
+   "i": 18,
+   "text": "The universe is full of mysteries, and black holes are among its most fascinating secrets.",
+   "t0": 86.36,
+   "t1": 92.26,
+   "para": false
+  },
+  {
+   "i": 19,
+   "text": "A place where time, space, and gravity behave in ways that challenge everything we know!",
+   "t0": 92.81,
+   "t1": 98.9,
+   "para": false
+  }
+ ]
+}
