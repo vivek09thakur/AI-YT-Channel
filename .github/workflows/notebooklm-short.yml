@@ -1,0 +1,237 @@
+name: NotebookLM short (auto topic)
+
+# Fully automatic: picks a random unpublished topic from pipeline/notebooklm/topics.json (science, technology, ai, space,
+# physics), lets NotebookLM research it on the web, generates a 9:16 Video Overview and publishes it to the videos branch
+# under nlm/. Independent of the other workflows: own scripts (pipeline/notebooklm/), own index (nlm.json), own folder.
+#
+# One-time setup (see pipeline/notebooklm/README.md): with a DEDICATED/throwaway Google account run
+#   pip install "notebooklm-py[headless,browser]"
+#   notebooklm login --master-token --account you@gmail.com
+# and store ~/.notebooklm/profiles/default/master_token.json as the repo secret NOTEBOOKLM_MASTER_TOKEN_JSON.
+
+on:
+  schedule:
+    - cron: '30 3 * * *'   # 09:00 IST daily
+  workflow_dispatch:
+    inputs:
+      genre:
+        description: 'Topic pool (auto = random genre)'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, science, technology, ai, space, physics]
+      topic:
+        description: 'Exact topic to use instead of a random pick (optional)'
+        required: false
+        type: string
+      research_mode:
+        description: 'Web research depth (deep is slower and uses more NotebookLM quota)'
+        required: true
+        type: choice
+        default: fast
+        options: [fast, deep]
+      format:
+        description: 'Video Overview format: short = ~60 s vertical 9:16; explainer / cinematic = 16:9'
+        required: true
+        type: choice
+        default: short
+        options: [short, explainer, cinematic]
+      style:
+        description: 'Visual style (explainer only; ignored for short / cinematic)'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, classic, whiteboard, kawaii, anime, watercolor, retro-print, heritage, paper-craft]
+      publish:
+        description: 'Publish to the videos branch (off = artifact only)'
+        required: true
+        type: boolean
+        default: true
+      keep_notebook:
+        description: 'Keep the NotebookLM notebook after download (off = delete it to keep the account tidy)'
+        required: true
+        type: boolean
+        default: false
+
+concurrency:
+  group: notebooklm-short
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  GENRE: ${{ inputs.genre || 'auto' }}
+  TOPIC_OVERRIDE: ${{ inputs.topic || '' }}
+  RESEARCH_MODE: ${{ inputs.research_mode || 'fast' }}
+  FORMAT: ${{ inputs.format || 'short' }}
+  STYLE: ${{ inputs.style || 'auto' }}
+  KEEP_NOTEBOOK: ${{ inputs.keep_notebook == true && '1' || '' }}
+
+jobs:
+  make:
+    name: Research + Video Overview
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    outputs:
+      slug: ${{ steps.pick.outputs.slug }}
+      topic: ${{ steps.pick.outputs.topic }}
+      genre: ${{ steps.pick.outputs.genre }}
+      duration: ${{ steps.probe.outputs.duration }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: FedericoCarboni/setup-ffmpeg@v3
+        with: { ffmpeg-version: release }
+      - name: Install notebooklm-py
+        run: |
+          pip install -q "notebooklm-py[headless]"
+          notebooklm --version
+
+      - name: Authenticate (master token -> session)
+        env:
+          NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
+        run: |
+          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see pipeline/notebooklm/README.md)"; exit 1; }
+          umask 077
+          mkdir -p ~/.notebooklm/profiles/default
+          printf '%s' "$NOTEBOOKLM_MASTER_TOKEN_JSON" > ~/.notebooklm/profiles/default/master_token.json
+          chmod 600 ~/.notebooklm/profiles/default/master_token.json
+          unset NOTEBOOKLM_MASTER_TOKEN_JSON
+          notebooklm login --master-token-refresh || notebooklm auth refresh --verify
+          notebooklm auth check --test --json | tee work_auth.json
+          python -c "import json,sys; d=json.load(open('work_auth.json')); sys.exit(0 if d.get('status')=='ok' else 1)" \
+            || { echo "::error::NotebookLM auth failed - re-mint the master token"; exit 1; }
+          rm -f work_auth.json
+
+      - name: Quota check
+        run: |
+          notebooklm usage --json > usage.json || { echo "::warning::usage meter unavailable"; echo '{}' > usage.json; }
+          python - <<'PY'
+          import json
+          d = json.load(open('usage.json'))
+          if d.get('status') != 'ready':
+              print('usage meter:', d.get('status', 'unknown'), '- continuing')
+              raise SystemExit(0)
+          for w in d.get('windows', []):
+              print(f"{w['kind']}: {w.get('used_percent', 0):.1f}% used, resets {w.get('resets_at')}")
+          if d.get('is_exhausted'):
+              print('::error::NotebookLM compute quota exhausted for this account')
+              raise SystemExit(1)
+          PY
+
+      - name: Fetch published index (to avoid repeats)
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/videos/nlm.json" -o nlm.json \
+            || { echo "no nlm.json on videos branch yet"; echo '[]' > nlm.json; }
+
+      - name: Pick topic
+        id: pick
+        run: python pipeline/notebooklm/pick_topic.py --topics pipeline/notebooklm/topics.json --genre "$GENRE" --used nlm.json --topic "$TOPIC_OVERRIDE"
+
+      - name: Create notebook + web research
+        id: nb
+        run: |
+          notebooklm create "${{ steps.pick.outputs.topic }}" --use --json | tee create.json
+          nb=$(python -c "import json;d=json.load(open('create.json'));print(d.get('active_notebook_id') or d.get('notebook',{}).get('id') or d.get('id') or '')")
+          test -n "$nb" || { echo "::error::could not read notebook id"; cat create.json; exit 1; }
+          echo "id=$nb" >> "$GITHUB_OUTPUT"
+          echo "notebook: $nb"
+          notebooklm source add-research "${{ steps.pick.outputs.topic }}" --mode "$RESEARCH_MODE" --from web --import-all --timeout 900 --retry 3 --json | tee research.json
+          notebooklm source list --json > sources.json || echo '[]' > sources.json
+          n=$(python -c "import json;d=json.load(open('sources.json'));r=d.get('sources',d) if isinstance(d,dict) else d;print(len(r) if isinstance(r,list) else 0)")
+          echo "sources imported: $n"
+          [ "$n" -gt 0 ] || { echo "::error::research imported no sources"; exit 1; }
+
+      - name: Generate Video Overview
+        run: |
+          prompt="Make this for a general YouTube Shorts audience: one clear idea, hook in the first 3 seconds, simple language, end with a one-line takeaway. Topic: ${{ steps.pick.outputs.topic }}"
+          args=(--format "$FORMAT" --wait --timeout 2400 --retry 3 --json)
+          if [ "$FORMAT" = "explainer" ]; then args+=(--style "$STYLE"); fi
+          notebooklm generate video "$prompt" "${args[@]}" | tee generate.json
+          python - <<'PY'
+          import json
+          d = json.load(open('generate.json'))
+          st = str(d.get('status', '')).lower()
+          print('generate status:', st or d)
+          if st and st not in ('completed', 'complete', 'done', 'ready', 'success'):
+              raise SystemExit(f'::error::video generation ended with status {st}')
+          PY
+
+      - name: Download + thumbnail + metadata
+        id: probe
+        run: |
+          mkdir -p final
+          notebooklm download video final/reel.mp4 --latest --force --json | tee download.json
+          test -s final/reel.mp4 || { echo "::error::download produced no file"; exit 1; }
+          dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 final/reel.mp4)
+          echo "duration=$dur" >> "$GITHUB_OUTPUT"
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 final/reel.mp4
+          ffmpeg -v error -y -ss 1 -i final/reel.mp4 -frames:v 1 -q:v 3 final/thumb.jpg
+          notebooklm ask --json "Return ONLY a JSON object with keys title (catchy YouTube Shorts title, max 60 characters), description (2 sentences) and hashtags (array of 5 lowercase tags without #)." > ask.json \
+            || echo '{}' > ask.json
+          python pipeline/notebooklm/make_meta.py --topic "${{ steps.pick.outputs.topic }}" --genre "${{ steps.pick.outputs.genre }}" \
+            --slug "${{ steps.pick.outputs.slug }}" --format "$FORMAT" --ask ask.json --sources sources.json --notebook "${{ steps.nb.outputs.id }}" --out final/meta.json
+          ls -la final
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nlm-short
+          retention-days: 30
+          path: final/
+
+      - name: Delete notebook
+        if: always() && steps.nb.outputs.id != '' && env.KEEP_NOTEBOOK == ''
+        run: notebooklm delete -n "${{ steps.nb.outputs.id }}" -y --json || echo "::warning::could not delete notebook ${{ steps.nb.outputs.id }}"
+
+      - name: Remove credentials
+        if: always()
+        run: rm -rf ~/.notebooklm
+
+  publish:
+    name: Publish to videos branch
+    needs: make
+    if: ${{ inputs.publish != false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: nlm-short, path: final }
+      - name: Checkout videos branch
+        run: |
+          git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
+            || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
+      - name: Add short + rebuild nlm overview
+        run: |
+          python main/pipeline/notebooklm/publish_nlm.py --root site --src final --slug "${{ needs.make.outputs.slug }}" --run "${{ github.run_number }}" \
+            --duration "${{ needs.make.outputs.duration }}" \
+            --repo "${{ github.repository }}" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "notebooklm short: ${{ needs.make.outputs.slug }} (run ${{ github.run_number }})"
+          for i in 1 2 3; do git push origin videos && break || { git pull --rebase origin videos; sleep 5; }; done
+      - name: Summary
+        run: |
+          slug="${{ needs.make.outputs.slug }}"; dir="nlm/${slug}-${{ github.run_number }}"
+          raw="https://github.com/${{ github.repository }}/raw/videos/$dir"
+          title=$(python -c "import json;print(json.load(open('final/meta.json')).get('title',''))")
+          {
+            echo "## NotebookLM short ready: $title"
+            echo
+            echo "- Genre: ${{ needs.make.outputs.genre }}"
+            echo "- Topic: ${{ needs.make.outputs.topic }}"
+            echo "- Length: ${{ needs.make.outputs.duration }} s, format: $FORMAT"
+            echo
+            echo "| Download | Link |"; echo "|---|---|"
+            echo "| Video | [$dir/reel.mp4]($raw/reel.mp4) |"
+            echo "| Thumbnail | [$dir/thumb.jpg]($raw/thumb.jpg) |"
+            echo
+            echo "Overview: https://github.com/${{ github.repository }}/blob/videos/nlm/README.md"
+          } >> "$GITHUB_STEP_SUMMARY"

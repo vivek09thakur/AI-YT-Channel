@@ -7,6 +7,7 @@ scene code and a pure-Python renderer. Videos are published to the `videos` bran
 |---|---|---|
 | **Generate story video** (`generate-video.yml`) | 2 minute mythology stories, 1920x1080 + 1080x1920 | `.github/skills/folk-art-video` (folk-art 2D, Pillow) |
 | **Daily fact reel** (`generate-daily-fact-reel.yml`) | 60 s vertical fact reels | `.github/skills/daily-fact-reel` (Remotion) |
+| **NotebookLM short** (`notebooklm-short.yml`) | daily auto-topic (science / tech / AI / space / physics) researched + rendered by NotebookLM, 9:16 | `pipeline/notebooklm/` (notebooklm-py, needs `NOTEBOOKLM_MASTER_TOKEN_JSON`) |
 | **Cleanup old videos** (`cleanup-old-videos.yml`) | keeps only the last week of videos on the `videos` branch | - |
 
 Story video flow: `tts.py` -> `folk/phrases.py` -> `folk/generate_folk.py` (LLM + `check_story.py` validation loop) -> commit
