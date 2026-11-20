@@ -55,8 +55,40 @@ env:
   PROJECT: work/reel
 
 jobs:
+  precheck:
+    name: Pre-run check (AI, runner, TTS quota)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      provider: ${{ steps.check.outputs.provider }}
+      model: ${{ steps.check.outputs.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q -r pipeline/requirements.txt
+      - name: Check quotas
+        id: check
+        # author ~12 min + Remotion render ~25 min + publish ~3 min
+        run: python pipeline/precheck.py --need-minutes 40 --prefer "${{ inputs.provider }}" --model "$MODEL" --voice "${{ inputs.voice }}"
+        env:
+          MODEL: ${{ inputs.model }}
+          BILLING_TOKEN: ${{ secrets.BILLING_TOKEN }}
+          ACTIONS_INCLUDED_MINUTES: ${{ vars.ACTIONS_INCLUDED_MINUTES }}
+          ACTIONS_ALLOW_OVERAGE: ${{ vars.ACTIONS_ALLOW_OVERAGE }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+
   author:
     name: Voice + scene code
+    needs: precheck
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:
@@ -89,18 +121,6 @@ jobs:
           echo "slug: $slug"
         env:
           TOPIC: ${{ inputs.topic }}
-      - name: Check LLM providers (keys, quota, credits)
-        id: llm
-        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "$MODEL"
-        env:
-          MODEL: ${{ inputs.model }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
-          META_AI_API: ${{ secrets.META_AI_API }}
       - name: Narration (neural TTS)
         id: narr
         run: |
@@ -128,7 +148,7 @@ jobs:
         run: |
           python pipeline/facts/generate_fact_reel.py --topic "$TOPIC" --narration work/narration.json --project "$PROJECT" --kit "$KIT" \
             --slug "${{ steps.slug.outputs.slug }}" --page-name "$PAGE_NAME" --notes "$NOTES" \
-            --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --chrome "$(which google-chrome)"
+            --provider "${{ needs.precheck.outputs.provider }}" --model "${{ needs.precheck.outputs.model }}" --chrome "$(which google-chrome)"
         env:
           CI: 'true'
           TOPIC: ${{ inputs.topic }}

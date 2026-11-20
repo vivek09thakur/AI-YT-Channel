@@ -17,6 +17,8 @@ def classify(status, body):
         return 'bad', f'invalid key / no access ({status})'
     if status == 429 or status == 402:
         if any(k in b for k in ('insufficient_quota', 'credit', 'billing', 'resource_exhausted', 'quota')):
+            if any(k in b for k in ('per minute', 'perminute', 'per_minute', 'requests per min')):
+                return 'ratelimit', f'per-minute limit hit ({status}), may work on retry'
             return 'exhausted', f'quota or credits exhausted ({status})'
         return 'ratelimit', f'rate limited right now ({status}), may work on retry'
     if status == 404 or 'not_found' in b or 'no longer available' in b or 'does not exist' in b:
@@ -27,12 +29,10 @@ def classify(status, body):
 def probe_once(provider, model, key):
     try:
         if provider == 'gemini':
-
-            r = requests.get(f'{GEMINI_BASE}/models/{model}', timeout=30, headers={'x-goog-api-key': key})
-            state, note = classify(r.status_code, r.text)
-            if state == 'ok':
-                note = 'key valid, model available (quota not checked)'
-            return state, note
+            # a real 1-token generation so an exhausted free-tier quota (429 RESOURCE_EXHAUSTED) is caught up front
+            r = requests.post(f'{GEMINI_BASE}/models/{model}:generateContent', timeout=60, headers={'x-goog-api-key': key},
+                              json={'contents': [{'parts': [{'text': PROBE_MSG[0]['content']}]}], 'generationConfig': {'maxOutputTokens': 5}})
+            return classify(r.status_code, r.text)
         if provider == 'anthropic':
             r = requests.post('https://api.anthropic.com/v1/messages', timeout=60,
                               headers={'x-api-key': key, 'anthropic-version': '2023-06-01'},
@@ -82,17 +82,13 @@ def credits(provider, key):
             'anthropic': 'not exposed by API; see console.anthropic.com'}.get(provider, '-')
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--prefer', default='auto', help='provider chosen by the user, or auto')
-    ap.add_argument('--model', default='', help='model override (only applied to the preferred provider)')
-    a = ap.parse_args()
-
+def check_llm(prefer='auto', model=''):
+    """probe every provider; returns (markdown lines, chosen row or None)"""
     rows = []
     for p in PRIORITY:
-        model = a.model if (a.model and p == a.prefer) else DEFAULT_MODEL[p]
-        res = probe(p, model, allow_fallback=not (a.model and p == a.prefer))
-        rows.append(res or {'provider': p, 'model': model, 'state': 'missing', 'note': f'secret {KEY_ENV[p]} not set', 'credits': '-'})
+        m = model if (model and p == prefer) else DEFAULT_MODEL[p]
+        res = probe(p, m, allow_fallback=not (model and p == prefer))
+        rows.append(res or {'provider': p, 'model': m, 'state': 'missing', 'note': f'secret {KEY_ENV[p]} not set', 'credits': '-'})
 
     icon = {'ok': '✅', 'ratelimit': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
     lines = ['### LLM providers', '', '| Provider | Model | Status | Credits | Note |', '|---|---|---|---|---|']
@@ -101,18 +97,26 @@ def main():
 
     usable = [r for r in rows if r['state'] in ('ok', 'ratelimit')]
     chosen = None
-    if a.prefer != 'auto':
-        chosen = next((r for r in usable if r['provider'] == a.prefer), None)
+    if prefer != 'auto':
+        chosen = next((r for r in usable if r['provider'] == prefer), None)
         if not chosen:
-            why = next((r for r in rows if r['provider'] == a.prefer), {}).get('note', '')
-            lines.append(f"\n> Requested provider **{a.prefer}** is not usable ({why}); falling back.")
+            why = next((r for r in rows if r['provider'] == prefer), {}).get('note', '')
+            lines.append(f"\n> Requested provider **{prefer}** is not usable ({why}); falling back.")
     if not chosen and usable:
         chosen = usable[0]
     if chosen:
         lines.append(f"\n**Using {chosen['provider']} / `{chosen['model']}`**")
     else:
         lines.append('\n**No usable provider.** Add a working key secret (GEMINI_API_KEY is free: aistudio.google.com/apikey).')
+    return lines, chosen
 
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--prefer', default='auto', help='provider chosen by the user, or auto')
+    ap.add_argument('--model', default='', help='model override (only applied to the preferred provider)')
+    a = ap.parse_args()
+    lines, chosen = check_llm(a.prefer, a.model)
     text = '\n'.join(lines)
     print(text)
     if os.environ.get('GITHUB_STEP_SUMMARY'):

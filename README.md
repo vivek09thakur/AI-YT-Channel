@@ -15,4 +15,10 @@ Story video flow: `tts.py` -> `folk/phrases.py` -> `folk/generate_folk.py` (LLM 
 LLM keys (any subset; free tiers first): `GEMINI_API_KEY`, `MISTRAL_API_KEY`, `CEREBRAS_API_KEY`, `META_AI_API`,
 `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`. The only expected failure mode is every configured LLM being out of quota.
 
+Both generate workflows start with a **precheck** job (`pipeline/precheck.py`) that fails fast, before any minutes are spent on
+TTS or rendering, if: no LLM key has quota (1-token probe per provider), the TTS service is unreachable (Azure if `AZURE_SPEECH_KEY`
+is set, else edge-tts), or the account does not have enough included Actions minutes left this month. The minutes check needs the
+secret `BILLING_TOKEN` (fine-grained PAT, Account permissions -> Plan: read; no repository access required) and is skipped with a
+warning when it is absent. Optional repo variables: `ACTIONS_INCLUDED_MINUTES` (default 2000), `ACTIONS_ALLOW_OVERAGE=1` to run on paid minutes.
+
 The previous shadow-puppet (HTML/Chrome) kit is kept in `.github/skills/shorts-story-video/` for the old committed stories but is no longer used by the action.

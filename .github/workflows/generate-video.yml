@@ -53,8 +53,47 @@ env:
   KIT: .github/skills/folk-art-video
 
 jobs:
+  precheck:
+    name: Pre-run check (AI, runner, TTS quota)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      provider: ${{ steps.check.outputs.provider }}
+      model: ${{ steps.check.outputs.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q -r pipeline/requirements.txt
+      - name: Estimate Actions minutes for this run
+        id: need
+        run: |
+          # author ~15 min + ~35 min per rendered format + publish ~3 min
+          case "$FORMATS" in both) n=90 ;; *) n=55 ;; esac
+          echo "minutes=$n" >> "$GITHUB_OUTPUT"
+        env:
+          FORMATS: ${{ inputs.formats }}
+      - name: Check quotas
+        id: check
+        run: python pipeline/precheck.py --need-minutes "${{ steps.need.outputs.minutes }}" --prefer "${{ inputs.provider }}" --model "$MODEL" --voice "${{ inputs.voice }}"
+        env:
+          MODEL: ${{ inputs.model }}
+          BILLING_TOKEN: ${{ secrets.BILLING_TOKEN }}
+          ACTIONS_INCLUDED_MINUTES: ${{ vars.ACTIONS_INCLUDED_MINUTES }}
+          ACTIONS_ALLOW_OVERAGE: ${{ vars.ACTIONS_ALLOW_OVERAGE }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+
   author:
     name: Voice + scene code
+    needs: precheck
     runs-on: ubuntu-latest
     timeout-minutes: 60
     outputs:
@@ -90,18 +129,6 @@ jobs:
           echo "rendering: $m"
         env:
           FORMATS: ${{ inputs.formats }}
-      - name: Check LLM providers (keys, quota, credits)
-        id: llm
-        run: python pipeline/check_keys.py --prefer "${{ inputs.provider }}" --model "$MODEL"
-        env:
-          MODEL: ${{ inputs.model }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
-          META_AI_API: ${{ secrets.META_AI_API }}
       - name: Prepare script
         run: |
           mkdir -p work
@@ -122,7 +149,7 @@ jobs:
       - name: Scene code (LLM, validated by rendering sample frames in both aspects)
         run: |
           python pipeline/folk/generate_folk.py --topic "$TOPIC" --narration work/narration.json --phrases work/phrases.json --kit "$KIT" \
-            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ steps.llm.outputs.provider }}" --model "${{ steps.llm.outputs.model }}" --notes "$NOTES"
+            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ needs.precheck.outputs.provider }}" --model "${{ needs.precheck.outputs.model }}" --notes "$NOTES"
         env:
           CI: 'true'
           TOPIC: ${{ inputs.topic }}

@@ -13,7 +13,7 @@ It is fully separate from the story-video pipeline:
 | Script copy on main | `scripts/<slug>.txt` | `scripts/facts/<slug>.txt` |
 | Output on `videos` branch | `videos/`, `videos.json`, `index.html` | `facts/`, `facts.json`, `facts/index.html` |
 
-Shared, read-only: `pipeline/tts.py`, `pipeline/check_keys.py`, `pipeline/generate_story.py` (imported for the LLM client only). `cleanup-old-videos` never touches `facts/`.
+Shared, read-only: `pipeline/tts.py`, `pipeline/check_keys.py`, `pipeline/precheck.py`, `pipeline/generate_story.py` (imported for the LLM client only). `cleanup-old-videos` never touches `facts/`.
 
 ## Run it
 
