@@ -12,8 +12,8 @@ SKY = {
     "heaven":  [(0, (34, 40, 130)), (0.55, (90, 90, 200)), (1, (240, 200, 255))],
     "fire":    [(0, (50, 14, 40)), (0.6, (190, 50, 40)), (1, (255, 170, 50))],
 }
-GOLD = (255, 196, 60); SAFFRON = (255, 150, 48); CREAM = (255, 240, 208); CRIMSON = (188, 34, 62)
-EMERALD = (26, 150, 104); AZURE = (70, 140, 224); PLUM = (84, 44, 124); TEAL = (20, 128, 134)
+GOLD = (222, 168, 52); SAFFRON = (228, 124, 38); CREAM = (242, 226, 192); CRIMSON = (166, 30, 50)                                        # antique gold, deep saffron, parchment, kumkum red (same as cast.py)
+EMERALD = (26, 128, 90); AZURE = (58, 108, 184); PLUM = (76, 38, 108); TEAL = (20, 110, 116)                                             # earthy folk-painting tones: peacock green, indigo-leaning blue
 RAYS_K = float(os.environ.get("FOLK_RAYS_K", "0.6"))          # strength of rays_burst translucency (series tone keeps bursts soft)
 
 def sky(c, kind="night"):

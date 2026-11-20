@@ -107,7 +107,7 @@ def s_rama(c, f, lf, n):
     for i, r in enumerate((430, 560)): mandala(c, W / 2, 1150, r, f * (1 if i % 2 else -1), GOLD, 14 + i * 4, 0.9, 0.3)
     draw_char(c, W / 2 if f < t_son else 420, GY, 1.6, "rama", act(f, "stand" if f < t_pro else "bless", 1, hold="bow", expr="smile"))
     title(c, "RAMA", f, _starts[4], 560, 170, GOLD, hold=40)
-    if t_son <= f < t_pro: draw_char(c, 800, GY, 1.3, "king", act(f, "bless", 2, expr="smile"), flip=True)
+    if t_son <= f < t_pro: draw_char(c, 850, GY, 1.3, "king", act(f, "bless", 2, expr="smile"), flip=True)
     if t_pro <= f < t_emb:
         draw_char(c, 820, GY, 0.8, "child", act(f, "namaste", 3, expr="smile"), flip=True); draw_animal(c, "deer", 900, GY, 0.6, f, True)
     if f >= t_emb: rays_burst(c, W / 2, 1150, f, 80, None, 18, (255, 240, 170, 60), 0.9, 0.6); title(c, "DHARMA", f, t_emb, 560, 120)

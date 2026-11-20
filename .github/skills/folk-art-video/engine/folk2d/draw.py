@@ -306,10 +306,13 @@ class Canvas:
         return grade(im) if GRADE != "none" else im
 
 # ---------- colour grade ----------
-# FOLK_GRADE=series (default): cinematic "series" look - desaturated, darker midtones, plum shadows / amber highlights,
-# fine film grain. FOLK_GRADE=none keeps the raw bright colours.  FOLK_GRADE_K scales the strength (1.0 default).
-GRADE = os.environ.get("FOLK_GRADE", "series").strip().lower()
+# FOLK_GRADE=folk (default): earthy folk-painting look (Pattachitra / Kalamkari) - darker exposure and midtones, warm sandalwood
+# tint, deep maroon shadows / ochre highlights, fine grain; hues are kept, every colour becomes a darker tone of itself.
+# FOLK_GRADE=series: the older cinematic look (desaturated, plum shadows / amber highlights).  FOLK_GRADE=none keeps the raw colours.
+# FOLK_GRADE_K scales the strength (1.0 default).
+GRADE = os.environ.get("FOLK_GRADE", "folk").strip().lower()
 GRADE_K = clamp(float(os.environ.get("FOLK_GRADE_K", "1.0")), 0.0, 2.0)
+FOLK = GRADE == "folk"
 _GRAIN = None
 _LUT = None
 _MASKS = None
@@ -317,18 +320,26 @@ def _lut():
     global _LUT
     if _LUT is None:
         xs = np.linspace(0, 1, 256)
-        y = xs ** (1 + 0.10 * GRADE_K)                                         # darker midtones
-        y = 0.5 + (y - 0.5) * (1 + 0.10 * GRADE_K)                             # a little more contrast
-        y = y * (1 - 0.06 * GRADE_K) + 0.02 * GRADE_K                           # lift blacks slightly, pull whites off peak
-        _LUT = [int(round(v * 255)) for v in np.clip(y, 0, 1)] * 3            # one 8-bit curve per RGB channel for Image.point
+        if FOLK:
+            y = xs ** (1 + 0.22 * GRADE_K)                                     # deeper midtones
+            y = 0.5 + (y - 0.5) * (1 + 0.08 * GRADE_K)                         # a little more contrast
+            y = y * (1 - 0.16 * GRADE_K) + 0.015 * GRADE_K                      # lower exposure, lift blacks a touch
+            tint = (1.0, 1 - 0.035 * GRADE_K, 1 - 0.11 * GRADE_K)              # warm sandalwood cast: whites go parchment, blues go indigo
+            _LUT = sum(([int(round(v * t * 255)) for v in np.clip(y, 0, 1)] for t in tint), [])
+        else:
+            y = xs ** (1 + 0.10 * GRADE_K)                                         # darker midtones
+            y = 0.5 + (y - 0.5) * (1 + 0.10 * GRADE_K)                             # a little more contrast
+            y = y * (1 - 0.06 * GRADE_K) + 0.02 * GRADE_K                           # lift blacks slightly, pull whites off peak
+            _LUT = [int(round(v * 255)) for v in np.clip(y, 0, 1)] * 3            # one 8-bit curve per RGB channel for Image.point
     return _LUT
 def _masks():
     """8-bit luma -> shadow / highlight blend weights (the sh*0.22K and hi*0.14K terms of the split tone)"""
     global _MASKS
     if _MASKS is None:
         l = np.arange(256) / 255.0
-        sh = np.clip(1 - l * 1.6, 0, 1) * 0.22 * GRADE_K
-        hi = np.clip(l * 1.6 - 0.6, 0, 1) * 0.14 * GRADE_K
+        ks, kh = (0.26, 0.16) if FOLK else (0.22, 0.14)
+        sh = np.clip(1 - l * 1.6, 0, 1) * ks * GRADE_K
+        hi = np.clip(l * 1.6 - 0.6, 0, 1) * kh * GRADE_K
         _MASKS = ([int(round(v * 255)) for v in sh], [int(round(v * 255)) for v in hi])
     return _MASKS
 def _grain(w, h):
@@ -337,16 +348,17 @@ def _grain(w, h):
         g = np.random.RandomState(7).normal(0, 1, (h + 256, w + 256)) * 0.018 * GRADE_K * 255 + 128
         _GRAIN = Image.fromarray(np.clip(g, 0, 255).astype(np.uint8), "L").convert("RGB")        # noise stored around 128
     return _GRAIN
+SHADOW_TONE, HIGHLIGHT_TONE = ((52, 18, 34), (226, 186, 118)) if FOLK else ((41, 20, 66), (255, 219, 158))   # maroon / ochre vs plum / amber
 def grade(im):
-    """series tone: desaturate, tone curve, split tone, grain.
+    """tone grade: desaturate, tone curve (+ warm tint for folk), split tone, grain.
     Same maths as the original float pipeline but run through Pillow's C ops (blend / point / composite / add),
     ~15x faster; per-pixel results differ only by 8-bit rounding (<= 2 levels)."""
-    im = Image.blend(im.convert("L").convert("RGB"), im, 1 - 0.22 * GRADE_K)                        # desaturate
+    im = Image.blend(im.convert("L").convert("RGB"), im, 1 - (0.12 if FOLK else 0.22) * GRADE_K)   # desaturate (folk keeps more of the pigment)
     im = im.point(_lut())
     lum = im.convert("L")
     sh, hi = _masks()
-    im = Image.composite(Image.new("RGB", im.size, (41, 20, 66)), im, lum.point(sh))               # plum shadows
-    im = Image.composite(Image.new("RGB", im.size, (255, 219, 158)), im, lum.point(hi))            # amber highlights
+    im = Image.composite(Image.new("RGB", im.size, SHADOW_TONE), im, lum.point(sh))
+    im = Image.composite(Image.new("RGB", im.size, HIGHLIGHT_TONE), im, lum.point(hi))
     w, h = im.size
     ox, oy = np.random.randint(0, 256, 2)[::-1]
     return ImageChops.add(im, _grain(w, h).crop((ox, oy, ox + w, oy + h)), 1.0, -128)
