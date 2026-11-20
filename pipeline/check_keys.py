@@ -23,6 +23,8 @@ def classify(status, body):
         return 'ratelimit', f'rate limited right now ({status}), may work on retry'
     if status == 404 or 'not_found' in b or 'no longer available' in b or 'does not exist' in b:
         return 'nomodel', f'model not available ({status})'
+    if status in (502, 503, 529) or any(k in b for k in ('high demand', 'overloaded', 'temporarily unavailable')):
+        return 'busy', f'model busy right now ({status}); the generation step retries and falls back'
     return 'error', f'HTTP {status}: {body[:120]}'
 
 
@@ -56,14 +58,24 @@ def probe(provider, model, allow_fallback=True):
     if not key:
         return None
     candidates = [model] + [m for m in FALLBACK_MODELS.get(provider, []) if m != model] if allow_fallback else [model]
-    tried = []
+    tried = []; first_busy = None
     for m in candidates:
         state, note = probe_once(provider, m, key)
-        if state != 'nomodel':
+        if state == 'busy' and first_busy is None:
+            first_busy = (m, note)
+        if state not in ('nomodel', 'busy'):
             break
         tried.append(m)
-    if tried and state != 'nomodel':
-        note += f" (skipped unavailable: {', '.join(tried)})"
+    else:
+        # every candidate was missing or busy: a busy model is still usable (generate_story retries + falls back)
+        if first_busy:
+            m, note = first_busy; state = 'busy'; tried = [t for t in tried if t != m]
+    if state == 'ok' and first_busy:
+        # keep the (busy) default: generate_story retries it and falls back on its own; the key itself is proven good
+        note = f'key valid; {first_busy[0]} busy right now (503), {m} answered - generation retries then falls back'
+        m = first_busy[0]; tried = [t for t in tried if t != m]
+    if tried and state not in ('nomodel', 'busy'):
+        note += f" (skipped unavailable or busy: {', '.join(tried)})"
     return {'provider': provider, 'model': m, 'state': state, 'note': note, 'credits': credits(provider, key)}
 
 
@@ -90,12 +102,12 @@ def check_llm(prefer='auto', model=''):
         res = probe(p, m, allow_fallback=not (model and p == prefer))
         rows.append(res or {'provider': p, 'model': m, 'state': 'missing', 'note': f'secret {KEY_ENV[p]} not set', 'credits': '-'})
 
-    icon = {'ok': '✅', 'ratelimit': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
+    icon = {'ok': '✅', 'ratelimit': '⏳', 'busy': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
     lines = ['### LLM providers', '', '| Provider | Model | Status | Credits | Note |', '|---|---|---|---|---|']
     for r in rows:
         lines.append(f"| {r['provider']} | `{r['model']}` | {icon[r['state']]} {r['state']} | {r['credits']} | {r['note']} |")
 
-    usable = [r for r in rows if r['state'] in ('ok', 'ratelimit')]
+    usable = [r for r in rows if r['state'] in ('ok', 'ratelimit', 'busy')]
     chosen = None
     if prefer != 'auto':
         chosen = next((r for r in usable if r['provider'] == prefer), None)
