@@ -1,0 +1,16 @@
+{
+ "title": "Why Is the Sky Blue?",
+ "description": "Discover the science of Rayleigh scattering and why our sky is blue.",
+ "characters": {
+  "Narrator": "friendly host with glasses"
+ },
+ "topic": "Why Is the Sky Blue? The Science Behind Its Beautiful Colour",
+ "page_name": "@daily.facts.challenge",
+ "voice": "en-US-AndrewNeural",
+ "duration": 59.11,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "attempts": 1,
+ "input_tokens": 19409,
+ "output_tokens": 3387
+}
