@@ -1,0 +1,16 @@
+{
+ "title": "What Are Neutron Stars?",
+ "description": "Discover the mind-bending physics of neutron stars, pulsars, and magnetarsâsome of the densest objects in the universe.",
+ "characters": {
+  "narrator": "cosmic guide with starry robes"
+ },
+ "topic": "What Are Neutron Stars?",
+ "page_name": "",
+ "voice": "en-GB-RyanNeural",
+ "duration": 69.67,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "attempts": 1,
+ "input_tokens": 19698,
+ "output_tokens": 4515
+}
