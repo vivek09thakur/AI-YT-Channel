@@ -1,0 +1,16 @@
+{
+ "title": "The Big Bang Explained",
+ "description": "Discover how the universe began 13.8 billion years ago and how we are truly made of stardust.",
+ "characters": {
+  "Narrator": "cream skin, dark hair, simple sweater"
+ },
+ "topic": "The Big Bang Explained: How Did the Universe Begin and How Did We Come Into Existence?",
+ "page_name": "",
+ "voice": "en-GB-RyanNeural",
+ "duration": 121.63,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "attempts": 1,
+ "input_tokens": 19832,
+ "output_tokens": 6237
+}
