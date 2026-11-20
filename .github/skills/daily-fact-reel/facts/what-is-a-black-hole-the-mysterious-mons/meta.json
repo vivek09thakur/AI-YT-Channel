@@ -1,0 +1,16 @@
+{
+ "title": "What Is a Black Hole?",
+ "description": "Explore the mysterious nature of black holes, how they form, and how they shape the cosmos.",
+ "characters": {
+  "host": "Curious presenter in a starry blue sweater"
+ },
+ "topic": "What Is a Black Hole? The Mysterious Monster of the Universe",
+ "page_name": "",
+ "voice": "en-US-AndrewNeural",
+ "duration": 101.9,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite",
+ "attempts": 1,
+ "input_tokens": 19672,
+ "output_tokens": 4634
+}
