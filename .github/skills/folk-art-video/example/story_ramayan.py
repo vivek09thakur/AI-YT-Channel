@@ -60,7 +60,7 @@ def s_cosmos(c, f, lf, n):
         k = pop(f, t_war, 12)
         crowd(c, GY - 10, f, 11, -300, W + 300, 0.85, 4, ((150, 40, 60), (60, 60, 120), (170, 110, 40)))
         draw_char(c, 330, GY, 1.3 * k, "warrior", act(f, "fight", 2, hold="sword", expr="stern")) if k > 0.05 else None
-        draw_char(c, 760, GY, 1.3 * k, "demon", act(f, "fight", 3, hold="mace", expr="stern"), flip=True) if k > 0.05 else None
+        draw_char(c, 760, GY, 1.3 * k, "demon", act(f, "strike", 3, hold="mace", expr="stern"), flip=True) if k > 0.05 else None
         sparks(c, 540, 1250, f, t_war + 20, 18, 5, (255, 220, 120), 200)
 
 def s_gods(c, f, lf, n):
@@ -217,8 +217,8 @@ def s_army(c, f, lf, n):
         if f >= t_b: title(c, "THE BRIDGE", f, t_b + 6, 520, 120, GOLD, hold=60)
     else:
         ground(c, GY, (80, 40, 50)); fire(c, 540, GY, 0.7, f)
-        draw_char(c, 300, GY, 1.5, "rama", act(f, "aim", 1, holdL="bow", expr="stern"))
-        draw_char(c, 800, GY, 1.6, "ravana", act(f, "fight", 4, hold="sword", expr="stern"), flip=True)
+        draw_char(c, 300, GY, 1.35, "rama", act(f, "aim", 1, holdL="bow", expr="stern"))                                                      # scales trimmed so Ravana's crown and raised sword stay under the title band at this zoom
+        draw_char(c, 800, GY, 1.4, "ravana", act(f, "strike", 4, hold="sword", expr="stern"), flip=True)
         sparks(c, 540, 1250, f, t_g + 10, 22, 11, (255, 220, 120), 260); ring_wave(c, 540, 1250, f, t_g, 500)
         title(c, "THE BATTLE", f, t_g + 6, 520, 130, (255, 150, 80))
 
@@ -232,8 +232,8 @@ def s_climax(c, f, lf, n):
         c.glow(640, 1100, 300, (150, 40, 120), 0.5, 1.0)
         if f >= t_e: title(c, "INVINCIBLE", f, t_e + 4, 500, 120, (255, 110, 110), hold=50)
     else:
-        draw_char(c, 300, GY, 1.5, "rama", act(f, "aim", 1, holdL="bow", expr="stern"))
-        draw_char(c, 820, GY, 1.6, "ravana", act(f, "fight", 4, hold="sword", expr="stern"), flip=True)
+        draw_char(c, 300, GY, 1.35, "rama", act(f, "aim", 1, holdL="bow", expr="stern"))
+        draw_char(c, 820, GY, 1.4, "ravana", act(f, "strike", 4, hold="sword", expr="stern"), flip=True)
         c.text("DHARMA", 300, 520, 100, GOLD, INK, 7, scale=pop(f, t_d, 10)); c.text("ADHARMA", 820, 520, 100, (255, 90, 90), INK, 7, scale=pop(f, T.word("When Dharma stands against", 3), 10))
 
 def s_arrow(c, f, lf, n):
@@ -243,7 +243,7 @@ def s_arrow(c, f, lf, n):
     hills(c, 1440, 120, (90, 40, 110), 7, 0.5); ground(c, GY, (110, 60, 70))
     rays_burst(c, 300, 1150, f, 80, None, 18, (255, 240, 170, 50), 0.9, 0.6)
     draw_char(c, 300, GY, 1.6, "rama", act(f, "aim", 1, holdL="bow", expr="stern"))
-    if f < t_n: draw_char(c, 900, GY, 1.5, "ravana", act(f, "fight" if f < t_a else "shout", 4, hold="sword", expr="stern" if f < t_a else "shock"), flip=True)
+    if f < t_n: draw_char(c, 900, GY, 1.3, "ravana", act(f, "strike" if f < t_a else "shout", 4, hold="sword", expr="stern" if f < t_a else "shock"), flip=True)
     title(c, "ONE WARRIOR", f, _starts[13] + 4, 520, 110, GOLD, hold=40)
     if t_a <= f < t_n:
         q = ease_in(prog(f, t_a + 8, T.end("One arrow will change") - 10)); arrow(c, lerp(420, 880, q), lerp(1200, 1180, q), -2, 300, 1.2, 1.0, (255, 230, 150))

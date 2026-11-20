@@ -69,18 +69,19 @@ NAMASTE_ARM = (-18, 232)
 ANJALI_FRONT = (25, 208)                                                                                                                   # frontal rig: palms meet at the heart instead of the forearms crossing
 POSES = {
     "stand": {}, "namaste": dict(armR=NAMASTE_ARM, armL=NAMASTE_ARM, anjali=True), "give": dict(armR=(42, 52), armL=(42, 52)), "point": dict(armR=(96, 4)),
-    "raise": dict(armR=(150, 20), armL=(150, 20)), "hips": dict(armR=(40, -80), armL=(40, -80)), "strike": dict(armR=(120, 50)), "think": dict(armR=(40, 120)),
+    "raise": dict(armR=(112, 30), armL=(112, 30)), "hips": dict(armR=(40, -80), armL=(40, -80)), "strike": dict(armR=(135, 35)), "think": dict(armR=(40, 120)),
     "plead": dict(armR=(55, 40), armL=(55, 40)), "bless": dict(armR=(75, 70)), "cross": dict(armR=(14, -112), armL=(4, 72), legs=(-12, 14), expr="stern"),
     "walk": dict(legs=(14, -14), armR=(-14, 8), armL=(14, 8)), "run": dict(legs=(32, -32), armR=(-30, 40), armL=(30, 40), lean=8),
     "bow": dict(lean=18, head=12, armR=(-10, 60), armL=(-10, 60)), "kneel": dict(seat="kneel", bob=SEAT_BOB["kneel"], armR=NAMASTE_ARM, armL=NAMASTE_ARM, anjali=True),
-    "aim": dict(armL=(92, -8), armR=(85, -140)), "shout": dict(armR=(150, 20), expr="shock", mouth=0.8), "cry": dict(expr="sad", armR=(60, 120), head=-6),
+    "aim": dict(armL=(80, -8), armR=(85, -140)), "shout": dict(armR=(112, 30), expr="shock", mouth=0.8), "cry": dict(expr="sad", armR=(60, 120), head=-6),
     "sit": dict(seat="seat", bob=SEAT_BOB["seat"], armR=(34, 66), armL=(34, 66)), "meditate": dict(seat="lotus", bob=SEAT_BOB["lotus"], armR=(30, 90), armL=(30, 90), expr="closed"),
-    "hold": dict(armR=(60, 0)), "wave": dict(armR=(140, -30)), "fight": dict(armR=(120, 50), armL=(40, -80), lean=6, expr="stern"), "fly": dict(armR=(170, 0), armL=(30, 10), lean=-12, legs=(-20, 20)),
+    "hold": dict(armR=(60, 0)), "wave": dict(armR=(140, -30)), "fight": dict(armR=(70, 45), armL=(40, -80), lean=6, expr="stern"), "fly": dict(armR=(170, 0), armL=(30, 10), lean=-12, legs=(-20, 20)),
+    "cradle": dict(armR=(20, -110), armL=(20, -110)),                                                                                      # frontal: elbows out, both forearms level across the belly (hold="newborn" lays a swaddled baby on them)
 }
 POSE_ALIASES = {"idle": "stand", "standing": "stand", "pray": "namaste", "praying": "namaste", "greet": "namaste", "offer": "give", "pointing": "point", "arms_up": "raise",
                 "cheer": "raise", "victory": "raise", "angry": "hips", "proud": "hips", "attack": "strike", "thinking": "think", "beg": "plead", "blessing": "bless",
                 "walking": "walk", "running": "run", "kneeling": "kneel", "sitting": "sit", "throne": "sit", "seated": "sit", "lotus": "meditate", "dhyana": "meditate", "yoga": "meditate", "tapas": "meditate", "penance": "meditate",
-                "archer": "aim", "shoot": "aim", "weep": "cry", "sad": "cry", "flying": "fly", "leap": "fly", "jump": "fly"}
+                "archer": "aim", "shoot": "aim", "weep": "cry", "sad": "cry", "flying": "fly", "leap": "fly", "jump": "fly", "carry": "cradle", "cradling": "cradle"}
 def pose_name(name):
     if not isinstance(name, str): return "stand"
     k = name.strip().lower(); k = POSE_ALIASES.get(k, k)
@@ -214,7 +215,13 @@ def draw_char(c, x, y, s=1.0, o="karna", p=None, flip=False, par=1.0):
 PLANTED = ("trident", "staff", "spear", "bow", "bow_tall")                                                                                # tall props a seated figure rests on the ground and grips instead of waving about
 GRIP = "__grip__"                                                                                                                          # hand closes round a pole that is drawn separately (planted prop)
 PLANT_Y = -200                                                                                                                             # local y of a planted pole's anchor: foot on the ground, top ~ -550 (below the title band)
-FAR_SHX = 10                                                                                                                               # profile rig: far shoulder sits just behind the near one; a resting far hand stays inside the waist/dhoti silhouette
+FAR_SH = (-62, -374)                                                                                                                       # profile rig: far shoulder at the top back corner of the chest; its deltoid cap peeks over the back shoulder and the upper arm emerges from the back edge
+NEAR_SHX = 15                                                                                                                              # near shoulder at the middle of the torso, so the near arm hangs over the body's side (not off the front edge)
+RAISE_SHIFT = 0.6                                                                                                                          # a near arm raised past 110 deg rolls its shoulder forward (units per degree, max 60 deg) so the upper arm clears the tilted profile face
+FAR_REST_BACK = 14                                                                                                                         # degrees a resting far arm hangs behind its own pose angle, so the hand shows behind the dhoti (never hidden: both arms always read)
+FAR_LAP = (-6, 55)                                                                                                                         # seated two-hand poses: the far arm drops behind the back and its forearm rests on the lap under the near elbow
+ANJALI_FAR = (30, 8)                                                                                                                       # pressed palms: the far arm is drawn over the chest just behind / below the near one (dx back, dy down), instead of vanishing behind the torso
+POLE_HELD = ("trident", "staff", "spear", "flag", "bow")                                                                                        # upright poles a standing figure holds a little forward, so the shaft does not run through the face
 def planted_prop(p):
     """prop kind to draw standing behind a cross-legged figure (so a meditating Shiva's trishul never floats off to his knee)"""
     h = p.get('hold')
@@ -364,11 +371,11 @@ def _draw_front(c, g, par):
             for e in (-1, 1):
                 poly([(hx + e * 3, hy - 4), (hx + e * 8, hy - 9), (hx + e * 15, hy - 4), (hx + e * 8, hy)], o['eye']); dot(hx + e * 9, hy - 4, 2.6, PUPIL)
             poly([(hx - 5, hy + 12), (hx + 5, hy + 12), (hx + 3, hy + 15), (hx - 3, hy + 15)], MOUTH)
-    plant = planted_prop(p)
+    plant = planted_prop(p); floor_y = Wd(0, 0)[1]
     if plant:
         shx0 = 42 if fem else 48; a1 = math.radians(p['armR'][0]); a2 = math.radians(sum(p['armR']))
         hx = U(shx0, -330)[0] + _arm_dir(a1, lean, sx)[0] * 78 * s + _arm_dir(a2, lean, sx)[0] * 72 * s
-        prop(plant, (hx, Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx)                                                                    # pole rises from the ground through the resting near hand
+        prop(plant, (hx, Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx, floor=floor_y)                                                     # pole rises from the ground through the resting near hand
     _legs_dhoti(c, g, par, False)
     if fem:
         chest = smooth([(-48, -322), (-40, -340), (0, -346), (40, -340), (48, -322), (40, -298), (20, -272), (26, -248, 'k'), (-26, -248, 'k'), (-20, -272), (-40, -298)]); shx = 42
@@ -413,7 +420,7 @@ def _draw_front(c, g, par):
             hand(h, d2, sx * side, sk, fist=bool(holdv) or grip)
             band(sh, e, 0.5, 9.5, jew, 7)
             for t_ in (0.72, 0.8, 0.88): band(e, h, t_, 7.2, jew, 3.2); band(e, h, t_ + 0.035, 7.2, shade(jew, 0.72), 1.2)
-            if holdv: prop(holdv, h, d2, s, c, par, sx)
+            if holdv: prop(holdv, h, d2, s, c, par, sx, floor=floor_y)
             return
         r = (15, 10.5, 6.5)
         limb(sh, e, h, r[0], r[1], r[2], sk)
@@ -422,7 +429,7 @@ def _draw_front(c, g, par):
         if o.get('guards'): g['rband'](e, h, 0.62, r[2] + 1.6, INK, 44)
         else: band(e, h, 0.88, r[2] + 1, jew, 4)
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
-        if holdv: prop(holdv, h, d2, s, c, par, sx)
+        if holdv: prop(holdv, h, d2, s, c, par, sx, floor=floor_y)
     # anjali: elbows out at the ribs, forearms angled up so the palms meet at the heart (the profile rig reads the same numbers as "hands forward")
     armR, armL = (ANJALI_FRONT if p.get('anjali') and tuple(p['armR']) == NAMASTE_ARM else p['armR']), (ANJALI_FRONT if p.get('anjali') and tuple(p['armL']) == NAMASTE_ARM else p['armL'])
     arm(-1, *armL, p['holdL']); arm(1, *armR, GRIP if plant else p['hold'])
@@ -566,6 +573,10 @@ def _draw_side(c, g, par):
     o, p, s, sx, lean, Wd, U, poly, polyw, ell, dot, hexa, limb, band, beads, hand, sw = (g[k] for k in ("o", "p", "s", "sx", "lean", "Wd", "U", "poly", "polyw", "ell", "dot", "hexa", "limb", "band", "beads", "hand", "sw"))
     sk, skd, hair, bead, jew, cr, fem = (g[k] for k in ("sk", "skd", "hair", "bead", "jew", "cr", "fem"))
     top = o['top']; skf = shade(sk, 0.9)
+    def far_active(up, bend): return (up > 25 or abs(bend) > 30) and not p.get('anjali')                                                   # far arm is "in use" (not a resting hang / walk swing / pressed palms)
+    plant = planted_prop(p)
+    hk = p['hold'].strip().lower() if isinstance(p['hold'], str) else None
+    if hk in POLE_HELD and not plant and not far_active(*p['armR']): p = dict(p, armR=(48, -48))                                          # standing with an upright pole: hold it at arm's length ahead so the shaft and prongs clear the face
     c.shadow(*Wd(4, 4), 70 * s, 12 * s, 0.3, par=par)
     _halo_aura(c, g, par, -4, -448)
     rlimb, rband = g['rlimb'], g['rband']
@@ -581,8 +592,31 @@ def _draw_side(c, g, par):
             poly(smooth([(hx - 16, hy - 24), (hx - 18, hy + 4), (hx - 6, hy + 24), (hx + 4, hy + 26), (hx + 16, hy + 4), (hx + 16, hy - 24), (hx, hy - 32)]), shade(sk, 0.86))
             poly([(hx - 16, hy - 22), (hx - 10, hy - 46), (hx - 3, hy - 32), (hx + 4, hy - 54), (hx + 10, hy - 32), (hx + 16, hy - 22)], shade(o['crownc'], 0.9))
             ell(hx + 7, hy - 5, 6, 3.5, o['eye']); dot(hx + 8, hy - 5, 2.4, PUPIL)
+    def far_angles(up, bend):
+        """far-arm pose derived from its own angles + the near arm's, so in every pose the far arm reads shoulder -> elbow -> hand: at rest it
+        hangs behind the back; in a two-hand pose it is offset from the near arm (never stacked behind it); akimbo puts the elbow out behind."""
+        nu, nb = p['armR']
+        stacks = abs(up - nu) < 30 and abs(bend - nb) < 30                                                                                # both arms strike the same pose -> the far hand would land exactly behind the near one
+        if bend < -50 and up > 0: return -up * 0.75, -bend * 0.94                                                                          # hand on hip: far elbow juts out behind the back, hand on the back of the hip
+        if stacks:
+            if p.get('seat'): return FAR_LAP                                                                                                # seated: far forearm rests on the lap, elbow showing behind the back
+            if up >= 110: return up + 30, bend                                                                                              # both raised: far arm goes straight up behind the head (a V, not two stacked arms)
+            if up > 15: return up + 20, max(bend - 20, 0)                                                                                   # both forward: far arm reaches out above the near one from the chest front edge
+            return up - 12, bend                                                                                                            # both hanging bent (bow): far a little behind
+        if not far_active(up, bend):
+            t = max(0.0, min((up - nu) / 24.0, 1.0))                                                                                        # counter-swing (walk): as the far arm swings ahead of the near one it blends from hanging behind the back to reaching
+            return up - FAR_REST_BACK + t * (FAR_REST_BACK + 22), bend + t * 22                                                             # forward past the belly, so the two hands never sit side by side on one hip
+        if 0 <= up < 20 and bend > 30: return up + 12, bend                                                                                 # reaching across the body (folded arms): hand clears the torso front
+        return up, bend
     def arm_pts(up, bend, side):
-        shp = U(70 if side > 0 else FAR_SHX, -356)
+        # near arm hangs from the middle of the torso and is drawn over it; a raised near arm rolls its shoulder forward so it clears the face.
+        # far arm hangs from the top back corner of the chest and is drawn under the body (see far_angles). Anjali (pressed palms) instead puts
+        # the far arm just behind the near one, in front of the chest, drawn over the torso.
+        shx, shy = NEAR_SHX, -356
+        if side > 0: shx += max(0.0, min(up - 110.0, 60.0)) * RAISE_SHIFT
+        elif p.get('anjali'): shx, shy = NEAR_SHX - ANJALI_FAR[0], -356 + ANJALI_FAR[1]
+        else: (shx, shy), (up, bend) = FAR_SH, far_angles(up, bend)
+        shp = U(shx, shy)
         bend_in = bend > 150; fwd = -1 if bend_in else 1
         a1 = math.radians(up); a2 = math.radians(up + bend)
         d1 = _arm_dir(a1, lean, sx * fwd); d2 = _arm_dir(a2, lean, sx * fwd)
@@ -590,12 +624,15 @@ def _draw_side(c, g, par):
         return shp, e, h, d2
     def arm(up, bend, holdv, side):
         """side -1 = left/far arm, +1 = right/near arm. Round shoulder, capsule upper arm / forearm, round elbow; lifted arms swing forward (+x).
-        The far arm hangs from a shoulder just behind the near one and is drawn under the body, so at rest it is hidden and only shows when raised."""
+        The far arm hangs from a shoulder behind the torso centre and is drawn under the body: its upper arm emerges from the back edge of the chest,
+        so it always reads as a second, attached arm (hanging behind at rest, reaching out from behind the chest when in use)."""
         shp, e, h, d2 = arm_pts(up, bend, side)
         grip = holdv == GRIP
         if grip: holdv = None
         fill = sk if side > 0 else skf
-        c.ell(*shp, 23 * s, 23 * s, fill, None, 0, par)                                                                                     # round deltoid cap
+        cap_col = fill
+        if top: cap_col = shade(top, 0.94 if side > 0 else 0.84)                                                                             # deltoid cap over a dressed torso is tunic-coloured (sleeveless shoulder, not a skin disc); the far cap a shade darker
+        c.ell(*shp, 23 * s, 23 * s, cap_col, None, 0, par)                                                                                  # round deltoid cap
         rlimb(shp, e, h, 17, 11, 5.5, fill)
         hand(h, d2, sx, fill, fist=bool(holdv) or grip, k=1.4)
         ink = INK if side > 0 else shade(INK, 1.3)
@@ -603,11 +640,11 @@ def _draw_side(c, g, par):
         if o.get('guards'): rband(e, h, 0.62, 8, ink, 54)                                                                                     # long black forearm guard
         else: band(e, h, 0.86, 9, ink, 7)                                                                                                     # wrist band
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
-        if holdv: prop(holdv, h, d2, s, c, par, sx)
-    plant = planted_prop(p)
-    if plant: prop(plant, (arm_pts(*p['armR'], 1)[2][0], Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx)                                   # pole rises from the ground through the resting near hand
-    arm(*p['armL'], p['holdL'], -1)
+        if holdv: prop(holdv, h, d2, s, c, par, sx, floor=floor_y)
+    anj = bool(p.get('anjali')); floor_y = Wd(0, 0)[1]
+    if plant: prop(plant, (arm_pts(*p['armR'], 1)[2][0], Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx, floor=floor_y)                    # pole rises from the ground through the resting near hand
     _legs_dhoti(c, g, par, True)
+    if not anj: arm(*p['armL'], p['holdL'], -1)                                                                                              # far arm: over the legs, under the torso -> hangs visibly behind the back, or reaches out from behind the chest
     Hd_ = _Hd_fn(g, 1.0, SIDE_LIFT, SIDE_ROT)
     polyw([Hd_(-27.5, -394), Hd_(-12, -392), Hd_(4, -390), U(13.2, -324), U(-33, -324)], shade(sk, 0.93))                       # vertical neck rising to the jaw underside                                                # slender neck, leaning into the tilted head
     # torso: broad rounded shoulders flowing into a tapered waist
@@ -635,6 +672,7 @@ def _draw_side(c, g, par):
     c.line([U(-30, -366), U(-2, -358), U(30, -364)], shade(sk, 0.74), 1.4 * s, par)                                                          # collarbone
     _necklaces(c, g, par, 0, 36, -368)
     _head_side(c, g, par)
+    if anj: arm(*p['armL'], p['holdL'], -1)                                                                                                  # pressed palms: far arm over the chest, a darker twin just behind the near arm, so both arms read
     arm(*p['armR'], GRIP if plant else p['hold'], 1)
 
 def _head_side(c, g, par):
@@ -693,12 +731,21 @@ def _mouth_side(c, g, par, Hd, cream):
 
 def f_tail(p): return p['bob'] * 1.3
 
-PROPS = ("dagger", "staff", "bowl", "lotus", "bow", "bow_low", "bow_tall", "arrow", "mace", "trident", "sword", "talwar", "torch", "chakra", "flute", "conch", "lamp", "book", "flag", "spear", "shield", "axe", "scroll", "pot")
-def prop(kind, h, d, s, c, par, sx):
+PROPS = ("dagger", "staff", "bowl", "lotus", "bow", "bow_low", "bow_tall", "arrow", "mace", "trident", "sword", "talwar", "torch", "chakra", "flute", "conch", "lamp", "book", "flag", "spear", "shield", "axe", "scroll", "pot", "newborn")
+def prop(kind, h, d, s, c, par, sx, floor=None):
+    """draw a hand prop at hand h along unit direction d. `floor` (world y of the figure's feet) keeps upright poles from spearing
+    through the ground: a pole's lower end is clamped to it and a tall bow is slid up so its lower tip rests on it."""
     ux, uy = d
-    nx, ny = -uy, ux
     if not isinstance(kind, str): return
     kind = kind.strip().lower()
+    lift = (floor - h[1]) / s if floor is not None else 0.0                                                                                 # how high the hand is above the feet (local units)
+    if kind in ("sword", "talwar") and lift > 440 and uy < -0.75: ux, uy = (0.999 if ux >= 0 else -0.999), -0.04                                         # blade in a hand raised over the head is levelled forward (overhead guard): stays under a title band and over the opponent's head
+    elif kind in ("sword", "talwar", "mace", "axe", "torch") and uy < -0.75:                                                                           # a weapon thrust straight up spears the title band: tilt it forward to ~45 deg (wrist cocked), keeping its facing
+        ux, uy = (0.707 if ux >= 0 else -0.707), -0.707
+    nx, ny = -uy, ux
+    def pole_bottom(L):
+        yb = h[1] + L * s
+        return min(yb, floor) if floor is not None else yb
     if kind == "dagger":
         tip = (h[0] + ux * 120 * s, h[1] + uy * 120 * s)
         c.poly([(h[0] + nx * 9 * s, h[1] + ny * 9 * s), (tip[0], tip[1]), (h[0] - nx * 9 * s, h[1] - ny * 9 * s)], (236, 240, 250), INK, 4 * s, par)
@@ -721,16 +768,31 @@ def prop(kind, h, d, s, c, par, sx):
         c.cap((h[0] - ux * 40 * s, h[1] - uy * 40 * s), (h[0], h[1]), 9 * s, 9 * s, (120, 60, 40), INK, 3 * s, par)
         c.ell(h[0] - ux * 44 * s, h[1] - uy * 44 * s, 11 * s, 11 * s, GOLD, INK, 3 * s, par)
     elif kind == "staff":
-        c.line([(h[0] - 0, h[1] + 160 * s), (h[0], h[1] - 190 * s)], (120, 78, 50), 11 * s, par); c.ell(h[0], h[1] - 196 * s, 12 * s, 12 * s, GOLD, INK, 3 * s, par)
+        c.line([(h[0] - 0, pole_bottom(160)), (h[0], h[1] - 190 * s)], (120, 78, 50), 11 * s, par); c.ell(h[0], h[1] - 196 * s, 12 * s, 12 * s, GOLD, INK, 3 * s, par)
     elif kind == "spear":
-        c.line([(h[0], h[1] + 200 * s), (h[0], h[1] - 260 * s)], (120, 78, 50), 10 * s, par)
+        c.line([(h[0], pole_bottom(200)), (h[0], h[1] - 260 * s)], (120, 78, 50), 10 * s, par)
         c.poly([(h[0] - 18 * s, h[1] - 250 * s), (h[0], h[1] - 330 * s), (h[0] + 18 * s, h[1] - 250 * s)], (236, 240, 250), INK, 4 * s, par)
     elif kind == "trident":
-        c.line([(h[0], h[1] + 200 * s), (h[0], h[1] - 260 * s)], (200, 170, 90), 10 * s, par)
+        # trishul about one figure tall: pole from the ground to brow height, prongs above (shorter than the old 556 so it clears title bands);
+        # held standing (hand at hip height) the head is trimmed so the prongs stay under the title band, and raised high (bless) it sits just above the fist
+        pt = 230 if lift < 150 else (175 if lift < 300 else 110)
+        c.line([(h[0], pole_bottom(200)), (h[0], h[1] - pt * s)], (200, 170, 90), 10 * s, par)
         for k in (-1, 0, 1):
-            x0 = h[0] + k * 34 * s; top = h[1] - 330 * s - (0 if k else 20 * s)
-            c.line([(h[0], h[1] - 260 * s), (x0, h[1] - 280 * s), (x0, top)], (236, 240, 250), 8 * s, par)
+            x0 = h[0] + k * 34 * s; top = h[1] - (pt + 70) * s - (0 if k else 20 * s)
+            c.line([(h[0], h[1] - pt * s), (x0, h[1] - (pt + 20) * s), (x0, top)], (236, 240, 250), 8 * s, par)
             c.poly([(x0 - 9 * s, top), (x0, top - 26 * s), (x0 + 9 * s, top)], (236, 240, 250), INK, 3 * s, par)
+    elif kind == "newborn":
+        # swaddled baby cradled across the forearms: a soft cloth bundle lying along the forearm, a small round head at the far end, no limbs
+        cloth, skin = (250, 238, 210), (214, 160, 112)
+        cx, cy = h[0] - ux * 6 * s, h[1] - 14 * s
+        a, b = (cx - ux * 44 * s, cy - uy * 44 * s), (cx + ux * 44 * s, cy + uy * 44 * s)
+        c.cap(a, b, 24 * s, 24 * s, cloth, INK, 3 * s, par)
+        c.line([(cx - ux * 30 * s + nx * 6 * s, cy - uy * 30 * s + ny * 6 * s), (cx + ux * 20 * s + nx * 14 * s, cy + uy * 20 * s + ny * 14 * s)], shade(cloth, 0.86), 4 * s, par)   # fold
+        hx, hy = b[0] + ux * 14 * s, b[1] + uy * 14 * s - 4 * s
+        c.ell(hx, hy, 17 * s, 17 * s, skin, INK, 3 * s, par)
+        c.poly([(hx - 10 * s, hy - 12 * s), (hx, hy - 20 * s), (hx + 10 * s, hy - 12 * s), (hx + 4 * s, hy - 9 * s), (hx - 4 * s, hy - 9 * s)], (24, 18, 22), None, 0, par)   # tuft of hair
+        for e in (-1, 1): c.arc(hx + e * 6 * s, hy, 4 * s, 3 * s, 0, 180, (24, 18, 22), 1.8 * s, par)                                      # sleeping eyes
+        c.ell(hx + 8 * s, hy + 4 * s, 3 * s, 2 * s, (232, 140, 130), None, 0, par)                                                           # cheek
     elif kind == "mace":
         c.line([(h[0] - ux * 20 * s, h[1] - uy * 20 * s), (h[0] + ux * 150 * s, h[1] + uy * 150 * s)], (150, 100, 60), 12 * s, par)
         c.ell(h[0] + ux * 190 * s, h[1] + uy * 190 * s, 46 * s, 46 * s, GOLD, INK, 5 * s, par); c.ell(h[0] + ux * 190 * s, h[1] + uy * 190 * s, 18 * s, 18 * s, CRIMSON, INK, 3 * s, par)
@@ -739,18 +801,24 @@ def prop(kind, h, d, s, c, par, sx):
         bx, by = h[0] + ux * 150 * s, h[1] + uy * 150 * s
         c.poly([(bx, by - 10 * s), (bx + nx * 70 * s, by + ny * 70 * s - 50 * s), (bx + nx * 80 * s, by + ny * 80 * s + 30 * s), (bx, by + 30 * s)], (236, 240, 250), INK, 4 * s, par)
     elif kind in ("bow", "bow_low"):
-        bx, by = h[0], h[1]; r = 150 * s; k = 22 * s * sx
-        # "bow": upright (aiming / carrying); "bow_low": axis follows the forearm, so a forward forearm holds it horizontally at the hip
-        ax, ay = (ux, uy) if kind == "bow_low" else (0.0, 1.0)
+        bx, by = h[0], h[1]; r = (135 if kind == "bow" else 150) * s; k = 22 * s * sx; gt = 0.0
+        if kind == "bow" and uy < 0 and floor is not None:                                                                                    # planted (seated figure): lower tip rests on the ground, the grip slides up to the resting hand
+            r = 165 * s; gt = by - (floor - r); by = floor - r
+            u_ = min(abs(gt) / r, 1.0); kk_ = k * (1.0 if u_ < 0.12 else (1.0 - (u_ - 0.12) / 0.43 * 0.1 if u_ < 0.55 else 0.9 - (u_ - 0.55) / 0.45 * 0.8))
+            bx -= kk_                                                                                                                      # ...and the limb (not the string) passes through that hand
+        # "bow": upright, canted ~20 deg forward and a little shorter so its upper tip stays beside the chest / under a title band (aiming / carrying);
+        # "bow_low": axis follows the forearm, so a forward forearm holds it horizontally at the hip
+        ax, ay = (ux, uy) if kind == "bow_low" else ((0.0, 1.0) if abs(ux) < 0.3 else (-0.342 * sx, 0.94))                                   # carried in a hanging hand: straight up-and-down so it stays out of a companion's space
         if ay < 0: ax, ay = -ax, -ay
         px_, py_ = ay * sx, -ax * sx
         def P(t, kk): return (bx + ax * t + px_ * kk, by + ay * t + py_ * kk)
         pts = [P(-r, k * 0.1), P(-r * 0.55, k * 0.9), P(-r * 0.12, k), P(r * 0.12, k), P(r * 0.55, k * 0.9), P(r, k * 0.1)]
         c.line(pts, INK, 5 * s, par); c.line([pts[0], pts[-1]], (236, 232, 220), 1.8 * s, par)
-        c.poly([P(-9 * s, k - 4 * s), P(-9 * s, k + 4 * s), P(9 * s, k + 4 * s), P(9 * s, k - 4 * s)], shade(INK, 1.8), None, 0, par)
+        c.poly([P(gt - 9 * s, k - 4 * s), P(gt - 9 * s, k + 4 * s), P(gt + 9 * s, k + 4 * s), P(gt + 9 * s, k - 4 * s)], shade(INK, 1.8), None, 0, par)
     elif kind == "bow_tall":
-        # Patel-style tall pale bow, held upright: tips reach from the knee to well above the head
+        # Patel-style tall pale bow, held upright: tips reach from the knee to well above the head (slid up if the lower tip would pierce the ground)
         bx, by = h[0], h[1]; k = 48 * s * sx
+        if floor is not None: by = min(by, floor - 236 * s)
         ax, ay = 0.08 * sx, 1.0; n_ = math.hypot(ax, ay); ax, ay = ax / n_, ay / n_                                               # near-vertical stave
         def P(t, kk): return (bx + ax * t + ay * kk, by + ay * t - ax * kk)
         pts = [P(-230 * s, k * 0.05), P(-150 * s, k * 0.72), P(-50 * s, k), P(50 * s, k), P(150 * s, k * 0.72), P(230 * s, k * 0.05)]
@@ -789,7 +857,7 @@ def prop(kind, h, d, s, c, par, sx):
         c.poly([(h[0] - 44 * s, h[1] - 30 * s), (h[0] + 44 * s, h[1] - 30 * s), (h[0] + 44 * s, h[1] + 26 * s), (h[0] - 44 * s, h[1] + 26 * s)], (250, 240, 210), INK, 4 * s, par)
         for k in range(3): c.line([(h[0] - 30 * s, h[1] - 14 * s + k * 14 * s), (h[0] + 30 * s, h[1] - 14 * s + k * 14 * s)], (150, 100, 60), 2 * s, par)
     elif kind == "flag":
-        c.line([(h[0], h[1] + 120 * s), (h[0], h[1] - 300 * s)], (150, 100, 60), 8 * s, par)
+        c.line([(h[0], pole_bottom(120)), (h[0], h[1] - 300 * s)], (150, 100, 60), 8 * s, par)
         c.poly([(h[0], h[1] - 300 * s), (h[0] + sx * 160 * s, h[1] - 250 * s), (h[0], h[1] - 190 * s)], SAFFRON, INK, 4 * s, par)
     elif kind == "pot":
         c.ell(h[0], h[1] + 20 * s, 36 * s, 40 * s, (200, 110, 60), INK, 4 * s, par); c.ell(h[0], h[1] - 20 * s, 22 * s, 8 * s, (160, 80, 40), INK, 3 * s, par)
@@ -818,6 +886,8 @@ def act(f, name="stand", seed=0, flip=False, **over):
     k = pose_name(name)
     if k in ("walk", "run"):                       # animate the legs / arms for locomotion poses
         sw = math.sin(f * (0.45 if k == "run" else 0.28) + seed); amp = 32 if k == "run" else 14
-        base.update(legs=(amp * sw, -amp * sw), armR=(-amp * sw * 1.2, 8 if k == "walk" else 40), armL=(amp * sw * 1.2, 8 if k == "walk" else 40), bob=base['bob'] + abs(sw) * 6)
+        asw = amp * sw * (1.2 if k == "run" else 0.86)                                                                                     # walk: arms swing only ~12 deg with a slight elbow bend (no stiff rods flung behind the back)
+        base.update(legs=(amp * sw, -amp * sw), armR=(-asw, 22 if k == "walk" else 40), armL=(asw, 22 if k == "walk" else 40), bob=base['bob'] + abs(sw) * 6)
     if k == "fly": base.update(bob=base['bob'] + math.sin(f * 0.2 + seed) * 10)
     base.update(over); return base
+

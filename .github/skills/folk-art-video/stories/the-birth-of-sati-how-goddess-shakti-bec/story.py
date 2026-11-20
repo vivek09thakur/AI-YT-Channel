@@ -51,7 +51,7 @@ def sub(c, f):
 def s_intro(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.15), y=(1060, 1130)); sky(c, "night"); stars(c, f, 80); moon(c, 220, 480, 80)
     rays_burst(c, W / 2, 1150, f, 100, None, 20, (255, 214, 120, 40), 0.9, 0.3)
-    mountain(c, 300, 1500, 900, 520, (54, 44, 120), True, 0.35); ground(c, GY, (90, 52, 80))
+    mountain(c, 130, 1500, 900, 440, (54, 44, 120), True, 0.35); ground(c, GY, (90, 52, 80))                                             # peak off to the left, clear of Shiva's head and halo
     mandala(c, W / 2, 1150, 420, f, GOLD, 18, 0.9, 0.3)
     t_s = T.start("there was Sati.")
     draw_char(c, 440, GY, 1.5, "shiva", act(f, "meditate", 1, hold="trident", expr="closed"))
@@ -84,7 +84,7 @@ def s_vision(c, f, lf, n):
 def s_request(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.05)); sky(c, "heaven")
     ground(c, GY, (100, 60, 90))
-    draw_char(c, 380, GY, 1.3, "king", act(f, "bow", 1, expr="neutral", mouth=talk(f, T.start("Daksha bowed and requested her"), T.end("to be born as his daughterâ¦"))))
+    draw_char(c, 380, GY, 1.3, "king", act(f, "bow", 1, expr="neutral", mouth=talk(f, T.start("Daksha bowed and requested her"), T.end("to be born as his daughterÃ¢Â€Â¦"))))
     draw_char(c, 700, GY, 1.4, "durga", act(f, "stand", 2, expr="smile"), flip=True)
 
 def s_warning(c, f, lf, n):
@@ -98,11 +98,10 @@ def s_warning(c, f, lf, n):
 def s_birth(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.1)); sky(c, "day"); sun(c, 200, 420, 100, f, True, 0.25)
     palace(c, 540, 1340, 0.9, 0.6); ground(c, GY, (170, 120, 70))
+    t_b = T.start("Sati, the daughter of Daksha")
     draw_char(c, 330, GY, 1.4, "king", act(f, "stand", 1, expr="smile"))
-    draw_char(c, 740, GY, 1.3, "queen", act(f, "stand", 2, expr="smile"), flip=True)
-    k = pop(f, T.start("Sati, the daughter of Daksha"), 12)
-    draw_char(c, 680, GY - 190, 0.6 * k, "child", act(f, "raise", 3, expr="smile")) if k > 0.05 else None
-    title(c, "BIRTH OF SATI", f, T.start("Sati, the daughter of Daksha"), 560, 110, GOLD)
+    draw_char(c, 740, GY, 1.3, "queen", act(f, "cradle", 2, expr="smile", hold="newborn" if f >= t_b else None), flip=True)               # the newborn is a swaddled bundle laid across the mother's forearms
+    title(c, "BIRTH OF SATI", f, t_b, 560, 110, GOLD)
 
 def s_childhood(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.12), x=(W / 2, 600)); sky(c, "day"); sun(c, 900, 500, 90, f, True, 0.25)
@@ -115,8 +114,8 @@ def s_conflict(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.2), kicks=[(_starts[8], 12)]); sky(c, "storm")
     lightning(c, 300, 60, 1000, f, _starts[8], 3)
     hills(c, 1400, 120, (40, 34, 70), 8, 0.45); ground(c, GY, (60, 44, 60))
-    draw_char(c, 380, GY, 1.5, "king", act(f, "shout", 1, expr="stern"))
-    draw_char(c, 740, GY, 1.5, "shiva", act(f, "stand", 2, hold="trident", expr="neutral"), flip=True)
+    draw_char(c, 300, GY, 1.5, "king", act(f, "shout", 1, expr="stern"))
+    draw_char(c, 840, GY, 1.5, "shiva", act(f, "stand", 2, hold="trident", expr="neutral"), flip=True)
     title(c, "HATRED", f, _starts[8], 560, 130, (255, 110, 110))
 
 def s_tragedy(c, f, lf, n):
@@ -149,13 +148,14 @@ def render_frame(f):
     return c.finish()
 
 def _cues():
-    C = [(0, "swell", 0.8), (T.start("Before Goddess Parvati was bornâ¦"), "chime", 0.7), (T.start("there was Sati."), "bell", 0.9),
-         (T.start("Daksha Prajapati, the son of Brahma,"), "dhol", 0.8), (T.start("He performed intense penanceâ¦"), "riser", 0.7),
+    C = [(0, "swell", 0.8), (T.start("Before Goddess Parvati was bornÃ¢Â€Â¦"), "chime", 0.7), (T.start("there was Sati."), "bell", 0.9),
+         (T.start("Daksha Prajapati, the son of Brahma,"), "dhol", 0.8), (T.start("He performed intense penanceÃ¢Â€Â¦"), "riser", 0.7),
          (T.start("Pleased by his devotion,"), "sparkle", 0.9), (T.start("Daksha bowed and requested her"), "pop", 0.7),
-         (T.start("The Goddess accepted his wishâ¦"), "whoosh", 0.7), (T.start("She told Daksha that if he ever disrespected herâ¦"), "thunk", 0.9),
-         (T.start("Soon, the Goddess was born into Daksha's familyâ¦"), "sparkle", 0.9), (T.start("From childhood,"), "chime", 0.7),
-         (T.start("But her father, Daksha,"), "rumble", 0.9), (T.start("And the very daughter he had prayed forâ¦"), "heart", 0.8),
-         (T.start("This was the beginning of Sati's storyâ¦"), "swell", 0.8), (T.start("In the next episodeâ¦"), "bell", 0.9)]
+         (T.start("The Goddess accepted his wishÃ¢Â€Â¦"), "whoosh", 0.7), (T.start("She told Daksha that if he ever disrespected herÃ¢Â€Â¦"), "thunk", 0.9),
+         (T.start("Soon, the Goddess was born into Daksha's familyÃ¢Â€Â¦"), "sparkle", 0.9), (T.start("From childhood,"), "chime", 0.7),
+         (T.start("But her father, Daksha,"), "rumble", 0.9), (T.start("And the very daughter he had prayed forÃ¢Â€Â¦"), "heart", 0.8),
+         (T.start("This was the beginning of Sati's storyÃ¢Â€Â¦"), "swell", 0.8), (T.start("In the next episodeÃ¢Â€Â¦"), "bell", 0.9)]
     return sorted(C)
 CUES = _cues()
 MUSIC = dict(style="bells", sa=146.83)
+
