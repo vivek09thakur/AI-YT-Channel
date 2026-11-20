@@ -9,6 +9,7 @@ except ImportError:
 
 SR = 48000
 LEAD_IN, GAP, PARA_GAP, ELLIPSIS_GAP, TAIL = 0.8, 0.55, 1.1, 0.35, 3.0
+CLAUSE_GAP = 0.22
 MAX_WORDS = 22
 
 
@@ -56,6 +57,22 @@ def trim_silence(pcm, thresh=400):
     while j > i and abs(a[j - 1]) < thresh: j -= 1
     i = max(0, i - SR // 20); j = min(n, j + SR // 10)
     return a[i:j].tobytes()
+
+
+def quiet_cut(pcm, t_lo, t_hi, win=0.02):
+    """Time (s) of the quietest `win` window inside [t_lo, t_hi] of mono s16 pcm. Word-boundary offsets from the TTS engine are only
+    approximate, so cutting at the midpoint between two words can land inside a word and leave a clipped stutter at the join."""
+    import array
+    a = array.array('h'); a.frombytes(pcm)
+    lo, hi, w = max(0, int(t_lo * SR)), min(len(a), int(t_hi * SR)), max(1, int(win * SR))
+    if hi - lo <= w:
+        return (t_lo + t_hi) / 2
+    best, best_t = None, (t_lo + t_hi) / 2
+    for p in range(lo, hi - w, w // 2):
+        e = sum(abs(v) for v in a[p:p + w])
+        if best is None or e < best:
+            best, best_t = e, (p + w / 2) / SR
+    return best_t
 
 
 async def edge_line(text, voice, rate, path):
@@ -156,7 +173,8 @@ def synth_whole(lines, voice, rate, out):
                 bounds = map_words_to_lines(words, lines)
                 pcm = to_pcm(path)
                 total = len(pcm) / 2 / SR
-                cuts = [0.0] + [(bounds[i][1] + bounds[i + 1][0]) / 2 for i in range(len(bounds) - 1)] + [total]
+                # cut in the quietest spot between the end of one line's last word and the start of the next (widened a little, since the engine's offsets drift)
+                cuts = [0.0] + [quiet_cut(pcm, bounds[i][1] - 0.06, bounds[i + 1][0] + 0.06) for i in range(len(bounds) - 1)] + [total]
                 parts = []
                 for i in range(len(lines)):
                     a, b = int(cuts[i] * SR) * 2, int(cuts[i + 1] * SR) * 2
@@ -229,9 +247,12 @@ def main():
             pcm = trim_silence(to_pcm(f))
         dur = len(pcm) / 2 / SR
         if i > 0:
+            prev = lines[i - 1]['text']
             gap = PARA_GAP if L['para'] else GAP
-            if lines[i - 1]['text'].endswith(('...', '…')):
+            if prev.endswith(('...', '…')):
                 gap += ELLIPSIS_GAP
+            elif not prev.endswith(('.', '!', '?', ':', ';')):
+                gap = CLAUSE_GAP                                   # comma-split continuation of the same sentence: only a breath, not a full pause
             pcm_parts.append(silence(gap)); t += gap
         meta.append({'i': i, 'text': L['text'], 't0': round(t, 2), 't1': round(t + dur, 2), 'para': L['para']})
         pcm_parts.append(pcm); t += dur

@@ -9,7 +9,7 @@ Everything is drawn at SS x for anti-aliasing and reduced in finish().
 """
 import math, os, glob
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageChops
+from PIL import Image, ImageDraw, ImageFont, ImageChops, ImageFilter
 
 W, H = 1080, 1920
 SS = int(os.environ.get("FOLK_SS", "2"))
@@ -227,7 +227,7 @@ class Canvas:
             a, b = self.T(x, y, par); rr = abs(self.S(r, par)); self.d.ellipse([a - rr, b - rr, a + rr, b + rr], fill=color)
 
     # ----- text
-    def _blit_text(self, s, px, py, size_px, fill, ol, olw_px, scale=1.0, alpha=1.0, bold=True):
+    def _blit_text(self, s, px, py, size_px, fill, ol, olw_px, scale=1.0, alpha=1.0, bold=True, glow=False):
         """draw a text block centred at screen pixel (px, py); sizes already in output pixels * SS"""
         if not s or size_px < 2: return
         f = font(size_px, bold)
@@ -240,12 +240,19 @@ class Canvas:
         tmp = tmp.crop(bb)
         if scale != 1.0: tmp = tmp.resize((max(1, int(tmp.width * scale)), max(1, int(tmp.height * scale))), Image.LANCZOS)
         if alpha < 1: tmp.putalpha(tmp.getchannel("A").point(lambda v: int(v * clamp(alpha))))
+        if glow and size_px >= 40 * SS:
+            # soft dark halo behind big titles so they stay legible over busy art and bright sprites
+            pad = int(size_px * 0.45); r = size_px * 0.16
+            a = Image.new("L", (tmp.width + 2 * pad, tmp.height + 2 * pad), 0); a.paste(tmp.getchannel("A"), (pad, pad))
+            a = a.filter(ImageFilter.GaussianBlur(r)).point(lambda v: min(255, int(v * 1.6 * 0.72)))
+            halo = Image.new("RGBA", a.size, (12, 8, 30, 255)); halo.putalpha(a)
+            self.img.alpha_composite(halo, (int(px - halo.width / 2), int(py - halo.height / 2)))
         self.img.paste(tmp, (int(px - tmp.width / 2), int(py - tmp.height / 2)), tmp)
-    def text(self, s, x, y, size, fill=(255, 240, 210), ol=INK, olw=6, scale=1.0, alpha=1.0, par=0.0, bold=True, anchor="mm"):
+    def text(self, s, x, y, size, fill=(255, 240, 210), ol=INK, olw=6, scale=1.0, alpha=1.0, par=0.0, bold=True, anchor="mm", glow=True):
         k = self.Z(par)
         px, py = self.T(x, y, par)
         ol, olw = resolve_ol(None, ol, olw)          # text keeps a dark edge for legibility, just thinner
-        self._blit_text(str(s), px, py, size * k * SS, fill, ol, olw * k * SS, scale, alpha, bold)
+        self._blit_text(str(s), px, py, size * k * SS, fill, ol, olw * k * SS, scale, alpha, bold, glow)
     def wrap(self, s, size, maxw):
         """wrap s into lines no wider than maxw (same units as size)"""
         f = font(size * SS); words = str(s).split(); lines, cur = [], ""

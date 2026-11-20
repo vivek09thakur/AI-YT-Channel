@@ -40,6 +40,7 @@ OUTFITS = {
     "warrior":  O(dhoti="short", skin=(200, 150, 108), hair=(40, 26, 30), crown="band", armor=True, top=(90, 60, 50), bottom=(160, 60, 50), bottom2=GOLD, mous=True, tilak="u", build=1.08),
     "woman":    O(skin=(220, 170, 128), hair=(30, 20, 26), crown="none", top=(60, 150, 110), top2=GOLD, bottom=(220, 80, 60), bottom2=GOLD, tilak="dot", female=True, build=0.95),
     "child":    O(skin=(226, 176, 130), hair=(40, 26, 30), crown="none", top=(250, 230, 120), bottom=(120, 140, 220), bottom2=GOLD, tilak="dot", build=0.7),
+    "girl":     O(skin=(226, 176, 130), hair=(30, 20, 26), crown="none", top=(250, 230, 120), top2=GOLD, bottom=(200, 60, 100), bottom2=GOLD, tilak="dot", female=True, build=0.7),
     "devotee":  O(skin=(200, 150, 108), hair=(40, 26, 30), crown="none", top=(250, 244, 230), bottom=(250, 244, 230), bottom2=(200, 120, 60), tilak="three", mous=True),
     "arjuna":   O(dhoti="short", skin=(214, 164, 118), hair=(30, 22, 40), crown="mukut", crownc=GOLD, top=None, bottom=(60, 90, 200), bottom2=GOLD, tilak="u", kundal=True, sash=(255, 190, 70), build=1.05),
     "bhima":    O(dhoti="short", skin=(200, 140, 100), hair=(30, 22, 30), crown="band", top=None, bottom=(200, 60, 50), bottom2=GOLD, mous=True, tilak="u", build=1.25),
@@ -49,7 +50,7 @@ OUTFITS = {
 }
 OUTFIT_ALIASES = {"ram": "rama", "laxman": "lakshmana", "lakshman": "lakshmana", "hanumaan": "hanuman", "raavan": "ravana", "rakshasa": "demon", "asura": "demon",
                   "mahadev": "shiva", "shankar": "shiva", "gauri": "parvati", "ganesh": "ganesha", "ganapati": "ganesha", "narayan": "vishnu", "rishi": "sage",
-                  "muni": "sage", "guru": "sage", "priest": "brahmin", "soldier": "warrior", "man": "villager", "farmer": "villager", "boy": "child", "girl": "child",
+                  "muni": "sage", "guru": "sage", "priest": "brahmin", "soldier": "warrior", "man": "villager", "farmer": "villager", "boy": "child", "daughter": "girl", "young girl": "girl",
                   "prince": "king", "princess": "queen", "god": "vishnu", "goddess": "lakshmi", "kaal bhairav": "bhairava", "kala bhairava": "bhairava", "arjun": "arjuna",
                   "bheem": "bhima", "dasharatha": "king", "dashrath": "king", "kaikeyi": "queen", "kausalya": "queen", "sugriva": "hanuman", "vali": "hanuman", "vanara": "hanuman"}
 def outfit(o):
@@ -61,20 +62,25 @@ def outfit(o):
         warn(f"unknown outfit {o!r} (drawn as villager); known: {', '.join(sorted(OUTFITS))}")
         k = "villager"
     return OUTFITS[k]
-DEF = dict(lean=0, bob=0, head=0, armR=(8, 6), armL=(8, 6), legs=(0, 0), expr="neutral", blink=False, mouth=0.0, hold=None, holdL=None, armor=None, look=0.0, aura=1.0, gaze=0.0, view=None)
+DEF = dict(lean=0, bob=0, head=0, armR=(8, 6), armL=(8, 6), legs=(0, 0), expr="neutral", blink=False, mouth=0.0, hold=None, holdL=None, armor=None, look=0.0, aura=1.0, gaze=0.0, view=None, seat=None, anjali=False)
+# seated poses: `seat` picks the folded-leg geometry and `bob` lowers the torso onto it (seat = throne/stool, lotus = cross-legged on the ground, kneel = one knee down)
+SEAT_BOB = {"seat": 122, "lotus": 196, "kneel": 118}
+NAMASTE_ARM = (-18, 232)
+ANJALI_FRONT = (25, 208)                                                                                                                   # frontal rig: palms meet at the heart instead of the forearms crossing
 POSES = {
-    "stand": {}, "namaste": dict(armR=(-18, 232), armL=(-18, 232)), "give": dict(armR=(42, 52), armL=(42, 52)), "point": dict(armR=(96, 4)),
+    "stand": {}, "namaste": dict(armR=NAMASTE_ARM, armL=NAMASTE_ARM, anjali=True), "give": dict(armR=(42, 52), armL=(42, 52)), "point": dict(armR=(96, 4)),
     "raise": dict(armR=(150, 20), armL=(150, 20)), "hips": dict(armR=(40, -80), armL=(40, -80)), "strike": dict(armR=(120, 50)), "think": dict(armR=(40, 120)),
     "plead": dict(armR=(55, 40), armL=(55, 40)), "bless": dict(armR=(75, 70)), "cross": dict(armR=(14, -112), armL=(4, 72), legs=(-12, 14), expr="stern"),
     "walk": dict(legs=(14, -14), armR=(-14, 8), armL=(14, 8)), "run": dict(legs=(32, -32), armR=(-30, 40), armL=(30, 40), lean=8),
-    "bow": dict(lean=18, head=12, armR=(-10, 60), armL=(-10, 60)), "kneel": dict(legs=(0, 85), bob=70, armR=(-18, 232), armL=(-18, 232)),
+    "bow": dict(lean=18, head=12, armR=(-10, 60), armL=(-10, 60)), "kneel": dict(seat="kneel", bob=SEAT_BOB["kneel"], armR=NAMASTE_ARM, armL=NAMASTE_ARM, anjali=True),
     "aim": dict(armL=(92, -8), armR=(85, -140)), "shout": dict(armR=(150, 20), expr="shock", mouth=0.8), "cry": dict(expr="sad", armR=(60, 120), head=-6),
-    "sit": dict(legs=(80, -80), bob=95, armR=(30, 60), armL=(30, 60)), "meditate": dict(legs=(80, -80), bob=95, armR=(30, 90), armL=(30, 90), expr="closed"),
+    "sit": dict(seat="seat", bob=SEAT_BOB["seat"], armR=(34, 66), armL=(34, 66)), "meditate": dict(seat="lotus", bob=SEAT_BOB["lotus"], armR=(30, 90), armL=(30, 90), expr="closed"),
     "hold": dict(armR=(60, 0)), "wave": dict(armR=(140, -30)), "fight": dict(armR=(120, 50), armL=(40, -80), lean=6, expr="stern"), "fly": dict(armR=(170, 0), armL=(30, 10), lean=-12, legs=(-20, 20)),
 }
 POSE_ALIASES = {"idle": "stand", "standing": "stand", "pray": "namaste", "praying": "namaste", "greet": "namaste", "offer": "give", "pointing": "point", "arms_up": "raise",
                 "cheer": "raise", "victory": "raise", "angry": "hips", "proud": "hips", "attack": "strike", "thinking": "think", "beg": "plead", "blessing": "bless",
-                "walking": "walk", "running": "run", "kneeling": "kneel", "sitting": "sit", "archer": "aim", "shoot": "aim", "weep": "cry", "sad": "cry", "flying": "fly", "leap": "fly", "jump": "fly"}
+                "walking": "walk", "running": "run", "kneeling": "kneel", "sitting": "sit", "throne": "sit", "seated": "sit", "lotus": "meditate", "dhyana": "meditate", "yoga": "meditate", "tapas": "meditate", "penance": "meditate",
+                "archer": "aim", "shoot": "aim", "weep": "cry", "sad": "cry", "flying": "fly", "leap": "fly", "jump": "fly"}
 def pose_name(name):
     if not isinstance(name, str): return "stand"
     k = name.strip().lower(); k = POSE_ALIASES.get(k, k)
@@ -203,9 +209,64 @@ def draw_char(c, x, y, s=1.0, o="karna", p=None, flip=False, par=1.0):
     if v == "auto": v = "front" if g['fem'] else "side"
     (_draw_front if v == "front" else _draw_side)(c, g, par)
 
+PLANTED = ("trident", "staff", "spear", "bow", "bow_tall")                                                                                # tall props a seated figure plants on the ground beside them instead of waving about
+def planted_prop(p):
+    """prop kind to draw standing behind a cross-legged figure (so a meditating Shiva's trishul never floats off to his knee)"""
+    h = p.get('hold')
+    if p.get('seat') == 'lotus' and isinstance(h, str) and h.strip().lower() in PLANTED: return h.strip().lower()
+    return None
+
+def _legs_seated(c, g, par, side_view, seat):
+    """folded legs + draped dhoti for sit / meditate / kneel. Everything is placed in final local units (feet of a standing figure at y=0),
+    so the hips really sit `bob` lower and the feet still touch the ground."""
+    o, p, s, sx, Wd, poly, limb, band, foot, sk, jew = (g[k] for k in ("o", "p", "s", "sx", "Wd", "poly", "limb", "band", "foot", "sk", "jew"))
+    rlimb, rfoot = g['rlimb'], g['rfoot']
+    fem = g['fem']; bob = p['bob']; hy = (-236 if side_view else HIP - 2) + bob
+    b, b2 = o['bottom'], o['bottom2']
+    def leg(i, hip, knee, ankle, fwd=None):
+        side = -1 if i == 0 else 1
+        hip, knee, ankle = Wd(*hip), Wd(*knee), Wd(*ankle)
+        if side_view:
+            fill = sk if i == 1 else shade(sk, 0.9)
+            rlimb(hip, knee, ankle, 20, 12.5, 7, fill)
+            if fwd is not None: rfoot(ankle, fwd * sx, fill)
+        elif fem:
+            rlimb(hip, knee, ankle, 12, 8.5, 6, sk)
+            if fwd is not None: rfoot(ankle, fwd * sx, sk)
+        else:
+            limb(hip, knee, ankle, 18, 13, 9, sk)
+            if fwd is not None: foot(ankle, fwd * sx, shade(sk, 0.92))
+        if fwd is not None: band(knee, ankle, 0.9, 10 if side_view else 7.5, jew, 3.5)
+    def drape(pts, panel=None):
+        poly(smooth(pts), b, Wd)
+        if panel: poly(smooth(panel), b2, Wd)
+    if side_view:
+        if seat == "seat":
+            leg(0, (-14, hy), (104, hy - 2), (104, -12), 1); leg(1, (14, hy), (122, hy + 2), (124, -12), 1)
+            drape([(-50, hy - 6, 'k'), (50, hy - 6, 'k'), (126, hy - 4), (134, hy + 18), (118, hy + 54), (90, hy + 56), (60, hy + 44), (-40, hy + 50), (-52, hy + 24)], [(-6, hy - 6, 'k'), (10, hy - 6, 'k'), (40, hy + 48), (16, hy + 46)])
+        elif seat == "lotus":
+            leg(0, (-14, hy), (96, hy + 4), (6, hy + 10)); leg(1, (14, hy), (112, hy + 6), (26, hy + 12))
+            drape([(-50, hy - 6, 'k'), (50, hy - 6, 'k'), (124, hy), (132, hy + 24), (100, hy + 34, 'k'), (-30, hy + 34, 'k'), (-50, hy + 20)], [(-6, hy - 6, 'k'), (10, hy - 6, 'k'), (30, hy + 30), (6, hy + 30)])
+            rfoot(Wd(64, hy - 10), sx, sk)                                                                                                   # foot resting on top of the near thigh
+        else:
+            leg(0, (-14, hy), (-30, -8), (-130, -6), -1); leg(1, (14, hy), (130, hy + 2), (132, -12), 1)
+            drape([(-50, hy - 6, 'k'), (50, hy - 6, 'k'), (128, hy - 4), (136, hy + 20), (120, hy + 52), (92, hy + 58), (60, hy + 52), (10, hy + 88), (-24, hy + 94), (-46, hy + 58)], [(-6, hy - 6, 'k'), (10, hy - 6, 'k'), (40, hy + 50), (16, hy + 52)])
+        return
+    if seat == "seat":
+        for i, side in ((0, -1), (1, 1)): leg(i, (side * 13, hy), (side * 34, hy + 22), (side * 36, -12), side)
+        drape([(-28, hy - 14, 'k'), (28, hy - 14, 'k'), (62, hy + 8), (66, hy + 38), (52, hy + 68, 'k'), (-52, hy + 68, 'k'), (-66, hy + 38), (-62, hy + 8)], [(-10, hy - 14, 'k'), (8, hy - 14, 'k'), (14, hy + 66), (-12, hy + 66)])
+    elif seat == "lotus":
+        for i, side in ((0, -1), (1, 1)): leg(i, (side * 13, hy), (side * 108, hy + 8), (-side * 16, hy + 14))
+        drape([(-28, hy - 28, 'k'), (28, hy - 28, 'k'), (116, hy), (126, hy + 24, 'k'), (-126, hy + 24, 'k'), (-116, hy)], [(-10, hy - 28, 'k'), (8, hy - 28, 'k'), (16, hy + 22), (-14, hy + 22)])
+        for side in (-1, 1): rfoot(Wd(-side * 34, hy - 6), -sx * side, sk)                                                                  # feet resting on the opposite thighs
+    else:
+        for i, side in ((0, -1), (1, 1)): leg(i, (side * 13, hy), (side * 16, hy + 50), (side * 18, -14))
+        drape([(-30, hy - 6, 'k'), (30, hy - 6, 'k'), (56, hy + 18), (60, hy + 78, 'k'), (-60, hy + 78, 'k'), (-56, hy + 18)], [(-10, hy - 6, 'k'), (8, hy - 6, 'k'), (14, hy + 76), (-12, hy + 76)])
+
 def _legs_dhoti(c, g, par, side_view):
     o, p, s, sx, Wd, poly, limb, band, foot, sk, skd, jew, sw = (g[k] for k in ("o", "p", "s", "sx", "Wd", "poly", "limb", "band", "foot", "sk", "skd", "jew", "sw"))
     fem = g['fem']
+    if p.get('seat') in SEAT_BOB: return _legs_seated(c, g, par, side_view, p['seat'])
     lg = p['legs']
     if side_view and lg[0] == 0 and lg[1] == 0: lg = (-9, 11)                                                                            # default profile stance: back leg back, front leg forward
     for i, ang in ((0, lg[0]), (1, lg[1])):
@@ -285,7 +346,7 @@ def _draw_front(c, g, par):
     if o.get('veil'):
         poly(smooth([(0, -456), (-32, -448), (-46, -410), (-54, -350), (-54, -300), (-50, -262, 'k'), (50, -262, 'k'), (54, -300), (54, -350), (46, -410), (32, -448)]), o['veil'])   # dupatta behind
     elif fem or o.get('longhair'):
-        poly(smooth([(-24, -420), (24, -420), (44, -360), (54 + sw, -300), (58 + sw * 1.6, -250, 'k'), (-58 + sw * 1.6, -250, 'k'), (-54 + sw, -300), (-44, -360)]), hair)
+        poly(smooth([(-24, -420), (24, -420), (44, -368), (50 + sw * 0.5, -330), (46 + sw, -292, 'k'), (-46 + sw, -292, 'k'), (-50 + sw * 0.5, -330), (-44, -368)]), hair)   # hair ends at the shoulder blades (waist-long strips beside the torso read as extra arms)
     if o.get('monkey'):
         tw = math.sin(f_tail(p)) * 18
         polyw([Wd(-16, -100), Wd(-24, -90), Wd(-100, -150 + tw), Wd(-128, -300 + tw * 2), Wd(-84, -366), Wd(-78, -354), Wd(-114, -300 + tw * 2), Wd(-90, -160 + tw)], hair)
@@ -298,6 +359,8 @@ def _draw_front(c, g, par):
             for e in (-1, 1):
                 poly([(hx + e * 3, hy - 4), (hx + e * 8, hy - 9), (hx + e * 15, hy - 4), (hx + e * 8, hy)], o['eye']); dot(hx + e * 9, hy - 4, 2.6, PUPIL)
             poly([(hx - 5, hy + 12), (hx + 5, hy + 12), (hx + 3, hy + 15), (hx - 3, hy + 15)], MOUTH)
+    plant = planted_prop(p)
+    if plant: prop(plant, Wd(-64, -226), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff stands behind the seated figure
     _legs_dhoti(c, g, par, False)
     if fem:
         chest = smooth([(-48, -322), (-40, -340), (0, -346), (40, -340), (48, -322), (40, -298), (20, -272), (26, -248, 'k'), (-26, -248, 'k'), (-20, -272), (-40, -298)]); shx = 42
@@ -350,7 +413,9 @@ def _draw_front(c, g, par):
         else: band(e, h, 0.88, r[2] + 1, jew, 4)
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
         if holdv: prop(holdv, h, d2, s, c, par, sx)
-    arm(-1, *p['armL'], p['holdL']); arm(1, *p['armR'], p['hold'])
+    # anjali: elbows out at the ribs, forearms angled up so the palms meet at the heart (the profile rig reads the same numbers as "hands forward")
+    armR, armL = (ANJALI_FRONT if p.get('anjali') and tuple(p['armR']) == NAMASTE_ARM else p['armR']), (ANJALI_FRONT if p.get('anjali') and tuple(p['armL']) == NAMASTE_ARM else p['armL'])
+    arm(-1, *armL, p['holdL']); arm(1, *armR, None if plant else p['hold'])
     _head_front(c, g, par)
 
 def _Hd_fn(g, hs=HS, lift=0, rot=0):
@@ -523,6 +588,8 @@ def _draw_side(c, g, par):
         else: band(e, h, 0.86, 9, ink, 7)                                                                                                     # wrist band
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
         if holdv: prop(holdv, h, d2, s, c, par, sx)
+    plant = planted_prop(p)
+    if plant: prop(plant, Wd(-52, -226), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff planted behind the seated figure
     _legs_dhoti(c, g, par, True)
     arm(*p['armL'], p['holdL'], -1)
     Hd_ = _Hd_fn(g, 1.0, SIDE_LIFT, SIDE_ROT)
@@ -551,7 +618,7 @@ def _draw_side(c, g, par):
     c.line([U(-30, -366), U(-2, -358), U(30, -364)], shade(sk, 0.74), 1.4 * s, par)                                                          # collarbone
     _necklaces(c, g, par, 0, 36, -368)
     _head_side(c, g, par)
-    arm(*p['armR'], p['hold'], 1)
+    arm(*p['armR'], None if plant else p['hold'], 1)
 
 def _head_side(c, g, par):
     """graphic-novel profile head, tilted ~25 deg skyward: one straight diagonal from hairline through brow and nose bridge to a sharp
@@ -567,9 +634,10 @@ def _head_side(c, g, par):
     if o.get('monkey'): poly(smooth([(16, -418), (46, -406, 'k'), (40, -390, 'k'), (14, -394)]), shade(sk, 1.12), Hd); dot(39, -400, 2.2, PUPIL, Hd)
     ell(-9, -406, 4.2, 5.2, shade(sk, 0.9), Hd)                                                                                              # ear cutout inside the C-hook
     poly(smooth([(-26.4, -385.8, 'k'), (-36.3, -418.8), (-23.1, -456.2), (5.5, -459.5), (19.8, -449.6, 'k'), (0, -444.1), (-9.9, -427.6), (-16.5, -412.2), (-6.6, -403.4), (-1.1, -411.1, 'k'), (-3.3, -396.8), (-18.7, -394.6)]), hair, Hd)   # hair cap covering the whole back of the skull down to the nape, sideburn hook round the ear
-    if o['kundal']: hexa(-9, -399, 5.5, GOLD, Hd); dot(-9, -399, 2.4, CRIMSON, Hd)
-    elif fem: hexa(-9, -399, 5, jew, Hd); dot(-9, -399, 2.1, bead, Hd)
-    else: dot(-9, -399, 2.4, GOLD, Hd)
+    # earring: a small ring at the lobe with a drop hanging below the jaw (a disc level with the eye read as a second eye)
+    if o['kundal']: dot(-9, -398, 2.6, GOLD, Hd); poly([(-9, -395), (-13, -387), (-9, -380), (-5, -387)], GOLD, Hd); dot(-9, -387, 1.7, CRIMSON, Hd)
+    elif fem: dot(-9, -398, 2.4, jew, Hd); poly([(-9, -395), (-12.5, -388), (-9, -382), (-5.5, -388)], jew, Hd); dot(-9, -388, 1.5, bead, Hd)
+    else: dot(-9, -398, 2.2, GOLD, Hd)
     if not fem and cr in ("none", "band"):
         poly(smooth([(-23, -454), (-38.4, -458.4), (-39.5, -476), (-23, -476), (-17.5, -460.6)]), hair, Hd)                                  # bun high on the upper crown
         poly([(-21, -452.5), (-27, -463.5), (-23, -465.5), (-18, -455.5)], GOLD, Hd)                                                                   # gold tie
