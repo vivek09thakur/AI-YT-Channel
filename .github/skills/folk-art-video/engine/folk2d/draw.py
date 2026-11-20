@@ -108,7 +108,7 @@ def font(size, bold=True):
     except Exception: f = ImageFont.load_default()
     _FONT_CACHE[key] = f; return f
 
-_GRAD = {}; _VIG = {}
+_GRAD = {}; _VIG = {}; _FLASH = {}
 class Canvas:
     def __init__(self):
         self.img = Image.new("RGBA", (OW * SS, OH * SS), (0, 0, 0, 255))
@@ -161,7 +161,12 @@ class Canvas:
             _VIG[strength] = m
         self.img.paste(Image.new("RGB", (OW * SS, OH * SS), (10, 6, 24)), (0, 0), _VIG[strength])
     def flash(self, a, color=(255, 255, 255)):
-        if a > 0.01: self.d.rectangle([0, 0, OW * SS, OH * SS], fill=tuple(color[:3]) + (int(255 * clamp(a)),))
+        # ImageDraw does not alpha-blend onto an RGBA image (it would overwrite with a translucent white that finish() flattens to pure white)
+        a = min(clamp(a), 0.55)                                                                                                            # never a blank white frame; stories tend to ask for ~0.85
+        if a <= 0.01: return
+        key = (tuple(color[:3]), int(255 * a))
+        if key not in _FLASH: _FLASH[key] = (Image.new("RGB", (OW * SS, OH * SS), key[0]), Image.new("L", (OW * SS, OH * SS), key[1]))
+        self.img.paste(_FLASH[key][0], (0, 0), _FLASH[key][1])
 
     # ----- primitives (all take world coords)
     def poly(self, pts, fill, ol=INK, olw=5, par=1.0):

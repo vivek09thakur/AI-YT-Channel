@@ -138,6 +138,8 @@ def _miter(p0, p1, p2, r, sign):
 def _prep(c, x, y, s, o, p, flip, par):
     """shared setup for both rigs -> dict of helpers. Everything is straight-edged (no round caps)."""
     o = outfit(o)
+    child = o['build'] < 0.85
+    if child: s *= o['build']                                                                                                               # child / girl: smaller body with a bigger head, so "from childhood" is not the adult sprite
     p = merge(p, None); sx = -1 if flip else 1
     try: p['armR'] = tuple(p['armR'])[:2]; p['armL'] = tuple(p['armL'])[:2]; p['legs'] = tuple(p['legs'])[:2]
     except Exception: p['armR'], p['armL'], p['legs'] = DEF['armR'], DEF['armL'], DEF['legs']
@@ -198,7 +200,7 @@ def _prep(c, x, y, s, o, p, flip, par):
         polyw([(ank[0] - fwd * 8 * s, ank[1] + 1 * s), (ank[0] + fwd * 28 * s, ank[1] + 7 * s), (ank[0] + fwd * 4 * s, ank[1] + 9 * s), (ank[0] - fwd * 10 * s, ank[1] + 8 * s)], fill)
     sw = math.sin(p['bob'] * 0.9) * 5 - 10
     return dict(o=o, p=p, s=s, sx=sx, lean=lean, Wd=Wd, U=U, poly=poly, polyw=polyw, ell=ell, dot=dot, hexa=hexa, limb=limb, band=band, beads=beads, hand=hand, foot=foot, sw=sw, rlimb=rlimb, rband=rband, rfoot=rfoot, cdot=cdot,
-                sk=o['skin'], skd=shade(o['skin'], 0.84), hair=o['hair'], bead=o.get('bead') or BEAD, jew=o['jewel'], cr=o['crown'], fem=bool(o.get('female')))
+                sk=o['skin'], skd=shade(o['skin'], 0.84), hair=o['hair'], bead=o.get('bead') or BEAD, jew=o['jewel'], cr=o['crown'], fem=bool(o.get('female')), hk=1.22 if child else 1.0)
 
 def draw_char(c, x, y, s=1.0, o="karna", p=None, flip=False, par=1.0):
     """flat-colour angular 'graphic-novel' rig: ~7-head figure, straight edges, smooth solid limbs, broad chest, big almond eye.
@@ -209,7 +211,10 @@ def draw_char(c, x, y, s=1.0, o="karna", p=None, flip=False, par=1.0):
     if v == "auto": v = "front" if g['fem'] else "side"
     (_draw_front if v == "front" else _draw_side)(c, g, par)
 
-PLANTED = ("trident", "staff", "spear", "bow", "bow_tall")                                                                                # tall props a seated figure plants on the ground beside them instead of waving about
+PLANTED = ("trident", "staff", "spear", "bow", "bow_tall")                                                                                # tall props a seated figure rests on the ground and grips instead of waving about
+GRIP = "__grip__"                                                                                                                          # hand closes round a pole that is drawn separately (planted prop)
+PLANT_Y = -200                                                                                                                             # local y of a planted pole's anchor: foot on the ground, top ~ -550 (below the title band)
+FAR_SHX = 20                                                                                                                               # profile rig: far shoulder sits just behind the near one, not on the back edge of the torso
 def planted_prop(p):
     """prop kind to draw standing behind a cross-legged figure (so a meditating Shiva's trishul never floats off to his knee)"""
     h = p.get('hold')
@@ -360,7 +365,10 @@ def _draw_front(c, g, par):
                 poly([(hx + e * 3, hy - 4), (hx + e * 8, hy - 9), (hx + e * 15, hy - 4), (hx + e * 8, hy)], o['eye']); dot(hx + e * 9, hy - 4, 2.6, PUPIL)
             poly([(hx - 5, hy + 12), (hx + 5, hy + 12), (hx + 3, hy + 15), (hx - 3, hy + 15)], MOUTH)
     plant = planted_prop(p)
-    if plant: prop(plant, Wd(-64, -150), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff stands behind the seated figure
+    if plant:
+        shx0 = 42 if fem else 48; a1 = math.radians(p['armR'][0]); a2 = math.radians(sum(p['armR']))
+        hx = U(shx0, -330)[0] + _arm_dir(a1, lean, sx)[0] * 78 * s + _arm_dir(a2, lean, sx)[0] * 72 * s
+        prop(plant, (hx, Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx)                                                                    # pole rises from the ground through the resting near hand
     _legs_dhoti(c, g, par, False)
     if fem:
         chest = smooth([(-48, -322), (-40, -340), (0, -346), (40, -340), (48, -322), (40, -298), (20, -272), (26, -248, 'k'), (-26, -248, 'k'), (-20, -272), (-40, -298)]); shx = 42
@@ -398,16 +406,18 @@ def _draw_front(c, g, par):
         sh = U(side * shx, -330); a1 = math.radians(up); a2 = math.radians(up + bend)
         d1 = _arm_dir(a1, lean, sx * side); d2 = _arm_dir(a2, lean, sx * side)
         e = (sh[0] + d1[0] * 78 * s, sh[1] + d1[1] * 78 * s); h = (e[0] + d2[0] * 72 * s, e[1] + d2[1] * 72 * s)
+        grip = holdv == GRIP
+        if grip: holdv = None
         if fem:
             c.ell(*sh, 12 * s, 12 * s, sk, None, 0, par); g['rlimb'](sh, e, h, 10.5, 8, 6, sk)
-            hand(h, d2, sx * side, sk, fist=bool(holdv))
+            hand(h, d2, sx * side, sk, fist=bool(holdv) or grip)
             band(sh, e, 0.5, 9.5, jew, 7)
             for t_ in (0.72, 0.8, 0.88): band(e, h, t_, 7.2, jew, 3.2); band(e, h, t_ + 0.035, 7.2, shade(jew, 0.72), 1.2)
             if holdv: prop(holdv, h, d2, s, c, par, sx)
             return
         r = (15, 10.5, 6.5)
         limb(sh, e, h, r[0], r[1], r[2], sk)
-        hand(h, d2, sx * side, sk, fist=bool(holdv))
+        hand(h, d2, sx * side, sk, fist=bool(holdv) or grip)
         beads(sh, e, 0.48, r[1] + 1, bead, 4)
         if o.get('guards'): g['rband'](e, h, 0.62, r[2] + 1.6, INK, 44)
         else: band(e, h, 0.88, r[2] + 1, jew, 4)
@@ -415,11 +425,11 @@ def _draw_front(c, g, par):
         if holdv: prop(holdv, h, d2, s, c, par, sx)
     # anjali: elbows out at the ribs, forearms angled up so the palms meet at the heart (the profile rig reads the same numbers as "hands forward")
     armR, armL = (ANJALI_FRONT if p.get('anjali') and tuple(p['armR']) == NAMASTE_ARM else p['armR']), (ANJALI_FRONT if p.get('anjali') and tuple(p['armL']) == NAMASTE_ARM else p['armL'])
-    arm(-1, *armL, p['holdL']); arm(1, *armR, None if plant else p['hold'])
+    arm(-1, *armL, p['holdL']); arm(1, *armR, GRIP if plant else p['hold'])
     _head_front(c, g, par)
 
 def _Hd_fn(g, hs=HS, lift=0, rot=0):
-    U, sx, s, hr = g['U'], g['sx'], g['s'], g['p']['head']; hc = (0, HC)
+    U, sx, s, hr = g['U'], g['sx'], g['s'], g['p']['head']; hc = (0, HC); hs = hs * g.get('hk', 1.0)
     def Hd(px, py):
         px, py = px * hs, CHIN + (py - CHIN) * hs + lift
         dx, dy = px - hc[0], py - hc[1]
@@ -571,17 +581,23 @@ def _draw_side(c, g, par):
             poly(smooth([(hx - 16, hy - 24), (hx - 18, hy + 4), (hx - 6, hy + 24), (hx + 4, hy + 26), (hx + 16, hy + 4), (hx + 16, hy - 24), (hx, hy - 32)]), shade(sk, 0.86))
             poly([(hx - 16, hy - 22), (hx - 10, hy - 46), (hx - 3, hy - 32), (hx + 4, hy - 54), (hx + 10, hy - 32), (hx + 16, hy - 22)], shade(o['crownc'], 0.9))
             ell(hx + 7, hy - 5, 6, 3.5, o['eye']); dot(hx + 8, hy - 5, 2.4, PUPIL)
-    def arm(up, bend, holdv, side):
-        """side -1 = left/far arm, +1 = right/near arm. Round shoulder, capsule upper arm / forearm, round elbow; lifted arms swing forward (+x)."""
-        shp = U(side * 70, -356)
+    def arm_pts(up, bend, side):
+        shp = U(70 if side > 0 else FAR_SHX, -356)
         bend_in = bend > 150; fwd = -1 if bend_in else 1
         a1 = math.radians(up); a2 = math.radians(up + bend)
         d1 = _arm_dir(a1, lean, sx * fwd); d2 = _arm_dir(a2, lean, sx * fwd)
         e = (shp[0] + d1[0] * 102 * s, shp[1] + d1[1] * 102 * s); h = (e[0] + d2[0] * 88 * s, e[1] + d2[1] * 88 * s)
+        return shp, e, h, d2
+    def arm(up, bend, holdv, side):
+        """side -1 = left/far arm, +1 = right/near arm. Round shoulder, capsule upper arm / forearm, round elbow; lifted arms swing forward (+x).
+        The far arm hangs from a shoulder just behind the near one and is drawn under the body, so at rest it is hidden and only shows when raised."""
+        shp, e, h, d2 = arm_pts(up, bend, side)
+        grip = holdv == GRIP
+        if grip: holdv = None
         fill = sk if side > 0 else skf
         c.ell(*shp, 23 * s, 23 * s, fill, None, 0, par)                                                                                     # round deltoid cap
         rlimb(shp, e, h, 17, 11, 5.5, fill)
-        hand(h, d2, sx, fill, fist=bool(holdv), k=1.4)
+        hand(h, d2, sx, fill, fist=bool(holdv) or grip, k=1.4)
         ink = INK if side > 0 else shade(INK, 1.3)
         band(shp, e, 0.56, 15, ink, 9)                                                                                                        # black arm band
         if o.get('guards'): rband(e, h, 0.62, 8, ink, 54)                                                                                     # long black forearm guard
@@ -589,19 +605,20 @@ def _draw_side(c, g, par):
         if holdv == 'sword' and o.get('talwar'): holdv = 'talwar'
         if holdv: prop(holdv, h, d2, s, c, par, sx)
     plant = planted_prop(p)
-    if plant: prop(plant, Wd(-52, -150), (0.0, -1.0), s, c, par, sx)                                                                      # trishul / staff planted behind the seated figure
-    _legs_dhoti(c, g, par, True)
+    if plant: prop(plant, (arm_pts(*p['armR'], 1)[2][0], Wd(0, PLANT_Y)[1]), (0.0, -1.0), s, c, par, sx)                                   # pole rises from the ground through the resting near hand
     arm(*p['armL'], p['holdL'], -1)
+    _legs_dhoti(c, g, par, True)
     Hd_ = _Hd_fn(g, 1.0, SIDE_LIFT, SIDE_ROT)
     polyw([Hd_(-27.5, -394), Hd_(-12, -392), Hd_(4, -390), U(13.2, -324), U(-33, -324)], shade(sk, 0.93))                       # vertical neck rising to the jaw underside                                                # slender neck, leaning into the tilted head
     # torso: broad rounded shoulders flowing into a tapered waist
     chest = smooth([(-86, -348), (-84, -368), (-72, -382), (-50, -388), (0, -380), (50, -388), (72, -382), (84, -368), (86, -348), (66, -312), (46, -266), (40, -238, 'k'), (-40, -238, 'k'), (-46, -266), (-66, -312)])
     poly(chest, sk)
+    back_rim = smooth([(-86, -348), (-84, -368), (-72, -382), (-64, -385), (-66, -312), (-42, -238, 'k'), (-40, -238, 'k'), (-46, -266), (-66, -312)])   # thin rim shadow on the back edge (a wide strip read as a third arm)
     if top:
         poly(chest, top)
-        poly(smooth([(-86, -348), (-84, -368), (-72, -382), (-58, -386), (-56, -312), (-34, -238, 'k'), (-40, -238, 'k'), (-46, -266), (-66, -312)]), shade(top, 0.86))
+        poly(back_rim, shade(top, 0.86))
     else:
-        poly(smooth([(-86, -348), (-84, -368), (-72, -382), (-58, -386), (-56, -312), (-34, -238, 'k'), (-40, -238, 'k'), (-46, -266), (-66, -312)]), shade(sk, 0.9))   # far side in shadow
+        poly(back_rim, shade(sk, 0.9))
         poly(smooth([(8, -348), (56, -360), (68, -330), (48, -300), (12, -304)]), shade(sk, 0.92))                                            # near pectoral
         if o['sash']:
             wrap = o['sash']
@@ -618,7 +635,7 @@ def _draw_side(c, g, par):
     c.line([U(-30, -366), U(-2, -358), U(30, -364)], shade(sk, 0.74), 1.4 * s, par)                                                          # collarbone
     _necklaces(c, g, par, 0, 36, -368)
     _head_side(c, g, par)
-    arm(*p['armR'], None if plant else p['hold'], 1)
+    arm(*p['armR'], GRIP if plant else p['hold'], 1)
 
 def _head_side(c, g, par):
     """graphic-novel profile head, tilted ~25 deg skyward: one straight diagonal from hairline through brow and nose bridge to a sharp
@@ -668,7 +685,8 @@ def _mouth_side(c, g, par, Hd, cream):
         poly([(33, -401.2), (26.3, -396.8), (33.5, -396.8 + hh)], PUPIL, Hd); poly([(32, -400), (27.5, -397.3), (31.5, -396)], cream, Hd)
     else:
         k = {"sad": -1, "stern": -1}.get(p['expr'], 0)
-        poly([(33, -401.2), (26.3, -396.8 + k), (33, -392.4)], cream, Hd)
+        sk = g['sk']
+        poly([(33, -401.2), (26.3, -396.8 + k), (33, -392.4)], shade(sk, 0.8), Hd)                                                         # lip-toned notch (a cream wedge under the moustache read as a second eye)
         poly([(33, -401.2), (26.3, -396.8 + k), (26.8, -395.4 + k), (33, -399.8)], MOUTH, Hd)                                                     # upper lip line
     if o['mous']: poly([(33, -400), (16, -403), (16, -399), (32, -397)], hair, Hd)
     if o.get('fangs'): poly([(27.5, -396), (30.5, -396), (29, -389)], (255, 255, 240), Hd)
