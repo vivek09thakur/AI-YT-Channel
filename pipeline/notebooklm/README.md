@@ -1,85 +1,176 @@
-# NotebookLM short (auto topic)
+# NotebookLM short
 
-Workflow `.github/workflows/notebooklm-short.yml`. Runs daily (09:00 IST) or by hand. Picks a random topic that has not been
-published yet from `topics.json` (genres: science, technology, ai, space, physics), has NotebookLM research it on the web,
-generates a **Video Overview** (`short` = ~60 s vertical 9:16 by default; `explainer` / `cinematic` = 16:9) and publishes it to
-the `videos` branch under `nlm/<slug>-<run>/` with `nlm.json`, `nlm/index.html` and `nlm/README.md`.
+Workflow file: `.github/workflows/notebooklm-short.yml`
 
-Independent of the other workflows: it does not touch `videos/`, `facts/`, `scripts/` or their indexes, and needs no LLM key or TTS.
+What it does, every day at 09:00 IST or when you run it by hand:
 
-## One-time setup
+1. Picks a topic that was not published yet from `topics.json`
+2. NotebookLM researches it on the web
+3. NotebookLM makes a 60 second vertical video (question hook, clear explanation, subscribe and follow us at the end)
+4. Video, thumbnail and captions are saved to the `videos` branch under `nlm/`
+5. Optional: the video is uploaded to YouTube and Instagram
 
-Uses [notebooklm-py](https://github.com/teng-lin/notebooklm-py) (unofficial, uses undocumented Google APIs - can break when
-Google changes them). CI auth is a durable **master token**, which is a full-account credential: use a **dedicated / throwaway
-Google account**, never your main one.
+It does not touch the other workflows or their folders.
+
+## Setup in 3 steps
+
+Step 1. Create a new throwaway Google account. Do not use your main account.
+
+Step 2. On your own computer, run these commands. A browser opens once. Sign in with the throwaway account.
 
 ```bash
 pip install "notebooklm-py[headless,browser]"
-notebooklm login --master-token --account throwaway@gmail.com   # browser opens once; sign in with the throwaway account
-# -> writes ~/.notebooklm/profiles/default/master_token.json
+notebooklm login --master-token --account throwaway@gmail.com
 ```
 
-Store that file's content as the repository secret **`NOTEBOOKLM_MASTER_TOKEN_JSON`** (Settings -> Secrets -> Actions), e.g.
-`gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON < ~/.notebooklm/profiles/default/master_token.json`.
+Step 3. Save the token file as a repository secret.
 
-If a run fails with an auth error, re-run the `login --master-token` command and update the secret. To revoke: Google Account ->
-Security -> Your devices -> remove the session.
+```bash
+gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO < ~/.notebooklm/profiles/default/master_token.json
+```
 
-## Optional: auto-upload to YouTube / Instagram
+On Windows PowerShell:
 
-The `upload` job runs only for platforms whose secrets exist (the precheck job prints a notice for each one that is skipped);
-without any of them the workflow just publishes to the videos branch as before. `upload: off` disables it for one run.
-Captions (`caption_youtube.txt`, `caption_instagram.txt` = description + CTA + hashtags) are always generated and shown in the
-run summary, so you can also post by hand.
+```powershell
+Get-Content "$env:USERPROFILE\.notebooklm\profiles\default\master_token.json" -Raw | gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO
+```
 
-**YouTube** - secrets `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` (input `yt_privacy`: public / unlisted / private).
-Follow the steps in the header of `yt_get_refresh_token.py` (Google Cloud project -> enable YouTube Data API v3 -> Desktop OAuth
-client -> run the helper once with the channel's account). Caveats: refresh tokens from a consent screen left in "Testing" die
-after 7 days (set it to "In production"); YouTube forces uploads from an **unverified** OAuth app to private until the app passes
-verification; the upload quota is ~6 uploads/day on a default API project.
+Done. Run the workflow from the Actions tab once to test it.
 
-**Instagram** - secrets `IG_USER_ID`, `IG_ACCESS_TOKEN` (optional repo variable `IG_GRAPH_HOST=graph.instagram.com` for tokens
-from "Instagram API with Instagram Login"). Needs a professional (Business / Creator) Instagram account; with Facebook Login it
-must be linked to a Facebook Page, the token needs `instagram_content_publish` (+ `pages_show_list`, `instagram_basic`) and the
-id comes from `GET /me/accounts?fields=instagram_business_account`. Long-lived tokens expire after 60 days - refresh and update
-the secret. Instagram downloads the video from a **public URL**: the videos-branch raw link is used when the repo is public,
-otherwise the file is parked for about an hour on tmpfiles.org (a third-party host - the reel is public seconds later anyway;
-skip the Instagram secrets if that is not acceptable). Reels limit: 25 posts per 24 h per account.
+## Secrets
 
-## Files
+| Secret | Needed | What it is | How to get it |
+|---|---|---|---|
+| NOTEBOOKLM_MASTER_TOKEN_JSON | Yes | Content of master_token.json | Setup step 2 and 3 above |
+| YT_CLIENT_ID | Only for YouTube upload | Google OAuth client id | See YouTube upload section |
+| YT_CLIENT_SECRET | Only for YouTube upload | Google OAuth client secret | See YouTube upload section |
+| YT_REFRESH_TOKEN | Only for YouTube upload | Long lived token for the channel | See YouTube upload section |
+| IG_USER_ID | Only for Instagram upload | Instagram professional account id | See Instagram upload section |
+| IG_ACCESS_TOKEN | Only for Instagram upload | Long lived Instagram token | See Instagram upload section |
+
+Set any secret with:
+
+```bash
+gh secret set SECRET_NAME -R OWNER/REPO
+```
+
+If a secret for a platform is missing, that upload is skipped and the run still succeeds.
+
+## Repository variables (optional)
+
+| Variable | Default | When to set |
+|---|---|---|
+| IG_GRAPH_HOST | graph.facebook.com | Set to graph.instagram.com if your token comes from Instagram Login instead of Facebook Login |
+
+## Workflow inputs
+
+| Input | Default | Meaning |
+|---|---|---|
+| genre | auto | Topic pool: auto, science, technology, ai, space, physics |
+| topic | empty | Exact topic to use instead of a random one |
+| research_mode | fast | fast or deep. Deep is slower and uses more quota |
+| format | short | short is vertical 60 s. explainer and cinematic are 16:9 |
+| style | auto | Visual style, used only with format explainer |
+| publish | true | Save to the videos branch |
+| keep_notebook | false | Keep the notebook in NotebookLM after the run |
+| upload | auto | auto uploads to every platform that has secrets. off skips upload |
+| yt_privacy | public | public, unlisted or private for the YouTube upload |
+
+## Change the closing line
+
+The subscribe and follow us sentence is one line in the workflow file, under `env`:
+
+```yaml
+CTA_LINE: "If you learned something new, support us by subscribing to the channel and following us for more."
+```
+
+Edit the text, commit, done. It is spoken at the end of every video and added to the captions.
+
+## YouTube upload
+
+Steps, all on your own computer:
+
+| Step | Where | What to do |
+|---|---|---|
+| 1 | console.cloud.google.com | Create a project |
+| 2 | APIs and Services, Library | Enable YouTube Data API v3 |
+| 3 | APIs and Services, OAuth consent screen | Type External. Add the channel Google account as a test user. Then set Publishing status to In production |
+| 4 | APIs and Services, Credentials | Create OAuth client ID, type Desktop app. Copy client id and client secret |
+| 5 | Terminal | Run the helper below. Sign in with the channel account and allow upload |
+| 6 | Terminal | Save the three secrets |
+
+```bash
+pip install google-auth-oauthlib
+python pipeline/notebooklm/yt_get_refresh_token.py --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET
+
+gh secret set YT_CLIENT_ID -R OWNER/REPO
+gh secret set YT_CLIENT_SECRET -R OWNER/REPO
+gh secret set YT_REFRESH_TOKEN -R OWNER/REPO
+```
+
+Good to know:
+
+| Topic | Fact |
+|---|---|
+| Private videos | YouTube sets videos from an unverified OAuth app to private. Request app verification in the consent screen to upload as public |
+| Token expiry | If the consent screen stays in Testing the refresh token dies after 7 days. In production it lasts |
+| Quota | About 6 uploads per day on a default API project |
+
+## Instagram upload
+
+Needs an Instagram professional account (Business or Creator) linked to a Facebook Page.
+
+| Step | Where | What to do |
+|---|---|---|
+| 1 | developers.facebook.com | Create an app, add the Instagram product |
+| 2 | Graph API Explorer | Generate a user token with permissions instagram_basic, instagram_content_publish, pages_show_list |
+| 3 | Graph API Explorer | Call `me/accounts?fields=instagram_business_account` and copy the instagram_business_account id |
+| 4 | Access Token Tool | Exchange for a long lived token (valid 60 days) |
+| 5 | Terminal | Save the two secrets |
+
+```bash
+gh secret set IG_USER_ID -R OWNER/REPO
+gh secret set IG_ACCESS_TOKEN -R OWNER/REPO
+```
+
+Good to know:
+
+| Topic | Fact |
+|---|---|
+| Token expiry | Long lived tokens last 60 days. Refresh and update the secret |
+| Public URL | Instagram downloads the video from a public link. If the repo is private the file is parked for about one hour on tmpfiles.org, a third party host. Skip the Instagram secrets if you do not want that |
+| Limit | 25 reels per account per day |
+
+## Files in this folder
 
 | File | Role |
 |---|---|
-| `topics.json` | curated topic pool per genre (edit freely; add genres by adding keys and extending the workflow's `genre` choice list) |
-| `pick_topic.py` | random unpublished topic (reads `nlm.json` from the videos branch to skip used slugs; reuses the oldest when a genre is exhausted) |
-| `sweep_notebooks.py` | precheck: lists notebooks on the account and marks leftovers from crashed runs (title matches a topic in `topics.json`) for deletion |
-| `make_meta.py` | builds `meta.json` (title / description / hashtags via `notebooklm ask`, CTA, source list, notebook id) + `caption_youtube.txt` / `caption_instagram.txt` |
-| `publish_nlm.py` | copies `reel.mp4`, `thumb.jpg`, `meta.json` to the videos branch and rebuilds `nlm.json`, `nlm/index.html`, `nlm/README.md` |
-| `upload_youtube.py` | optional: resumable upload via YouTube Data API v3 (refresh token), title + caption + tags from `meta.json` |
-| `upload_instagram.py` | optional: Instagram Graph API REELS container -> poll -> publish, caption from `meta.json` |
-| `yt_get_refresh_token.py` | one-time local helper to mint `YT_REFRESH_TOKEN` |
+| topics.json | Topic list per genre. Edit freely |
+| pick_topic.py | Picks a random topic that is not in nlm.json yet |
+| sweep_notebooks.py | Finds leftover notebooks from crashed runs so precheck can delete them |
+| make_meta.py | Writes meta.json, caption_youtube.txt and caption_instagram.txt |
+| publish_nlm.py | Copies the result to the videos branch and rebuilds nlm.json, nlm/index.html, nlm/README.md |
+| upload_youtube.py | Uploads the video to YouTube |
+| upload_instagram.py | Publishes the video as an Instagram Reel |
+| yt_get_refresh_token.py | One time helper to get YT_REFRESH_TOKEN |
 
-## Run flow
+## Jobs
 
-Job **precheck** (fails fast, ~1 min):
-1. secret `NOTEBOOKLM_MASTER_TOKEN_JSON` present and a JSON object
-2. install `notebooklm-py[headless]`, mint a session from the master token, `auth check --test` (token actually works)
-3. `usage --json` - stop if the account's compute quota is exhausted
-4. `notebooklm list` -> `sweep_notebooks.py` deletes leftover notebooks from crashed / cancelled runs (skipped with `keep_notebook`)
-5. detect upload targets from secrets -> outputs `yt` / `ig`; credentials wiped
+| Job | What it does | Fails when |
+|---|---|---|
+| precheck | Checks the token secret exists and works, checks quota, deletes leftover notebooks, detects upload targets | Secret missing or invalid, quota exhausted |
+| make | Picks topic, researches, generates video, downloads it, writes captions, deletes the notebook | NotebookLM errors |
+| publish | Saves to the videos branch | Git push problems |
+| upload | YouTube and or Instagram, only when their secrets exist | Platform API errors |
 
-Job **make**:
-1. re-mint a session (sessions are per job), `pick_topic.py` -> topic / slug
-2. `notebooklm create --use` -> `source add-research "<topic>" --mode fast|deep --import-all`
-3. `notebooklm generate video --format short --wait` - the prompt enforces a three-part script: (1) hook = open with a
-   question to the viewer, (2) clear step-by-step explanation in simple language, (3) one-line takeaway + the closing call to
-   action from `CTA_LINE` in the workflow `env` ("support us by subscribing ... and following us"). Edit `CTA_LINE` to change the wording.
-4. `download video`, ffmpeg thumbnail, `ask` for title (phrased as a question) / description (ends with "Subscribe and follow us for more.") / hashtags
-   -> `meta.json` + `caption_youtube.txt` + `caption_instagram.txt`
-5. notebook is deleted (`if: always()`, so also after a failed step; skipped with `keep_notebook`), credentials removed from the runner
+Typical run time: 10 to 25 minutes.
 
-Job **publish**: videos branch `nlm/<slug>-<run>/` + indexes.
-Job **upload** (only when precheck found YouTube and/or Instagram secrets): YouTube Short and/or Instagram Reel with the captions; links in the run summary.
+## Troubleshooting
 
-Typical runner time: 10-25 min (NotebookLM generation dominates; research `deep` adds several minutes). Each run spends NotebookLM
-compute quota on the throwaway account (research + one video + one chat question).
+| Problem | Fix |
+|---|---|
+| precheck says secret not set | Run setup step 3 again |
+| precheck says auth failed | Run setup step 2 again and update the secret |
+| quota exhausted | Wait for the reset time printed in the log or use a second throwaway account |
+| YouTube video is private | App is not verified, see YouTube section |
+| Instagram error about video URL | Public link not reachable, check the log line that says which URL was used |
