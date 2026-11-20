@@ -1,0 +1,1391 @@
+{
+ "fps": 30,
+ "duration": 103.76,
+ "total_frames": 3113,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Before Goddess Parvati was born…",
+   "t0": 0.8,
+   "t1": 2.71,
+   "f0": 24,
+   "f1": 81,
+   "words": [
+    {
+     "w": "Before",
+     "f": 24
+    },
+    {
+     "w": "Goddess",
+     "f": 37
+    },
+    {
+     "w": "Parvati",
+     "f": 52
+    },
+    {
+     "w": "was",
+     "f": 66
+    },
+    {
+     "w": "born…",
+     "f": 73
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 1,
+   "text": "there was Sati.",
+   "t0": 3.61,
+   "t1": 4.61,
+   "f0": 108,
+   "f1": 138,
+   "words": [
+    {
+     "w": "there",
+     "f": 108
+    },
+    {
+     "w": "was",
+     "f": 121
+    },
+    {
+     "w": "Sati.",
+     "f": 128
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 2,
+   "text": "And her birth was destined",
+   "t0": 5.16,
+   "t1": 6.572,
+   "f0": 155,
+   "f1": 197,
+   "words": [
+    {
+     "w": "And",
+     "f": 155
+    },
+    {
+     "w": "her",
+     "f": 161
+    },
+    {
+     "w": "birth",
+     "f": 166
+    },
+    {
+     "w": "was",
+     "f": 176
+    },
+    {
+     "w": "destined",
+     "f": 182
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 2,
+   "text": "to change the life of Lord Shiva forever.",
+   "t0": 6.572,
+   "t1": 8.69,
+   "f0": 197,
+   "f1": 261,
+   "words": [
+    {
+     "w": "to",
+     "f": 197
+    },
+    {
+     "w": "change",
+     "f": 201
+    },
+    {
+     "w": "the",
+     "f": 213
+    },
+    {
+     "w": "life",
+     "f": 218
+    },
+    {
+     "w": "of",
+     "f": 226
+    },
+    {
+     "w": "Lord",
+     "f": 230
+    },
+    {
+     "w": "Shiva",
+     "f": 238
+    },
+    {
+     "w": "forever.",
+     "f": 247
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 3,
+   "text": "Daksha Prajapati, the son of Brahma,",
+   "t0": 9.79,
+   "t1": 11.865,
+   "f0": 294,
+   "f1": 356,
+   "words": [
+    {
+     "w": "Daksha",
+     "f": 294
+    },
+    {
+     "w": "Prajapati,",
+     "f": 307
+    },
+    {
+     "w": "the",
+     "f": 326
+    },
+    {
+     "w": "son",
+     "f": 332
+    },
+    {
+     "w": "of",
+     "f": 339
+    },
+    {
+     "w": "Brahma,",
+     "f": 343
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 3,
+   "text": "desired to have",
+   "t0": 11.865,
+   "t1": 12.795,
+   "f0": 356,
+   "f1": 384,
+   "words": [
+    {
+     "w": "desired",
+     "f": 356
+    },
+    {
+     "w": "to",
+     "f": 371
+    },
+    {
+     "w": "have",
+     "f": 375
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "the divine Goddess Shakti as his daughter.",
+   "t0": 12.795,
+   "t1": 15.3,
+   "f0": 384,
+   "f1": 459,
+   "words": [
+    {
+     "w": "the",
+     "f": 384
+    },
+    {
+     "w": "divine",
+     "f": 390
+    },
+    {
+     "w": "Goddess",
+     "f": 403
+    },
+    {
+     "w": "Shakti",
+     "f": 418
+    },
+    {
+     "w": "as",
+     "f": 431
+    },
+    {
+     "w": "his",
+     "f": 435
+    },
+    {
+     "w": "daughter.",
+     "f": 442
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 4,
+   "text": "He performed intense penance…",
+   "t0": 16.4,
+   "t1": 17.96,
+   "f0": 492,
+   "f1": 539,
+   "words": [
+    {
+     "w": "He",
+     "f": 492
+    },
+    {
+     "w": "performed",
+     "f": 496
+    },
+    {
+     "w": "intense",
+     "f": 513
+    },
+    {
+     "w": "penance…",
+     "f": 526
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 5,
+   "text": "praying for the Goddess to bless his family.",
+   "t0": 18.86,
+   "t1": 21.11,
+   "f0": 566,
+   "f1": 633,
+   "words": [
+    {
+     "w": "praying",
+     "f": 566
+    },
+    {
+     "w": "for",
+     "f": 579
+    },
+    {
+     "w": "the",
+     "f": 585
+    },
+    {
+     "w": "Goddess",
+     "f": 590
+    },
+    {
+     "w": "to",
+     "f": 603
+    },
+    {
+     "w": "bless",
+     "f": 607
+    },
+    {
+     "w": "his",
+     "f": 616
+    },
+    {
+     "w": "family.",
+     "f": 622
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 6,
+   "text": "Pleased by his devotion,",
+   "t0": 22.21,
+   "t1": 23.564,
+   "f0": 666,
+   "f1": 707,
+   "words": [
+    {
+     "w": "Pleased",
+     "f": 666
+    },
+    {
+     "w": "by",
+     "f": 681
+    },
+    {
+     "w": "his",
+     "f": 685
+    },
+    {
+     "w": "devotion,",
+     "f": 691
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 6,
+   "text": "the divine Mother appeared before him.",
+   "t0": 23.564,
+   "t1": 25.73,
+   "f0": 707,
+   "f1": 772,
+   "words": [
+    {
+     "w": "the",
+     "f": 707
+    },
+    {
+     "w": "divine",
+     "f": 713
+    },
+    {
+     "w": "Mother",
+     "f": 725
+    },
+    {
+     "w": "appeared",
+     "f": 737
+    },
+    {
+     "w": "before",
+     "f": 754
+    },
+    {
+     "w": "him.",
+     "f": 766
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 7,
+   "text": "Daksha bowed and requested her",
+   "t0": 26.83,
+   "t1": 28.473,
+   "f0": 805,
+   "f1": 854,
+   "words": [
+    {
+     "w": "Daksha",
+     "f": 805
+    },
+    {
+     "w": "bowed",
+     "f": 816
+    },
+    {
+     "w": "and",
+     "f": 826
+    },
+    {
+     "w": "requested",
+     "f": 831
+    },
+    {
+     "w": "her",
+     "f": 849
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 7,
+   "text": "to be born as his daughter…",
+   "t0": 28.473,
+   "t1": 29.8,
+   "f0": 854,
+   "f1": 894,
+   "words": [
+    {
+     "w": "to",
+     "f": 854
+    },
+    {
+     "w": "be",
+     "f": 858
+    },
+    {
+     "w": "born",
+     "f": 862
+    },
+    {
+     "w": "as",
+     "f": 869
+    },
+    {
+     "w": "his",
+     "f": 873
+    },
+    {
+     "w": "daughter…",
+     "f": 879
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 8,
+   "text": "so that she could become",
+   "t0": 30.7,
+   "t1": 31.953,
+   "f0": 921,
+   "f1": 959,
+   "words": [
+    {
+     "w": "so",
+     "f": 921
+    },
+    {
+     "w": "that",
+     "f": 925
+    },
+    {
+     "w": "she",
+     "f": 932
+    },
+    {
+     "w": "could",
+     "f": 938
+    },
+    {
+     "w": "become",
+     "f": 947
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 8,
+   "text": "the wife of Lord Shiva.",
+   "t0": 31.953,
+   "t1": 33.08,
+   "f0": 959,
+   "f1": 992,
+   "words": [
+    {
+     "w": "the",
+     "f": 959
+    },
+    {
+     "w": "wife",
+     "f": 964
+    },
+    {
+     "w": "of",
+     "f": 972
+    },
+    {
+     "w": "Lord",
+     "f": 975
+    },
+    {
+     "w": "Shiva.",
+     "f": 983
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 9,
+   "text": "The Goddess accepted his wish…",
+   "t0": 34.18,
+   "t1": 35.86,
+   "f0": 1025,
+   "f1": 1076,
+   "words": [
+    {
+     "w": "The",
+     "f": 1025
+    },
+    {
+     "w": "Goddess",
+     "f": 1031
+    },
+    {
+     "w": "accepted",
+     "f": 1046
+    },
+    {
+     "w": "his",
+     "f": 1062
+    },
+    {
+     "w": "wish…",
+     "f": 1068
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 10,
+   "text": "but gave him a warning.",
+   "t0": 36.76,
+   "t1": 37.98,
+   "f0": 1103,
+   "f1": 1139,
+   "words": [
+    {
+     "w": "but",
+     "f": 1103
+    },
+    {
+     "w": "gave",
+     "f": 1109
+    },
+    {
+     "w": "him",
+     "f": 1117
+    },
+    {
+     "w": "a",
+     "f": 1123
+    },
+    {
+     "w": "warning.",
+     "f": 1125
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 11,
+   "text": "She told Daksha that if he ever disrespected her…",
+   "t0": 38.53,
+   "t1": 41.24,
+   "f0": 1156,
+   "f1": 1237,
+   "words": [
+    {
+     "w": "She",
+     "f": 1156
+    },
+    {
+     "w": "told",
+     "f": 1162
+    },
+    {
+     "w": "Daksha",
+     "f": 1170
+    },
+    {
+     "w": "that",
+     "f": 1182
+    },
+    {
+     "w": "if",
+     "f": 1190
+    },
+    {
+     "w": "he",
+     "f": 1195
+    },
+    {
+     "w": "ever",
+     "f": 1199
+    },
+    {
+     "w": "disrespected",
+     "f": 1207
+    },
+    {
+     "w": "her…",
+     "f": 1231
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 12,
+   "text": "or forgot her divine nature…",
+   "t0": 42.14,
+   "t1": 43.67,
+   "f0": 1264,
+   "f1": 1310,
+   "words": [
+    {
+     "w": "or",
+     "f": 1264
+    },
+    {
+     "w": "forgot",
+     "f": 1268
+    },
+    {
+     "w": "her",
+     "f": 1280
+    },
+    {
+     "w": "divine",
+     "f": 1286
+    },
+    {
+     "w": "nature…",
+     "f": 1298
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 13,
+   "text": "she would abandon that body",
+   "t0": 44.57,
+   "t1": 46.142,
+   "f0": 1337,
+   "f1": 1384,
+   "words": [
+    {
+     "w": "she",
+     "f": 1337
+    },
+    {
+     "w": "would",
+     "f": 1343
+    },
+    {
+     "w": "abandon",
+     "f": 1354
+    },
+    {
+     "w": "that",
+     "f": 1368
+    },
+    {
+     "w": "body",
+     "f": 1376
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 13,
+   "text": "and return to her eternal form.",
+   "t0": 46.142,
+   "t1": 47.85,
+   "f0": 1384,
+   "f1": 1436,
+   "words": [
+    {
+     "w": "and",
+     "f": 1384
+    },
+    {
+     "w": "return",
+     "f": 1390
+    },
+    {
+     "w": "to",
+     "f": 1403
+    },
+    {
+     "w": "her",
+     "f": 1407
+    },
+    {
+     "w": "eternal",
+     "f": 1413
+    },
+    {
+     "w": "form.",
+     "f": 1427
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 14,
+   "text": "Soon, the Goddess was born into Daksha's family…",
+   "t0": 48.95,
+   "t1": 51.76,
+   "f0": 1468,
+   "f1": 1553,
+   "words": [
+    {
+     "w": "Soon,",
+     "f": 1468
+    },
+    {
+     "w": "the",
+     "f": 1477
+    },
+    {
+     "w": "Goddess",
+     "f": 1484
+    },
+    {
+     "w": "was",
+     "f": 1500
+    },
+    {
+     "w": "born",
+     "f": 1506
+    },
+    {
+     "w": "into",
+     "f": 1515
+    },
+    {
+     "w": "Daksha's",
+     "f": 1524
+    },
+    {
+     "w": "family…",
+     "f": 1539
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 15,
+   "text": "as Sati, the daughter of Daksha and Asikni.",
+   "t0": 52.66,
+   "t1": 55.39,
+   "f0": 1580,
+   "f1": 1662,
+   "words": [
+    {
+     "w": "as",
+     "f": 1580
+    },
+    {
+     "w": "Sati,",
+     "f": 1585
+    },
+    {
+     "w": "the",
+     "f": 1594
+    },
+    {
+     "w": "daughter",
+     "f": 1601
+    },
+    {
+     "w": "of",
+     "f": 1621
+    },
+    {
+     "w": "Daksha",
+     "f": 1626
+    },
+    {
+     "w": "and",
+     "f": 1640
+    },
+    {
+     "w": "Asikni.",
+     "f": 1647
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 16,
+   "text": "Her birth brought joy to the family…",
+   "t0": 56.49,
+   "t1": 58.33,
+   "f0": 1695,
+   "f1": 1750,
+   "words": [
+    {
+     "w": "Her",
+     "f": 1695
+    },
+    {
+     "w": "birth",
+     "f": 1700
+    },
+    {
+     "w": "brought",
+     "f": 1710
+    },
+    {
+     "w": "joy",
+     "f": 1723
+    },
+    {
+     "w": "to",
+     "f": 1729
+    },
+    {
+     "w": "the",
+     "f": 1733
+    },
+    {
+     "w": "family…",
+     "f": 1738
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 17,
+   "text": "but her destiny",
+   "t0": 59.23,
+   "t1": 60.042,
+   "f0": 1777,
+   "f1": 1801,
+   "words": [
+    {
+     "w": "but",
+     "f": 1777
+    },
+    {
+     "w": "her",
+     "f": 1783
+    },
+    {
+     "w": "destiny",
+     "f": 1788
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 17,
+   "text": "was far greater than anyone could imagine.",
+   "t0": 60.042,
+   "t1": 62.23,
+   "f0": 1801,
+   "f1": 1867,
+   "words": [
+    {
+     "w": "was",
+     "f": 1801
+    },
+    {
+     "w": "far",
+     "f": 1807
+    },
+    {
+     "w": "greater",
+     "f": 1813
+    },
+    {
+     "w": "than",
+     "f": 1826
+    },
+    {
+     "w": "anyone",
+     "f": 1833
+    },
+    {
+     "w": "could",
+     "f": 1844
+    },
+    {
+     "w": "imagine.",
+     "f": 1854
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 18,
+   "text": "From childhood,",
+   "t0": 63.33,
+   "t1": 64.277,
+   "f0": 1900,
+   "f1": 1928,
+   "words": [
+    {
+     "w": "From",
+     "f": 1900
+    },
+    {
+     "w": "childhood,",
+     "f": 1909
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 18,
+   "text": "Sati felt a deep connection with Lord Shiva…",
+   "t0": 64.277,
+   "t1": 66.9,
+   "f0": 1928,
+   "f1": 2007,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 1928
+    },
+    {
+     "w": "felt",
+     "f": 1937
+    },
+    {
+     "w": "a",
+     "f": 1946
+    },
+    {
+     "w": "deep",
+     "f": 1948
+    },
+    {
+     "w": "connection",
+     "f": 1957
+    },
+    {
+     "w": "with",
+     "f": 1979
+    },
+    {
+     "w": "Lord",
+     "f": 1987
+    },
+    {
+     "w": "Shiva…",
+     "f": 1996
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 19,
+   "text": "the supreme yogi who lived beyond worldly desires.",
+   "t0": 67.8,
+   "t1": 70.94,
+   "f0": 2034,
+   "f1": 2128,
+   "words": [
+    {
+     "w": "the",
+     "f": 2034
+    },
+    {
+     "w": "supreme",
+     "f": 2041
+    },
+    {
+     "w": "yogi",
+     "f": 2056
+    },
+    {
+     "w": "who",
+     "f": 2065
+    },
+    {
+     "w": "lived",
+     "f": 2072
+    },
+    {
+     "w": "beyond",
+     "f": 2083
+    },
+    {
+     "w": "worldly",
+     "f": 2097
+    },
+    {
+     "w": "desires.",
+     "f": 2112
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 20,
+   "text": "Her heart was devoted to him alone.",
+   "t0": 72.04,
+   "t1": 73.94,
+   "f0": 2161,
+   "f1": 2218,
+   "words": [
+    {
+     "w": "Her",
+     "f": 2161
+    },
+    {
+     "w": "heart",
+     "f": 2167
+    },
+    {
+     "w": "was",
+     "f": 2177
+    },
+    {
+     "w": "devoted",
+     "f": 2184
+    },
+    {
+     "w": "to",
+     "f": 2198
+    },
+    {
+     "w": "him",
+     "f": 2202
+    },
+    {
+     "w": "alone.",
+     "f": 2208
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 21,
+   "text": "But her father, Daksha,",
+   "t0": 75.04,
+   "t1": 76.44,
+   "f0": 2251,
+   "f1": 2293,
+   "words": [
+    {
+     "w": "But",
+     "f": 2251
+    },
+    {
+     "w": "her",
+     "f": 2258
+    },
+    {
+     "w": "father,",
+     "f": 2265
+    },
+    {
+     "w": "Daksha,",
+     "f": 2279
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 21,
+   "text": "would one day develop a deep hatred toward Shiva.",
+   "t0": 76.44,
+   "t1": 79.55,
+   "f0": 2293,
+   "f1": 2386,
+   "words": [
+    {
+     "w": "would",
+     "f": 2293
+    },
+    {
+     "w": "one",
+     "f": 2305
+    },
+    {
+     "w": "day",
+     "f": 2312
+    },
+    {
+     "w": "develop",
+     "f": 2319
+    },
+    {
+     "w": "a",
+     "f": 2335
+    },
+    {
+     "w": "deep",
+     "f": 2338
+    },
+    {
+     "w": "hatred",
+     "f": 2347
+    },
+    {
+     "w": "toward",
+     "f": 2361
+    },
+    {
+     "w": "Shiva.",
+     "f": 2375
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 22,
+   "text": "And the very daughter he had prayed for…",
+   "t0": 80.65,
+   "t1": 82.36,
+   "f0": 2420,
+   "f1": 2471,
+   "words": [
+    {
+     "w": "And",
+     "f": 2420
+    },
+    {
+     "w": "the",
+     "f": 2424
+    },
+    {
+     "w": "very",
+     "f": 2429
+    },
+    {
+     "w": "daughter",
+     "f": 2436
+    },
+    {
+     "w": "he",
+     "f": 2448
+    },
+    {
+     "w": "had",
+     "f": 2452
+    },
+    {
+     "w": "prayed",
+     "f": 2456
+    },
+    {
+     "w": "for…",
+     "f": 2466
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 23,
+   "text": "would become the reason for",
+   "t0": 83.26,
+   "t1": 84.572,
+   "f0": 2498,
+   "f1": 2537,
+   "words": [
+    {
+     "w": "would",
+     "f": 2498
+    },
+    {
+     "w": "become",
+     "f": 2506
+    },
+    {
+     "w": "the",
+     "f": 2517
+    },
+    {
+     "w": "reason",
+     "f": 2522
+    },
+    {
+     "w": "for",
+     "f": 2532
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 23,
+   "text": "a conflict that shook the heavens.",
+   "t0": 84.572,
+   "t1": 86.17,
+   "f0": 2537,
+   "f1": 2585,
+   "words": [
+    {
+     "w": "a",
+     "f": 2537
+    },
+    {
+     "w": "conflict",
+     "f": 2539
+    },
+    {
+     "w": "that",
+     "f": 2553
+    },
+    {
+     "w": "shook",
+     "f": 2559
+    },
+    {
+     "w": "the",
+     "f": 2568
+    },
+    {
+     "w": "heavens.",
+     "f": 2573
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 24,
+   "text": "This was the beginning of Sati's story…",
+   "t0": 87.27,
+   "t1": 89.21,
+   "f0": 2618,
+   "f1": 2676,
+   "words": [
+    {
+     "w": "This",
+     "f": 2618
+    },
+    {
+     "w": "was",
+     "f": 2626
+    },
+    {
+     "w": "the",
+     "f": 2631
+    },
+    {
+     "w": "beginning",
+     "f": 2637
+    },
+    {
+     "w": "of",
+     "f": 2654
+    },
+    {
+     "w": "Sati's",
+     "f": 2658
+    },
+    {
+     "w": "story…",
+     "f": 2667
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 25,
+   "text": "a story of divine love, devotion, pride, and tragedy.",
+   "t0": 90.11,
+   "t1": 94.0,
+   "f0": 2703,
+   "f1": 2820,
+   "words": [
+    {
+     "w": "a",
+     "f": 2703
+    },
+    {
+     "w": "story",
+     "f": 2706
+    },
+    {
+     "w": "of",
+     "f": 2720
+    },
+    {
+     "w": "divine",
+     "f": 2726
+    },
+    {
+     "w": "love,",
+     "f": 2743
+    },
+    {
+     "w": "devotion,",
+     "f": 2755
+    },
+    {
+     "w": "pride,",
+     "f": 2777
+    },
+    {
+     "w": "and",
+     "f": 2792
+    },
+    {
+     "w": "tragedy.",
+     "f": 2800
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 26,
+   "text": "In the next episode…",
+   "t0": 95.1,
+   "t1": 96.3,
+   "f0": 2853,
+   "f1": 2889,
+   "words": [
+    {
+     "w": "In",
+     "f": 2853
+    },
+    {
+     "w": "the",
+     "f": 2858
+    },
+    {
+     "w": "next",
+     "f": 2864
+    },
+    {
+     "w": "episode…",
+     "f": 2873
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 27,
+   "text": "Sati begins her penance",
+   "t0": 97.2,
+   "t1": 98.748,
+   "f0": 2916,
+   "f1": 2962,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 2916
+    },
+    {
+     "w": "begins",
+     "f": 2925
+    },
+    {
+     "w": "her",
+     "f": 2939
+    },
+    {
+     "w": "penance",
+     "f": 2946
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 27,
+   "text": "to win Lord Shiva as her husband.",
+   "t0": 98.748,
+   "t1": 100.76,
+   "f0": 2962,
+   "f1": 3023,
+   "words": [
+    {
+     "w": "to",
+     "f": 2962
+    },
+    {
+     "w": "win",
+     "f": 2967
+    },
+    {
+     "w": "Lord",
+     "f": 2974
+    },
+    {
+     "w": "Shiva",
+     "f": 2983
+    },
+    {
+     "w": "as",
+     "f": 2995
+    },
+    {
+     "w": "her",
+     "f": 3000
+    },
+    {
+     "w": "husband.",
+     "f": 3007
+    }
+   ]
+  }
+ ]
+}
