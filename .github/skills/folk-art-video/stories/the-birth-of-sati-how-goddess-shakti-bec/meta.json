@@ -1,10 +1,10 @@
 {
- "title": "The Birth of Sati: Goddess Shakti Becomes Daksha's Daughter",
- "description": "Before Parvati, there was Sati. Discover how Daksha Prajapati's intense penance brought the Supreme Goddess Shakti into the mortal realm, bound by a fateful condition.",
- "topic": "The Birth of Sati: How Goddess Shakti Became Daksha's Daughter ",
- "voice": "en-GB-RyanNeural",
- "duration": 103.76,
+ "title": "The Birth of Sati: How Goddess Shakti Became Daksha's Daughter",
+ "description": "Discover the story of Goddess Sati's miraculous birth and her eternal devotion to Lord Shiva, rooted in the sacred Shiva Purana.",
+ "topic": "The Birth of Sati: How Goddess Shakti Became Daksha's Daughter | Shiva Purana",
+ "voice": "en-US-AndrewNeural",
+ "duration": 112.81,
  "engine": "folk-art-video",
  "provider": "gemini",
- "model": "gemini-3.8-flash"
+ "model": "gemini-3.5-flash-lite"
 }
