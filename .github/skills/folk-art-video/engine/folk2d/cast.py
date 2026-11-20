@@ -214,7 +214,7 @@ def draw_char(c, x, y, s=1.0, o="karna", p=None, flip=False, par=1.0):
 PLANTED = ("trident", "staff", "spear", "bow", "bow_tall")                                                                                # tall props a seated figure rests on the ground and grips instead of waving about
 GRIP = "__grip__"                                                                                                                          # hand closes round a pole that is drawn separately (planted prop)
 PLANT_Y = -200                                                                                                                             # local y of a planted pole's anchor: foot on the ground, top ~ -550 (below the title band)
-FAR_SHX = 20                                                                                                                               # profile rig: far shoulder sits just behind the near one, not on the back edge of the torso
+FAR_SHX = 10                                                                                                                               # profile rig: far shoulder sits just behind the near one; a resting far hand stays inside the waist/dhoti silhouette
 def planted_prop(p):
     """prop kind to draw standing behind a cross-legged figure (so a meditating Shiva's trishul never floats off to his knee)"""
     h = p.get('hold')

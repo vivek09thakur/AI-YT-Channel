@@ -54,10 +54,10 @@ def s_intro(c, f, lf, n):
     mountain(c, 300, 1500, 900, 520, (54, 44, 120), True, 0.35); ground(c, GY, (90, 52, 80))
     mandala(c, W / 2, 1150, 420, f, GOLD, 18, 0.9, 0.3)
     t_s = T.start("there was Sati.")
-    draw_char(c, W / 2, GY, 1.5, "shiva", act(f, "meditate", 1, hold="trident", expr="closed"))
+    draw_char(c, 440, GY, 1.5, "shiva", act(f, "meditate", 1, hold="trident", expr="closed"))
     if f >= t_s:
         k = pop(f, t_s, 12)
-        draw_char(c, 700, GY, 1.2 * k, "sita", act(f, "namaste", 2, expr="smile"), flip=True) if k > 0.05 else None
+        draw_char(c, 860, GY, 1.2 * k, "sita", act(f, "namaste", 2, expr="smile"), flip=True) if k > 0.05 else None
         title(c, "SATI", f, t_s, 560, 140)
 
 def s_daksha_wish(c, f, lf, n):
@@ -84,7 +84,7 @@ def s_vision(c, f, lf, n):
 def s_request(c, f, lf, n):
     cam(c, lf, n, (1.0, 1.05)); sky(c, "heaven")
     ground(c, GY, (100, 60, 90))
-    draw_char(c, 380, GY, 1.3, "king", act(f, "namaste", 1, expr="neutral", mouth=talk(f, T.start("Daksha bowed and requested her"), T.end("to be born as his daughterâ¦"))))
+    draw_char(c, 380, GY, 1.3, "king", act(f, "bow", 1, expr="neutral", mouth=talk(f, T.start("Daksha bowed and requested her"), T.end("to be born as his daughterâ¦"))))
     draw_char(c, 700, GY, 1.4, "durga", act(f, "stand", 2, expr="smile"), flip=True)
 
 def s_warning(c, f, lf, n):
@@ -101,7 +101,7 @@ def s_birth(c, f, lf, n):
     draw_char(c, 330, GY, 1.4, "king", act(f, "stand", 1, expr="smile"))
     draw_char(c, 740, GY, 1.3, "queen", act(f, "stand", 2, expr="smile"), flip=True)
     k = pop(f, T.start("Sati, the daughter of Daksha"), 12)
-    draw_char(c, 540, GY - 100, 0.5 * k, "child", act(f, "raise", 3, expr="smile")) if k > 0.05 else None
+    draw_char(c, 680, GY - 190, 0.6 * k, "child", act(f, "raise", 3, expr="smile")) if k > 0.05 else None
     title(c, "BIRTH OF SATI", f, T.start("Sati, the daughter of Daksha"), 560, 110, GOLD)
 
 def s_childhood(c, f, lf, n):
