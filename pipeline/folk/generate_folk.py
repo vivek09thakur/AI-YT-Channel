@@ -25,14 +25,19 @@ def brief(topic, narr, ph, notes):
 
 
 def check_meta(txt):
+    """lenient: strip code fences, take the first JSON object, ignore trailing junk (models often append a line after it)"""
+    s = txt.strip()
+    if s.startswith('```'): s = s.split('\n', 1)[-1]
+    i = s.find('{')
     try:
-        m = json.loads(txt)
+        if i < 0: raise ValueError('no JSON object found')
+        m, _ = json.JSONDecoder().raw_decode(s[i:])
     except Exception as e:
         return None, [f'meta.json is not valid JSON: {e}']
     errs = []
     if not isinstance(m, dict) or not str(m.get('title', '')).strip(): errs.append('meta.json needs a non-empty "title"')
-    if not str(m.get('description', '')).strip(): errs.append('meta.json needs a non-empty "description"')
-    return m, errs
+    elif not str(m.get('description', '')).strip(): errs.append('meta.json needs a non-empty "description"')
+    return (m if isinstance(m, dict) else None), errs
 
 
 def main():
@@ -61,11 +66,16 @@ def main():
         if not new: errs = ['your reply contained no `=== FILE: name ===` blocks; reply with meta.json and story.py only, no prose'] + errs
         meta = None
         if not errs:
-            meta, errs = check_meta(files['meta.json'])
+            meta, meta_errs = check_meta(files['meta.json'])
             (sdir / 'story.py').write_text(files['story.py'], encoding='utf-8')
             res = check_story.check(sdir / 'story.py', sdir / 'phrases.json', kit, a.step, sdir / 'sheet.jpg')
             for w in res['warnings']: print('    warning:', w, flush=True)
             errs += res['problems']
+            if meta_errs and not errs:
+                # story passes; a bad meta.json is not worth another full attempt - fall back to the topic
+                print('    warning: ' + '; '.join(meta_errs) + ' -> using topic as title/description', flush=True)
+                meta = {**(meta or {}), 'title': str((meta or {}).get('title') or a.topic), 'description': str((meta or {}).get('description') or a.topic)}
+            errs += meta_errs if errs else []
             if not errs:
                 title = ' '.join(str(meta['title']).split())
                 (sdir / 'meta.json').write_text(json.dumps({**meta, 'title': title, 'topic': a.topic, 'voice': narr.get('voice'), 'duration': narr['duration'],
