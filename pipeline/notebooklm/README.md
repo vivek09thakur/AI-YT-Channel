@@ -39,8 +39,10 @@ Security -> Your devices -> remove the session.
 1. install `notebooklm-py[headless]`, mint a session from the master token, `auth check --test`, `usage --json` (fails fast if the account's compute quota is exhausted)
 2. `pick_topic.py` -> topic / slug
 3. `notebooklm create --use` -> `source add-research "<topic>" --mode fast|deep --import-all`
-4. `notebooklm generate video --format short --wait` (prompt asks for a Shorts-style hook + takeaway)
-5. `download video`, ffmpeg thumbnail, `ask` for title/description/hashtags -> `meta.json`
+4. `notebooklm generate video --format short --wait` - the prompt enforces a three-part script: (1) hook = open with a
+   question to the viewer, (2) clear step-by-step explanation in simple language, (3) one-line takeaway + the closing call to
+   action from `CTA_LINE` in the workflow `env` ("support us by subscribing ... and following us"). Edit `CTA_LINE` to change the wording.
+5. `download video`, ffmpeg thumbnail, `ask` for title (phrased as a question) / description (ends with "Subscribe and follow us for more.") / hashtags -> `meta.json`
 6. notebook is deleted (unless `keep_notebook`), credentials removed from the runner
 7. publish job: videos branch `nlm/<slug>-<run>/` + indexes
 
