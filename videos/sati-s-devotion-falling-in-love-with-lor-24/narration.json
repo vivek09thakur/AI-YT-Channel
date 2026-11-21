@@ -1,0 +1,133 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 98.28,
+ "lines": [
+  {
+   "i": 0,
+   "text": "A majestic royal palace echoes with the silent, unwavering prayers of a young princess who refuses to look at anyone else.",
+   "t0": 0.8,
+   "t1": 7.62,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "Princess Sati closes her eyes and paints the luminous image of the great ascetic in her mind.",
+   "t0": 8.72,
+   "t1": 13.65,
+   "para": true
+  },
+  {
+   "i": 2,
+   "text": "Her proud father Daksha wants a powerful warrior prince for her throne.",
+   "t0": 14.2,
+   "t1": 17.98,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "Sati wants only the lord of the high mountains.",
+   "t0": 18.53,
+   "t1": 21.1,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "She leaves the soft comforts of silk and gold far behind.",
+   "t0": 22.2,
+   "t1": 25.43,
+   "para": true
+  },
+  {
+   "i": 5,
+   "text": "She walks deep into the silent, ancient forest where the wild winds whisper only one sacred name.",
+   "t0": 25.98,
+   "t1": 31.78,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "Shiva...",
+   "t0": 32.33,
+   "t1": 32.88,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "Days turn into long, unforgiving seasons of hardship.",
+   "t0": 34.33,
+   "t1": 37.76,
+   "para": true
+  },
+  {
+   "i": 8,
+   "text": "Sati eats only dry fallen leaves, then only drops of morning dew, and finally nothing at all.",
+   "t0": 38.31,
+   "t1": 44.36,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Her fierce penance burns like a pure flame against the dark woods.",
+   "t0": 44.91,
+   "t1": 48.51,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "Wild beasts gather quietly around her, sensing her immense and growing spiritual power.",
+   "t0": 49.61,
+   "t1": 54.72,
+   "para": true
+  },
+  {
+   "i": 11,
+   "text": "Fierce tigers sit as gentle guards.",
+   "t0": 55.27,
+   "t1": 57.47,
+   "para": false
+  },
+  {
+   "i": 12,
+   "text": "Venomous snakes bow their hoods in deep respect to her unbreakable focus.",
+   "t0": 58.02,
+   "t1": 62.06,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "Finally, the solid earth trembles ever so slightly beneath the trees.",
+   "t0": 63.16,
+   "t1": 67.28,
+   "para": true
+  },
+  {
+   "i": 14,
+   "text": "A cool, fragrant breeze sweeps through the canopy carrying the deep scent of sacred ash and Himalayan snow.",
+   "t0": 67.83,
+   "t1": 73.61,
+   "para": false
+  },
+  {
+   "i": 15,
+   "text": "Lord Shiva suddenly appears before her, draped in tiger skin, His matted locks holding the bright crescent moon.",
+   "t0": 74.71,
+   "t1": 81.03,
+   "para": true
+  },
+  {
+   "i": 16,
+   "text": "He smiles gently at the devoted princess who dared to conquer the cosmos with pure love.",
+   "t0": 81.58,
+   "t1": 86.35,
+   "para": false
+  },
+  {
+   "i": 17,
+   "text": "Their divine union will soon bridge two entirely different worlds, setting the stage for a great cosmic love story that transcends time itself.",
+   "t0": 87.45,
+   "t1": 95.28,
+   "para": true
+  }
+ ]
+}
