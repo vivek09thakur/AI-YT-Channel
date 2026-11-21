@@ -41,6 +41,8 @@ FALLBACK_MODELS = {
 REASONING_BODY = {'meta': {'reasoning_effort': 'low'}}
 KEY_ENV = {p: OPENAI_COMPAT[p][1] for p in OPENAI_COMPAT} | {'anthropic': 'ANTHROPIC_API_KEY'}
 RETRY_WAITS = (15, 30, 45)  # per model; a 503 storm then costs 1.5 min before the next fallback model is tried
+# seconds to wait for the model's reply (per request); small text jobs set LLM_TIMEOUT=120 so a stalled stream fails fast
+LLM_TIMEOUT = int(os.environ.get('LLM_TIMEOUT', '600'))
 
 
 class Unavailable(Exception):
@@ -70,7 +72,7 @@ def call_gemini(model, system, messages, max_tokens):
             'generationConfig': {'maxOutputTokens': max_tokens + 8000, 'thinkingConfig': {'thinkingLevel': 'low'}}}
     url = f'{GEMINI_BASE}/models/{model}:streamGenerateContent?alt=sse'
     for cfg in (body, {**body, 'generationConfig': {'maxOutputTokens': max_tokens + 8000}}):
-        r = requests.post(url, timeout=(30, 600), headers={'x-goog-api-key': key}, json=cfg, stream=True)
+        r = requests.post(url, timeout=(30, LLM_TIMEOUT), headers={'x-goog-api-key': key}, json=cfg, stream=True)
         if r.status_code == 400 and 'thinking' in r.text.lower() and cfg is body:
             continue
         r.raise_for_status()
@@ -108,7 +110,7 @@ def call_llm(provider, model, system, messages, max_tokens):
                     body.update(REASONING_BODY[provider]); body['max_tokens'] = max_tokens * 2
                 else:
                     body['temperature'] = 0.4
-                r = requests.post(url, timeout=600,
+                r = requests.post(url, timeout=LLM_TIMEOUT,
                                   headers={'Authorization': f'Bearer {os.environ[key]}', **extra}, json=body)
                 r.raise_for_status(); j = r.json()
                 if 'error' in j:
@@ -117,7 +119,7 @@ def call_llm(provider, model, system, messages, max_tokens):
             if provider == 'anthropic':
                 if not os.environ.get('ANTHROPIC_API_KEY'):
                     raise Unavailable('ANTHROPIC_API_KEY is not set')
-                r = requests.post('https://api.anthropic.com/v1/messages', timeout=600,
+                r = requests.post('https://api.anthropic.com/v1/messages', timeout=LLM_TIMEOUT,
                                   headers={'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01'},
                                   json={'model': model, 'max_tokens': max_tokens, 'temperature': 0.4, 'system': system, 'messages': messages})
                 r.raise_for_status(); j = r.json()

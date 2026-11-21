@@ -78,6 +78,7 @@ permissions:
 
 env:
   KIT: .github/skills/folk-art-video
+  PYTHONUNBUFFERED: '1'
   # scheduled runs have no inputs: these are the defaults used then
   FORMATS: ${{ inputs.formats || 'both' }}
   VOICE: ${{ inputs.voice || 'en-US-AndrewNeural' }}
@@ -158,6 +159,7 @@ jobs:
           python pipeline/folk/pick_story.py --out work --used site/videos.json --provider "${{ needs.precheck.outputs.provider }}" \
             --model "${{ needs.precheck.outputs.model }}" --theme "$THEME" --notes "$NOTES"
         env:
+          LLM_TIMEOUT: '120'
           THEME: ${{ inputs.theme }}
           NOTES: ${{ inputs.notes }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -329,6 +331,7 @@ jobs:
             --slug "${{ needs.author.outputs.slug }}" --cta "$CTA" --provider "${{ needs.precheck.outputs.provider }}"
           echo; cat final/caption_youtube.txt
         env:
+          LLM_TIMEOUT: '120'
           TOPIC: ${{ needs.author.outputs.topic }}
           CTA: ${{ env.CTA_LINE }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
