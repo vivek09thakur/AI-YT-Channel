@@ -98,7 +98,7 @@ Free. Takes about 10 minutes. Everything below is on developers.facebook.com unl
 |---|---|
 | IG_USER1_ID | the number under the account |
 | IG_USER1_TOKEN | the token |
-| IG_USER1_NAME | optional label, shown in the job name |
+| IG_USER1_NAME | optional label, shown in the upload summary (job name stays `user1`) |
 
 Skip sections 3 (webhooks) and 4 (App Review). Tester accounts can post without review.
 
@@ -126,7 +126,7 @@ Private repo note: Instagram must fetch the video from a public URL, so the file
 | YT_USER1_CLIENT_SECRET | client secret |
 | YT_USER1_REFRESH_TOKEN | printed by the script |
 | YT_USER1_PRIVACY | optional: public, unlisted, private |
-| YT_USER1_NAME | optional label |
+| YT_USER1_NAME | optional label, shown in the upload summary |
 
 Known limits:
 

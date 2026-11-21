@@ -361,7 +361,8 @@ jobs:
     name: Upload ${{ matrix.platform }} / ${{ matrix.name }}
     needs: [precheck, make, publish]
     # publish may be skipped (publish=false) - still upload if the video was made and at least one account is configured
-    if: ${{ !cancelled() && needs.make.result == 'success' && needs.precheck.outputs.count != '0' }}
+    # matrix output is dropped by GitHub if it ever contains a secret value -> guard on non-empty so the run is not failed
+    if: ${{ !cancelled() && needs.make.result == 'success' && needs.precheck.outputs.count != '0' && needs.precheck.outputs.matrix != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
@@ -377,6 +378,7 @@ jobs:
         with: { name: nlm-short, path: final }
 
       - name: Select account credentials
+        id: acct
         env:
           # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
           ALL_SECRETS: ${{ toJSON(secrets) }}
@@ -425,10 +427,10 @@ jobs:
             echo
             echo "| Platform | Account | Result |"; echo "|---|---|---|"
             if [ "${{ matrix.platform }}" = "youtube" ]; then
-              echo "| YouTube | ${{ matrix.name }} | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
+              echo "| YouTube | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
               echo; echo "<details><summary>Caption</summary>"; echo; echo '```'; cat final/caption_youtube.txt; echo; echo '```'; echo "</details>"
             else
-              echo "| Instagram | ${{ matrix.name }} | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
+              echo "| Instagram | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
               echo; echo "<details><summary>Caption</summary>"; echo; echo '```'; cat final/caption_instagram.txt; echo; echo '```'; echo "</details>"
             fi
           } >> "$GITHUB_STEP_SUMMARY"

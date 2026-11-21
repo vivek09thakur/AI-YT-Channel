@@ -9,9 +9,14 @@ Sources (all optional, combined). Secrets are read from the environment or from 
                                                         -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
   YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
 
-  list   --upload auto|off          print {"matrix": [...names only...], "count": N, "summary": [...]}
+  list   --upload auto|off          print {"matrix": [{"platform","name"}...], "count": N, "summary": [...]}
   select --platform P --name N --env-file FILE
                                     write shell exports for that one account and print ::add-mask:: lines
+
+IMPORTANT: the matrix "name" is a fixed, non-secret KEY (default, user1, user2, json1 ...), never a value taken
+from a secret. GitHub silently drops any job output that contains a secret value ("Skip output ... since it
+may contain secret"), which would leave the upload job with an empty matrix and fail the whole run.
+The optional *_NAME label is only resolved inside the upload job (select) and exported as ACCOUNT_LABEL.
 """
 import argparse
 import json
@@ -73,12 +78,12 @@ def numbered(platform):
     out = []
     for n in nums:
         acc = {k: env(f"{prefix}{n}_{s}") for k, s in suffix.items()}
-        name = env(f"{prefix}{n}_NAME") or f"user{n}"
         missing = [k for k in REQ[platform] if not acc[k]]
         if missing:
             warn(f"{prefix}{n}_* account incomplete - missing {', '.join(f'{prefix}{n}_{suffix[k]}' for k in missing)} - skipped")
             continue
-        out.append({"name": name, **{k: v for k, v in acc.items() if v}})
+        out.append({"name": f"user{n}", "label": env(f"{prefix}{n}_NAME") or f"user{n}",
+                    **{k: v for k, v in acc.items() if v}})
     return out
 
 
@@ -100,16 +105,16 @@ def load_json_list(var):
 
 
 def accounts():
-    """Return {platform: [ {name, ...creds} ]} with legacy single secrets as 'default'."""
+    """Return {platform: [ {name (non-secret key), label, ...creds} ]} with legacy single secrets as 'default'."""
     out = {"youtube": [], "instagram": []}
     legacy_yt = {k: env(ENV["youtube"][k]) for k in REQ["youtube"]}
     if all(legacy_yt.values()):
-        out["youtube"].append({"name": "default", **legacy_yt})
+        out["youtube"].append({"name": "default", "label": "default", **legacy_yt})
     elif any(legacy_yt.values()):
         warn("YouTube default account incomplete - need YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN")
     legacy_ig = {k: env(ENV["instagram"][k]) for k in REQ["instagram"]}
     if all(legacy_ig.values()):
-        out["instagram"].append({"name": "default", **legacy_ig})
+        out["instagram"].append({"name": "default", "label": "default", **legacy_ig})
     elif any(legacy_ig.values()):
         warn("Instagram default account incomplete - need IG_USER_ID, IG_ACCESS_TOKEN")
 
@@ -127,15 +132,15 @@ def accounts():
                 continue
             if a.get("enabled") is False:
                 continue
-            name = str(a.get("name") or f"account{i + 1}").strip()
+            # matrix key is positional (json1, json2 ...); the JSON "name" is secret content -> label only
+            name = f"json{i + 1}"
+            label = str(a.get("name") or name).strip()
             missing = [k for k in REQ[platform] if not str(a.get(k, "")).strip()]
             if missing:
-                warn(f"{var} account '{name}' missing {', '.join(missing)} - skipped")
+                warn(f"{var}[{i}] missing {', '.join(missing)} - skipped")
                 continue
-            if any(x["name"] == name for x in out[platform]):
-                warn(f"{var} duplicate account name '{name}' - skipped")
-                continue
-            out[platform].append({"name": name, **{k: str(v).strip() for k, v in a.items() if k != "enabled"}})
+            out[platform].append({"name": name, "label": label,
+                                  **{k: str(v).strip() for k, v in a.items() if k not in ("enabled", "name")}})
     return out
 
 
@@ -161,7 +166,7 @@ def cmd_select(a):
         print(f"::error::no {a.platform} account named '{a.name}'", file=sys.stderr)
         sys.exit(1)
     x = match[0]
-    lines = []
+    lines = [f"export ACCOUNT_LABEL={shlex.quote(x.get('label') or a.name)}"]
     for key, var in ENV[a.platform].items():
         val = x.get(key, "")
         if not val:
@@ -172,6 +177,9 @@ def cmd_select(a):
     with open(a.env_file, "w") as f:
         f.write("\n".join(lines) + "\n")
     os.chmod(a.env_file, 0o600)
+    if a.github_output:
+        with open(a.github_output, "a") as f:
+            f.write(f"label={x.get('label') or a.name}\n")
     print(f"selected {a.platform} account '{a.name}'", file=sys.stderr)
 
 
@@ -185,6 +193,7 @@ def main():
     s.add_argument("--platform", required=True, choices=list(REQ))
     s.add_argument("--name", required=True)
     s.add_argument("--env-file", required=True)
+    s.add_argument("--github-output", default=os.environ.get("GITHUB_OUTPUT", ""))
     s.set_defaults(fn=cmd_select)
     a = ap.parse_args()
     a.fn(a)
