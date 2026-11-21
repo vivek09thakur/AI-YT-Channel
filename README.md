@@ -14,90 +14,51 @@ GitHub Actions that create finished YouTube videos from a script or from a topic
 
 ## Get started
 
-Everything runs in GitHub Actions. On your computer you only need the GitHub CLI to add secrets and start runs. Replace OWNER/REPO with the path of this repo as shown in the browser address bar.
+Everything runs in GitHub Actions. There is nothing to install or clone. You only add a few secrets in the repo settings and start a workflow.
 
-1. Install and log in to the GitHub CLI
+Where to add things: open the repo on GitHub, go to Settings, then Secrets and variables, then Actions. Secrets go under the Secrets tab with New repository secret. Variables go under the Variables tab with New repository variable.
 
-   ```bash
-   winget install GitHub.cli
-   gh auth login
-   gh repo view OWNER/REPO
-   ```
+1. Add one LLM key
 
-2. Add at least one LLM key (needed for story videos and fact reels, free tiers first)
+   Needed for story videos and fact reels. Add any one of these as a secret, free tiers first: GEMINI_API_KEY, MISTRAL_API_KEY, CEREBRAS_API_KEY. The value is the API key from that provider.
 
-   ```bash
-   gh secret set GEMINI_API_KEY -R OWNER/REPO
-   gh secret set MISTRAL_API_KEY -R OWNER/REPO
-   gh secret set CEREBRAS_API_KEY -R OWNER/REPO
-   ```
+2. Optional: better voices
 
-   Each command asks you to paste the value.
+   Secret AZURE_SPEECH_KEY with your Azure Speech key, and variable AZURE_SPEECH_REGION with the region, for example centralindia. Without them the free edge-tts voices are used.
 
-3. Optional: better voices and a minutes guard
+3. Optional: minutes guard
 
-   ```bash
-   gh secret set AZURE_SPEECH_KEY -R OWNER/REPO
-   gh variable set AZURE_SPEECH_REGION -R OWNER/REPO --body centralindia
-   gh secret set BILLING_TOKEN -R OWNER/REPO
-   gh variable set ACTIONS_INCLUDED_MINUTES -R OWNER/REPO --body 2000
-   ```
+   Secret BILLING_TOKEN with a fine grained personal access token that has Plan read permission. Precheck then stops a run when your Actions minutes are almost used up. Variable ACTIONS_INCLUDED_MINUTES with your plan minutes, default 2000.
 
-4. NotebookLM short (needed only for that workflow)
+4. NotebookLM short
 
-   Use a throwaway Google account. A browser opens once.
+   Needed only for that workflow. Use a throwaway Google account. On your computer run once
 
    ```bash
    pip install "notebooklm-py[headless,browser]"
    notebooklm login --master-token --account throwaway@gmail.com
-   gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO < ~/.notebooklm/profiles/default/master_token.json
    ```
 
-   On Windows PowerShell the last line is
-
-   ```powershell
-   Get-Content "$env:USERPROFILE\.notebooklm\profiles\default\master_token.json" -Raw | gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO
-   ```
+   A browser opens, sign in with the throwaway account. Then open the file `.notebooklm/profiles/default/master_token.json` in your home folder, copy its whole content and add it as secret NOTEBOOKLM_MASTER_TOKEN_JSON.
 
 5. Optional: auto upload of NotebookLM shorts
 
-   Setup steps for the Google and Meta side are in `pipeline/notebooklm/README.md`. Then:
-
-   ```bash
-   gh secret set YT_CLIENT_ID -R OWNER/REPO
-   gh secret set YT_CLIENT_SECRET -R OWNER/REPO
-   gh secret set YT_REFRESH_TOKEN -R OWNER/REPO
-   gh secret set IG_USER_ID -R OWNER/REPO
-   gh secret set IG_ACCESS_TOKEN -R OWNER/REPO
-   ```
+   Secrets YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN for YouTube and IG_USER_ID, IG_ACCESS_TOKEN for Instagram. How to get the values is in `pipeline/notebooklm/README.md`. If a platform has no secrets its upload is skipped.
 
 6. Check the setup
 
-   ```bash
-   gh secret list -R OWNER/REPO
-   gh variable list -R OWNER/REPO
-   gh workflow run "Pre-run check only" -R OWNER/REPO
-   gh run watch -R OWNER/REPO
-   ```
+   Actions tab, choose Pre-run check only, click Run workflow. It reports which keys work, if the voice service is reachable and how many minutes are left.
 
 7. Start a run
 
-   From the Actions tab, or from the terminal
-
-   ```bash
-   gh workflow run "Generate story video" -R OWNER/REPO -f topic="Shiva drinks the poison" -f script_file=my_script.txt
-   gh workflow run "Generate daily fact reel" -R OWNER/REPO -f topic="Why the sky is blue" -f script="Sentence one. Sentence two."
-   gh workflow run "NotebookLM short (auto topic)" -R OWNER/REPO
-   gh run list -R OWNER/REPO --limit 5
-   ```
+   Actions tab, choose a workflow, click Run workflow, fill in the form. NotebookLM short also runs by itself every day at 09:00 IST.
 
 8. Get the video
 
-   Open the `videos` branch. Each run has its own folder with the mp4 files, a thumbnail and a meta.json. The run summary also shows direct download links.
-
+   Open the `videos` branch. Each run has its own folder with the mp4 files, a thumbnail and a meta.json. The run summary of the workflow also shows direct download links.
 ## Secrets
 
-Add them under Settings, Secrets and variables, Actions, or with `gh secret set NAME -R OWNER/REPO`.
+Add them under Settings, Secrets and variables, Actions, Secrets tab.
 
 | Secret | Used by | Required | Notes |
 |---|---|---|---|
@@ -116,7 +77,7 @@ Add them under Settings, Secrets and variables, Actions, or with `gh secret set 
 
 ## Variables
 
-Add them under Settings, Secrets and variables, Actions, Variables tab, or with `gh variable set NAME -R OWNER/REPO`.
+Add them under Settings, Secrets and variables, Actions, Variables tab.
 
 | Variable | Default | Meaning |
 |---|---|---|

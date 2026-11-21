@@ -4,8 +4,8 @@
 1. Google Cloud console -> create a project -> enable "YouTube Data API v3"
 2. APIs & Services -> OAuth consent screen -> External, add your channel's Google account as a test user
 3. Credentials -> Create credentials -> OAuth client ID -> Desktop app -> copy client id + secret
-4. pip install google-auth-oauthlib
-   python pipeline/notebooklm/yt_get_refresh_token.py --client-id ... --client-secret ...
+4. download this file, then: pip install google-auth-oauthlib
+   python yt_get_refresh_token.py --client-id ... --client-secret ...
    (a browser opens; sign in with the CHANNEL's Google account and allow "upload videos")
 5. store the printed refresh token + the client id/secret as repo secrets YT_REFRESH_TOKEN, YT_CLIENT_ID, YT_CLIENT_SECRET
 
@@ -32,7 +32,7 @@ def main():
     flow = InstalledAppFlow.from_client_config(cfg, SCOPES)
     creds = flow.run_local_server(port=0, access_type='offline', prompt='consent')
     print('\nYT_REFRESH_TOKEN =', creds.refresh_token)
-    print('store it:  gh secret set YT_REFRESH_TOKEN -R <owner>/<repo>  (paste when prompted)')
+    print('add it as repository secret YT_REFRESH_TOKEN (Settings -> Secrets and variables -> Actions)')
 
 
 if __name__ == '__main__':

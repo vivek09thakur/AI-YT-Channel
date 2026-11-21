@@ -21,15 +21,9 @@ Every video follows the same structure: a question to hook the viewer, a clear e
 
 3. Save the token as a repository secret
 
-   ```bash
-   gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO < ~/.notebooklm/profiles/default/master_token.json
-   ```
+   Open the file `.notebooklm/profiles/default/master_token.json` in your home folder (on Windows `C:\Users\YOU\.notebooklm\profiles\default\master_token.json`) and copy its whole content.
 
-   On Windows PowerShell
-
-   ```powershell
-   Get-Content "$env:USERPROFILE\.notebooklm\profiles\default\master_token.json" -Raw | gh secret set NOTEBOOKLM_MASTER_TOKEN_JSON -R OWNER/REPO
-   ```
+   In the repo on GitHub go to Settings, Secrets and variables, Actions, New repository secret. Name NOTEBOOKLM_MASTER_TOKEN_JSON, value the copied text.
 
 4. Run the workflow
 
@@ -45,7 +39,7 @@ That is all. Videos appear under `nlm/` on the `videos` branch with a thumbnail,
 | YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN | YouTube upload |
 | IG_USER_ID, IG_ACCESS_TOKEN | Instagram upload |
 
-Upload secrets are optional. If they are missing, the upload is skipped and the run still succeeds.
+All secrets are added in the repo under Settings, Secrets and variables, Actions, New repository secret. Upload secrets are optional. If they are missing, the upload is skipped and the run still succeeds.
 
 ## Upload to YouTube
 
@@ -53,20 +47,14 @@ Upload secrets are optional. If they are missing, the upload is skipped and the 
 2. Enable YouTube Data API v3
 3. OAuth consent screen: type External, add the channel account as a test user, set Publishing status to In production
 4. Credentials: create an OAuth client ID of type Desktop app
-5. Get the refresh token
+5. Get the refresh token. Download `yt_get_refresh_token.py` from this folder and run it on your computer
 
    ```bash
    pip install google-auth-oauthlib
-   python pipeline/notebooklm/yt_get_refresh_token.py --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET
+   python yt_get_refresh_token.py --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET
    ```
 
-6. Save the secrets
-
-   ```bash
-   gh secret set YT_CLIENT_ID -R OWNER/REPO
-   gh secret set YT_CLIENT_SECRET -R OWNER/REPO
-   gh secret set YT_REFRESH_TOKEN -R OWNER/REPO
-   ```
+6. Add three repository secrets under Settings, Secrets and variables, Actions: YT_CLIENT_ID and YT_CLIENT_SECRET from step 4, YT_REFRESH_TOKEN printed by step 5
 
 Note: YouTube keeps videos from an unverified app private. Request verification in the consent screen to upload as public.
 
@@ -78,12 +66,7 @@ You need a professional Instagram account (Business or Creator) linked to a Face
 2. In Graph API Explorer generate a token with instagram_basic, instagram_content_publish and pages_show_list
 3. Call `me/accounts?fields=instagram_business_account` and copy the id
 4. Exchange the token for a long lived token in the Access Token Tool
-5. Save the secrets
-
-   ```bash
-   gh secret set IG_USER_ID -R OWNER/REPO
-   gh secret set IG_ACCESS_TOKEN -R OWNER/REPO
-   ```
+5. Add two repository secrets under Settings, Secrets and variables, Actions: IG_USER_ID with the id from step 3, IG_ACCESS_TOKEN with the long lived token from step 4
 
 Note: long lived tokens last 60 days, then update the secret. Instagram needs a public link to the video. If the repo is private the file is parked for one hour on tmpfiles.org. Skip these secrets if you do not want that.
 
