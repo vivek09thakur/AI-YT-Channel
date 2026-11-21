@@ -1,0 +1,69 @@
+{
+ "title": "How Does Your CPU Execute Code So Fast?",
+ "topic": "How a CPU executes an instruction",
+ "genre": "technology",
+ "slug": "how-a-cpu-executes-an-instruction",
+ "format": "short",
+ "description": "Learn how the CPU uses the fetch, decode, and execute cycle to turn machine code into lightning-fast calculations. Discover how modern processors use pipelining and branch prediction to run billions of operations per second. Subscribe and follow us for more.",
+ "hashtags": [
+  "#cpu",
+  "#processor",
+  "#hardware",
+  "#tech",
+  "#computerscience",
+  "#pipelining",
+  "#architecture",
+  "#coding",
+  "#technology",
+  "#engineering",
+  "#computing",
+  "#electronics"
+ ],
+ "cta": "If you learned something new, support us by subscribing to the channel and following us for more.",
+ "caption_youtube": "Learn how the CPU uses the fetch, decode, and execute cycle to turn machine code into lightning-fast calculations. Discover how modern processors use pipelining and branch prediction to run billions of operations per second. Subscribe and follow us for more.\n\n#cpu #processor #hardware #tech #computerscience #pipelining #architecture #coding #technology #engineering #computing #electronics #shorts",
+ "caption_instagram": "Learn how the CPU uses the fetch, decode, and execute cycle to turn machine code into lightning-fast calculations. Discover how modern processors use pipelining and branch prediction to run billions of operations per second. Subscribe and follow us for more.\n\n#cpu #processor #hardware #tech #computerscience #pipelining #architecture #coding #technology #engineering #computing #electronics #reels #explore #learnsomethingnew",
+ "notebook_id": "ff1b6f5f-bec2-45a3-93e4-2bc6e1b07f47",
+ "sources": [
+  {
+   "title": "Branch Prediction in Modern CPUs - The Coding Gopher",
+   "url": "https://thecodinggopher.substack.com/p/branch-prediction-in-modern-cpus"
+  },
+  {
+   "title": "Inside the CPU: A Complete Guide to the Instruction Execution Cycle and How Data Is Retrieved from RAM - DEV Community",
+   "url": "https://dev.to/farhadrahimiklie/inside-the-cpu-a-complete-guide-to-the-instruction-execution-cycle-and-how-data-is-retrieved-from-4j2c"
+  },
+  {
+   "title": "Instruction cycle - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Instruction_cycle"
+  },
+  {
+   "title": "Instruction pipelining - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Instruction_pipelining"
+  },
+  {
+   "title": "Out-of-Order Execution — Computer Architecture - Fermi AI",
+   "url": "https://fermi.ai/wiki/cs-arch-out-of-order-execution"
+  },
+  {
+   "title": "RISC vs CISC - Reduced Instruction Set - YouTube",
+   "url": "https://www.youtube.com/watch?v=XTbg4wTdqu8"
+  },
+  {
+   "title": "The CU, The ALU and The Register | The CPU - gesci",
+   "url": "https://oer-studentresources.gesci.org/wp-content/courses/Computer/CS-F1-cpu/the_cu_the_alu_and_the_register.html"
+  },
+  {
+   "title": "The Instruction Cycle: Fetch, Decode and Execute - ChipVerify",
+   "url": "https://chipverify.com/computer-architecture/the-instruction-cycle"
+  },
+  {
+   "title": "Understanding How the Control Unit Executes Instructions | Lenovo US",
+   "url": "https://www.lenovo.com/us/en/glossary/control-unit/"
+  },
+  {
+   "title": "What Is a CPU Register? Types, Functions & How It Works - Total Phase",
+   "url": "https://www.totalphase.com/blog/2023/05/what-is-register-in-cpu-how-does-it-work/"
+  }
+ ],
+ "generator": "notebooklm video overview"
+}
