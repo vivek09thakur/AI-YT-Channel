@@ -174,10 +174,18 @@ Change the wording:
 
 | Job | What it checks or does |
 |---|---|
-| Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks, lists upload accounts |
+| Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks |
 | Make | topic, research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
-| Upload platform / name | one job per account |
+| Upload | calls `notebooklm-upload.yml`: detects accounts, one job per account (`instagram / user1` ...) |
+
+### Upload an already made video (no NotebookLM quota)
+
+If a run made and published the video but the upload failed or was skipped, do not use "Re-run all jobs" (that remakes the video and uses quota, and it runs the OLD workflow file).
+
+- Open the `videos` branch > `nlm/README.md` and copy the folder name, e.g. `nlm/how-deepfakes-are-made-and-detected-5`
+- Actions tab > **NotebookLM upload (YouTube / Instagram)** > Run workflow > paste the folder
+- One upload job per configured account runs, nothing else
 
 ---
 
@@ -192,3 +200,5 @@ Change the wording:
 | no public URL for the video | tmpfiles.org down, re-run |
 | YouTube video is private | Google app not verified |
 | account incomplete - skipped | one of the numbered secrets is missing |
+| Upload job shows "Waiting for pending jobs" and the run fails | upload matrix was empty; fixed in `upload_accounts.py` (matrix never contains secret values). Use the upload workflow above for that video |
+| reel.mp4 not found on the videos branch | wrong folder name, copy it from `nlm/README.md` on the `videos` branch |

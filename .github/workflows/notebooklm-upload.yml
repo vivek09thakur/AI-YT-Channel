@@ -1,0 +1,162 @@
+name: NotebookLM upload (YouTube / Instagram)
+
+# Uploads an already-made NotebookLM short to every configured account (IG_USERn_* / YT_USERn_* secrets).
+# Does NOT touch NotebookLM, so it costs no quota. Two ways in:
+#   - called by notebooklm-short.yml right after a video is made (artifact of the same run)
+#   - run manually (Actions > this workflow > Run workflow) with the folder name on the videos branch,
+#     e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 - useful when a previous run made the video but
+#     the upload step failed or was skipped.
+
+on:
+  workflow_call:
+    inputs:
+      folder:
+        description: 'Folder on the videos branch (nlm/<slug>-<run>) holding reel.mp4 + meta.json'
+        type: string
+        default: ''
+      artifact:
+        description: 'Artifact of the calling run to use instead of the folder'
+        type: string
+        default: ''
+      upload:
+        description: 'auto = every account whose secrets are set, off = skip'
+        type: string
+        default: auto
+      yt_privacy:
+        type: string
+        default: public
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: 'Folder on the videos branch, e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 (see nlm/README.md on that branch)'
+        required: true
+        type: string
+      yt_privacy:
+        description: 'YouTube privacy for the uploaded Short'
+        required: true
+        type: choice
+        default: public
+        options: [public, unlisted, private]
+
+permissions:
+  contents: read
+
+jobs:
+  targets:
+    name: Detect upload accounts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.targets.outputs.matrix }}
+      count: ${{ steps.targets.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Detect upload accounts
+        id: targets
+        env:
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+          UPLOAD: ${{ inputs.upload || 'auto' }}
+        run: |
+          python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" > accounts.json
+          # matrix holds fixed keys only (user1, json1, default) - a secret value here would make GitHub drop the output
+          echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
+          echo "count=$(python -c "import json;print(json.load(open('accounts.json'))['count'])")" >> "$GITHUB_OUTPUT"
+          rm -f accounts.json
+
+  upload:
+    name: Upload ${{ matrix.platform }} / ${{ matrix.name }}
+    needs: targets
+    if: ${{ needs.targets.outputs.count != '0' && needs.targets.outputs.matrix != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include: ${{ fromJson(needs.targets.outputs.matrix) }}
+    env:
+      FOLDER: ${{ inputs.folder }}
+      YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Get video from the calling run (artifact)
+        if: inputs.artifact != ''
+        uses: actions/download-artifact@v4
+        with: { name: '${{ inputs.artifact }}', path: final }
+
+      - name: Get video from the videos branch
+        if: inputs.artifact == ''
+        run: |
+          test -n "$FOLDER" || { echo "::error::folder input is required (nlm/<slug>-<run> on the videos branch)"; exit 1; }
+          FOLDER="${FOLDER#/}"; FOLDER="${FOLDER%/}"
+          git clone --depth 1 --filter=blob:none --sparse --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site
+          git -C site sparse-checkout set "$FOLDER"
+          test -f "site/$FOLDER/reel.mp4" || { echo "::error::site/$FOLDER/reel.mp4 not found on the videos branch - check the folder name in nlm/README.md"; exit 1; }
+          mkdir -p final && cp "site/$FOLDER"/* final/
+          ls -la final
+
+      - name: Select account credentials
+        id: acct
+        env:
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+        run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ matrix.platform }}" --name "${{ matrix.name }}" --env-file "$RUNNER_TEMP/creds.sh"
+
+      - name: Upload to YouTube
+        id: yt
+        if: matrix.platform == 'youtube'
+        run: |
+          pip install -q google-api-python-client google-auth
+          . "$RUNNER_TEMP/creds.sh"
+          python pipeline/notebooklm/upload_youtube.py --video final/reel.mp4 --meta final/meta.json --privacy "${YT_ACCOUNT_PRIVACY:-$YT_PRIVACY}" --out yt.json
+          echo "url=$(python -c "import json;print(json.load(open('yt.json')).get('url',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Instagram (Reel)
+        id: ig
+        if: matrix.platform == 'instagram'
+        env:
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST || 'graph.facebook.com' }}
+        run: |
+          . "$RUNNER_TEMP/creds.sh"
+          # The Graph API needs a PUBLIC video URL. Use the videos-branch raw URL when the repo is public,
+          # otherwise park the file for ~1 h on tmpfiles.org (the reel is about to be public anyway).
+          url=""
+          if [ -n "$FOLDER" ]; then
+            raw="https://github.com/${{ github.repository }}/raw/videos/${FOLDER#/}/reel.mp4"
+            curl -fsSLI -o /dev/null "$raw" && url="$raw" && echo "using repo raw URL"
+          fi
+          if [ -z "$url" ]; then
+            url=$(curl -fsS -F "file=@final/reel.mp4" https://tmpfiles.org/api/v1/upload | python -c "import json,sys;u=json.load(sys.stdin)['data']['url'];print(u.replace('tmpfiles.org/','tmpfiles.org/dl/',1))")
+            echo "using temporary public host"
+          fi
+          test -n "$url" || { echo "::error::no public URL for the video"; exit 1; }
+          python pipeline/notebooklm/upload_instagram.py --video-url "$url" --meta final/meta.json --out ig.json
+          echo "url=$(python -c "import json;print(json.load(open('ig.json')).get('permalink',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Remove credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/creds.sh"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Upload ${{ matrix.platform }} / ${{ matrix.name }}"
+            echo
+            echo "| Platform | Account | Result |"; echo "|---|---|---|"
+            if [ "${{ matrix.platform }}" = "youtube" ]; then
+              echo "| YouTube | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
+            else
+              echo "| Instagram | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
+            fi
+            echo
+            echo "<details><summary>Caption</summary>"; echo; echo '```'
+            python -c "import json;m=json.load(open('final/meta.json'));print(m.get('caption_${{ matrix.platform }}') or m.get('description') or m.get('title',''))"
+            echo '```'; echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
