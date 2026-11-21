@@ -1,0 +1,12 @@
+{
+  "name": "shadow-puppet-kit",
+  "private": true,
+  "description": "Render tooling for the shorts-story-video kit (puppeteer-core + headless Chrome + ffmpeg).",
+  "scripts": {
+    "test": "node render.mjs test",
+    "render": "node render.mjs render"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}

@@ -1,0 +1,57 @@
+name: Report failure
+
+# Called by the daily workflows when a run fails: keeps ONE open issue per workflow (label pipeline-failure) and adds a
+# comment with the run link each time, so a failure shows up as an email without anyone watching the Actions tab.
+# The issue is closed automatically by the next successful run of that workflow.
+
+on:
+  workflow_call:
+    inputs:
+      workflow:
+        description: 'Workflow display name'
+        type: string
+        required: true
+      status:
+        description: 'success or failure'
+        type: string
+        required: true
+      detail:
+        description: 'Short note (which job failed)'
+        type: string
+        default: ''
+
+permissions:
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Open / update / close the failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          WF: ${{ inputs.workflow }}
+          STATUS: ${{ inputs.status }}
+          DETAIL: ${{ inputs.detail }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RUN_NO: ${{ github.run_number }}
+        run: |
+          title="[$WF] daily run is failing"
+          gh label create pipeline-failure --repo "$REPO" --color B60205 --description "a daily video workflow failed" 2>/dev/null || true
+          num=$(gh issue list --repo "$REPO" --label pipeline-failure --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+          if [ "$STATUS" = "failure" ]; then
+            body="Run #$RUN_NO failed${DETAIL:+ ($DETAIL)}: $RUN_URL"$'\n\n'"Open the run, read the red step, fix or re-run. The retry slot later today runs again by itself if nothing was published."
+            if [ -n "$num" ]; then
+              gh issue comment "$num" --repo "$REPO" --body "$body"
+              echo "commented on issue #$num"
+            else
+              gh issue create --repo "$REPO" --title "$title" --label pipeline-failure --body "$body"
+            fi
+          elif [ -n "$num" ]; then
+            gh issue close "$num" --repo "$REPO" --comment "Run #$RUN_NO succeeded: $RUN_URL"
+            echo "closed issue #$num"
+          else
+            echo "success, no open failure issue"
+          fi

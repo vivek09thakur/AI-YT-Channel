@@ -1,0 +1,16 @@
+**/node_modules/
+**/shadow-puppet-kit/out/
+**/shadow-puppet-kit/debug/*.png
+**/shadow-puppet-kit/*.html
+!**/shadow-puppet-kit/*_shell.html
+work/
+__pycache__/
+*.pyc
+**/shadow-puppet-kit/debug/*.js
+**/shadow-puppet-kit/debug/*.mjs
+**/shadow-puppet-kit/debug/*.html
+**/stickman-reel/template/public/
+**/stickman-reel/template/out/
+**/stickman-reel/template/debug/
+
+**/stickman-reel/template/meta.json

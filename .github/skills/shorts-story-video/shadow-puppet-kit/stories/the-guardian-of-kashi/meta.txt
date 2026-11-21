@@ -1,0 +1,2 @@
+title=THE GUARDIAN OF KASHI
+parts=ref,lines,narration,story,sound_score,vertical

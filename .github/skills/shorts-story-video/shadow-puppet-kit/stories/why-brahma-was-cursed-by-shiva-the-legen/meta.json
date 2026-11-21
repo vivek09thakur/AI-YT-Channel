@@ -1,0 +1,17 @@
+{
+ "title": "THE FIFTH HEAD",
+ "hook": [
+  "Why Brahma lost his fifth head",
+  "and was cursed by Shiva"
+ ],
+ "subtitle": "A 2 minute legend",
+ "kinds": {
+  "15": "big",
+  "16": "tag"
+ },
+ "topic": "Why Brahma Was Cursed by Shiva: The Legend of the Fifth Head",
+ "voice": "en-IN-PrabhatNeural",
+ "duration": 117.07,
+ "provider": "gemini",
+ "model": "gemini-3.8-flash"
+}

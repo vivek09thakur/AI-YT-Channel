@@ -1,0 +1,22 @@
+  const DURATION = 100.67;
+  const LINES = [
+    [0.8, "Have you ever wondered why a fierce form of Lord Shiva is always associated with a dog?", null, 5.23],
+    [6.33, "Kala Bhairava, the mighty guardian of Kashi, is traditionally depicted with a dog as his divine companion and vehicle.", "big", 12.98],
+    [14.08, "But this is more than just an unusual symbol.", null, 16.44],
+    [17.54, "In Hindu tradition, the dog represents loyalty, alertness, protection, and unwavering devotion.", null, 23.94],
+    [25.04, "As Bhairava's companion, it reflects his role as the guardian who watches over the world and protects those who seek refuge in him.", null, 32.19],
+    [33.29, "Bhairava is also known as the protector of sacred places and the destroyer of negative forces.", null, 38.67],
+    [39.77, "His dog stands beside him as a symbol of vigilance…", null, 42.8],
+    [43.7, "reminding us that divine protection is always watchful.", null, 46.8],
+    [47.9, "In many traditions, devotees offer food to dogs as an act of reverence to Kala Bhairava.", null, 53.1],
+    [54.2, "It is believed that serving these animals with kindness is one way of expressing devotion to the deity.", null, 59.62],
+    [60.72, "The fierce Bhairava teaches us courage…", null, 62.91],
+    [63.81, "while his loyal companion reminds us of humility and faithfulness.", null, 67.59],
+    [68.69, "Together, they represent a powerful lesson: true strength is not only about defeating evil…", null, 73.93],
+    [74.83, "it is also about protecting the vulnerable.", null, 77.09],
+    [78.19, "That is why the image of Kala Bhairava with his dog continues to inspire devotion across generations.", "tag", 84.21],
+    [85.31, "But Bhairava's mysteries do not end here.", null, 87.69],
+    [88.79, "Why do devotees worship him on Ashtami…", null, 91.24],
+    [92.14, "and what makes Kalashtami so sacred?", null, 94.4],
+    [95.5, "That is the story of our next episode.", "title", 97.67],
+  ];

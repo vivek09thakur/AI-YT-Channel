@@ -1,0 +1,18 @@
+{
+ "title": "THE CURSE OF BHAIRAVA",
+ "hook": [
+  "What happened after Shiva",
+  "cut off Brahma's fifth head?"
+ ],
+ "subtitle": "A story from Hindu mythology",
+ "kinds": {
+  "0": "title",
+  "14": "tag",
+  "15": "tag"
+ },
+ "topic": "What Happened After Lord Shiva Cut Off Brahma's Fifth Head? | The Curse of Bhairava",
+ "voice": "en-GB-RyanNeural",
+ "duration": 101.28,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}

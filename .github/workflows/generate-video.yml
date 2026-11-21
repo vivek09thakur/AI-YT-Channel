@@ -1,0 +1,451 @@
+name: Generate story video
+
+# Daily: an LLM looks at the stories already on the videos branch, picks the next one (continues a saga or moves to a
+# tradition not covered lately), writes the 2-minute narration, then renders, publishes and uploads it (group "story").
+# By hand: same, or give your own topic / script.
+
+on:
+  schedule:
+    # 2 stories a day: each slot runs only while fewer than 2 were published today (see guard job); the last slot
+    # is a retry for a failed earlier run and never produces a third one.
+    - cron: '30 5 * * *'   # 11:00 IST, after the NotebookLM short
+    - cron: '30 11 * * *'  # 17:00 IST
+    - cron: '30 15 * * *'  # 21:00 IST retry slot
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Topic / title of the story. Leave EMPTY to let the LLM pick the next story from what was published before'
+        required: false
+        type: string
+      script:
+        description: 'Narration text (optional, empty = LLM writes it). Sentences are split automatically; use " / " or a blank line between paragraphs.'
+        required: false
+        type: string
+      script_file:
+        description: 'Path of a .txt in this repo with the narration (alternative to script). Past scripts are kept on the videos branch under scripts/'
+        required: false
+        type: string
+      theme:
+        description: 'Auto mode only: steer the pick, e.g. "Ramayana" or "continue the Sati saga"'
+        required: false
+        type: string
+      formats:
+        description: 'Which video(s) to render (shorts = 9:16 only, landscape = 16:9 only; one format halves render minutes)'
+        required: true
+        type: choice
+        default: both
+        options: [both, shorts, landscape]
+      voice:
+        description: 'Narration voice (neural)'
+        required: true
+        type: choice
+        default: en-GB-RyanNeural
+        options: [en-GB-RyanNeural, en-GB-SoniaNeural, en-US-AndrewNeural, en-US-GuyNeural, en-US-AvaNeural, en-IN-PrabhatNeural, en-IN-NeerjaNeural]
+      provider:
+        description: 'LLM that writes the scene code (auto = first working key, free tiers first)'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, gemini, mistral, cerebras, meta, openrouter, openai, anthropic]
+      model:
+        description: 'Model override (defaults: gemini-3.8-flash, mistral-large-latest, qwen-3-coder-480b, muse-spark-1.3, anthropic/claude-sonnet-4, gpt-4.1, claude-sonnet-4-20250514)'
+        required: false
+        type: string
+      notes:
+        description: 'Optional notes for the illustrator LLM (characters, colours, moments to show); auto mode writes its own'
+        required: false
+        type: string
+      upload:
+        description: 'Upload after publishing: auto = every account allowed for group "story" (YT_USERn_FOR / IG_USERn_FOR), off = only publish'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, off]
+      yt_privacy:
+        description: 'YouTube privacy for uploads'
+        required: true
+        type: choice
+        default: public
+        options: [public, unlisted, private]
+      cta:
+        description: 'Closing line appended to the captions'
+        required: false
+        type: string
+        default: 'Subscribe for more folk tales from Indian mythology.'
+
+concurrency:
+  group: generate-video
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+env:
+  DAILY_TARGET: '2'   # scheduled videos per day (guard job)
+  KIT: .github/skills/folk-art-video
+  PYTHONUNBUFFERED: '1'
+  # scheduled runs have no inputs: these are the defaults used then
+  FORMATS: ${{ inputs.formats || 'both' }}
+  VOICE: ${{ inputs.voice || 'en-GB-RyanNeural' }}
+  PROVIDER: ${{ inputs.provider || 'auto' }}
+  UPLOAD: ${{ inputs.upload || 'auto' }}
+  YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
+  CTA_LINE: ${{ inputs.cta || 'Subscribe for more folk tales from Indian mythology.' }}
+
+jobs:
+  # Daily target: a scheduled slot only does work while fewer than DAILY_TARGET videos of this kind were published
+  # today, so a failed slot is picked up by the next one. Manual runs always go.
+  guard:
+    name: Daily target reached?
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      go: ${{ steps.g.outputs.go }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: g
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
+          python pipeline/published_today.py --repo "${{ github.repository }}" --index videos.json --max "${DAILY_TARGET:-2}"
+
+  precheck:
+    name: Pre-run check (AI, runner, TTS quota)
+    needs: guard
+    if: needs.guard.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      provider: ${{ steps.check.outputs.provider }}
+      model: ${{ steps.check.outputs.model }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q -r pipeline/requirements.txt
+      - name: Estimate Actions minutes for this run
+        id: need
+        run: |
+          # author ~15 min + ~35 min per rendered format + publish ~3 min
+          case "$FORMATS" in both) n=90 ;; *) n=55 ;; esac
+          echo "minutes=$n" >> "$GITHUB_OUTPUT"
+      - name: Check quotas
+        id: check
+        run: python pipeline/precheck.py --need-minutes "${{ steps.need.outputs.minutes }}" --prefer "$PROVIDER" --model "$MODEL" --voice "$VOICE"
+        env:
+          MODEL: ${{ inputs.model }}
+          BILLING_TOKEN: ${{ secrets.BILLING_TOKEN }}
+          ACTIONS_INCLUDED_MINUTES: ${{ vars.ACTIONS_INCLUDED_MINUTES }}
+          ACTIONS_ALLOW_OVERAGE: ${{ vars.ACTIONS_ALLOW_OVERAGE }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+
+  author:
+    name: Voice + scene code
+    needs: precheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      slug: ${{ steps.slug.outputs.slug }}
+      topic: ${{ steps.topic.outputs.topic }}
+      matrix: ${{ steps.formats.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: ffmpeg (preinstalled on ubuntu-latest, apt fallback)
+        run: command -v ffmpeg >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }; ffmpeg -version | head -1
+      - name: Install tools
+        timeout-minutes: 10
+        run: |
+          pip install -q -r pipeline/requirements.txt -r pipeline/folk/requirements.txt
+      - name: Previously published stories (videos branch index)
+        if: inputs.topic == '' && inputs.script == '' && inputs.script_file == ''
+        run: |
+          mkdir -p site
+          curl -fsSL -o site/videos.json -H "Authorization: Bearer ${{ github.token }}" -H "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/${{ github.repository }}/contents/videos.json?ref=videos" \
+            && python -c "import json;d=json.load(open('site/videos.json'));print(len(d),'published');[print(' -',e.get('date',''),e.get('title','')) for e in d[:10]]" \
+            || echo "no videos.json yet (first story)"
+      - name: Pick the next story + write the narration (LLM)
+        id: pick
+        if: inputs.topic == '' && inputs.script == '' && inputs.script_file == ''
+        run: |
+          mkdir -p work
+          python pipeline/folk/pick_story.py --out work --used site/videos.json --provider "${{ needs.precheck.outputs.provider }}" \
+            --model "${{ needs.precheck.outputs.model }}" --theme "$THEME" --notes "$NOTES"
+        env:
+          LLM_TIMEOUT: '120'
+          THEME: ${{ inputs.theme }}
+          NOTES: ${{ inputs.notes }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+      - name: Topic
+        id: topic
+        run: |
+          topic="${PICKED:-$INPUT}"
+          test -n "$topic" || { echo "::error::no topic: give one, or leave topic AND script empty for auto mode"; exit 1; }
+          echo "topic=$topic" >> "$GITHUB_OUTPUT"
+          echo "notes=${PICKED_NOTES:-$INPUT_NOTES}" >> "$GITHUB_OUTPUT"
+          echo "topic: $topic"
+        env:
+          PICKED: ${{ steps.pick.outputs.topic }}
+          PICKED_NOTES: ${{ steps.pick.outputs.notes }}
+          INPUT: ${{ inputs.topic }}
+          INPUT_NOTES: ${{ inputs.notes }}
+      - name: Slug
+        id: slug
+        run: |
+          slug=$(printf '%s' "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
+          echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
+        env:
+          TOPIC: ${{ steps.topic.outputs.topic }}
+      - name: Render matrix from formats input
+        id: formats
+        run: |
+          # flat list of strings: GitHub drops a job output that contains a masked value, and every LINE of a
+          # multi-line secret is a mask (e.g. "{" / "}"), so no JSON objects here
+          case "$FORMATS" in
+            shorts)    m='["shorts"]' ;;
+            landscape) m='["landscape"]' ;;
+            *)         m='["landscape", "shorts"]' ;;
+          esac
+          echo "matrix=$m" >> "$GITHUB_OUTPUT"
+          echo "rendering: $m"
+      - name: Prepare script
+        run: |
+          mkdir -p work
+          if [ -s work/script.txt ]; then echo "using the LLM-written script"
+          elif [ -n "$SCRIPT_FILE" ]; then cp "$SCRIPT_FILE" work/script.txt
+          else printf '%s\n' "$SCRIPT_INPUT" > work/script.txt; fi
+          test -s work/script.txt || { echo "::error::no script: give script / script_file, or leave topic AND script empty for auto mode"; exit 1; }
+          wc -w work/script.txt
+        env:
+          SCRIPT_INPUT: ${{ inputs.script }}
+          SCRIPT_FILE: ${{ inputs.script_file }}
+      - name: Voice (neural TTS)
+        run: python pipeline/tts.py --script work/script.txt --voice "$VOICE" --out work
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION }}
+      - name: Phrase timeline
+        run: python pipeline/folk/phrases.py --narration work/narration.json --out work/phrases.json
+      - name: Scene code (LLM, validated by rendering sample frames in both aspects)
+        run: |
+          python pipeline/folk/generate_folk.py --topic "$TOPIC" --narration work/narration.json --phrases work/phrases.json --kit "$KIT" \
+            --slug "${{ steps.slug.outputs.slug }}" --provider "${{ needs.precheck.outputs.provider }}" --model "${{ needs.precheck.outputs.model }}" --notes "$NOTES"
+        env:
+          CI: 'true'
+          TOPIC: ${{ steps.topic.outputs.topic }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+          NOTES: ${{ steps.topic.outputs.notes }}
+      - name: Upload story bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: story
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            work/voice.wav
+            work/voice.mp3
+            work/narration.json
+            work/phrases.json
+            work/script.txt
+            work/pick.json
+            ${{ env.KIT }}/stories/${{ steps.slug.outputs.slug }}/
+      - name: Commit story code to main (re-renderable)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$KIT/stories/${{ steps.slug.outputs.slug }}"
+          git commit -m "story: ${{ steps.slug.outputs.slug }} (run ${{ github.run_number }})" || { echo "nothing to commit"; exit 0; }
+          git pull --rebase origin "${{ github.ref_name }}" && git push origin HEAD:"${{ github.ref_name }}"
+
+  render:
+    name: Render ${{ matrix.format }}
+    needs: author
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        format: ${{ fromJson(needs.author.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: story, path: bundle }
+      - name: ffmpeg (preinstalled on ubuntu-latest, apt fallback)
+        run: command -v ffmpeg >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }; ffmpeg -version | head -1
+      - name: Install tools
+        timeout-minutes: 10
+        run: |
+          pip install -q -r pipeline/folk/requirements.txt
+          nproc
+      - name: Place story files
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          mkdir -p "$KIT/stories/$slug" work
+          cp -r "bundle/$KIT/stories/$slug/." "$KIT/stories/$slug/"
+          cp bundle/work/voice.wav work/
+          test -s "$KIT/stories/$slug/story.py" && test -s "$KIT/stories/$slug/phrases.json"
+      - name: Render frames + soundtrack + encode
+        run: |
+          # thumb.jpg comes from the landscape render, or from shorts when that is the only format
+          thumb=""; { [ "${{ matrix.format }}" = landscape ] || [ "$FORMATS" = shorts ]; } && thumb="--thumb"
+          python pipeline/folk/render_folk.py --story "$KIT/stories/${{ needs.author.outputs.slug }}" --voice work/voice.wav \
+            --aspect "${{ matrix.format }}" --out out --kit "$KIT" $thumb
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_type,width,height -of default=nw=1 "out/${{ matrix.format }}.mp4"
+        env:
+          FOLK_SS: '2'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ matrix.format }}
+          retention-days: 30
+          path: |
+            out/${{ matrix.format }}.mp4
+            out/thumb.jpg
+            out/sheet_${{ matrix.format }}.jpg
+
+  publish:
+    name: Publish to videos branch
+    needs: [precheck, author, render]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/download-artifact@v4
+        with: { name: story, path: bundle }
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'video-*', merge-multiple: true, path: final }
+      - name: Collect
+        run: |
+          slug="${{ needs.author.outputs.slug }}"
+          cp bundle/work/voice.mp3 bundle/work/narration.json final/
+          cp "bundle/$KIT/stories/$slug/meta.json" final/ || echo '{}' > final/meta.json
+          ls -la final
+      - run: pip install -q -r main/pipeline/requirements.txt
+      - name: Captions + hashtags (LLM, falls back to the story description)
+        run: |
+          python main/pipeline/folk/captions.py --meta final/meta.json --script bundle/work/script.txt --topic "$TOPIC" \
+            --slug "${{ needs.author.outputs.slug }}" --cta "$CTA" --provider "${{ needs.precheck.outputs.provider }}"
+          echo; cat final/caption_youtube.txt
+        env:
+          LLM_TIMEOUT: '120'
+          TOPIC: ${{ needs.author.outputs.topic }}
+          CTA: ${{ env.CTA_LINE }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+      - name: Upload bundle for the upload jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-final
+          retention-days: 7
+          path: |
+            final/*.mp4
+            final/thumb.jpg
+            final/meta.json
+      - name: Checkout videos branch
+        run: |
+          git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
+            || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
+      - name: Add video + script + rebuild overview
+        run: |
+          mkdir -p site/scripts && cp bundle/work/script.txt "site/scripts/${{ needs.author.outputs.slug }}-${{ github.run_number }}.txt"
+          python main/pipeline/publish.py --root site --src final --slug "${{ needs.author.outputs.slug }}" --run "${{ github.run_number }}" \
+            --repo "${{ github.repository }}" --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "video: ${{ needs.author.outputs.slug }} (run ${{ github.run_number }})"
+          git push origin videos
+      - name: Summary
+        run: |
+          slug="${{ needs.author.outputs.slug }}"; dir="videos/${slug}-${{ github.run_number }}"
+          raw="https://github.com/${{ github.repository }}/raw/videos/$dir"
+          {
+            echo "## Video ready: $slug"
+            echo
+            echo "| Format | Download |"; echo "|---|---|"
+            [ -f final/landscape.mp4 ] && echo "| YouTube landscape (1920x1080) | [$dir/landscape.mp4]($raw/landscape.mp4) |"
+            [ -f final/shorts.mp4 ] && echo "| YouTube Shorts (1080x1920) | [$dir/shorts.mp4]($raw/shorts.mp4) |"
+            echo
+            echo "Overview page: https://github.com/${{ github.repository }}/blob/videos/README.md (or enable GitHub Pages on the videos branch for index.html)"
+            echo
+            echo "Story code committed to \`${{ env.KIT }}/stories/$slug/\` on \`${{ github.ref_name }}\` (folk-art engine); re-render any time with \`python pipeline/folk/render_folk.py --story $KIT/stories/$slug --voice voice.wav --aspect shorts\`."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Uploads go to accounts allowed for group "story" (YT_USERn_FOR / IG_USERn_FOR secrets). Shorts -> YouTube + Instagram,
+  # landscape -> YouTube only. Re-run by hand with the "Upload video" workflow and folder videos/<slug>-<run>.
+  upload_shorts:
+    name: Upload shorts
+    needs: [author, publish]
+    if: ${{ inputs.formats != 'landscape' && inputs.upload != 'off' }}
+    uses: ./.github/workflows/upload-video.yml
+    secrets: inherit
+    with:
+      artifact: story-final
+      folder: ${{ format('videos/{0}-{1}', needs.author.outputs.slug, github.run_number) }}
+      video: shorts.mp4
+      group: story
+      platforms: youtube,instagram
+      yt_kind: short
+      upload: ${{ inputs.upload || 'auto' }}
+      yt_privacy: ${{ inputs.yt_privacy || 'public' }}
+
+  upload_landscape:
+    name: Upload landscape
+    needs: [author, publish]
+    if: ${{ inputs.formats != 'shorts' && inputs.upload != 'off' }}
+    uses: ./.github/workflows/upload-video.yml
+    secrets: inherit
+    with:
+      artifact: story-final
+      folder: ${{ format('videos/{0}-{1}', needs.author.outputs.slug, github.run_number) }}
+      video: landscape.mp4
+      group: story
+      platforms: youtube
+      yt_kind: video
+      upload: ${{ inputs.upload || 'auto' }}
+      yt_privacy: ${{ inputs.yt_privacy || 'public' }}
+
+  report:
+    name: Report
+    needs: [guard, precheck, author, render, publish, upload_shorts, upload_landscape]
+    if: ${{ always() && needs.guard.outputs.go == 'true' }}
+    uses: ./.github/workflows/report-failure.yml
+    with:
+      workflow: Generate story video
+      status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
+      detail: ${{ needs.precheck.result == 'failure' && 'precheck' || needs.author.result == 'failure' && 'author' || needs.render.result == 'failure' && 'render' || needs.publish.result == 'failure' && 'publish' || (needs.upload_shorts.result == 'failure' || needs.upload_landscape.result == 'failure') && 'upload' || '' }}

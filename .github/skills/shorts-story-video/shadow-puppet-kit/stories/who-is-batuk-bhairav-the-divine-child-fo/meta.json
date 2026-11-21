@@ -1,0 +1,17 @@
+{
+ "title": "BATUK BHAIRAV",
+ "hook": [
+  "The child form of Lord Shiva,",
+  "protector of the fearless."
+ ],
+ "subtitle": "A story of divine courage",
+ "kinds": {
+  "1": "big",
+  "11": "tag"
+ },
+ "topic": "Who Is Batuk Bhairav? The Divine Child Form of Lord Shiva and Why We Worship Him",
+ "voice": "en-GB-RyanNeural",
+ "duration": 67.2,
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}

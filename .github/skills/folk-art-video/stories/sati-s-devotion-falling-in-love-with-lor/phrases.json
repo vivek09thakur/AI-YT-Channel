@@ -1,0 +1,1415 @@
+{
+ "fps": 30,
+ "duration": 98.28,
+ "total_frames": 2948,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "A majestic royal palace echoes with the silent,",
+   "t0": 0.8,
+   "t1": 3.46,
+   "f0": 24,
+   "f1": 104,
+   "words": [
+    {
+     "w": "A",
+     "f": 24
+    },
+    {
+     "w": "majestic",
+     "f": 26
+    },
+    {
+     "w": "royal",
+     "f": 42
+    },
+    {
+     "w": "palace",
+     "f": 53
+    },
+    {
+     "w": "echoes",
+     "f": 65
+    },
+    {
+     "w": "with",
+     "f": 77
+    },
+    {
+     "w": "the",
+     "f": 85
+    },
+    {
+     "w": "silent,",
+     "f": 92
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "unwavering prayers of a young princess who refuses",
+   "t0": 3.46,
+   "t1": 6.392,
+   "f0": 104,
+   "f1": 192,
+   "words": [
+    {
+     "w": "unwavering",
+     "f": 104
+    },
+    {
+     "w": "prayers",
+     "f": 124
+    },
+    {
+     "w": "of",
+     "f": 139
+    },
+    {
+     "w": "a",
+     "f": 143
+    },
+    {
+     "w": "young",
+     "f": 145
+    },
+    {
+     "w": "princess",
+     "f": 155
+    },
+    {
+     "w": "who",
+     "f": 171
+    },
+    {
+     "w": "refuses",
+     "f": 177
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 0,
+   "text": "to look at anyone else.",
+   "t0": 6.392,
+   "t1": 7.62,
+   "f0": 192,
+   "f1": 229,
+   "words": [
+    {
+     "w": "to",
+     "f": 192
+    },
+    {
+     "w": "look",
+     "f": 196
+    },
+    {
+     "w": "at",
+     "f": 204
+    },
+    {
+     "w": "anyone",
+     "f": 208
+    },
+    {
+     "w": "else.",
+     "f": 220
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "Princess Sati closes her eyes and paints",
+   "t0": 8.72,
+   "t1": 10.926,
+   "f0": 262,
+   "f1": 328,
+   "words": [
+    {
+     "w": "Princess",
+     "f": 262
+    },
+    {
+     "w": "Sati",
+     "f": 277
+    },
+    {
+     "w": "closes",
+     "f": 285
+    },
+    {
+     "w": "her",
+     "f": 297
+    },
+    {
+     "w": "eyes",
+     "f": 302
+    },
+    {
+     "w": "and",
+     "f": 310
+    },
+    {
+     "w": "paints",
+     "f": 316
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 1,
+   "text": "the luminous image of",
+   "t0": 10.926,
+   "t1": 12.093,
+   "f0": 328,
+   "f1": 363,
+   "words": [
+    {
+     "w": "the",
+     "f": 328
+    },
+    {
+     "w": "luminous",
+     "f": 334
+    },
+    {
+     "w": "image",
+     "f": 349
+    },
+    {
+     "w": "of",
+     "f": 359
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 1,
+   "text": "the great ascetic in her mind.",
+   "t0": 12.093,
+   "t1": 13.65,
+   "f0": 363,
+   "f1": 410,
+   "words": [
+    {
+     "w": "the",
+     "f": 363
+    },
+    {
+     "w": "great",
+     "f": 369
+    },
+    {
+     "w": "ascetic",
+     "f": 378
+    },
+    {
+     "w": "in",
+     "f": 392
+    },
+    {
+     "w": "her",
+     "f": 396
+    },
+    {
+     "w": "mind.",
+     "f": 402
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 2,
+   "text": "Her proud father Daksha wants",
+   "t0": 14.2,
+   "t1": 15.802,
+   "f0": 426,
+   "f1": 474,
+   "words": [
+    {
+     "w": "Her",
+     "f": 426
+    },
+    {
+     "w": "proud",
+     "f": 432
+    },
+    {
+     "w": "father",
+     "f": 441
+    },
+    {
+     "w": "Daksha",
+     "f": 453
+    },
+    {
+     "w": "wants",
+     "f": 464
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 2,
+   "text": "a powerful warrior prince for her throne.",
+   "t0": 15.802,
+   "t1": 17.98,
+   "f0": 474,
+   "f1": 539,
+   "words": [
+    {
+     "w": "a",
+     "f": 474
+    },
+    {
+     "w": "powerful",
+     "f": 476
+    },
+    {
+     "w": "warrior",
+     "f": 491
+    },
+    {
+     "w": "prince",
+     "f": 505
+    },
+    {
+     "w": "for",
+     "f": 516
+    },
+    {
+     "w": "her",
+     "f": 522
+    },
+    {
+     "w": "throne.",
+     "f": 528
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "Sati wants only the lord of the high mountains.",
+   "t0": 18.53,
+   "t1": 21.1,
+   "f0": 556,
+   "f1": 633,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 556
+    },
+    {
+     "w": "wants",
+     "f": 564
+    },
+    {
+     "w": "only",
+     "f": 574
+    },
+    {
+     "w": "the",
+     "f": 582
+    },
+    {
+     "w": "lord",
+     "f": 588
+    },
+    {
+     "w": "of",
+     "f": 596
+    },
+    {
+     "w": "the",
+     "f": 601
+    },
+    {
+     "w": "high",
+     "f": 607
+    },
+    {
+     "w": "mountains.",
+     "f": 615
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 4,
+   "text": "She leaves the soft comforts",
+   "t0": 22.2,
+   "t1": 23.885,
+   "f0": 666,
+   "f1": 717,
+   "words": [
+    {
+     "w": "She",
+     "f": 666
+    },
+    {
+     "w": "leaves",
+     "f": 672
+    },
+    {
+     "w": "the",
+     "f": 685
+    },
+    {
+     "w": "soft",
+     "f": 691
+    },
+    {
+     "w": "comforts",
+     "f": 700
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 4,
+   "text": "of silk and gold far behind.",
+   "t0": 23.885,
+   "t1": 25.43,
+   "f0": 717,
+   "f1": 763,
+   "words": [
+    {
+     "w": "of",
+     "f": 717
+    },
+    {
+     "w": "silk",
+     "f": 721
+    },
+    {
+     "w": "and",
+     "f": 729
+    },
+    {
+     "w": "gold",
+     "f": 736
+    },
+    {
+     "w": "far",
+     "f": 744
+    },
+    {
+     "w": "behind.",
+     "f": 750
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "She walks deep into the silent,",
+   "t0": 25.98,
+   "t1": 27.815,
+   "f0": 779,
+   "f1": 834,
+   "words": [
+    {
+     "w": "She",
+     "f": 779
+    },
+    {
+     "w": "walks",
+     "f": 786
+    },
+    {
+     "w": "deep",
+     "f": 797
+    },
+    {
+     "w": "into",
+     "f": 806
+    },
+    {
+     "w": "the",
+     "f": 815
+    },
+    {
+     "w": "silent,",
+     "f": 821
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 5,
+   "text": "ancient forest where",
+   "t0": 27.815,
+   "t1": 29.137,
+   "f0": 834,
+   "f1": 874,
+   "words": [
+    {
+     "w": "ancient",
+     "f": 834
+    },
+    {
+     "w": "forest",
+     "f": 850
+    },
+    {
+     "w": "where",
+     "f": 863
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 5,
+   "text": "the wild winds whisper only one sacred name.",
+   "t0": 29.137,
+   "t1": 31.78,
+   "f0": 874,
+   "f1": 953,
+   "words": [
+    {
+     "w": "the",
+     "f": 874
+    },
+    {
+     "w": "wild",
+     "f": 881
+    },
+    {
+     "w": "winds",
+     "f": 890
+    },
+    {
+     "w": "whisper",
+     "f": 901
+    },
+    {
+     "w": "only",
+     "f": 916
+    },
+    {
+     "w": "one",
+     "f": 925
+    },
+    {
+     "w": "sacred",
+     "f": 931
+    },
+    {
+     "w": "name.",
+     "f": 945
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 6,
+   "text": "Shiva...",
+   "t0": 32.33,
+   "t1": 32.88,
+   "f0": 970,
+   "f1": 986,
+   "words": [
+    {
+     "w": "Shiva...",
+     "f": 970
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 7,
+   "text": "Days turn into long, unforgiving seasons of hardship.",
+   "t0": 34.33,
+   "t1": 37.76,
+   "f0": 1030,
+   "f1": 1133,
+   "words": [
+    {
+     "w": "Days",
+     "f": 1030
+    },
+    {
+     "w": "turn",
+     "f": 1039
+    },
+    {
+     "w": "into",
+     "f": 1049
+    },
+    {
+     "w": "long,",
+     "f": 1058
+    },
+    {
+     "w": "unforgiving",
+     "f": 1067
+    },
+    {
+     "w": "seasons",
+     "f": 1093
+    },
+    {
+     "w": "of",
+     "f": 1109
+    },
+    {
+     "w": "hardship.",
+     "f": 1114
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 8,
+   "text": "Sati eats only dry fallen leaves,",
+   "t0": 38.31,
+   "t1": 40.517,
+   "f0": 1149,
+   "f1": 1216,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 1149
+    },
+    {
+     "w": "eats",
+     "f": 1159
+    },
+    {
+     "w": "only",
+     "f": 1169
+    },
+    {
+     "w": "dry",
+     "f": 1179
+    },
+    {
+     "w": "fallen",
+     "f": 1186
+    },
+    {
+     "w": "leaves,",
+     "f": 1201
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "then only drops of morning dew,",
+   "t0": 40.517,
+   "t1": 42.561,
+   "f0": 1216,
+   "f1": 1277,
+   "words": [
+    {
+     "w": "then",
+     "f": 1216
+    },
+    {
+     "w": "only",
+     "f": 1225
+    },
+    {
+     "w": "drops",
+     "f": 1235
+    },
+    {
+     "w": "of",
+     "f": 1247
+    },
+    {
+     "w": "morning",
+     "f": 1252
+    },
+    {
+     "w": "dew,",
+     "f": 1269
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 8,
+   "text": "and finally nothing at all.",
+   "t0": 42.561,
+   "t1": 44.36,
+   "f0": 1277,
+   "f1": 1331,
+   "words": [
+    {
+     "w": "and",
+     "f": 1277
+    },
+    {
+     "w": "finally",
+     "f": 1284
+    },
+    {
+     "w": "nothing",
+     "f": 1301
+    },
+    {
+     "w": "at",
+     "f": 1319
+    },
+    {
+     "w": "all.",
+     "f": 1323
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 9,
+   "text": "Her fierce penance burns like",
+   "t0": 44.91,
+   "t1": 46.577,
+   "f0": 1347,
+   "f1": 1397,
+   "words": [
+    {
+     "w": "Her",
+     "f": 1347
+    },
+    {
+     "w": "fierce",
+     "f": 1353
+    },
+    {
+     "w": "penance",
+     "f": 1365
+    },
+    {
+     "w": "burns",
+     "f": 1379
+    },
+    {
+     "w": "like",
+     "f": 1389
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 9,
+   "text": "a pure flame against the dark woods.",
+   "t0": 46.577,
+   "t1": 48.51,
+   "f0": 1397,
+   "f1": 1455,
+   "words": [
+    {
+     "w": "a",
+     "f": 1397
+    },
+    {
+     "w": "pure",
+     "f": 1399
+    },
+    {
+     "w": "flame",
+     "f": 1407
+    },
+    {
+     "w": "against",
+     "f": 1417
+    },
+    {
+     "w": "the",
+     "f": 1431
+    },
+    {
+     "w": "dark",
+     "f": 1437
+    },
+    {
+     "w": "woods.",
+     "f": 1445
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 10,
+   "text": "Wild beasts gather quietly around her, sensing",
+   "t0": 49.61,
+   "t1": 52.34,
+   "f0": 1488,
+   "f1": 1570,
+   "words": [
+    {
+     "w": "Wild",
+     "f": 1488
+    },
+    {
+     "w": "beasts",
+     "f": 1497
+    },
+    {
+     "w": "gather",
+     "f": 1509
+    },
+    {
+     "w": "quietly",
+     "f": 1522
+    },
+    {
+     "w": "around",
+     "f": 1537
+    },
+    {
+     "w": "her,",
+     "f": 1549
+    },
+    {
+     "w": "sensing",
+     "f": 1555
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 10,
+   "text": "her immense and growing spiritual power.",
+   "t0": 52.34,
+   "t1": 54.72,
+   "f0": 1570,
+   "f1": 1642,
+   "words": [
+    {
+     "w": "her",
+     "f": 1570
+    },
+    {
+     "w": "immense",
+     "f": 1576
+    },
+    {
+     "w": "and",
+     "f": 1591
+    },
+    {
+     "w": "growing",
+     "f": 1598
+    },
+    {
+     "w": "spiritual",
+     "f": 1612
+    },
+    {
+     "w": "power.",
+     "f": 1631
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 11,
+   "text": "Fierce tigers sit as gentle guards.",
+   "t0": 55.27,
+   "t1": 57.47,
+   "f0": 1658,
+   "f1": 1724,
+   "words": [
+    {
+     "w": "Fierce",
+     "f": 1658
+    },
+    {
+     "w": "tigers",
+     "f": 1672
+    },
+    {
+     "w": "sit",
+     "f": 1685
+    },
+    {
+     "w": "as",
+     "f": 1692
+    },
+    {
+     "w": "gentle",
+     "f": 1697
+    },
+    {
+     "w": "guards.",
+     "f": 1710
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 12,
+   "text": "Venomous snakes bow their hoods",
+   "t0": 58.02,
+   "t1": 59.808,
+   "f0": 1741,
+   "f1": 1794,
+   "words": [
+    {
+     "w": "Venomous",
+     "f": 1741
+    },
+    {
+     "w": "snakes",
+     "f": 1756
+    },
+    {
+     "w": "bow",
+     "f": 1768
+    },
+    {
+     "w": "their",
+     "f": 1774
+    },
+    {
+     "w": "hoods",
+     "f": 1784
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 12,
+   "text": "in deep respect to her unbreakable focus.",
+   "t0": 59.808,
+   "t1": 62.06,
+   "f0": 1794,
+   "f1": 1862,
+   "words": [
+    {
+     "w": "in",
+     "f": 1794
+    },
+    {
+     "w": "deep",
+     "f": 1798
+    },
+    {
+     "w": "respect",
+     "f": 1806
+    },
+    {
+     "w": "to",
+     "f": 1820
+    },
+    {
+     "w": "her",
+     "f": 1824
+    },
+    {
+     "w": "unbreakable",
+     "f": 1830
+    },
+    {
+     "w": "focus.",
+     "f": 1852
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 13,
+   "text": "Finally, the solid earth trembles",
+   "t0": 63.16,
+   "t1": 65.184,
+   "f0": 1895,
+   "f1": 1956,
+   "words": [
+    {
+     "w": "Finally,",
+     "f": 1895
+    },
+    {
+     "w": "the",
+     "f": 1910
+    },
+    {
+     "w": "solid",
+     "f": 1916
+    },
+    {
+     "w": "earth",
+     "f": 1927
+    },
+    {
+     "w": "trembles",
+     "f": 1938
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 13,
+   "text": "ever so slightly beneath the trees.",
+   "t0": 65.184,
+   "t1": 67.28,
+   "f0": 1956,
+   "f1": 2018,
+   "words": [
+    {
+     "w": "ever",
+     "f": 1956
+    },
+    {
+     "w": "so",
+     "f": 1964
+    },
+    {
+     "w": "slightly",
+     "f": 1969
+    },
+    {
+     "w": "beneath",
+     "f": 1986
+    },
+    {
+     "w": "the",
+     "f": 2001
+    },
+    {
+     "w": "trees.",
+     "f": 2008
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 14,
+   "text": "A cool,",
+   "t0": 67.83,
+   "t1": 68.158,
+   "f0": 2035,
+   "f1": 2045,
+   "words": [
+    {
+     "w": "A",
+     "f": 2035
+    },
+    {
+     "w": "cool,",
+     "f": 2037
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 14,
+   "text": "fragrant breeze sweeps through the canopy carrying",
+   "t0": 68.158,
+   "t1": 71.048,
+   "f0": 2045,
+   "f1": 2131,
+   "words": [
+    {
+     "w": "fragrant",
+     "f": 2045
+    },
+    {
+     "w": "breeze",
+     "f": 2061
+    },
+    {
+     "w": "sweeps",
+     "f": 2072
+    },
+    {
+     "w": "through",
+     "f": 2084
+    },
+    {
+     "w": "the",
+     "f": 2098
+    },
+    {
+     "w": "canopy",
+     "f": 2104
+    },
+    {
+     "w": "carrying",
+     "f": 2116
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 14,
+   "text": "the deep scent of sacred ash and Himalayan snow.",
+   "t0": 71.048,
+   "t1": 73.61,
+   "f0": 2131,
+   "f1": 2208,
+   "words": [
+    {
+     "w": "the",
+     "f": 2131
+    },
+    {
+     "w": "deep",
+     "f": 2137
+    },
+    {
+     "w": "scent",
+     "f": 2145
+    },
+    {
+     "w": "of",
+     "f": 2155
+    },
+    {
+     "w": "sacred",
+     "f": 2159
+    },
+    {
+     "w": "ash",
+     "f": 2171
+    },
+    {
+     "w": "and",
+     "f": 2177
+    },
+    {
+     "w": "Himalayan",
+     "f": 2183
+    },
+    {
+     "w": "snow.",
+     "f": 2200
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 15,
+   "text": "Lord Shiva suddenly appears before her, draped",
+   "t0": 74.71,
+   "t1": 77.389,
+   "f0": 2241,
+   "f1": 2322,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 2241
+    },
+    {
+     "w": "Shiva",
+     "f": 2250
+    },
+    {
+     "w": "suddenly",
+     "f": 2260
+    },
+    {
+     "w": "appears",
+     "f": 2276
+    },
+    {
+     "w": "before",
+     "f": 2291
+    },
+    {
+     "w": "her,",
+     "f": 2303
+    },
+    {
+     "w": "draped",
+     "f": 2309
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 15,
+   "text": "in tiger skin,",
+   "t0": 77.389,
+   "t1": 78.145,
+   "f0": 2322,
+   "f1": 2344,
+   "words": [
+    {
+     "w": "in",
+     "f": 2322
+    },
+    {
+     "w": "tiger",
+     "f": 2326
+    },
+    {
+     "w": "skin,",
+     "f": 2336
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 15,
+   "text": "His matted locks holding the bright crescent moon.",
+   "t0": 78.145,
+   "t1": 81.03,
+   "f0": 2344,
+   "f1": 2431,
+   "words": [
+    {
+     "w": "His",
+     "f": 2344
+    },
+    {
+     "w": "matted",
+     "f": 2351
+    },
+    {
+     "w": "locks",
+     "f": 2363
+    },
+    {
+     "w": "holding",
+     "f": 2373
+    },
+    {
+     "w": "the",
+     "f": 2388
+    },
+    {
+     "w": "bright",
+     "f": 2394
+    },
+    {
+     "w": "crescent",
+     "f": 2406
+    },
+    {
+     "w": "moon.",
+     "f": 2423
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 16,
+   "text": "He smiles gently at the devoted princess who dared",
+   "t0": 81.58,
+   "t1": 84.362,
+   "f0": 2447,
+   "f1": 2531,
+   "words": [
+    {
+     "w": "He",
+     "f": 2447
+    },
+    {
+     "w": "smiles",
+     "f": 2451
+    },
+    {
+     "w": "gently",
+     "f": 2463
+    },
+    {
+     "w": "at",
+     "f": 2475
+    },
+    {
+     "w": "the",
+     "f": 2479
+    },
+    {
+     "w": "devoted",
+     "f": 2485
+    },
+    {
+     "w": "princess",
+     "f": 2499
+    },
+    {
+     "w": "who",
+     "f": 2515
+    },
+    {
+     "w": "dared",
+     "f": 2521
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 16,
+   "text": "to conquer the cosmos with pure love.",
+   "t0": 84.362,
+   "t1": 86.35,
+   "f0": 2531,
+   "f1": 2590,
+   "words": [
+    {
+     "w": "to",
+     "f": 2531
+    },
+    {
+     "w": "conquer",
+     "f": 2535
+    },
+    {
+     "w": "the",
+     "f": 2549
+    },
+    {
+     "w": "cosmos",
+     "f": 2555
+    },
+    {
+     "w": "with",
+     "f": 2567
+    },
+    {
+     "w": "pure",
+     "f": 2575
+    },
+    {
+     "w": "love.",
+     "f": 2583
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 17,
+   "text": "Their divine union will soon",
+   "t0": 87.45,
+   "t1": 89.029,
+   "f0": 2624,
+   "f1": 2671,
+   "words": [
+    {
+     "w": "Their",
+     "f": 2624
+    },
+    {
+     "w": "divine",
+     "f": 2633
+    },
+    {
+     "w": "union",
+     "f": 2645
+    },
+    {
+     "w": "will",
+     "f": 2655
+    },
+    {
+     "w": "soon",
+     "f": 2663
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 17,
+   "text": "bridge two entirely different worlds,",
+   "t0": 89.029,
+   "t1": 91.135,
+   "f0": 2671,
+   "f1": 2734,
+   "words": [
+    {
+     "w": "bridge",
+     "f": 2671
+    },
+    {
+     "w": "two",
+     "f": 2683
+    },
+    {
+     "w": "entirely",
+     "f": 2689
+    },
+    {
+     "w": "different",
+     "f": 2704
+    },
+    {
+     "w": "worlds,",
+     "f": 2722
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 17,
+   "text": "setting the stage for",
+   "t0": 91.135,
+   "t1": 92.319,
+   "f0": 2734,
+   "f1": 2770,
+   "words": [
+    {
+     "w": "setting",
+     "f": 2734
+    },
+    {
+     "w": "the",
+     "f": 2748
+    },
+    {
+     "w": "stage",
+     "f": 2754
+    },
+    {
+     "w": "for",
+     "f": 2764
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 17,
+   "text": "a great cosmic love story that transcends time itself.",
+   "t0": 92.319,
+   "t1": 95.28,
+   "f0": 2770,
+   "f1": 2858,
+   "words": [
+    {
+     "w": "a",
+     "f": 2770
+    },
+    {
+     "w": "great",
+     "f": 2772
+    },
+    {
+     "w": "cosmic",
+     "f": 2781
+    },
+    {
+     "w": "love",
+     "f": 2793
+    },
+    {
+     "w": "story",
+     "f": 2801
+    },
+    {
+     "w": "that",
+     "f": 2811
+    },
+    {
+     "w": "transcends",
+     "f": 2819
+    },
+    {
+     "w": "time",
+     "f": 2839
+    },
+    {
+     "w": "itself.",
+     "f": 2847
+    }
+   ]
+  }
+ ]
+}

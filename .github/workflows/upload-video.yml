@@ -1,0 +1,251 @@
+name: Upload video (YouTube / Instagram)
+
+# Uploads an already-made video to every configured account (IG_USERn_* / YT_USERn_* secrets) that is allowed
+# for the given group (IG_USERn_FOR / YT_USERn_FOR = "nlm", "story", "stickman" or a comma list; unset = all workflows).
+# Costs no NotebookLM / LLM quota. Four ways in:
+#   - called by notebooklm-short.yml right after a short is made (group nlm, artifact of the same run)
+#   - called by generate-video.yml after a folk-art story is published (group story, shorts.mp4 + landscape.mp4)
+#   - called by generate-stickman-reel.yml after a fact reel is published (group stickman, reel.mp4)
+#   - run manually (Actions > this workflow > Run workflow) with the folder name on the videos branch,
+#     e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5, videos/the-birth-of-sati-12 or stickman/which-planet-spins-backwards-3 -
+#     useful when a previous run made the video but the upload failed or was skipped.
+
+on:
+  workflow_call:
+    inputs:
+      folder:
+        description: 'Folder on the videos branch (nlm/<slug>-<run>, videos/<slug>-<run> or stickman/<slug>-<run>) holding the video + meta.json'
+        type: string
+        default: ''
+      artifact:
+        description: 'Artifact of the calling run to use instead of the folder'
+        type: string
+        default: ''
+      video:
+        description: 'Video file name inside the folder / artifact'
+        type: string
+        default: reel.mp4
+      group:
+        description: 'Which accounts: nlm, story, stickman (accounts whose *_FOR secret does not list it are skipped); empty = all'
+        type: string
+        default: ''
+      platforms:
+        description: 'youtube,instagram or just one of them'
+        type: string
+        default: youtube,instagram
+      yt_kind:
+        description: 'short (adds #Shorts) or video (normal landscape upload)'
+        type: string
+        default: short
+      upload:
+        description: 'auto = every account whose secrets are set, off = skip'
+        type: string
+        default: auto
+      yt_privacy:
+        type: string
+        default: public
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: 'Folder on the videos branch, e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5, videos/the-birth-of-sati-12 or stickman/which-planet-spins-backwards-3 (see README.md on that branch)'
+        required: true
+        type: string
+      video:
+        description: 'Video file in that folder'
+        required: true
+        type: choice
+        default: reel.mp4
+        options: [reel.mp4, shorts.mp4, landscape.mp4]
+      group:
+        description: 'Accounts to use: nlm / story / stickman = only accounts whose YT_USERn_FOR / IG_USERn_FOR secret lists that group; all = every account. The run summary shows each account as usern (YT_USERn_NAME / IG_USERn_NAME).'
+        required: true
+        type: choice
+        default: all
+        options: [all, nlm, story, stickman]
+      platforms:
+        description: 'Where to upload'
+        required: true
+        type: choice
+        default: youtube,instagram
+        options: ['youtube,instagram', youtube, instagram]
+      yt_kind:
+        description: 'YouTube: short (9:16, adds #Shorts) or video (16:9 landscape)'
+        required: true
+        type: choice
+        default: short
+        options: [short, video]
+      yt_privacy:
+        description: 'YouTube privacy for the upload'
+        required: true
+        type: choice
+        default: public
+        options: [public, unlisted, private]
+
+permissions:
+  contents: read
+
+jobs:
+  targets:
+    name: Detect upload accounts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.targets.outputs.matrix }}
+      count: ${{ steps.targets.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Secrets must be single-line
+        env:
+          TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
+        run: |
+          if [ "$(printf '%s' "$TOKEN_JSON" | wc -l)" -gt 0 ]; then
+            echo "::warning::NOTEBOOKLM_MASTER_TOKEN_JSON spans several lines. GitHub masks every line of it (e.g. '{' and '}'), which can make job outputs disappear. Re-save it as one line: python -c \"import json;print(json.dumps(json.load(open('master_token.json'))))\""
+          fi
+      - name: Detect upload accounts
+        id: targets
+        env:
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+          UPLOAD: ${{ inputs.upload || 'auto' }}
+          GROUP: ${{ inputs.group == 'all' && '' || inputs.group }}
+          PLATFORMS: ${{ inputs.platforms || 'youtube,instagram' }}
+        run: |
+          python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" --group "$GROUP" --platforms "$PLATFORMS" > accounts.json
+          # matrix is a flat list of "platform/key" strings (no braces, no secret values): GitHub masks every LINE of a
+          # multi-line secret and drops any job output that contains a masked value
+          echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
+          echo "count=$(python -c "import json;print(json.load(open('accounts.json'))['count'])")" >> "$GITHUB_OUTPUT"
+          rm -f accounts.json
+
+  # GitHub silently drops a job output that contains any masked value (every LINE of a multi-line secret is a mask).
+  # If that happens the upload job is skipped with no explanation, so fail loudly here with the reason instead.
+  check:
+    name: Upload targets sanity
+    needs: targets
+    if: ${{ needs.targets.outputs.matrix == '' || needs.targets.outputs.count == '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::GitHub dropped the upload matrix output because it contains a masked value. Usual cause: a multi-line secret (e.g. NOTEBOOKLM_MASTER_TOKEN_JSON pasted pretty-printed) - every line of it becomes a mask. Re-save that secret as ONE line (python -c \"import json;print(json.dumps(json.load(open('master_token.json'))))\") and check no secret has a value like 'instagram', 'youtube', 'user1', '/' or '[', then run again."
+          exit 1
+
+  upload:
+    name: Upload ${{ matrix.target }}
+    needs: targets
+    if: ${{ needs.targets.outputs.count != '0' && needs.targets.outputs.matrix != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        target: ${{ fromJson(needs.targets.outputs.matrix) }}
+    env:
+      FOLDER: ${{ inputs.folder }}
+      VIDEO: ${{ inputs.video || 'reel.mp4' }}
+      YT_KIND: ${{ inputs.yt_kind || 'short' }}
+      YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
+    steps:
+      - name: Split target into platform / account key
+        id: t
+        run: |
+          echo "platform=${TARGET%%/*}" >> "$GITHUB_OUTPUT"
+          echo "name=${TARGET#*/}" >> "$GITHUB_OUTPUT"
+        env: { TARGET: '${{ matrix.target }}' }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Get video from the calling run (artifact)
+        if: inputs.artifact != ''
+        uses: actions/download-artifact@v4
+        with: { name: '${{ inputs.artifact }}', path: final }
+
+      - name: Get video from the videos branch
+        if: inputs.artifact == ''
+        run: |
+          test -n "$FOLDER" || { echo "::error::folder input is required (nlm/<slug>-<run> on the videos branch)"; exit 1; }
+          FOLDER="${FOLDER#/}"; FOLDER="${FOLDER%/}"
+          git clone --depth 1 --filter=blob:none --sparse --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site
+          git -C site sparse-checkout set "$FOLDER"
+          test -f "site/$FOLDER/$VIDEO" || { echo "::error::site/$FOLDER/$VIDEO not found on the videos branch - check the folder name in README.md / nlm/README.md there"; exit 1; }
+          mkdir -p final && cp "site/$FOLDER"/* final/
+          ls -la final
+
+      - name: Check video + meta
+        run: |
+          test -f "final/$VIDEO" || { echo "::error::final/$VIDEO missing (artifact/folder has: $(ls final | tr '\n' ' '))"; exit 1; }
+          test -f final/meta.json || { echo "::error::final/meta.json missing - captions come from it"; exit 1; }
+
+      - name: Select account credentials
+        id: acct
+        env:
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+        run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ steps.t.outputs.platform }}" --name "${{ steps.t.outputs.name }}" --env-file "$RUNNER_TEMP/creds.sh"
+
+      - name: Upload to YouTube
+        id: yt
+        if: steps.t.outputs.platform == 'youtube'
+        run: |
+          pip install -q google-api-python-client google-auth
+          . "$RUNNER_TEMP/creds.sh"
+          # 3 attempts: the API has transient 5xx / network blips; a finished upload writes yt.json so it is never repeated
+          for i in 1 2 3; do
+            python pipeline/notebooklm/upload_youtube.py --video "final/$VIDEO" --meta final/meta.json --kind "$YT_KIND" --privacy "${YT_ACCOUNT_PRIVACY:-$YT_PRIVACY}" --out yt.json && break
+            [ -f yt.json ] && break
+            [ "$i" = 3 ] && { echo "::error::YouTube upload failed 3 times"; exit 1; }
+            echo "attempt $i failed, retrying in 90s"; sleep 90
+          done
+          echo "url=$(python -c "import json;print(json.load(open('yt.json')).get('url',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Instagram (Reel)
+        id: ig
+        if: steps.t.outputs.platform == 'instagram'
+        env:
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST || 'graph.facebook.com' }}
+        run: |
+          . "$RUNNER_TEMP/creds.sh"
+          # The Graph API needs a PUBLIC video URL. Use the videos-branch raw URL when the repo is public,
+          # otherwise park the file for ~1 h on tmpfiles.org (the reel is about to be public anyway).
+          url=""
+          if [ -n "$FOLDER" ]; then
+            raw="https://github.com/${{ github.repository }}/raw/videos/${FOLDER#/}/$VIDEO"
+            curl -fsSLI -o /dev/null "$raw" && url="$raw" && echo "using repo raw URL"
+          fi
+          if [ -z "$url" ]; then
+            url=$(curl -fsS -F "file=@final/$VIDEO" https://tmpfiles.org/api/v1/upload | python -c "import json,sys;u=json.load(sys.stdin)['data']['url'];print(u.replace('tmpfiles.org/','tmpfiles.org/dl/',1))")
+            echo "using temporary public host"
+          fi
+          test -n "$url" || { echo "::error::no public URL for the video"; exit 1; }
+          for i in 1 2 3; do
+            python pipeline/notebooklm/upload_instagram.py --video-url "$url" --meta final/meta.json --out ig.json && break
+            [ -f ig.json ] && break
+            [ "$i" = 3 ] && { echo "::error::Instagram upload failed 3 times"; exit 1; }
+            echo "attempt $i failed, retrying in 90s"; sleep 90
+          done
+          echo "url=$(python -c "import json;print(json.load(open('ig.json')).get('permalink',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Remove credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/creds.sh"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Upload $VIDEO -> ${{ steps.t.outputs.platform }} / ${{ steps.t.outputs.name }}"
+            echo
+            echo "| Platform | Account | Result |"; echo "|---|---|---|"
+            if [ "${{ steps.t.outputs.platform }}" = "youtube" ]; then
+              echo "| YouTube | ${{ steps.t.outputs.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
+            else
+              echo "| Instagram | ${{ steps.t.outputs.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
+            fi
+            echo
+            echo "<details><summary>Caption</summary>"; echo; echo '```'
+            python -c "import json;m=json.load(open('final/meta.json'));print(m.get('caption_${{ steps.t.outputs.platform }}') or m.get('description') or m.get('title',''))"
+            echo '```'; echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,23 @@
+{
+  "name": "stickman-reel",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion project for the stickman fact reel action (based on the bhul-bill-video-builder kit)",
+  "scripts": {
+    "prepare-assets": "node prepare.mjs",
+    "typecheck": "tsc --noEmit",
+    "still": "remotion still src/index.ts StoryVideo",
+    "render": "remotion render src/index.ts StoryVideo"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/baloo-2": "^5.3.0",
+    "@fontsource/patrick-hand": "^5.3.0",
+    "@remotion/cli": "^4.0.539",
+    "@types/react": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "remotion": "^4.0.539",
+    "typescript": "^7.0.2"
+  }
+}
