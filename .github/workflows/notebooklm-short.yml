@@ -66,6 +66,11 @@ on:
         type: choice
         default: public
         options: [public, unlisted, private]
+      trim_outro:
+        description: 'Cut the NotebookLM end card (auto-detect; falls back to OUTRO_TRIM seconds)'
+        required: true
+        type: boolean
+        default: true
 
 concurrency:
   group: notebooklm-short
@@ -83,6 +88,9 @@ env:
   KEEP_NOTEBOOK: ${{ inputs.keep_notebook == true && '1' || '' }}
   UPLOAD: ${{ inputs.upload || 'auto' }}
   YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
+  TRIM_OUTRO: ${{ inputs.trim_outro == false && '' || '1' }}
+  # Seconds cut from the end when the end card cannot be detected (0 = leave the video as is).
+  OUTRO_TRIM: '3'
   # Closing call to action spoken at the end of every video (edit here to change the wording).
   CTA_LINE: "If you learned something new, support us by subscribing to the channel and following us for more."
 
@@ -257,12 +265,34 @@ jobs:
               raise SystemExit(f'::error::video generation ended with status {st}')
           PY
 
-      - name: Download + thumbnail + metadata
+      - name: Download video
+        run: |
+          mkdir -p final work
+          notebooklm download video work/raw.mp4 --latest --force --json | tee download.json
+          test -s work/raw.mp4 || { echo "::error::download produced no file"; exit 1; }
+          ffprobe -v error -show_entries format=duration -of csv=p=0 work/raw.mp4
+
+      - name: Trim NotebookLM outro
+        id: trim
+        run: |
+          if [ -n "$TRIM_OUTRO" ]; then
+            python pipeline/notebooklm/trim_outro.py work/raw.mp4 final/reel.mp4 --fallback "$OUTRO_TRIM" --report final/trim.json
+          else
+            cp work/raw.mp4 final/reel.mp4
+            echo '{"trimmed": false, "reason": "disabled"}' > final/trim.json
+          fi
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r = json.load(open('final/trim.json'))
+          print('### Outro trim')
+          print(f"- trimmed: {r.get('trimmed')}  reason: {r.get('reason')}")
+          if r.get('trimmed'):
+              print(f"- {r['input_duration']} s -> {r['output_duration']} s (removed {r['removed']} s at {r['cut_at']} s)")
+          PY
+
+      - name: Thumbnail + metadata
         id: probe
         run: |
-          mkdir -p final
-          notebooklm download video final/reel.mp4 --latest --force --json | tee download.json
-          test -s final/reel.mp4 || { echo "::error::download produced no file"; exit 1; }
           dur=$(ffprobe -v error -show_entries format=duration -of csv=p=0 final/reel.mp4)
           echo "duration=$dur" >> "$GITHUB_OUTPUT"
           ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 final/reel.mp4

@@ -57,6 +57,7 @@ Private repo: video is parked 1 h on tmpfiles.org so Instagram can fetch it.
 | keep_notebook | false | |
 | upload | auto | auto, off |
 | yt_privacy | public | public, unlisted, private |
+| trim_outro | true | cuts the NotebookLM end card (auto-detect, else last 3 s) |
 
 Closing line: edit `CTA_LINE` in `.github/workflows/notebooklm-short.yml`.
 Topics: edit `topics.json`.
