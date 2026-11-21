@@ -234,7 +234,16 @@ jobs:
           prompt="Make this for a general YouTube Shorts audience about the topic: ${{ steps.pick.outputs.topic }}. Follow this exact three-part structure. PART 1 - HOOK (first 3 seconds): open by asking the audience one short, intriguing question about the topic, for example 'Have you ever wondered...' or 'What if...'. Do not start with a statement or a title. PART 2 - EXPLANATION: answer that question clearly and step by step in simple everyday language, one idea at a time, with a concrete example or comparison, so a beginner fully understands it. PART 3 - CLOSING (last few seconds): give a one-line takeaway, then end by speaking this call to action word for word: '$CTA_LINE'. Keep the whole thing conversational and energetic."
           args=(--format "$FORMAT" --wait --timeout 2400 --retry 3 --json)
           if [ "$FORMAT" = "explainer" ]; then args+=(--style "$STYLE"); fi
-          notebooklm generate video "$prompt" "${args[@]}" | tee generate.json
+          set -o pipefail
+          # RateLimitError on CREATE_ARTIFACT = the account's daily Video Overview quota is used up; retrying for minutes cannot help
+          if ! notebooklm generate video "$prompt" "${args[@]}" 2> >(tee generate.err >&2) | tee generate.json; then
+            if grep -q 'RateLimitError' generate.err; then
+              echo "::error::NotebookLM daily Video Overview quota reached for this account (RateLimitError on CREATE_ARTIFACT). Wait for the daily reset (about 13:30 IST) or use another throwaway account. No video was made, nothing to upload."
+            else
+              echo "::error::notebooklm generate video failed - see log above"
+            fi
+            exit 1
+          fi
           python - <<'PY'
           import json
           d = json.load(open('generate.json'))

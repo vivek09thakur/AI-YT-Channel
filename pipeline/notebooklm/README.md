@@ -202,6 +202,7 @@ If a run made and published the video but the upload failed or was skipped, do n
 | secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set | Section 1 |
 | NotebookLM auth failed | Section 1 again, token expired |
 | quota exhausted | wait for the reset time printed in the log |
+| daily Video Overview quota reached (RateLimitError on CREATE_ARTIFACT) | the free account only gets a few videos per day; wait for the daily reset (about 13:30 IST) or use another throwaway account. The daily schedule makes one video per day, extra manual runs eat into this |
 | research imported no sources | re-run, or pick another topic |
 | no public URL for the video | tmpfiles.org down, re-run |
 | YouTube video is private | Google app not verified |
