@@ -8,7 +8,7 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 |---|---|---|---|
 | NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily 09:00 IST, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON |
 | Upload video | Uploads an already made video from the `videos` branch (no NotebookLM quota) | By hand, or called by the two workflows above/below | IG_USER1_* / YT_* |
-| Generate story video | 2 min folk art story, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | By hand | GEMINI_API_KEY |
+| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily 11:00 IST, or by hand (own topic/script optional) | GEMINI_API_KEY |
 | Generate daily fact reel | 60 s vertical fact reel | By hand | GEMINI_API_KEY |
 | Pre-run check only | Tests keys, voice, remaining minutes | By hand | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |

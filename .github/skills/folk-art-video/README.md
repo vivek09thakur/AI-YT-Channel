@@ -16,6 +16,9 @@ stories/<slug>/     generated: story.py meta.json phrases.json narration.json sh
 
 ## Pipeline (`pipeline/folk/`)
 
+0. `pick_story.py` (auto mode: no topic / script given, or the daily schedule) reads `videos.json` from the `videos` branch,
+   asks the LLM for the next story - continue the saga when the last ones form a sequence, otherwise a tradition not covered
+   lately - and writes the 230-320 word narration (`work/script.txt`, `work/pick.json`). `theme` input steers it.
 1. `tts.py` narration -> `phrases.py` splits it into <= 9-word phrases with frame timings -> `work/phrases.json`
 2. `generate_folk.py` sends `prompt/CONTRACT_FOLK.md` + the example + the phrase brief to the LLM, parses `story.py`/`meta.json`,
    runs `check_story.py` and feeds the problems back (3 attempts, provider fallback via `generate_story.call_with_fallback`).
