@@ -26,9 +26,15 @@ Use a throwaway Google account, not your main one.
   ```
 
 - A browser opens, log in with the throwaway account
-- Open the file `~/.notebooklm/profiles/default/master_token.json` (Windows: `C:\Users\YOU\.notebooklm\profiles\default\master_token.json`)
-- Copy its whole content
-- Add secret `NOTEBOOKLM_MASTER_TOKEN_JSON` and paste
+- Print the token file as ONE line and copy the output:
+
+  ```bash
+  python -c "import json,os;print(json.dumps(json.load(open(os.path.expanduser('~/.notebooklm/profiles/default/master_token.json')))))"
+  ```
+
+- Add secret `NOTEBOOKLM_MASTER_TOKEN_JSON` and paste that single line
+
+Why one line: GitHub masks every line of a multi-line secret. A pretty-printed JSON gives masks like `{` and `}`, and GitHub then silently drops any job output containing them, which breaks the upload job. The Precheck warns if the secret is multi-line.
 
 Check it worked: Actions tab > NotebookLM short > Run workflow. The first job, Precheck, must be green.
 
@@ -200,5 +206,5 @@ If a run made and published the video but the upload failed or was skipped, do n
 | no public URL for the video | tmpfiles.org down, re-run |
 | YouTube video is private | Google app not verified |
 | account incomplete - skipped | one of the numbered secrets is missing |
-| Upload job shows "Waiting for pending jobs" and the run fails | upload matrix was empty; fixed in `upload_accounts.py` (matrix never contains secret values). Use the upload workflow above for that video |
+| Upload job shows "Waiting for pending jobs" and the run fails, or "Upload targets sanity" fails | a multi-line secret (usually NOTEBOOKLM_MASTER_TOKEN_JSON) made GitHub drop the upload matrix. Re-save it as one line (Section 1), then use the upload workflow above for that video |
 | reel.mp4 not found on the videos branch | wrong folder name, copy it from `nlm/README.md` on the `videos` branch |

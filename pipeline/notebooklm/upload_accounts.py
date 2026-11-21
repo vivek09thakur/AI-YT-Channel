@@ -9,13 +9,14 @@ Sources (all optional, combined). Secrets are read from the environment or from 
                                                         -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
   YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
 
-  list   --upload auto|off          print {"matrix": [{"platform","name"}...], "count": N, "summary": [...]}
+  list   --upload auto|off          print {"matrix": ["platform/key", ...], "count": N, "summary": [...]}
   select --platform P --name N --env-file FILE
                                     write shell exports for that one account and print ::add-mask:: lines
 
-IMPORTANT: the matrix "name" is a fixed, non-secret KEY (default, user1, user2, json1 ...), never a value taken
-from a secret. GitHub silently drops any job output that contains a secret value ("Skip output ... since it
-may contain secret"), which would leave the upload job with an empty matrix and fail the whole run.
+IMPORTANT: the matrix is a flat list of "platform/key" strings where key is fixed and non-secret (default, user1,
+user2, json1 ...), never a value taken from a secret. GitHub silently drops any job output that contains a masked
+value ("Skip output ... since it may contain secret"), and it masks every LINE of a multi-line secret - a
+pretty-printed master_token.json makes "{" and "}" masked, so the output must not be a JSON object either.
 The optional *_NAME label is only resolved inside the upload job (select) and exported as ACCOUNT_LABEL.
 """
 import argparse
@@ -146,17 +147,19 @@ def accounts():
 
 def cmd_list(a):
     acc = accounts() if a.upload != "off" else {"youtube": [], "instagram": []}
-    matrix = [{"platform": p, "name": x["name"]} for p in ("youtube", "instagram") for x in acc[p]]
-    summary = [f"{m['platform']}:{m['name']}" for m in matrix]
+    # matrix is a flat list of "platform/key" strings on purpose: GitHub masks every LINE of a multi-line secret
+    # (e.g. a pretty-printed master_token.json gives masks "{" and "}") and drops any job output containing a
+    # masked value - so the output must not contain braces or anything else that could be a secret line.
+    matrix = [f"{p}/{x['name']}" for p in ("youtube", "instagram") for x in acc[p]]
     # a non-empty placeholder keeps fromJson() happy when the job is skipped via count == 0
-    res = {"matrix": matrix or [{"platform": "none", "name": "none"}], "count": len(matrix), "summary": summary}
+    res = {"matrix": matrix or ["none/none"], "count": len(matrix), "summary": matrix}
     print(json.dumps(res))
     if a.upload == "off":
         print("upload: off (workflow input)", file=sys.stderr)
     elif not matrix:
         print("::notice::no upload accounts configured (set YT_* / IG_* secrets or YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON)", file=sys.stderr)
     else:
-        print("upload accounts: " + ", ".join(summary), file=sys.stderr)
+        print("upload accounts: " + ", ".join(matrix), file=sys.stderr)
 
 
 def cmd_select(a):

@@ -53,6 +53,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+      - name: Secrets must be single-line
+        env:
+          TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
+        run: |
+          if [ "$(printf '%s' "$TOKEN_JSON" | wc -l)" -gt 0 ]; then
+            echo "::warning::NOTEBOOKLM_MASTER_TOKEN_JSON spans several lines. GitHub masks every line of it (e.g. '{' and '}'), which can make job outputs disappear. Re-save it as one line: python -c \"import json;print(json.dumps(json.load(open('master_token.json'))))\""
+          fi
       - name: Detect upload accounts
         id: targets
         env:
@@ -61,13 +68,14 @@ jobs:
           UPLOAD: ${{ inputs.upload || 'auto' }}
         run: |
           python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" > accounts.json
-          # matrix holds fixed keys only (user1, json1, default) - a secret value here would make GitHub drop the output
+          # matrix is a flat list of "platform/key" strings (no braces, no secret values): GitHub masks every LINE of a
+          # multi-line secret and drops any job output that contains a masked value
           echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
           echo "count=$(python -c "import json;print(json.load(open('accounts.json'))['count'])")" >> "$GITHUB_OUTPUT"
           rm -f accounts.json
 
-  # GitHub silently drops a job output that contains any secret VALUE. If that happens the upload job is skipped
-  # with no explanation, so fail loudly here with the reason instead.
+  # GitHub silently drops a job output that contains any masked value (every LINE of a multi-line secret is a mask).
+  # If that happens the upload job is skipped with no explanation, so fail loudly here with the reason instead.
   check:
     name: Upload targets sanity
     needs: targets
@@ -75,11 +83,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "::error::GitHub dropped the upload matrix output because it contains a secret value. Some repository secret has a value equal to one of: 'instagram', 'youtube', 'user1', 'user2', 'default', 'json1', 'platform', 'name' or a digit like '1'. Most likely IG_USERn_NAME / YT_USERn_NAME - delete that secret or set it to something else (it is only a label), then run again."
+          echo "::error::GitHub dropped the upload matrix output because it contains a masked value. Usual cause: a multi-line secret (e.g. NOTEBOOKLM_MASTER_TOKEN_JSON pasted pretty-printed) - every line of it becomes a mask. Re-save that secret as ONE line (python -c \"import json;print(json.dumps(json.load(open('master_token.json'))))\") and check no secret has a value like 'instagram', 'youtube', 'user1', '/' or '[', then run again."
           exit 1
 
   upload:
-    name: Upload ${{ matrix.platform }} / ${{ matrix.name }}
+    name: Upload ${{ matrix.target }}
     needs: targets
     if: ${{ needs.targets.outputs.count != '0' && needs.targets.outputs.matrix != '' }}
     runs-on: ubuntu-latest
@@ -88,11 +96,17 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        include: ${{ fromJson(needs.targets.outputs.matrix) }}
+        target: ${{ fromJson(needs.targets.outputs.matrix) }}
     env:
       FOLDER: ${{ inputs.folder }}
       YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
     steps:
+      - name: Split target into platform / account key
+        id: t
+        run: |
+          echo "platform=${TARGET%%/*}" >> "$GITHUB_OUTPUT"
+          echo "name=${TARGET#*/}" >> "$GITHUB_OUTPUT"
+        env: { TARGET: '${{ matrix.target }}' }
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
@@ -118,11 +132,11 @@ jobs:
         env:
           # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
           ALL_SECRETS: ${{ toJSON(secrets) }}
-        run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ matrix.platform }}" --name "${{ matrix.name }}" --env-file "$RUNNER_TEMP/creds.sh"
+        run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ steps.t.outputs.platform }}" --name "${{ steps.t.outputs.name }}" --env-file "$RUNNER_TEMP/creds.sh"
 
       - name: Upload to YouTube
         id: yt
-        if: matrix.platform == 'youtube'
+        if: steps.t.outputs.platform == 'youtube'
         run: |
           pip install -q google-api-python-client google-auth
           . "$RUNNER_TEMP/creds.sh"
@@ -131,7 +145,7 @@ jobs:
 
       - name: Upload to Instagram (Reel)
         id: ig
-        if: matrix.platform == 'instagram'
+        if: steps.t.outputs.platform == 'instagram'
         env:
           IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST || 'graph.facebook.com' }}
         run: |
@@ -159,16 +173,16 @@ jobs:
         if: always()
         run: |
           {
-            echo "## Upload ${{ matrix.platform }} / ${{ matrix.name }}"
+            echo "## Upload ${{ steps.t.outputs.platform }} / ${{ steps.t.outputs.name }}"
             echo
             echo "| Platform | Account | Result |"; echo "|---|---|---|"
-            if [ "${{ matrix.platform }}" = "youtube" ]; then
-              echo "| YouTube | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
+            if [ "${{ steps.t.outputs.platform }}" = "youtube" ]; then
+              echo "| YouTube | ${{ steps.t.outputs.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
             else
-              echo "| Instagram | ${{ matrix.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
+              echo "| Instagram | ${{ steps.t.outputs.name }} (${{ steps.acct.outputs.label }}) | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
             fi
             echo
             echo "<details><summary>Caption</summary>"; echo; echo '```'
-            python -c "import json;m=json.load(open('final/meta.json'));print(m.get('caption_${{ matrix.platform }}') or m.get('description') or m.get('title',''))"
+            python -c "import json;m=json.load(open('final/meta.json'));print(m.get('caption_${{ steps.t.outputs.platform }}') or m.get('description') or m.get('title',''))"
             echo '```'; echo "</details>"
           } >> "$GITHUB_STEP_SUMMARY"

@@ -110,6 +110,9 @@ jobs:
           test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see pipeline/notebooklm/README.md)"; exit 1; }
           python -c "import json,os; d=json.loads(os.environ['NOTEBOOKLM_MASTER_TOKEN_JSON']); assert isinstance(d, dict) and d, 'empty'" \
             || { echo "::error::NOTEBOOKLM_MASTER_TOKEN_JSON is not a JSON object - paste the whole master_token.json file"; exit 1; }
+          if [ "$(printf '%s' "$NOTEBOOKLM_MASTER_TOKEN_JSON" | wc -l)" -gt 0 ]; then
+            echo "::warning::NOTEBOOKLM_MASTER_TOKEN_JSON spans several lines. GitHub masks every line of it (e.g. '{' and '}'), which can make job outputs disappear. Re-save it as one line: python -c \"import json;print(json.dumps(json.load(open('master_token.json'))))\""
+          fi
           echo "master token secret: present"
 
       - name: Install notebooklm-py
