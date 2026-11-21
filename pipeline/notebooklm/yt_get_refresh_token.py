@@ -7,7 +7,8 @@
 4. download this file, then: pip install google-auth-oauthlib
    python yt_get_refresh_token.py --client-id ... --client-secret ...
    (a browser opens; sign in with the CHANNEL's Google account and allow all requested access)
-5. store the printed refresh token + the client id/secret as repo secrets YT_REFRESH_TOKEN, YT_CLIENT_ID, YT_CLIENT_SECRET
+5. store the printed refresh token + the client id/secret as repo secrets YT_USERn_REFRESH_TOKEN, YT_USERn_CLIENT_ID, YT_USERn_CLIENT_SECRET
+   (run once per channel, logged in as that channel's account; the client id/secret are the same for every channel)
 
 Scopes requested: upload + manage (thumbnails) + YouTube Analytics read-only, so the same refresh token also works
 for analytics scripts. Enable "YouTube Analytics API" in the project too, or drop the yt-analytics scopes below.
@@ -39,8 +40,9 @@ def main():
                          'redirect_uris': ['http://localhost']}}
     flow = InstalledAppFlow.from_client_config(cfg, SCOPES)
     creds = flow.run_local_server(port=0, access_type='offline', prompt='consent')
-    print('\nYT_REFRESH_TOKEN =', creds.refresh_token)
-    print('add it as repository secret YT_REFRESH_TOKEN (Settings -> Secrets and variables -> Actions)')
+    print('\nrefresh token =', creds.refresh_token)
+    print('add it as repository secret YT_USER1_REFRESH_TOKEN (USER2, USER3 ... for more channels; same client id/secret),')
+    print('optionally YT_USER1_FOR = nlm | story to limit which workflow posts there (Settings -> Secrets and variables -> Actions)')
 
 
 if __name__ == '__main__':
