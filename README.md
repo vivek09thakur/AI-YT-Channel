@@ -7,8 +7,8 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 | Workflow | Output | How it runs | Needs |
 |---|---|---|---|
 | NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily 09:00 IST, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON |
-| NotebookLM upload | Re-uploads an already made short from the `videos` branch (no NotebookLM quota) | By hand, or called by the short workflow | IG_USER1_* / YT_USER1_* |
-| Generate story video | 2 min folk art story, 16:9 and 9:16 | By hand | GEMINI_API_KEY |
+| Upload video | Uploads an already made video from the `videos` branch (no NotebookLM quota) | By hand, or called by the two workflows above/below | IG_USER1_* / YT_USER1_* |
+| Generate story video | 2 min folk art story, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | By hand | GEMINI_API_KEY |
 | Generate daily fact reel | 60 s vertical fact reel | By hand | GEMINI_API_KEY |
 | Pre-run check only | Tests keys, voice, remaining minutes | By hand | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
@@ -39,6 +39,7 @@ Add in repo > Settings > Secrets and variables > Actions.
 | NOTEBOOKLM_MASTER_TOKEN_JSON | Secret | content of master_token.json | NotebookLM short |
 | IG_USER1_ID, IG_USER1_TOKEN | Secret | Instagram account 1 (2, 3 ... for more) | Instagram upload |
 | YT_USER1_CLIENT_ID, YT_USER1_CLIENT_SECRET, YT_USER1_REFRESH_TOKEN | Secret | YouTube account 1 (2, 3 ... for more) | YouTube upload |
+| IG_USER1_FOR, YT_USER1_FOR | Secret | optional: `nlm`, `story` or `nlm,story` = which workflow may post to that account (unset = all) | Separate channels per workflow |
 | GEMINI_API_KEY | Secret | Gemini key (or MISTRAL_API_KEY / CEREBRAS_API_KEY) | Story video, Fact reel |
 | AZURE_SPEECH_KEY | Secret | Azure Speech key | Optional, better voices |
 | AZURE_SPEECH_REGION | Variable | e.g. centralindia | With Azure key |

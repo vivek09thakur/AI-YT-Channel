@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Upload a video to YouTube (Data API v3) using a long-lived OAuth refresh token.
 
-usage: upload_youtube.py --video final/reel.mp4 --meta final/meta.json [--privacy public|unlisted|private] --out yt.json
+usage: upload_youtube.py --video final/reel.mp4 --meta final/meta.json [--privacy public|unlisted|private] [--kind short|video] --out yt.json
+
+--kind short (default) adds #Shorts to the title; --kind video is a normal landscape upload (no #Shorts, youtu.be link).
 
 env: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN  (mint the refresh token once with yt_get_refresh_token.py)
 deps: pip install google-api-python-client google-auth
@@ -9,7 +11,7 @@ deps: pip install google-api-python-client google-auth
 Title / description / tags come from meta.json (title, caption_youtube, hashtags). Writes {"id", "url"} to --out.
 Note: YouTube forces videos uploaded by an UNVERIFIED Google Cloud OAuth app to private; see README.
 """
-import argparse, json, os, sys, time
+import argparse, json, os, re, sys, time
 from pathlib import Path
 
 from google.oauth2.credentials import Credentials
@@ -19,6 +21,7 @@ from googleapiclient.http import MediaFileUpload
 
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube']
 CATEGORY_EDUCATION = '27'
+CATEGORIES = {'education': '27', 'entertainment': '24', 'film': '1', 'people': '22'}
 
 
 def creds_from_env():
@@ -34,21 +37,26 @@ def main():
     ap.add_argument('--video', required=True)
     ap.add_argument('--meta', required=True)
     ap.add_argument('--privacy', default='public', choices=['public', 'unlisted', 'private'])
+    ap.add_argument('--kind', default='short', choices=['short', 'video'])
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
 
     meta = json.loads(Path(a.meta).read_text(encoding='utf-8'))
     title = (meta.get('title') or meta.get('topic') or 'Short')[:100]
-    if '#shorts' not in title.lower() and len(title) <= 92:
+    if a.kind == 'short' and '#shorts' not in title.lower() and len(title) <= 92:
         title += ' #Shorts'
-    description = (meta.get('caption_youtube') or meta.get('description') or '')[:5000]
+    description = (meta.get('caption_youtube') or meta.get('description') or '')
+    if a.kind == 'video':
+        description = re.sub(r'(?i)\s*#shorts\b', '', description).strip()
+    description = description[:5000]
+    category = CATEGORIES.get(str(meta.get('category', '')).lower(), CATEGORY_EDUCATION)
     tags = [t.lstrip('#') for t in meta.get('hashtags', [])]
     tags = [t for t in tags if t]
     while sum(len(t) + 2 for t in tags) > 480:
         tags.pop()
 
     body = {
-        'snippet': {'title': title, 'description': description, 'tags': tags, 'categoryId': CATEGORY_EDUCATION},
+        'snippet': {'title': title, 'description': description, 'tags': tags, 'categoryId': category},
         'status': {'privacyStatus': a.privacy, 'selfDeclaredMadeForKids': False},
     }
     yt = build('youtube', 'v3', credentials=creds_from_env(), cache_discovery=False)
@@ -71,7 +79,7 @@ def main():
             sys.exit(f'::error::YouTube upload failed: {e}')
 
     vid = resp['id']
-    url = f'https://youtube.com/shorts/{vid}'
+    url = f'https://youtube.com/shorts/{vid}' if a.kind == 'short' else f'https://youtu.be/{vid}'
     print(f'uploaded: {url} (privacy {resp.get("status", {}).get("privacyStatus", a.privacy)})')
 
     thumb = Path(a.video).with_name('thumb.jpg')

@@ -1,23 +1,41 @@
-name: NotebookLM upload (YouTube / Instagram)
+name: Upload video (YouTube / Instagram)
 
-# Uploads an already-made NotebookLM short to every configured account (IG_USERn_* / YT_USERn_* secrets).
-# Does NOT touch NotebookLM, so it costs no quota. Two ways in:
-#   - called by notebooklm-short.yml right after a video is made (artifact of the same run)
+# Uploads an already-made video to every configured account (IG_USERn_* / YT_USERn_* secrets) that is allowed
+# for the given group (IG_USERn_FOR / YT_USERn_FOR = "nlm", "story" or "nlm,story"; unset = all workflows).
+# Costs no NotebookLM / LLM quota. Three ways in:
+#   - called by notebooklm-short.yml right after a short is made (group nlm, artifact of the same run)
+#   - called by generate-video.yml after a folk-art story is published (group story, shorts.mp4 + landscape.mp4)
 #   - run manually (Actions > this workflow > Run workflow) with the folder name on the videos branch,
-#     e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 - useful when a previous run made the video but
-#     the upload step failed or was skipped.
+#     e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 or videos/the-birth-of-sati-12 - useful when a previous
+#     run made the video but the upload failed or was skipped.
 
 on:
   workflow_call:
     inputs:
       folder:
-        description: 'Folder on the videos branch (nlm/<slug>-<run>) holding reel.mp4 + meta.json'
+        description: 'Folder on the videos branch (nlm/<slug>-<run> or videos/<slug>-<run>) holding the video + meta.json'
         type: string
         default: ''
       artifact:
         description: 'Artifact of the calling run to use instead of the folder'
         type: string
         default: ''
+      video:
+        description: 'Video file name inside the folder / artifact'
+        type: string
+        default: reel.mp4
+      group:
+        description: 'Which accounts: nlm, story ... (accounts whose *_FOR secret does not list it are skipped); empty = all'
+        type: string
+        default: ''
+      platforms:
+        description: 'youtube,instagram or just one of them'
+        type: string
+        default: youtube,instagram
+      yt_kind:
+        description: 'short (adds #Shorts) or video (normal landscape upload)'
+        type: string
+        default: short
       upload:
         description: 'auto = every account whose secrets are set, off = skip'
         type: string
@@ -28,11 +46,35 @@ on:
   workflow_dispatch:
     inputs:
       folder:
-        description: 'Folder on the videos branch, e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 (see nlm/README.md on that branch)'
+        description: 'Folder on the videos branch, e.g. nlm/how-do-ai-detectors-spot-deepfake-seams-5 or videos/the-birth-of-sati-12 (see README.md on that branch)'
         required: true
         type: string
+      video:
+        description: 'Video file in that folder'
+        required: true
+        type: choice
+        default: reel.mp4
+        options: [reel.mp4, shorts.mp4, landscape.mp4]
+      group:
+        description: 'Accounts to use (their *_FOR secret must allow it; all = every account)'
+        required: true
+        type: choice
+        default: all
+        options: [all, nlm, story]
+      platforms:
+        description: 'Where to upload'
+        required: true
+        type: choice
+        default: youtube,instagram
+        options: [youtube,instagram, youtube, instagram]
+      yt_kind:
+        description: 'YouTube: short (9:16, adds #Shorts) or video (16:9 landscape)'
+        required: true
+        type: choice
+        default: short
+        options: [short, video]
       yt_privacy:
-        description: 'YouTube privacy for the uploaded Short'
+        description: 'YouTube privacy for the upload'
         required: true
         type: choice
         default: public
@@ -66,8 +108,10 @@ jobs:
           # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
           ALL_SECRETS: ${{ toJSON(secrets) }}
           UPLOAD: ${{ inputs.upload || 'auto' }}
+          GROUP: ${{ inputs.group == 'all' && '' || inputs.group }}
+          PLATFORMS: ${{ inputs.platforms || 'youtube,instagram' }}
         run: |
-          python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" > accounts.json
+          python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" --group "$GROUP" --platforms "$PLATFORMS" > accounts.json
           # matrix is a flat list of "platform/key" strings (no braces, no secret values): GitHub masks every LINE of a
           # multi-line secret and drops any job output that contains a masked value
           echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
@@ -99,6 +143,8 @@ jobs:
         target: ${{ fromJson(needs.targets.outputs.matrix) }}
     env:
       FOLDER: ${{ inputs.folder }}
+      VIDEO: ${{ inputs.video || 'reel.mp4' }}
+      YT_KIND: ${{ inputs.yt_kind || 'short' }}
       YT_PRIVACY: ${{ inputs.yt_privacy || 'public' }}
     steps:
       - name: Split target into platform / account key
@@ -123,9 +169,14 @@ jobs:
           FOLDER="${FOLDER#/}"; FOLDER="${FOLDER%/}"
           git clone --depth 1 --filter=blob:none --sparse --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site
           git -C site sparse-checkout set "$FOLDER"
-          test -f "site/$FOLDER/reel.mp4" || { echo "::error::site/$FOLDER/reel.mp4 not found on the videos branch - check the folder name in nlm/README.md"; exit 1; }
+          test -f "site/$FOLDER/$VIDEO" || { echo "::error::site/$FOLDER/$VIDEO not found on the videos branch - check the folder name in README.md / nlm/README.md there"; exit 1; }
           mkdir -p final && cp "site/$FOLDER"/* final/
           ls -la final
+
+      - name: Check video + meta
+        run: |
+          test -f "final/$VIDEO" || { echo "::error::final/$VIDEO missing (artifact/folder has: $(ls final | tr '\n' ' '))"; exit 1; }
+          test -f final/meta.json || { echo "::error::final/meta.json missing - captions come from it"; exit 1; }
 
       - name: Select account credentials
         id: acct
@@ -140,7 +191,7 @@ jobs:
         run: |
           pip install -q google-api-python-client google-auth
           . "$RUNNER_TEMP/creds.sh"
-          python pipeline/notebooklm/upload_youtube.py --video final/reel.mp4 --meta final/meta.json --privacy "${YT_ACCOUNT_PRIVACY:-$YT_PRIVACY}" --out yt.json
+          python pipeline/notebooklm/upload_youtube.py --video "final/$VIDEO" --meta final/meta.json --kind "$YT_KIND" --privacy "${YT_ACCOUNT_PRIVACY:-$YT_PRIVACY}" --out yt.json
           echo "url=$(python -c "import json;print(json.load(open('yt.json')).get('url',''))")" >> "$GITHUB_OUTPUT"
 
       - name: Upload to Instagram (Reel)
@@ -154,11 +205,11 @@ jobs:
           # otherwise park the file for ~1 h on tmpfiles.org (the reel is about to be public anyway).
           url=""
           if [ -n "$FOLDER" ]; then
-            raw="https://github.com/${{ github.repository }}/raw/videos/${FOLDER#/}/reel.mp4"
+            raw="https://github.com/${{ github.repository }}/raw/videos/${FOLDER#/}/$VIDEO"
             curl -fsSLI -o /dev/null "$raw" && url="$raw" && echo "using repo raw URL"
           fi
           if [ -z "$url" ]; then
-            url=$(curl -fsS -F "file=@final/reel.mp4" https://tmpfiles.org/api/v1/upload | python -c "import json,sys;u=json.load(sys.stdin)['data']['url'];print(u.replace('tmpfiles.org/','tmpfiles.org/dl/',1))")
+            url=$(curl -fsS -F "file=@final/$VIDEO" https://tmpfiles.org/api/v1/upload | python -c "import json,sys;u=json.load(sys.stdin)['data']['url'];print(u.replace('tmpfiles.org/','tmpfiles.org/dl/',1))")
             echo "using temporary public host"
           fi
           test -n "$url" || { echo "::error::no public URL for the video"; exit 1; }
@@ -173,7 +224,7 @@ jobs:
         if: always()
         run: |
           {
-            echo "## Upload ${{ steps.t.outputs.platform }} / ${{ steps.t.outputs.name }}"
+            echo "## Upload $VIDEO -> ${{ steps.t.outputs.platform }} / ${{ steps.t.outputs.name }}"
             echo
             echo "| Platform | Account | Result |"; echo "|---|---|---|"
             if [ "${{ steps.t.outputs.platform }}" = "youtube" ]; then

@@ -105,6 +105,7 @@ Free. Takes about 10 minutes. Everything below is on developers.facebook.com unl
 | IG_USER1_ID | the number under the account |
 | IG_USER1_TOKEN | the token |
 | IG_USER1_NAME | optional label, shown in the upload summary (job name stays `user1`) |
+| IG_USER1_FOR | optional: which workflow may post here, `nlm`, `story` or `nlm,story` (unset = all, see section 4) |
 
 Skip sections 3 (webhooks) and 4 (App Review). Tester accounts can post without review.
 
@@ -142,6 +143,7 @@ Private repo note: Instagram must fetch the video from a public URL, so the file
 | YT_USER1_REFRESH_TOKEN | printed by the script |
 | YT_USER1_PRIVACY | optional: public, unlisted, private |
 | YT_USER1_NAME | optional label, shown in the upload summary |
+| YT_USER1_FOR | optional: which workflow may post here, `nlm`, `story` or `nlm,story` (unset = all, see section 4) |
 
 Known limits:
 
@@ -156,7 +158,24 @@ Known limits:
 - Repeat the secrets with 2, 3, 4 ... (`IG_USER2_ID`, `IG_USER2_TOKEN`, `YT_USER2_CLIENT_ID` ...)
 - Each account uploads in its own job. One bad token does not stop the others.
 - Incomplete sets are skipped with a warning in the Precheck job.
-- Old style single secrets `IG_USER_ID`, `IG_ACCESS_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` still work as account "default".
+- Old style single secrets `IG_USER_ID`, `IG_ACCESS_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` still work as account "default" (`IG_FOR` / `YT_FOR` restrict them).
+
+### One channel per workflow
+
+Each workflow uploads with a **group** name: NotebookLM short = `nlm`, Generate story video = `story`. An account takes every group unless its `*_FOR` secret says otherwise. Example: facts channel + Instagram page for NotebookLM, a second channel for folk-art stories:
+
+| Secret | Value |
+|---|---|
+| YT_USER1_CLIENT_ID / _CLIENT_SECRET | same OAuth client for both channels |
+| YT_USER1_REFRESH_TOKEN | token minted while logged in as the facts channel |
+| YT_USER1_FOR | `nlm` |
+| IG_USER1_ID / IG_USER1_TOKEN | Instagram page |
+| IG_USER1_FOR | `nlm` |
+| YT_USER2_CLIENT_ID / _CLIENT_SECRET | same values as USER1 |
+| YT_USER2_REFRESH_TOKEN | token minted while logged in as the stories channel |
+| YT_USER2_FOR | `story` |
+
+The "Detect upload accounts" job log lists which accounts were skipped for the group.
 
 ---
 
@@ -192,15 +211,17 @@ Change the wording:
 | Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks |
 | Make | topic, research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
-| Upload | calls `notebooklm-upload.yml`: detects accounts, one job per account (`instagram / user1` ...) |
+| Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...) |
 
 ### Upload an already made video (no NotebookLM quota)
 
 If a run made and published the video but the upload failed or was skipped, do not use "Re-run all jobs" (that remakes the video and uses quota, and it runs the OLD workflow file).
 
 - Open the `videos` branch > `nlm/README.md` and copy the folder name, e.g. `nlm/how-deepfakes-are-made-and-detected-5`
-- Actions tab > **NotebookLM upload (YouTube / Instagram)** > Run workflow > paste the folder
-- One upload job per configured account runs, nothing else
+- Actions tab > **Upload video (YouTube / Instagram)** > Run workflow > paste the folder, video `reel.mp4`, group `nlm`
+- One upload job per allowed account runs, nothing else
+
+Same workflow for a story video: folder `videos/<slug>-<run>`, video `shorts.mp4` (group `story`, short) or `landscape.mp4` (platforms `youtube`, kind `video`).
 
 ---
 

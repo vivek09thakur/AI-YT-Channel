@@ -23,6 +23,10 @@ stories/<slug>/     generated: story.py meta.json phrases.json narration.json sh
    renders ~600 sampled frames in both aspects: shots join 0..total, every shot draws a character, no exceptions, no blank
    frames, unknown outfit/pose/prop/animal/cue names, CUES/MUSIC sanity, `stories/<slug>/sheet.jpg`.
 4. `render_folk.py --aspect shorts|landscape`: all frames on all cores -> stems -> mix -> `-14 LUFS` -> H.264 mp4 -> QA.
+5. `captions.py` adds `description`, `hashtags`, `caption_youtube`, `caption_instagram` to `meta.json` (LLM, falls back to the story
+   description). The workflow then publishes to the `videos` branch and calls `upload-video.yml` with group `story`:
+   `shorts.mp4` -> YouTube Short + Instagram Reel, `landscape.mp4` -> YouTube video. Accounts are picked by the
+   `YT_USERn_FOR` / `IG_USERn_FOR` secrets (see `pipeline/notebooklm/README.md` section 4).
 
 ## Local use
 

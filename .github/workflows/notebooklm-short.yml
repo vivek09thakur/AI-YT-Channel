@@ -4,7 +4,7 @@ name: NotebookLM short (auto topic)
 # physics), lets NotebookLM research it on the web, generates a 9:16 Video Overview and publishes it to the videos branch
 # under nlm/. Independent of the other workflows: own scripts (pipeline/notebooklm/), own index (nlm.json), own folder.
 # Jobs: precheck (token present + works, quota, leftover notebooks) -> make -> publish -> upload (reusable workflow
-# notebooklm-upload.yml: YouTube Short / Instagram Reel for every account whose secrets are set; it can also be run by
+# upload-video.yml: YouTube Short / Instagram Reel for every account whose secrets are set; it can also be run by
 # hand for an already-published video; see pipeline/notebooklm/README.md).
 #
 # One-time setup (see pipeline/notebooklm/README.md): with a DEDICATED/throwaway Google account run
@@ -359,10 +359,12 @@ jobs:
     needs: [make, publish]
     # publish may be skipped (publish=false) - still upload from the artifact if the video was made
     if: ${{ !cancelled() && needs.make.result == 'success' && inputs.upload != 'off' }}
-    uses: ./.github/workflows/notebooklm-upload.yml
+    uses: ./.github/workflows/upload-video.yml
     secrets: inherit
     with:
       artifact: nlm-short
+      video: reel.mp4
+      group: nlm
       folder: ${{ needs.publish.result == 'success' && format('nlm/{0}-{1}', needs.make.outputs.slug, github.run_number) || '' }}
       upload: ${{ inputs.upload || 'auto' }}
       yt_privacy: ${{ inputs.yt_privacy || 'public' }}

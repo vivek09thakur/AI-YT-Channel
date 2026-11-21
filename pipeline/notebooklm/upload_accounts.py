@@ -9,7 +9,11 @@ Sources (all optional, combined). Secrets are read from the environment or from 
                                                         -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
   YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
 
-  list   --upload auto|off          print {"matrix": ["platform/key", ...], "count": N, "summary": [...]}
+Which workflow may use an account (optional): IG_USERn_FOR / YT_USERn_FOR / IG_FOR / YT_FOR / JSON "for" = comma list
+of groups, e.g. "story" or "nlm,story". Unset or "all" = every workflow. `list --group story` keeps only matching accounts.
+
+  list   --upload auto|off [--group G] [--platforms youtube,instagram]
+                                    print {"matrix": ["platform/key", ...], "count": N, "summary": [...]}
   select --platform P --name N --env-file FILE
                                     write shell exports for that one account and print ::add-mask:: lines
 
@@ -70,6 +74,12 @@ def env(k):
     return (SECRETS.get(k) or "").strip()
 
 
+def groups(raw):
+    """'nlm, story' -> {'nlm', 'story'}; empty / 'all' -> set() meaning no restriction."""
+    s = {g.strip().lower() for g in str(raw or "").replace(";", ",").split(",") if g.strip()}
+    return set() if not s or "all" in s else s
+
+
 def numbered(platform):
     """Collect IG_USER<n>_ID / YT_USER<n>_CLIENT_ID ... style accounts, ordered by n."""
     prefix, suffix = NUMBERED[platform]
@@ -84,7 +94,7 @@ def numbered(platform):
             warn(f"{prefix}{n}_* account incomplete - missing {', '.join(f'{prefix}{n}_{suffix[k]}' for k in missing)} - skipped")
             continue
         out.append({"name": f"user{n}", "label": env(f"{prefix}{n}_NAME") or f"user{n}",
-                    **{k: v for k, v in acc.items() if v}})
+                    "for": groups(env(f"{prefix}{n}_FOR")), **{k: v for k, v in acc.items() if v}})
     return out
 
 
@@ -110,12 +120,12 @@ def accounts():
     out = {"youtube": [], "instagram": []}
     legacy_yt = {k: env(ENV["youtube"][k]) for k in REQ["youtube"]}
     if all(legacy_yt.values()):
-        out["youtube"].append({"name": "default", "label": "default", **legacy_yt})
+        out["youtube"].append({"name": "default", "label": "default", "for": groups(env("YT_FOR")), **legacy_yt})
     elif any(legacy_yt.values()):
         warn("YouTube default account incomplete - need YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN")
     legacy_ig = {k: env(ENV["instagram"][k]) for k in REQ["instagram"]}
     if all(legacy_ig.values()):
-        out["instagram"].append({"name": "default", "label": "default", **legacy_ig})
+        out["instagram"].append({"name": "default", "label": "default", "for": groups(env("IG_FOR")), **legacy_ig})
     elif any(legacy_ig.values()):
         warn("Instagram default account incomplete - need IG_USER_ID, IG_ACCESS_TOKEN")
 
@@ -140,13 +150,22 @@ def accounts():
             if missing:
                 warn(f"{var}[{i}] missing {', '.join(missing)} - skipped")
                 continue
-            out[platform].append({"name": name, "label": label,
-                                  **{k: str(v).strip() for k, v in a.items() if k not in ("enabled", "name")}})
+            out[platform].append({"name": name, "label": label, "for": groups(a.get("for")),
+                                  **{k: str(v).strip() for k, v in a.items() if k not in ("enabled", "name", "for")}})
     return out
+
+
+def allowed(x, group):
+    return not group or not x["for"] or group.lower() in x["for"]
 
 
 def cmd_list(a):
     acc = accounts() if a.upload != "off" else {"youtube": [], "instagram": []}
+    platforms = [p.strip() for p in a.platforms.split(",") if p.strip()]
+    skipped = [f"{p}/{x['name']}" for p in platforms for x in acc[p] if not allowed(x, a.group)]
+    acc = {p: [x for x in acc[p] if allowed(x, a.group)] if p in platforms else [] for p in acc}
+    if skipped:
+        print(f"not for group '{a.group}': " + ", ".join(skipped), file=sys.stderr)
     # matrix is a flat list of "platform/key" strings on purpose: GitHub masks every LINE of a multi-line secret
     # (e.g. a pretty-printed master_token.json gives masks "{" and "}") and drops any job output containing a
     # masked value - so the output must not contain braces or anything else that could be a secret line.
@@ -191,6 +210,8 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     l = sub.add_parser("list")
     l.add_argument("--upload", default="auto")
+    l.add_argument("--group", default="", help="workflow group (nlm, story ...); accounts with *_FOR not listing it are skipped")
+    l.add_argument("--platforms", default="youtube,instagram")
     l.set_defaults(fn=cmd_list)
     s = sub.add_parser("select")
     s.add_argument("--platform", required=True, choices=list(REQ))

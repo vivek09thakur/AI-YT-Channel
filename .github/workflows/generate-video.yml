@@ -41,6 +41,23 @@ on:
         description: 'Optional notes for the illustrator LLM (characters, colours, moments to show)'
         required: false
         type: string
+      upload:
+        description: 'Upload after publishing: auto = every account allowed for group "story" (YT_USERn_FOR / IG_USERn_FOR), off = only publish'
+        required: true
+        type: choice
+        default: auto
+        options: [auto, off]
+      yt_privacy:
+        description: 'YouTube privacy for uploads'
+        required: true
+        type: choice
+        default: public
+        options: [public, unlisted, private]
+      cta:
+        description: 'Closing line appended to the captions'
+        required: false
+        type: string
+        default: 'Subscribe for more folk tales from Indian mythology.'
 
 concurrency:
   group: generate-video
@@ -119,11 +136,12 @@ jobs:
       - name: Render matrix from formats input
         id: formats
         run: |
-          # thumb.jpg is grabbed from the first rendered format
+          # flat list of strings: GitHub drops a job output that contains a masked value, and every LINE of a
+          # multi-line secret is a mask (e.g. "{" / "}"), so no JSON objects here
           case "$FORMATS" in
-            shorts)    m='[{"format":"shorts","thumb":"--thumb"}]' ;;
-            landscape) m='[{"format":"landscape","thumb":"--thumb"}]' ;;
-            *)         m='[{"format":"landscape","thumb":"--thumb"},{"format":"shorts","thumb":""}]' ;;
+            shorts)    m='["shorts"]' ;;
+            landscape) m='["landscape"]' ;;
+            *)         m='["landscape", "shorts"]' ;;
           esac
           echo "matrix=$m" >> "$GITHUB_OUTPUT"
           echo "rendering: $m"
@@ -191,7 +209,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJson(needs.author.outputs.matrix) }}
+        format: ${{ fromJson(needs.author.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -214,8 +232,10 @@ jobs:
           test -s "$KIT/stories/$slug/story.py" && test -s "$KIT/stories/$slug/phrases.json"
       - name: Render frames + soundtrack + encode
         run: |
+          # thumb.jpg comes from the landscape render, or from shorts when that is the only format
+          thumb=""; { [ "${{ matrix.format }}" = landscape ] || [ "${{ inputs.formats }}" = shorts ]; } && thumb="--thumb"
           python pipeline/folk/render_folk.py --story "$KIT/stories/${{ needs.author.outputs.slug }}" --voice work/voice.wav \
-            --aspect "${{ matrix.format }}" --out out --kit "$KIT" ${{ matrix.thumb }}
+            --aspect "${{ matrix.format }}" --out out --kit "$KIT" $thumb
           ffprobe -v error -show_entries format=duration -show_entries stream=codec_type,width,height -of default=nw=1 "out/${{ matrix.format }}.mp4"
         env:
           FOLK_SS: '2'
@@ -230,7 +250,7 @@ jobs:
 
   publish:
     name: Publish to videos branch
-    needs: [author, render]
+    needs: [precheck, author, render]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -246,8 +266,33 @@ jobs:
         run: |
           slug="${{ needs.author.outputs.slug }}"
           cp bundle/work/voice.mp3 bundle/work/narration.json final/
-          cp "bundle/$KIT/stories/$slug/meta.json" final/ || true
+          cp "bundle/$KIT/stories/$slug/meta.json" final/ || echo '{}' > final/meta.json
           ls -la final
+      - run: pip install -q -r main/pipeline/requirements.txt
+      - name: Captions + hashtags (LLM, falls back to the story description)
+        run: |
+          python main/pipeline/folk/captions.py --meta final/meta.json --script bundle/work/script.txt --topic "$TOPIC" \
+            --slug "${{ needs.author.outputs.slug }}" --cta "$CTA" --provider "${{ needs.precheck.outputs.provider }}"
+          echo; cat final/caption_youtube.txt
+        env:
+          TOPIC: ${{ inputs.topic }}
+          CTA: ${{ inputs.cta }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
+      - name: Upload bundle for the upload jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-final
+          retention-days: 7
+          path: |
+            final/*.mp4
+            final/thumb.jpg
+            final/meta.json
       - name: Checkout videos branch
         run: |
           git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
@@ -278,3 +323,37 @@ jobs:
             echo
             echo "Story code committed to \`${{ env.KIT }}/stories/$slug/\` on \`${{ github.ref_name }}\` (folk-art engine); re-render any time with \`python pipeline/folk/render_folk.py --story $KIT/stories/$slug --voice voice.wav --aspect shorts\`."
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # Uploads go to accounts allowed for group "story" (YT_USERn_FOR / IG_USERn_FOR secrets). Shorts -> YouTube + Instagram,
+  # landscape -> YouTube only. Re-run by hand with the "Upload video" workflow and folder videos/<slug>-<run>.
+  upload_shorts:
+    name: Upload shorts
+    needs: [author, publish]
+    if: ${{ inputs.formats != 'landscape' && inputs.upload != 'off' }}
+    uses: ./.github/workflows/upload-video.yml
+    secrets: inherit
+    with:
+      artifact: story-final
+      folder: ${{ format('videos/{0}-{1}', needs.author.outputs.slug, github.run_number) }}
+      video: shorts.mp4
+      group: story
+      platforms: youtube,instagram
+      yt_kind: short
+      upload: ${{ inputs.upload }}
+      yt_privacy: ${{ inputs.yt_privacy }}
+
+  upload_landscape:
+    name: Upload landscape
+    needs: [author, publish]
+    if: ${{ inputs.formats != 'shorts' && inputs.upload != 'off' }}
+    uses: ./.github/workflows/upload-video.yml
+    secrets: inherit
+    with:
+      artifact: story-final
+      folder: ${{ format('videos/{0}-{1}', needs.author.outputs.slug, github.run_number) }}
+      video: landscape.mp4
+      group: story
+      platforms: youtube
+      yt_kind: video
+      upload: ${{ inputs.upload }}
+      yt_privacy: ${{ inputs.yt_privacy }}
