@@ -230,11 +230,17 @@ jobs:
           test -n "$nb" || { echo "::error::could not read notebook id"; cat create.json; exit 1; }
           echo "id=$nb" >> "$GITHUB_OUTPUT"
           echo "notebook: $nb"
-          notebooklm source add-research "${{ steps.pick.outputs.topic }}" --mode "$RESEARCH_MODE" --from web --import-all --timeout 900 --retry 3 --json | tee research.json
-          notebooklm source list --json > sources.json || echo '[]' > sources.json
-          n=$(python -c "import json;d=json.load(open('sources.json'));r=d.get('sources',d) if isinstance(d,dict) else d;print(len(r) if isinstance(r,list) else 0)")
-          echo "sources imported: $n"
-          [ "$n" -gt 0 ] || { echo "::error::research imported no sources"; exit 1; }
+          # add-research has no --retry flag; retry the whole call ourselves
+          n=0
+          for attempt in 1 2 3; do
+            notebooklm source add-research "${{ steps.pick.outputs.topic }}" --mode "$RESEARCH_MODE" --from web --import-all --timeout 900 --json | tee research.json || true
+            notebooklm source list --json > sources.json || echo '[]' > sources.json
+            n=$(python -c "import json;d=json.load(open('sources.json'));r=d.get('sources',d) if isinstance(d,dict) else d;print(len(r) if isinstance(r,list) else 0)")
+            echo "attempt $attempt: sources imported: $n"
+            [ "$n" -gt 0 ] && break
+            sleep 30
+          done
+          [ "$n" -gt 0 ] || { echo "::error::research imported no sources"; cat research.json; exit 1; }
 
       - name: Generate Video Overview
         run: |
