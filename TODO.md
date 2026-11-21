@@ -13,12 +13,13 @@ Tokens come from the account owner's login (Instagram: Meta Business account / a
 
 ### Repo
 
-- [ ] README: Mermaid diagram of workflow group -> `YT_USERn` / `IG_USERn` (no personal names), under "Which account gets which video"
-- [ ] Review the 3 Dependabot alerts (2 high, 1 moderate) on `main` - probably `template/package-lock.json`; bump, re-render a reel, confirm
 - [ ] Regenerate any tokens that were ever pasted into chat or committed
 
 ## Done
 
+- [x] README: Mermaid diagram of workflow group -> `YT_USERn` / `IG_USERn`
+- [x] README / account guide: full secrets and variables reference, schedules, routing, costs, known limits (`ca1888d`)
+- [x] Fresh `main` history (single root commit, same tree); old history in local `main-backup` + `E:\Projects\AI-YT-Channel-old-history.bundle`
 - [x] Folk-art story video pipeline (kit, engine, contract, generator, render, workflow)
 - [x] NotebookLM short: precheck, captions, YouTube / Instagram upload, docs
 - [x] Multi-account upload with `_FOR` groups and `_NAME` labels

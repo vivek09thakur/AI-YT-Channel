@@ -61,6 +61,22 @@ Every workflow uploads with a **group** name: `nlm`, `story` or `stickman`. An a
 
 Current mapping (secret -> value):
 
+```mermaid
+flowchart LR
+    story["Generate story video<br/>group: story"] --> yt1["YT_USER1<br/>IExplainHinduism"]
+    story --> ig2["IG_USER2<br/>Pauranik Katha (planned)"]
+    nlm["NotebookLM short<br/>group: nlm"] --> yt2["YT_USER2<br/>crocodile.explains"]
+    nlm --> ig1["IG_USER1<br/>crocodile.explains"]
+    stick["Generate stickman fact reel<br/>group: stickman"] --> yt3["YT_USER3<br/>facts channel (planned)"]
+    stick --> ig3["IG_USER3<br/>facts channel (planned)"]
+    classDef done fill:#c8f7c5,stroke:#2e7d32,color:#000
+    classDef todo fill:#ffd0d0,stroke:#c62828,color:#000
+    class yt1,yt2,ig1 done
+    class ig2,yt3,ig3 todo
+```
+
+Green = secrets set, red = still to add (see `TODO.md`). The arrows are the `*_FOR` secrets:
+
 ```
 YT_USER1_FOR = story      # IExplainHinduism (YouTube)
 YT_USER2_FOR = nlm        # crocodile.explains (YouTube)
