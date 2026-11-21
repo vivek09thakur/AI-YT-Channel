@@ -6,8 +6,11 @@
 3. Credentials -> Create credentials -> OAuth client ID -> Desktop app -> copy client id + secret
 4. download this file, then: pip install google-auth-oauthlib
    python yt_get_refresh_token.py --client-id ... --client-secret ...
-   (a browser opens; sign in with the CHANNEL's Google account and allow "upload videos")
+   (a browser opens; sign in with the CHANNEL's Google account and allow all requested access)
 5. store the printed refresh token + the client id/secret as repo secrets YT_REFRESH_TOKEN, YT_CLIENT_ID, YT_CLIENT_SECRET
+
+Scopes requested: upload + manage (thumbnails) + YouTube Analytics read-only, so the same refresh token also works
+for analytics scripts. Enable "YouTube Analytics API" in the project too, or drop the yt-analytics scopes below.
 
 Refresh tokens issued while the consent screen is in "Testing" expire after 7 days; publish the consent screen
 (Publishing status -> In production) to make it long-lived. No Google review is needed for your own channel, but
@@ -17,7 +20,12 @@ import argparse
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
+SCOPES = [
+    'https://www.googleapis.com/auth/youtube.upload',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/yt-analytics.readonly',
+    'https://www.googleapis.com/auth/yt-analytics-monetary.readonly',
+]
 
 
 def main():

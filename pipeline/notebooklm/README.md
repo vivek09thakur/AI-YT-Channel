@@ -114,8 +114,17 @@ Private repo note: Instagram must fetch the video from a public URL, so the file
 
 ## 3. YouTube upload (optional)
 
-- console.cloud.google.com > New project > APIs and services > Enable **YouTube Data API v3**
+- console.cloud.google.com > New project (free, no card) > APIs and services > Library > enable **YouTube Data API v3** and **YouTube Analytics API**
 - OAuth consent screen > External > fill name and email > add the channel Google account as **Test user**
+- Scopes > Manually add scopes > paste, one per line, then Add to table > Update:
+
+  ```
+  https://www.googleapis.com/auth/youtube.upload
+  https://www.googleapis.com/auth/youtube
+  https://www.googleapis.com/auth/yt-analytics.readonly
+  https://www.googleapis.com/auth/yt-analytics-monetary.readonly
+  ```
+
 - Credentials > Create credentials > OAuth client ID > **Desktop app** > copy client ID and client secret
 - On your PC:
 
@@ -124,7 +133,7 @@ Private repo note: Instagram must fetch the video from a public URL, so the file
   python pipeline/notebooklm/yt_get_refresh_token.py --client-id ID --client-secret SECRET
   ```
 
-- A browser opens, log in with the channel account, allow. The script prints the refresh token.
+- A browser opens, log in with the channel account, allow. The script prints the refresh token. The same token covers upload, thumbnails and YouTube Analytics (read-only).
 
 | Secret | Value |
 |---|---|
