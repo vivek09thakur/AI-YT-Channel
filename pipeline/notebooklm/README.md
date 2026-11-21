@@ -138,12 +138,14 @@ Private repo note: Instagram must fetch the video from a public URL, so the file
 
 | Secret | Value |
 |---|---|
-| YT_USER1_CLIENT_ID | client ID |
-| YT_USER1_CLIENT_SECRET | client secret |
-| YT_USER1_REFRESH_TOKEN | printed by the script |
+| YT_CLIENT_ID | client ID (shared by every channel, it identifies the Google Cloud app) |
+| YT_CLIENT_SECRET | client secret (shared) |
+| YT_USER1_REFRESH_TOKEN | printed by the script while logged in as channel 1 |
+| YT_USER1_FOR | optional: which workflow may post here, `nlm`, `story` or `nlm,story` (unset = all, see section 4) |
 | YT_USER1_PRIVACY | optional: public, unlisted, private |
 | YT_USER1_NAME | optional label, shown in the upload summary |
-| YT_USER1_FOR | optional: which workflow may post here, `nlm`, `story` or `nlm,story` (unset = all, see section 4) |
+
+Second channel: run the script again logged in as that channel, add `YT_USER2_REFRESH_TOKEN` (+ `YT_USER2_FOR`). `YT_USERn_CLIENT_ID` / `YT_USERn_CLIENT_SECRET` are only needed when a channel uses a different Google Cloud project.
 
 Known limits:
 
@@ -166,14 +168,13 @@ Each workflow uploads with a **group** name: NotebookLM short = `nlm`, Generate 
 
 | Secret | Value |
 |---|---|
-| YT_USER1_CLIENT_ID / _CLIENT_SECRET | same OAuth client for both channels |
-| YT_USER1_REFRESH_TOKEN | token minted while logged in as the facts channel |
-| YT_USER1_FOR | `nlm` |
+| YT_CLIENT_ID / YT_CLIENT_SECRET | the one OAuth client |
+| YT_USER1_REFRESH_TOKEN | token minted while logged in as the stories channel |
+| YT_USER1_FOR | `story` |
+| YT_USER2_REFRESH_TOKEN | token minted while logged in as the facts channel |
+| YT_USER2_FOR | `nlm` |
 | IG_USER1_ID / IG_USER1_TOKEN | Instagram page |
 | IG_USER1_FOR | `nlm` |
-| YT_USER2_CLIENT_ID / _CLIENT_SECRET | same values as USER1 |
-| YT_USER2_REFRESH_TOKEN | token minted while logged in as the stories channel |
-| YT_USER2_FOR | `story` |
 
 The "Detect upload accounts" job log lists which accounts were skipped for the group.
 

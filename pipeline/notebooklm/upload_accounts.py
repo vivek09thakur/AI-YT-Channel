@@ -5,6 +5,7 @@ Sources (all optional, combined). Secrets are read from the environment or from 
   IG_USER_ID + IG_ACCESS_TOKEN                          -> Instagram account "default"
   IG_USER1_ID + IG_USER1_TOKEN, IG_USER2_ID + ...       -> Instagram accounts "user1", "user2", ... (IG_USERn_NAME optional)
   YT_CLIENT_ID + YT_CLIENT_SECRET + YT_REFRESH_TOKEN    -> YouTube account "default"
+  YT_CLIENT_ID + YT_CLIENT_SECRET + YT_USERn_REFRESH_TOKEN -> YouTube "usern" (shared OAuth client, one token per channel)
   YT_USER1_CLIENT_ID + YT_USER1_CLIENT_SECRET + YT_USER1_REFRESH_TOKEN, ...
                                                         -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
   YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
@@ -39,6 +40,8 @@ ENV = {
                 "privacy": "YT_ACCOUNT_PRIVACY"},
     "instagram": {"user_id": "IG_USER_ID", "access_token": "IG_ACCESS_TOKEN"},
 }
+# credentials that may come from the shared single secret when the numbered one is absent
+SHARED = {"youtube": ("client_id", "client_secret")}
 # numbered secrets: prefix, suffix per credential key
 NUMBERED = {
     "youtube": ("YT_USER", {"client_id": "CLIENT_ID", "client_secret": "CLIENT_SECRET", "refresh_token": "REFRESH_TOKEN",
@@ -89,6 +92,9 @@ def numbered(platform):
     out = []
     for n in nums:
         acc = {k: env(f"{prefix}{n}_{s}") for k, s in suffix.items()}
+        # one Google Cloud OAuth client serves every channel: YT_CLIENT_ID / YT_CLIENT_SECRET are the shared fallback
+        for k in SHARED.get(platform, ()):
+            acc[k] = acc[k] or env(ENV[platform][k])
         missing = [k for k in REQ[platform] if not acc[k]]
         if missing:
             warn(f"{prefix}{n}_* account incomplete - missing {', '.join(f'{prefix}{n}_{suffix[k]}' for k in missing)} - skipped")
@@ -121,7 +127,7 @@ def accounts():
     legacy_yt = {k: env(ENV["youtube"][k]) for k in REQ["youtube"]}
     if all(legacy_yt.values()):
         out["youtube"].append({"name": "default", "label": "default", "for": groups(env("YT_FOR")), **legacy_yt})
-    elif any(legacy_yt.values()):
+    elif legacy_yt["refresh_token"]:
         warn("YouTube default account incomplete - need YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN")
     legacy_ig = {k: env(ENV["instagram"][k]) for k in REQ["instagram"]}
     if all(legacy_ig.values()):
