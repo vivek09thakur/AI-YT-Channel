@@ -1,5 +1,18 @@
 [
  {
+  "dir": "nlm/how-deepfakes-are-made-and-detected-5",
+  "slug": "how-deepfakes-are-made-and-detected",
+  "run": "5",
+  "run_url": "https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/44885603435",
+  "title": "How Do AI Detectors Spot Deepfake Seams?",
+  "topic": "How deepfakes are made and detected",
+  "genre": "ai",
+  "format": "short",
+  "duration": 72.3,
+  "date": "2026-11-21",
+  "reel_bytes": 6290546
+ },
+ {
   "dir": "nlm/why-octopuses-are-so-intelligent-4",
   "slug": "why-octopuses-are-so-intelligent",
   "run": "4",
