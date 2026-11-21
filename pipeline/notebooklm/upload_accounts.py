@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Resolve upload accounts for YouTube / Instagram from secrets.
 
-Sources (all optional, combined):
-  YT_CLIENT_ID + YT_CLIENT_SECRET + YT_REFRESH_TOKEN   -> YouTube account "default"
-  YT_ACCOUNTS_JSON  = [{"name":"main","client_id":"..","client_secret":"..","refresh_token":"..","privacy":"public"}, ...]
+Sources (all optional, combined). Secrets are read from the environment or from ALL_SECRETS (toJSON(secrets)).
   IG_USER_ID + IG_ACCESS_TOKEN                          -> Instagram account "default"
-  IG_ACCOUNTS_JSON  = [{"name":"brand","user_id":"..","access_token":".."}, ...]
-An entry with "enabled": false is skipped.
+  IG_USER1_ID + IG_USER1_TOKEN, IG_USER2_ID + ...       -> Instagram accounts "user1", "user2", ... (IG_USERn_NAME optional)
+  YT_CLIENT_ID + YT_CLIENT_SECRET + YT_REFRESH_TOKEN    -> YouTube account "default"
+  YT_USER1_CLIENT_ID + YT_USER1_CLIENT_SECRET + YT_USER1_REFRESH_TOKEN, ...
+                                                        -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
+  YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
 
   list   --upload auto|off          print {"matrix": [...names only...], "count": N, "summary": [...]}
   select --platform P --name N --env-file FILE
@@ -15,6 +16,7 @@ An entry with "enabled": false is skipped.
 import argparse
 import json
 import os
+import re
 import shlex
 import sys
 
@@ -27,14 +29,57 @@ ENV = {
                 "privacy": "YT_ACCOUNT_PRIVACY"},
     "instagram": {"user_id": "IG_USER_ID", "access_token": "IG_ACCESS_TOKEN"},
 }
+# numbered secrets: prefix, suffix per credential key
+NUMBERED = {
+    "youtube": ("YT_USER", {"client_id": "CLIENT_ID", "client_secret": "CLIENT_SECRET", "refresh_token": "REFRESH_TOKEN",
+                            "privacy": "PRIVACY"}),
+    "instagram": ("IG_USER", {"user_id": "ID", "access_token": "TOKEN"}),
+}
 
 
 def warn(msg):
     print(f"::warning::{msg}", file=sys.stderr)
 
 
+def _secrets():
+    merged = dict(os.environ)
+    raw = os.environ.get("ALL_SECRETS", "")
+    if raw:
+        try:
+            data = json.loads(raw)
+            if isinstance(data, dict):
+                merged.update({k: str(v) for k, v in data.items()})
+        except json.JSONDecodeError:
+            warn("ALL_SECRETS is not valid JSON - ignored")
+    return merged
+
+
+SECRETS = None
+
+
 def env(k):
-    return os.environ.get(k, "").strip()
+    global SECRETS
+    if SECRETS is None:
+        SECRETS = _secrets()
+    return (SECRETS.get(k) or "").strip()
+
+
+def numbered(platform):
+    """Collect IG_USER<n>_ID / YT_USER<n>_CLIENT_ID ... style accounts, ordered by n."""
+    prefix, suffix = NUMBERED[platform]
+    if SECRETS is None:
+        env("")
+    nums = sorted({int(m.group(1)) for k in SECRETS for m in [re.fullmatch(rf"{prefix}(\d+)_[A-Z_]+", k)] if m})
+    out = []
+    for n in nums:
+        acc = {k: env(f"{prefix}{n}_{s}") for k, s in suffix.items()}
+        name = env(f"{prefix}{n}_NAME") or f"user{n}"
+        missing = [k for k in REQ[platform] if not acc[k]]
+        if missing:
+            warn(f"{prefix}{n}_* account incomplete - missing {', '.join(f'{prefix}{n}_{suffix[k]}' for k in missing)} - skipped")
+            continue
+        out.append({"name": name, **{k: v for k, v in acc.items() if v}})
+    return out
 
 
 def load_json_list(var):
@@ -67,6 +112,13 @@ def accounts():
         out["instagram"].append({"name": "default", **legacy_ig})
     elif any(legacy_ig.values()):
         warn("Instagram default account incomplete - need IG_USER_ID, IG_ACCESS_TOKEN")
+
+    for platform in ("youtube", "instagram"):
+        for x in numbered(platform):
+            if any(y["name"] == x["name"] for y in out[platform]):
+                warn(f"{platform} duplicate account name '{x['name']}' - skipped")
+                continue
+            out[platform].append(x)
 
     for platform, var in (("youtube", "YT_ACCOUNTS_JSON"), ("instagram", "IG_ACCOUNTS_JSON")):
         for i, a in enumerate(load_json_list(var)):

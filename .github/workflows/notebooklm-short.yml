@@ -163,13 +163,8 @@ jobs:
       - name: Detect upload accounts
         id: targets
         env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
         run: |
           python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" > accounts.json
           echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
@@ -383,13 +378,8 @@ jobs:
 
       - name: Select account credentials
         env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
+          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
+          ALL_SECRETS: ${{ toJSON(secrets) }}
         run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ matrix.platform }}" --name "${{ matrix.name }}" --env-file "$RUNNER_TEMP/creds.sh"
 
       - name: Upload to YouTube

@@ -15,7 +15,7 @@ Add these in repo Settings > Secrets and variables > Actions.
 | BILLING_TOKEN | Secret | Fine grained PAT, Plan: read | Optional, stops runs when minutes are low |
 | YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN | Secret | See pipeline/notebooklm/README.md | Optional, YouTube upload |
 | IG_USER_ID, IG_ACCESS_TOKEN | Secret | See pipeline/notebooklm/README.md | Optional, Instagram upload |
-| YT_ACCOUNTS_JSON, IG_ACCOUNTS_JSON | Secret | See pipeline/notebooklm/README.md | Optional, several accounts |
+| IG_USER1_ID, IG_USER1_TOKEN, YT_USER1_... | Secret | See pipeline/notebooklm/README.md | Optional, more accounts (2, 3, ...) |
 
 Get the NotebookLM token (throwaway Google account, run once on your PC):
 

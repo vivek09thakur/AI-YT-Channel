@@ -46,14 +46,15 @@ Private repo: video is parked 1 h on tmpfiles.org so Instagram can fetch it.
 
 ## More than one account (optional)
 
-One secret per platform, a JSON list. Each account uploads in its own job.
+Number the secrets. Each account uploads in its own job. Add as many as you like.
 
-| Secret | Value |
+| Platform | Secrets for account n |
 |---|---|
-| YT_ACCOUNTS_JSON | `[{"name":"main","client_id":"..","client_secret":"..","refresh_token":"..","privacy":"public"}]` |
-| IG_ACCOUNTS_JSON | `[{"name":"brand","user_id":"..","access_token":".."}]` |
+| Instagram | IG_USER1_ID, IG_USER1_TOKEN (optional IG_USER1_NAME) |
+| YouTube | YT_USER1_CLIENT_ID, YT_USER1_CLIENT_SECRET, YT_USER1_REFRESH_TOKEN (optional YT_USER1_NAME, YT_USER1_PRIVACY) |
 
-privacy is optional. Add `"enabled": false` to pause an account. The single secrets above still work as account "default".
+Use 2, 3, ... for more. The single secrets above still work as account "default".
+A JSON list also works: YT_ACCOUNTS_JSON or IG_ACCOUNTS_JSON, see upload_accounts.py.
 
 ## Options
 
