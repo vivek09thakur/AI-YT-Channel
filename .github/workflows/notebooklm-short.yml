@@ -100,8 +100,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
-      yt: ${{ steps.targets.outputs.yt }}
-      ig: ${{ steps.targets.outputs.ig }}
+      matrix: ${{ steps.targets.outputs.matrix }}
+      count: ${{ steps.targets.outputs.count }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -160,25 +160,21 @@ jobs:
             [ -n "$id" ] && { notebooklm delete -n "$id" -y --json >/dev/null && echo "deleted leftover notebook $id" || echo "::warning::could not delete leftover notebook $id"; }
           done < <(grep '^DELETE ' sweep.txt | cut -d' ' -f2)
 
-      - name: Detect upload targets
+      - name: Detect upload accounts
         id: targets
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
         run: |
-          yt=false; ig=false
-          if [ "$UPLOAD" = "off" ]; then
-            echo "upload: off (workflow input)"
-          else
-            if [ -n "$YT_CLIENT_ID" ] && [ -n "$YT_CLIENT_SECRET" ] && [ -n "$YT_REFRESH_TOKEN" ]; then yt=true; echo "YouTube upload: enabled (privacy $YT_PRIVACY)";
-            else echo "::notice::YouTube upload skipped - set secrets YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN to enable"; fi
-            if [ -n "$IG_USER_ID" ] && [ -n "$IG_ACCESS_TOKEN" ]; then ig=true; echo "Instagram upload: enabled";
-            else echo "::notice::Instagram upload skipped - set secrets IG_USER_ID, IG_ACCESS_TOKEN to enable"; fi
-          fi
-          echo "yt=$yt" >> "$GITHUB_OUTPUT"; echo "ig=$ig" >> "$GITHUB_OUTPUT"
+          python pipeline/notebooklm/upload_accounts.py list --upload "$UPLOAD" > accounts.json
+          echo "matrix=$(python -c "import json;print(json.dumps(json.load(open('accounts.json'))['matrix']))")" >> "$GITHUB_OUTPUT"
+          echo "count=$(python -c "import json;print(json.load(open('accounts.json'))['count'])")" >> "$GITHUB_OUTPUT"
+          rm -f accounts.json
 
       - name: Remove credentials
         if: always()
@@ -367,12 +363,17 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   upload:
-    name: Upload (YouTube / Instagram, optional)
+    name: Upload ${{ matrix.platform }} / ${{ matrix.name }}
     needs: [precheck, make, publish]
-    # publish may be skipped (publish=false) - still upload if the video was made and at least one target is configured
-    if: ${{ !cancelled() && needs.make.result == 'success' && (needs.precheck.outputs.yt == 'true' || needs.precheck.outputs.ig == 'true') }}
+    # publish may be skipped (publish=false) - still upload if the video was made and at least one account is configured
+    if: ${{ !cancelled() && needs.make.result == 'success' && needs.precheck.outputs.count != '0' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include: ${{ fromJson(needs.precheck.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -380,26 +381,33 @@ jobs:
       - uses: actions/download-artifact@v4
         with: { name: nlm-short, path: final }
 
-      - name: Upload to YouTube
-        id: yt
-        if: needs.precheck.outputs.yt == 'true'
+      - name: Select account credentials
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
+        run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ matrix.platform }}" --name "${{ matrix.name }}" --env-file "$RUNNER_TEMP/creds.sh"
+
+      - name: Upload to YouTube
+        id: yt
+        if: matrix.platform == 'youtube'
         run: |
           pip install -q google-api-python-client google-auth
-          python pipeline/notebooklm/upload_youtube.py --video final/reel.mp4 --meta final/meta.json --privacy "$YT_PRIVACY" --out yt.json
+          . "$RUNNER_TEMP/creds.sh"
+          python pipeline/notebooklm/upload_youtube.py --video final/reel.mp4 --meta final/meta.json --privacy "${YT_ACCOUNT_PRIVACY:-$YT_PRIVACY}" --out yt.json
           echo "url=$(python -c "import json;print(json.load(open('yt.json')).get('url',''))")" >> "$GITHUB_OUTPUT"
 
       - name: Upload to Instagram (Reel)
         id: ig
-        if: needs.precheck.outputs.ig == 'true'
+        if: matrix.platform == 'instagram'
         env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST || 'graph.facebook.com' }}
         run: |
+          . "$RUNNER_TEMP/creds.sh"
           # The Graph API needs a PUBLIC video URL. Use the videos-branch raw URL when the repo is public,
           # otherwise park the file for ~1 h on tmpfiles.org (the reel is about to be public anyway).
           url=""
@@ -415,16 +423,22 @@ jobs:
           python pipeline/notebooklm/upload_instagram.py --video-url "$url" --meta final/meta.json --out ig.json
           echo "url=$(python -c "import json;print(json.load(open('ig.json')).get('permalink',''))")" >> "$GITHUB_OUTPUT"
 
+      - name: Remove credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/creds.sh"
+
       - name: Summary
         if: always()
         run: |
           {
-            echo "## Uploads"
+            echo "## Upload ${{ matrix.platform }} / ${{ matrix.name }}"
             echo
-            echo "| Platform | Result |"; echo "|---|---|"
-            [ "${{ needs.precheck.outputs.yt }}" = "true" ] && echo "| YouTube | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |" || echo "| YouTube | skipped (secrets not set) |"
-            [ "${{ needs.precheck.outputs.ig }}" = "true" ] && echo "| Instagram | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |" || echo "| Instagram | skipped (secrets not set) |"
-            echo
-            echo "<details><summary>YouTube caption</summary>"; echo; echo '```'; cat final/caption_youtube.txt; echo; echo '```'; echo "</details>"
-            echo "<details><summary>Instagram caption</summary>"; echo; echo '```'; cat final/caption_instagram.txt; echo; echo '```'; echo "</details>"
+            echo "| Platform | Account | Result |"; echo "|---|---|---|"
+            if [ "${{ matrix.platform }}" = "youtube" ]; then
+              echo "| YouTube | ${{ matrix.name }} | ${{ steps.yt.outcome }} ${{ steps.yt.outputs.url }} |"
+              echo; echo "<details><summary>Caption</summary>"; echo; echo '```'; cat final/caption_youtube.txt; echo; echo '```'; echo "</details>"
+            else
+              echo "| Instagram | ${{ matrix.name }} | ${{ steps.ig.outcome }} ${{ steps.ig.outputs.url }} |"
+              echo; echo "<details><summary>Caption</summary>"; echo; echo '```'; cat final/caption_instagram.txt; echo; echo '```'; echo "</details>"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

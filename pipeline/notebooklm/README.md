@@ -44,6 +44,17 @@ Needs a Business or Creator account linked to a Facebook Page.
 
 Private repo: video is parked 1 h on tmpfiles.org so Instagram can fetch it.
 
+## More than one account (optional)
+
+One secret per platform, a JSON list. Each account uploads in its own job.
+
+| Secret | Value |
+|---|---|
+| YT_ACCOUNTS_JSON | `[{"name":"main","client_id":"..","client_secret":"..","refresh_token":"..","privacy":"public"}]` |
+| IG_ACCOUNTS_JSON | `[{"name":"brand","user_id":"..","access_token":".."}]` |
+
+privacy is optional. Add `"enabled": false` to pause an account. The single secrets above still work as account "default".
+
 ## Options
 
 | Input | Default | Values |
