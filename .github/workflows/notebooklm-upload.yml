@@ -66,6 +66,18 @@ jobs:
           echo "count=$(python -c "import json;print(json.load(open('accounts.json'))['count'])")" >> "$GITHUB_OUTPUT"
           rm -f accounts.json
 
+  # GitHub silently drops a job output that contains any secret VALUE. If that happens the upload job is skipped
+  # with no explanation, so fail loudly here with the reason instead.
+  check:
+    name: Upload targets sanity
+    needs: targets
+    if: ${{ needs.targets.outputs.matrix == '' || needs.targets.outputs.count == '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::GitHub dropped the upload matrix output because it contains a secret value. Some repository secret has a value equal to one of: 'instagram', 'youtube', 'user1', 'user2', 'default', 'json1', 'platform', 'name' or a digit like '1'. Most likely IG_USERn_NAME / YT_USERn_NAME - delete that secret or set it to something else (it is only a label), then run again."
+          exit 1
+
   upload:
     name: Upload ${{ matrix.platform }} / ${{ matrix.name }}
     needs: targets
