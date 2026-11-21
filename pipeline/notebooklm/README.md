@@ -1,111 +1,71 @@
-# Welcome to NotebookLM short 👋
+# NotebookLM short
 
-This workflow makes one short video a day, fully automatic. It picks a topic, researches it on the web with NotebookLM, generates a 60 second vertical video and saves it to the `videos` branch. Optionally it uploads the video to YouTube and Instagram.
+Daily auto video: random topic > web research > 60 s vertical video (question hook, explanation, subscribe and follow us) > `videos` branch > optional upload.
 
-Every video follows the same structure: a question to hook the viewer, a clear explanation, and a closing line asking to subscribe and follow us.
+## Setup
 
-## Get started
-
-1. Create a throwaway Google account
-
-   Do not use your main account.
-
-2. Log in once on your computer
+1. Make a throwaway Google account
+2. On your PC:
 
    ```bash
    pip install "notebooklm-py[headless,browser]"
    notebooklm login --master-token --account throwaway@gmail.com
    ```
 
-   A browser opens. Sign in with the throwaway account.
+3. Copy the content of `~/.notebooklm/profiles/default/master_token.json`
+4. Repo Settings > Secrets and variables > Actions > New repository secret > name NOTEBOOKLM_MASTER_TOKEN_JSON, paste
+5. Actions tab > NotebookLM short > Run workflow
 
-3. Save the token as a repository secret
+## YouTube upload (optional)
 
-   Open the file `.notebooklm/profiles/default/master_token.json` in your home folder (on Windows `C:\Users\YOU\.notebooklm\profiles\default\master_token.json`) and copy its whole content.
-
-   In the repo on GitHub go to Settings, Secrets and variables, Actions, New repository secret. Name NOTEBOOKLM_MASTER_TOKEN_JSON, value the copied text.
-
-4. Run the workflow
-
-   Open the Actions tab, choose NotebookLM short, click Run workflow. It also runs by itself every day at 09:00 IST.
-
-That is all. Videos appear under `nlm/` on the `videos` branch with a thumbnail, a meta.json and ready to paste captions.
-
-## Secrets
-
-| Secret | Needed for |
-|---|---|
-| NOTEBOOKLM_MASTER_TOKEN_JSON | Everything |
-| YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN | YouTube upload |
-| IG_USER_ID, IG_ACCESS_TOKEN | Instagram upload |
-
-All secrets are added in the repo under Settings, Secrets and variables, Actions, New repository secret. Upload secrets are optional. If they are missing, the upload is skipped and the run still succeeds.
-
-## Upload to YouTube
-
-1. Go to console.cloud.google.com and create a project
-2. Enable YouTube Data API v3
-3. OAuth consent screen: type External, add the channel account as a test user, set Publishing status to In production
-4. Credentials: create an OAuth client ID of type Desktop app
-5. Get the refresh token. Download `yt_get_refresh_token.py` from this folder and run it on your computer
+1. console.cloud.google.com > new project > enable YouTube Data API v3
+2. OAuth consent screen > External > add channel account as test user > set In production
+3. Credentials > OAuth client ID > Desktop app > copy id and secret
+4. Download `yt_get_refresh_token.py`, run:
 
    ```bash
    pip install google-auth-oauthlib
-   python yt_get_refresh_token.py --client-id YOUR_CLIENT_ID --client-secret YOUR_CLIENT_SECRET
+   python yt_get_refresh_token.py --client-id ID --client-secret SECRET
    ```
 
-6. Add three repository secrets under Settings, Secrets and variables, Actions: YT_CLIENT_ID and YT_CLIENT_SECRET from step 4, YT_REFRESH_TOKEN printed by step 5
+5. Add secrets YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN
 
-Note: YouTube keeps videos from an unverified app private. Request verification in the consent screen to upload as public.
+Unverified app = videos stay private. Request verification to post public.
 
-## Upload to Instagram
+## Instagram upload (optional)
 
-You need a professional Instagram account (Business or Creator) linked to a Facebook Page.
+Needs a Business or Creator account linked to a Facebook Page.
 
-1. Go to developers.facebook.com, create an app and add the Instagram product
-2. In Graph API Explorer generate a token with instagram_basic, instagram_content_publish and pages_show_list
-3. Call `me/accounts?fields=instagram_business_account` and copy the id
-4. Exchange the token for a long lived token in the Access Token Tool
-5. Add two repository secrets under Settings, Secrets and variables, Actions: IG_USER_ID with the id from step 3, IG_ACCESS_TOKEN with the long lived token from step 4
+1. developers.facebook.com > new app > add Instagram product
+2. Graph API Explorer > token with instagram_basic, instagram_content_publish, pages_show_list
+3. Call `me/accounts?fields=instagram_business_account` > copy the id
+4. Access Token Tool > exchange for long lived token (60 days)
+5. Add secrets IG_USER_ID, IG_ACCESS_TOKEN
 
-Note: long lived tokens last 60 days, then update the secret. Instagram needs a public link to the video. If the repo is private the file is parked for one hour on tmpfiles.org. Skip these secrets if you do not want that.
+Private repo: video is parked 1 h on tmpfiles.org so Instagram can fetch it.
 
-## Options when you run it by hand
+## Options
 
-| Input | Default | Meaning |
+| Input | Default | Values |
 |---|---|---|
-| genre | auto | science, technology, ai, space or physics |
-| topic | empty | Use this exact topic instead of a random one |
-| research_mode | fast | fast or deep |
-| format | short | short, explainer or cinematic |
-| style | auto | Visual style, explainer only |
-| publish | true | Save to the videos branch |
-| keep_notebook | false | Keep the notebook in NotebookLM |
-| upload | auto | auto or off |
-| yt_privacy | public | public, unlisted or private |
+| genre | auto | science, technology, ai, space, physics |
+| topic | empty | exact topic |
+| research_mode | fast | fast, deep |
+| format | short | short, explainer, cinematic |
+| style | auto | explainer only |
+| publish | true | |
+| keep_notebook | false | |
+| upload | auto | auto, off |
+| yt_privacy | public | public, unlisted, private |
 
-## Change the closing line
+Closing line: edit `CTA_LINE` in `.github/workflows/notebooklm-short.yml`.
+Topics: edit `topics.json`.
 
-Open `.github/workflows/notebooklm-short.yml` and edit this line under `env`
+## Errors
 
-```yaml
-CTA_LINE: "If you learned something new, support us by subscribing to the channel and following us for more."
-```
-
-## Add topics
-
-Edit `topics.json`. Each genre is a list of topics. Topics already published are skipped automatically.
-
-## If something fails
-
-- Secret not set: repeat step 3 of Get started
-- Auth failed: repeat step 2 and 3 of Get started
-- Quota exhausted: wait for the reset time shown in the log, or use a second throwaway account
-- YouTube video is private: the app is not verified, see Upload to YouTube
-- Instagram video URL error: check the log line that shows which URL was used
-
-## Learn more
-
-- notebooklm-py on GitHub: https://github.com/teng-lin/notebooklm-py
-- YouTube Data API: https://developers.google.com/youtube/v3
-- Instagram content publishing: https://developers.facebook.com/docs/instagram-platform/content-publishing
+| Log says | Do |
+|---|---|
+| secret not set | Setup step 4 |
+| auth failed | Setup step 2 to 4 |
+| quota exhausted | Wait for reset time in log |
+| YouTube video private | App not verified |
