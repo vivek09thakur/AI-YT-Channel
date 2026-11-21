@@ -6,15 +6,19 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 
 | Workflow | Output | How it runs | Needs |
 |---|---|---|---|
-| NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily 09:00 IST (+ retry slot 15:30 IST if nothing was published), or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON |
-| Upload video | Uploads an already made video from the `videos` branch to every account of a group (no NotebookLM quota) | By hand, or called by the two workflows above/below | IG_USERn_* / YT_* |
-| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily 11:00 IST (+ retry slot 17:00 IST), or by hand (own topic/script optional) | GEMINI_API_KEY |
-| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily 13:00 and 19:00 IST (+ retry slot 22:00 IST), 2 a day, or by hand (own fact/script optional) | GEMINI_API_KEY |
-| Pre-run check only | Tests keys, voice, remaining minutes | By hand | nothing |
+| NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily 09:00 and 15:30 IST (+ retry slot 20:00 IST), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (upload accounts optional) |
+| Upload video | Uploads an already made video from the `videos` branch to every account of a group (no NotebookLM quota) | By hand, or called by the three generation workflows | at least one complete IG_USERn_* or YT_* account |
+| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily 11:00 and 17:00 IST (+ retry slot 21:00 IST), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
+| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily 13:00 and 19:00 IST (+ retry slot 22:00 IST), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
+| Pre-run check only | Probes LLM keys and the TTS voice, checks remaining Actions minutes when BILLING_TOKEN is set | By hand | one LLM key to pass |
 | Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success | Called by the daily workflows | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
 
-## Setup in 3 steps
+A scheduled slot only runs while fewer than 2 entries for today (UTC) exist in that workflow's index on the `videos` branch (`nlm.json`, `videos.json`, `stickman.json`); otherwise the guard job skips it. Manual runs ignore the guard. A story rendered in both formats counts as one entry. Even when you give your own script, the story and stickman workflows still need an LLM key: the model writes the scene code.
+
+## Setup
+
+### NotebookLM short (3 steps)
 
 1. Get the NotebookLM token (throwaway Google account, run once on your PC):
 
@@ -23,23 +27,37 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
    notebooklm login --master-token --account throwaway@gmail.com
    ```
 
-   Copy the content of `~/.notebooklm/profiles/default/master_token.json`.
+   Print the token file as **one line** and copy the output (a multi-line secret makes GitHub mask `{` and `}` and silently drop job outputs):
 
-2. Repo > Settings > Secrets and variables > Actions > New repository secret > `NOTEBOOKLM_MASTER_TOKEN_JSON` > paste.
+   ```bash
+   python -c "import json,os;print(json.dumps(json.load(open(os.path.expanduser('~/.notebooklm/profiles/default/master_token.json')))))"
+   ```
+
+2. Repo > Settings > Secrets and variables > Actions > New repository secret > `NOTEBOOKLM_MASTER_TOKEN_JSON` > paste that single line.
 
 3. Actions tab > NotebookLM short > Run workflow. Done. It now runs daily.
 
-Uploads are optional. Follow `pipeline/notebooklm/README.md` (screenshots included) to add Instagram or YouTube accounts.
+### Story video and stickman fact reel (1 step)
+
+Create a free Gemini key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and add it as secret `GEMINI_API_KEY` (any other provider from the table below works too). Then Actions > **Generate story video** or **Generate stickman fact reel** > Run workflow. No NotebookLM token needed.
+
+### Uploads (optional)
+
+Without upload accounts the workflows still make the videos and publish them to the `videos` branch. To post them:
+
+- Instagram: [`pipeline/notebooklm/README.md` section 2](pipeline/notebooklm/README.md#2-instagram-upload-optional) (screenshots, ~10 min, free) -> `IG_USERn_ID` + `IG_USERn_TOKEN`
+- YouTube: [section 3](pipeline/notebooklm/README.md#3-youtube-upload-optional) -> Google Cloud OAuth client (`YT_CLIENT_ID` + `YT_CLIENT_SECRET`, shared) and one `YT_USERn_REFRESH_TOKEN` per channel, minted on your PC with `python pipeline/notebooklm/yt_get_refresh_token.py --client-id ID --client-secret SECRET` while logged in as that channel
+- Then add `*_FOR` so each account only receives one workflow's videos (next section)
 
 ## Which account gets which video
 
-Every workflow uploads with a **group** name. An account joins a group through its `*_FOR` secret; an account without `_FOR` joins all groups. One run makes one video and the same file goes to every account in the group.
+Every workflow uploads with a **group** name: `nlm`, `story` or `stickman`. An account is eligible when its `*_FOR` secret lists that group, is unset, or is `all`; a comma list such as `nlm,story` joins several groups. One run makes one video and the same file goes unchanged to every eligible account on that platform. The story workflow (default `formats=both`) makes two files: `shorts.mp4` goes to eligible YouTube and Instagram accounts, `landscape.mp4` only to eligible YouTube accounts.
 
 | Workflow | Group | File(s) | Goes to |
 |---|---|---|---|
-| NotebookLM short | `nlm` | `reel.mp4` | every YT / IG account with `_FOR` = `nlm` |
-| Generate story video | `story` | `shorts.mp4` (YT Short + IG Reel), `landscape.mp4` (YT video) | every YT / IG account with `_FOR` = `story` |
-| Generate stickman fact reel | `stickman` | `reel.mp4` | every YT / IG account with `_FOR` = `stickman` |
+| NotebookLM short | `nlm` | `reel.mp4` | every eligible YT / IG account (`_FOR` lists `nlm`, or unset / `all`) |
+| Generate story video | `story` | `shorts.mp4` (YT Short + IG Reel), `landscape.mp4` (YT video) | every eligible YT / IG account; landscape only to YouTube |
+| Generate stickman fact reel | `stickman` | `reel.mp4` | every eligible YT / IG account (`_FOR` lists `stickman`, or unset / `all`) |
 
 Current mapping (secret -> value):
 
@@ -52,26 +70,61 @@ IG_USER2_FOR = story      # Pauranik Katha (Instagram, planned)
 IG_USER3_FOR = stickman   # facts channel (Instagram, planned)
 ```
 
-Several groups: `nlm,story`. To check what a run will do, open the run > **Upload video / targets** job: the log lists each account as `youtube/user1 (IExplainHinduism)` or `instagram/user2: not for group nlm`. The name in brackets comes from the optional `YT_USERn_NAME` / `IG_USERn_NAME` secret; set it to the channel / page name so you can tell accounts apart in the logs and run summary (otherwise you only see `user1`, `user2`).
+To check what a run will do, open the run > **Upload video / targets** job ("Detect upload accounts"). Its log lists `upload accounts: youtube/user1, instagram/user1` and `not for group 'nlm': instagram/user2` for skipped ones. The upload jobs that follow are named `youtube / user1`, `instagram / user1` ... Set the optional `YT_USERn_NAME` / `IG_USERn_NAME` secret to the channel / page name: it is shown in that job's summary next to `usern` so you can tell accounts apart (it never appears in job names or the detection log, which must stay secret-free).
 
-Manual upload (Actions > Upload video > Run workflow): **Accounts to use** is the group above; `all` posts to every account. **Where to upload** picks the platform(s). So "stickman + youtube" = only the YouTube channel whose `YT_USERn_FOR` is `stickman`.
+### Manual upload
+
+Actions > **Upload video** > Run workflow re-posts a video that is already on the `videos` branch, without generating anything (use it when an upload failed; the scheduled retry slots make new videos, they do not retry uploads).
+
+| Input | Default | What to enter |
+|---|---|---|
+| folder | required | folder on the `videos` branch: `nlm/<slug>-<run>`, `videos/<slug>-<run>` or `stickman/<slug>-<run>` (see README.md on that branch); must contain the video and `meta.json` |
+| video | `reel.mp4` | `reel.mp4`, `shorts.mp4` or `landscape.mp4` |
+| group | `all` | `nlm`, `story`, `stickman` filter accounts through `*_FOR`; `all` = every account |
+| platforms | `youtube,instagram` | or `youtube` / `instagram` (landscape: `youtube`) |
+| yt_kind | `short` | `short` adds #Shorts; `video` for landscape |
+| yt_privacy | `public` | `public`, `unlisted`, `private`; a channel's `YT_USERn_PRIVACY` secret (or `privacy` in `YT_ACCOUNTS_JSON`) overrides this |
+
+So "stickman + youtube" = every eligible YouTube channel: the one whose `YT_USERn_FOR` lists `stickman`, plus any channel with `_FOR` unset or `all`. For an artifact-only NotebookLM test set both `publish=false` and `upload=off`; `publish=false` alone still uploads.
 
 ## All secrets and variables
 
-Add in repo > Settings > Secrets and variables > Actions.
+Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in the Secrets tab, **Variable** in the Variables tab. `n` = 1, 2, 3 ... "one of" = at least one working LLM key is needed by the story and stickman workflows (and by Pre-run check); NotebookLM needs none. `provider=auto` probes the keys in the order gemini, mistral, cerebras, meta, openrouter, openai, anthropic and uses the first usable one (a key that is only rate-limited or busy still counts as usable and is retried).
 
-| Name | Type | What | Needed for |
+### Generation
+
+| Name | Type | Required? | What / how to get it |
 |---|---|---|---|
-| NOTEBOOKLM_MASTER_TOKEN_JSON | Secret | content of master_token.json | NotebookLM short |
-| IG_USER1_ID, IG_USER1_TOKEN | Secret | Instagram account 1 (2, 3 ... for more) | Instagram upload |
-| YT_CLIENT_ID, YT_CLIENT_SECRET | Secret | Google Cloud OAuth client (one for all channels) | YouTube upload |
-| YT_USER1_REFRESH_TOKEN | Secret | YouTube channel 1 (2, 3 ... for more) | YouTube upload |
-| IG_USERn_FOR, YT_USERn_FOR | Secret | optional: `nlm`, `story`, `stickman` or a comma list = which workflow may post to that account (unset = all) | One channel per workflow, see above |
-| IG_USERn_NAME, YT_USERn_NAME | Secret | optional: display name (e.g. `crocodile.explains`) shown in logs and the run summary instead of `usern` | Telling accounts apart |
-| GEMINI_API_KEY | Secret | Gemini key (or MISTRAL_API_KEY / CEREBRAS_API_KEY) | Story video, Stickman fact reel |
-| AZURE_SPEECH_KEY | Secret | Azure Speech key | Optional, better voices |
-| AZURE_SPEECH_REGION | Variable | e.g. centralindia | With Azure key |
-| BILLING_TOKEN | Secret | fine grained PAT, Plan: read | Optional, stops runs when minutes are low |
+| NOTEBOOKLM_MASTER_TOKEN_JSON | Secret | NotebookLM short | `master_token.json` as one line, see [Setup](#notebooklm-short-3-steps) |
+| GEMINI_API_KEY | Secret | one of | free: [aistudio.google.com/apikey](https://aistudio.google.com/apikey) > Create API key (default model `gemini-3.8-flash`) |
+| MISTRAL_API_KEY | Secret | one of | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
+| CEREBRAS_API_KEY | Secret | one of | [cloud.cerebras.ai](https://cloud.cerebras.ai) > API Keys (free tier) |
+| META_AI_API | Secret | one of | Meta Model API key from [dev.meta.ai](https://dev.meta.ai) (paid). Not an Instagram token |
+| OPENROUTER_API_KEY | Secret | one of | [openrouter.ai/settings/keys](https://openrouter.ai/settings/keys) (default model needs credits) |
+| OPENAI_API_KEY | Secret | one of | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) (API credits, not ChatGPT Plus) |
+| ANTHROPIC_API_KEY | Secret | one of | [console.anthropic.com](https://console.anthropic.com) > API Keys (API credits) |
+| AZURE_SPEECH_KEY | Secret | optional | Azure portal > create a **Speech** resource > Keys and Endpoint. Without it narration uses free edge-tts (same voice names, default `en-GB-RyanNeural`) |
+| AZURE_SPEECH_REGION | Variable | with Azure key | region of that Speech resource, e.g. `centralindia` |
+| BILLING_TOKEN | Secret | optional | GitHub > Settings > Developer settings > [Fine-grained tokens](https://github.com/settings/personal-access-tokens) > Account permissions > **Plan: Read-only**. Lets Pre-run check stop a story / stickman run when the month's Actions minutes would run out (NotebookLM does not use it) |
+| ACTIONS_INCLUDED_MINUTES | Variable | optional | your plan's included private-repo minutes, default `2000` (only an estimate input for the guard) |
+| ACTIONS_ALLOW_OVERAGE | Variable | optional | `1` = keep running on paid minutes when included minutes are used up (your GitHub spending limit must allow it) |
+
+### Upload accounts
+
+| Name | Type | Required? | What / how to get it |
+|---|---|---|---|
+| IG_USERn_ID, IG_USERn_TOKEN | Secret | per Instagram account | professional (Creator / Business) account id + token: [guide section 2](pipeline/notebooklm/README.md#2-instagram-upload-optional), steps 2.1-2.7 with screenshots |
+| IG_GRAPH_HOST | Variable | optional | `graph.facebook.com` (default, Facebook-Login tokens) or `graph.instagram.com` for Instagram-Login tokens (`instagram_business_*` permissions, as in the guide). Set it if Instagram uploads fail with an OAuth / host error |
+| YT_CLIENT_ID, YT_CLIENT_SECRET | Secret | for YouTube (shared) | one Google Cloud OAuth client (Desktop app) used by every numbered channel that has no own `YT_USERn_CLIENT_*`, and by the legacy account: [guide section 3](pipeline/notebooklm/README.md#3-youtube-upload-optional) |
+| YT_USERn_REFRESH_TOKEN | Secret | per YouTube channel | `python pipeline/notebooklm/yt_get_refresh_token.py --client-id ID --client-secret SECRET` on your PC, logged in as that channel ([section 3](pipeline/notebooklm/README.md#3-youtube-upload-optional)) |
+| YT_USERn_CLIENT_ID, YT_USERn_CLIENT_SECRET | Secret | optional | only when channel n uses its own Google Cloud project instead of the shared client |
+| YT_USERn_PRIVACY | Secret | optional | `public`, `unlisted` or `private` for that channel; overrides the workflow's `yt_privacy` input (default `public`) |
+| IG_USERn_FOR, YT_USERn_FOR | Secret | optional | `nlm`, `story`, `stickman` or a comma list = which workflow may post there (unset / `all` = every workflow). See [above](#which-account-gets-which-video) |
+| IG_USERn_NAME, YT_USERn_NAME | Secret | optional | channel / page name shown in the upload job summary next to `usern` |
+| IG_USER_ID, IG_ACCESS_TOKEN, YT_REFRESH_TOKEN, IG_FOR, YT_FOR | Secret | legacy | old single-account names, still work as account `default` (`*_FOR` restricts them) |
+| IG_ACCOUNTS_JSON, YT_ACCOUNTS_JSON | Secret | alternative | one-line JSON list instead of numbered secrets, e.g. `[{"user_id":"...","access_token":"...","name":"Facts","for":"stickman"}]` / `[{"client_id":"...","client_secret":"...","refresh_token":"...","name":"Facts","for":"stickman","privacy":"private"}]`; `"enabled":false` skips an entry. JSON YouTube entries do not inherit the shared client |
+
+Numbered, legacy and JSON accounts are all combined, so define each real account once or it gets the video twice. `GITHUB_TOKEN` is provided by Actions; no extra token is needed for the `videos` branch or the failure issue.
 
 ## Where things are
 
@@ -85,4 +138,26 @@ Add in repo > Settings > Secrets and variables > Actions.
 
 ## Costs
 
-Everything used is free: NotebookLM free tier, Meta and YouTube APIs, GitHub Actions (unlimited minutes on a public repo, 2000 per month on a private one).
+A free setup is possible (NotebookLM free tier, Gemini / Cerebras free tiers, edge-tts, Meta and YouTube APIs), but not every option is free: Meta Model API, OpenAI, Anthropic, paid OpenRouter models and Azure Speech are billed, and `provider=auto` will pick a paid key if the free ones fail.
+
+GitHub Actions minutes: unlimited on a **public** repo; a **private** repo gets 2,000 min/month on GitHub Free (3,000 on Pro), shared by all private repos of the account. Approximate use per run:
+
+| Workflow | Minutes / run |
+|---|---|
+| Story video, `both` formats (default) | ~90 (one format ~55) |
+| Stickman fact reel | ~35 |
+| NotebookLM short | ~25 (mostly waiting on NotebookLM) |
+| Guard job on a skipped cron slot | ~1 (9 slots a day) |
+
+At 2 a day for all three workflows that is roughly 300 min/day, about 9,000 min/month, so a private repo on the free plan stops after about a week. Options: make the repo public, run fewer videos a day (`DAILY_TARGET` at the top of each workflow file, and drop a cron line), story with one format, or a self-hosted runner. `BILLING_TOKEN` makes the story / stickman precheck stop before a run that would not fit; it warns instead when `ACTIONS_ALLOW_OVERAGE=1` or the account already uses paid minutes, and it is not fail-closed: without the token, or when the billing API call fails, the check is skipped and the run continues.
+
+### Known limits
+
+| Limit | What to expect |
+|---|---|
+| YouTube upload quota | default 100 `videos.insert` calls per day per Google Cloud project, reset at midnight Pacific. Channels sharing the project share it; a story in both formats is 2 calls per channel |
+| YouTube refresh tokens | OAuth consent screen left in **Testing** gives 7-day refresh tokens. Set it to **In production** (no verification needed for your own test users) and mint the tokens again |
+| YouTube visibility | per the current API docs, uploads from unverified projects are **not** forced to private. If a video lands private, check the `yt_privacy` input / `YT_USERn_PRIVACY` and the channel's default upload settings |
+| Instagram | the Graph API downloads the video from a public URL. Public repo: the `videos` branch raw URL. Private repo: the file is parked about 1 hour on tmpfiles.org, i.e. briefly public, and that host can be down |
+| Instagram tokens | the token from the guide (configuration template) does not expire; the account must be an app tester (no App Review) |
+| NotebookLM | free accounts get a few Video Overviews per day, reset around 13:30 IST. The 2-a-day schedule is a target; the precheck shows the remaining quota |

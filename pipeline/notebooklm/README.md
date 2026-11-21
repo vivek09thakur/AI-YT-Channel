@@ -1,6 +1,6 @@
 # NotebookLM short
 
-Every day at 09:00 IST (or by hand) this workflow:
+Twice a day (09:00 and 15:30 IST, retry slot 20:00 IST) or by hand, this workflow:
 
 - picks a random unused topic from `topics.json`
 - lets NotebookLM research it on the web
@@ -149,9 +149,9 @@ Second channel: run the script again logged in as that channel, add `YT_USER2_RE
 
 Known limits:
 
-- Unverified Google app: uploads are forced to private. Submit the app for verification to post public.
-- Consent screen left in Testing: refresh token dies after 7 days. Set it to In production.
-- Default quota is about 6 uploads per day.
+- Consent screen left in Testing: refresh token dies after 7 days. Set it to In production (your own test users keep working without verification), then mint the tokens again.
+- Default quota: 100 `videos.insert` calls per day per Google Cloud project (reset midnight Pacific), shared by every channel on that project.
+- Unverified app: per the current API docs uploads are not forced to private. If a video lands private, check `yt_privacy` / `YT_USERn_PRIVACY` and the channel's default upload settings.
 
 ---
 
@@ -159,7 +159,7 @@ Known limits:
 
 - Repeat the secrets with 2, 3, 4 ... (`IG_USER2_ID`, `IG_USER2_TOKEN`, `YT_USER2_CLIENT_ID` ...)
 - Each account uploads in its own job. One bad token does not stop the others.
-- Incomplete sets are skipped with a warning in the Precheck job.
+- Incomplete sets are skipped with a warning in the "Detect upload accounts" job.
 - Old style single secrets `IG_USER_ID`, `IG_ACCESS_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` still work as account "default" (`IG_FOR` / `YT_FOR` restrict them).
 
 ### One channel per workflow (groups)
@@ -187,7 +187,7 @@ An account takes every group unless its `*_FOR` secret says otherwise (`nlm`, `s
 | IG_USER2_ID / IG_USER2_TOKEN / IG_USER2_FOR | page / `story` | Pauranik Katha (planned) |
 | IG_USER3_ID / IG_USER3_TOKEN / IG_USER3_FOR | page / `stickman` | facts channel (planned) |
 
-How to verify: open any run > **Upload video / targets** job ("Detect upload accounts"). The log lists every account as `youtube/user1 (IExplainHinduism)` when it will be used, or `instagram/user2: not for group nlm` when skipped. The upload jobs that follow are named `youtube / user1`, `instagram / user1` ... so the run page shows exactly where the video went.
+How to verify: open any run > **Upload video / targets** job ("Detect upload accounts"). The log lists `upload accounts: youtube/user1, instagram/user1` for the accounts that will be used and `not for group 'nlm': instagram/user2` for skipped ones. The upload jobs that follow are named `youtube / user1`, `instagram / user1` ... so the run page shows exactly where the video went; the optional `*_NAME` label appears in each upload job's summary (never in job names or the detection log, which must stay free of secret values).
 
 ---
 
@@ -202,7 +202,7 @@ Actions tab > NotebookLM short > Run workflow.
 | research_mode | fast | fast, deep |
 | format | short | short (9:16), explainer, cinematic (16:9) |
 | style | auto | explainer only |
-| publish | true | false = artifact only |
+| publish | true | false = skip the videos branch; uploads still run unless upload = off (artifact-only test: publish false AND upload off) |
 | keep_notebook | false | true = keep notebook in NotebookLM |
 | upload | auto | off = skip all uploads |
 | yt_privacy | public | public, unlisted, private |
@@ -220,14 +220,14 @@ Change the wording:
 
 | Job | What it checks or does |
 |---|---|
-| Guard | scheduled runs only: skips everything when a short was already published today (the 15:30 IST retry slot) |
+| Guard | scheduled runs only: skips everything when 2 shorts were already published today (UTC), so the retry slot only works when a slot failed |
 | Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks |
 | Make | topic, research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
 | Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it |
 
-Schedule: 09:00 IST, and a retry slot at 15:30 IST that only runs when the morning run did not publish (NotebookLM video quota resets around 13:30 IST).
+Schedule: 09:00 and 15:30 IST (2 a day), plus a retry slot at 20:00 IST that only runs when fewer than 2 were published (NotebookLM video quota resets around 13:30 IST).
 
 ### Upload an already made video (no NotebookLM quota)
 
@@ -248,10 +248,10 @@ Same workflow for a story video: folder `videos/<slug>-<run>`, video `shorts.mp4
 | secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set | Section 1 |
 | NotebookLM auth failed | Section 1 again, token expired |
 | quota exhausted | wait for the reset time printed in the log |
-| daily Video Overview quota reached (RateLimitError on CREATE_ARTIFACT) | the free account only gets a few videos per day; wait for the daily reset (about 13:30 IST) or use another throwaway account. The daily schedule makes one video per day, extra manual runs eat into this |
+| daily Video Overview quota reached (RateLimitError on CREATE_ARTIFACT) | the free account only gets a few videos per day; wait for the daily reset (about 13:30 IST) or use another throwaway account. The schedule already makes 2 videos per day, extra manual runs eat into this |
 | research imported no sources | re-run, or pick another topic |
 | no public URL for the video | tmpfiles.org down, re-run |
-| YouTube video is private | Google app not verified |
+| YouTube video is private | `yt_privacy` input or `YT_USERn_PRIVACY` secret set to private, or the channel's default upload visibility |
 | account incomplete - skipped | one of the numbered secrets is missing |
 | Upload job shows "Waiting for pending jobs" and the run fails, or "Upload targets sanity" fails | a multi-line secret (usually NOTEBOOKLM_MASTER_TOKEN_JSON) made GitHub drop the upload matrix. Re-save it as one line (Section 1), then use the upload workflow above for that video |
 | reel.mp4 not found on the videos branch | wrong folder name, copy it from `nlm/README.md` on the `videos` branch |
