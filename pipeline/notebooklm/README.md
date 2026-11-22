@@ -1,6 +1,6 @@
 # NotebookLM short
 
-Twice a day (09:00 and 15:30 IST, retry slot 20:00 IST) or by hand, this workflow:
+Twice a day (due 9:07 am and 3:07 pm IST, retried every 30 minutes, last chance 8:07 pm) or by hand, this workflow:
 
 - picks a random unused topic from `topics.json`
 - lets NotebookLM research it on the web
@@ -220,14 +220,14 @@ Change the wording:
 
 | Job | What it checks or does |
 |---|---|
-| Guard | scheduled runs only: skips everything when 2 shorts were already published today (UTC), so the retry slot only works when a slot failed |
+| Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 9:07 am / 3:07 pm IST, counted per UTC day) is still missing, so the 30-minute retry slots only work after a dropped or failed slot |
 | Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks |
 | Make | topic, research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
 | Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it |
 
-Schedule: 09:00 and 15:30 IST (2 a day), plus a retry slot at 20:00 IST that only runs when fewer than 2 were published (NotebookLM video quota resets around 13:30 IST).
+Schedule: shorts are due at 9:07 am and 3:07 pm IST (the second after the NotebookLM quota reset, about 1:30 pm). GitHub delays or drops cron slots on the hour / half hour, so every slot sits on :07 / :37 and is repeated every 30 minutes (until 11:37 am, then until 5:37 pm, plus a last chance at 8:07 pm). A slot only runs while a short that is due by then is missing, so a dropped or failed slot is retried half an hour later and a third short is never made.
 
 ### Upload an already made video (no NotebookLM quota)
 

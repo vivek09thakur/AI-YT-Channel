@@ -9,11 +9,15 @@ name: Generate stickman fact reel
 
 on:
   schedule:
-    # 2 reels a day: each slot runs only while fewer than 2 were published today (guard job); the last slot
-    # is a retry for a failed earlier run and never produces a third one.
-    - cron: '30 7 * * *'   # 13:00 IST
-    - cron: '30 13 * * *'  # 19:00 IST
-    - cron: '30 16 * * *'  # 22:00 IST retry slot
+    # 2 reels a day, due 1:27 pm and 5:57 pm IST. GitHub delays or drops cron slots that sit on the hour / half hour,
+    # so every slot is on :27 / :57 and is repeated every 30 minutes. The guard job lets a slot work only while a
+    # reel that is due by then is still missing (DUE_UTC below), so retries never make a third reel, or the second
+    # one before its time. Cron times are UTC (IST minus 5:30).
+    - cron: '57 7 * * *'        # 1:27 pm IST, first reel
+    - cron: '27,57 8-9 * * *'   # 1:57, 2:27, 2:57, 3:27 pm IST retries
+    - cron: '27 10 * * *'       # 3:57 pm IST retry
+    - cron: '27,57 12-13 * * *' # 5:57 pm IST second reel, then 6:27, 6:57, 7:27 pm retries
+    - cron: '27 14 * * *'       # 7:57 pm IST last retry (a reel takes up to ~70 min, so it is still posted before 10 pm)
   workflow_dispatch:
     inputs:
       topic:
@@ -84,6 +88,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
+  DUE_UTC: '07:57 12:27'   # when the 1st and 2nd reel of the day are due (1:27 pm and 5:57 pm IST); guard job
   KIT: .github/skills/stickman-reel
   PROJECT: work/reel
   PYTHONUNBUFFERED: '1'
@@ -96,8 +101,8 @@ env:
   PAGE_NAME: ${{ inputs.page_name || '' }}
 
 jobs:
-  # Daily target: a scheduled slot only does work while fewer than DAILY_TARGET reels were published today, so a
-  # failed slot is picked up by the next one. Manual runs always go.
+  # Daily target: a scheduled slot only does work while a reel that is due by now (DUE_UTC, at most DAILY_TARGET a
+  # day) is still missing, so a dropped or failed slot is picked up by the next 30-minute retry. Manual runs always go.
   guard:
     name: Daily target reached?
     runs-on: ubuntu-latest
@@ -111,7 +116,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
-          python pipeline/published_today.py --repo "${{ github.repository }}" --index stickman.json --max "${DAILY_TARGET:-2}"
+          python pipeline/published_today.py --repo "${{ github.repository }}" --index stickman.json --max "${DAILY_TARGET:-2}" --due "$DUE_UTC"
 
   precheck:
     name: Pre-run check (AI, runner, TTS quota)

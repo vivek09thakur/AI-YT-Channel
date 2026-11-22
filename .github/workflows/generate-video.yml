@@ -6,11 +6,15 @@ name: Generate story video
 
 on:
   schedule:
-    # 2 stories a day: each slot runs only while fewer than 2 were published today (see guard job); the last slot
-    # is a retry for a failed earlier run and never produces a third one.
-    - cron: '30 5 * * *'   # 11:00 IST, after the NotebookLM short
-    - cron: '30 11 * * *'  # 17:00 IST
-    - cron: '30 15 * * *'  # 21:00 IST retry slot
+    # 2 stories a day, due 11:17 am and 4:47 pm IST. GitHub delays or drops cron slots that sit on the hour / half
+    # hour, so every slot is on :17 / :47 and is repeated every 30 minutes. The guard job lets a slot work only while
+    # a story that is due by then is still missing (DUE_UTC below), so retries never make a third story, or the
+    # second one before its time. Cron times are UTC (IST minus 5:30).
+    - cron: '47 5 * * *'        # 11:17 am IST, first story
+    - cron: '17,47 6-7 * * *'   # 11:47 am, 12:17, 12:47, 1:17 pm IST retries
+    - cron: '17 8 * * *'        # 1:47 pm IST retry
+    - cron: '17,47 11-13 * * *' # 4:47 pm IST second story, then 5:17, 5:47, 6:17, 6:47, 7:17 pm retries
+    - cron: '17 14 * * *'       # 7:47 pm IST last retry (a story takes up to ~70 min, so it is still posted before 10 pm)
   workflow_dispatch:
     inputs:
       topic:
@@ -83,6 +87,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
+  DUE_UTC: '05:47 11:17'   # when the 1st and 2nd story of the day are due (11:17 am and 4:47 pm IST); guard job
   KIT: .github/skills/folk-art-video
   PYTHONUNBUFFERED: '1'
   # scheduled runs have no inputs: these are the defaults used then
@@ -94,8 +99,8 @@ env:
   CTA_LINE: ${{ inputs.cta || 'Subscribe for more folk tales from Indian mythology.' }}
 
 jobs:
-  # Daily target: a scheduled slot only does work while fewer than DAILY_TARGET videos of this kind were published
-  # today, so a failed slot is picked up by the next one. Manual runs always go.
+  # Daily target: a scheduled slot only does work while a video that is due by now (DUE_UTC, at most DAILY_TARGET a
+  # day) is still missing, so a dropped or failed slot is picked up by the next 30-minute retry. Manual runs always go.
   guard:
     name: Daily target reached?
     runs-on: ubuntu-latest
@@ -109,7 +114,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
-          python pipeline/published_today.py --repo "${{ github.repository }}" --index videos.json --max "${DAILY_TARGET:-2}"
+          python pipeline/published_today.py --repo "${{ github.repository }}" --index videos.json --max "${DAILY_TARGET:-2}" --due "$DUE_UTC"
 
   precheck:
     name: Pre-run check (AI, runner, TTS quota)

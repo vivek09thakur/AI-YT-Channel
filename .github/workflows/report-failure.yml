@@ -42,7 +42,7 @@ jobs:
           gh label create pipeline-failure --repo "$REPO" --color B60205 --description "a daily video workflow failed" 2>/dev/null || true
           num=$(gh issue list --repo "$REPO" --label pipeline-failure --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
           if [ "$STATUS" = "failure" ]; then
-            body="Run #$RUN_NO failed${DETAIL:+ ($DETAIL)}: $RUN_URL"$'\n\n'"Open the run, read the red step, fix or re-run. The retry slot later today runs again by itself if nothing was published."
+            body="Run #$RUN_NO failed${DETAIL:+ ($DETAIL)}: $RUN_URL"$'\n\n'"Open the run, read the red step, fix or re-run. The next 30-minute retry slot runs again by itself while today's videos are missing."
             if [ -n "$num" ]; then
               gh issue comment "$num" --repo "$REPO" --body "$body"
               echo "commented on issue #$num"

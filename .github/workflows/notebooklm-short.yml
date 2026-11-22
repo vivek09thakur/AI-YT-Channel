@@ -14,11 +14,18 @@ name: NotebookLM short (auto topic)
 
 on:
   schedule:
-    # 2 shorts a day: each slot runs only while fewer than 2 were published today (see guard job), so the
-    # evening slot is a retry for a failed morning/afternoon run and never produces a third one.
-    - cron: '30 3 * * *'   # 09:00 IST
-    - cron: '0 10 * * *'   # 15:30 IST (NotebookLM quota resets ~13:30 IST)
-    - cron: '30 14 * * *'  # 20:00 IST retry slot
+    # 2 shorts a day, due 9:07 am and 3:07 pm IST (the second after NotebookLM's quota reset, about 1:30 pm).
+    # GitHub delays or drops cron slots that sit on the hour / half hour, so every slot is on :07 / :37 and is
+    # repeated every 30 minutes. The guard job lets a slot work only while a short that is due by then is still
+    # missing (DUE_UTC below), so retries never make a third short, or the second one before its time.
+    # Cron times are UTC (IST minus 5:30).
+    - cron: '37 3 * * *'        # 9:07 am IST, first short
+    - cron: '7,37 4-5 * * *'    # 9:37, 10:07, 10:37, 11:07 am IST retries
+    - cron: '7 6 * * *'         # 11:37 am IST retry
+    - cron: '37 9 * * *'        # 3:07 pm IST, second short
+    - cron: '7,37 10-11 * * *'  # 3:37, 4:07, 4:37, 5:07 pm IST retries
+    - cron: '7 12 * * *'        # 5:37 pm IST retry
+    - cron: '37 14 * * *'       # 8:07 pm IST, last chance for anything still missing (a short takes about 15 min)
   workflow_dispatch:
     inputs:
       genre:
@@ -87,6 +94,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
+  DUE_UTC: '03:37 09:37'   # when the 1st and 2nd short of the day are due (9:07 am and 3:07 pm IST); guard job
   GENRE: ${{ inputs.genre || 'auto' }}
   TOPIC_OVERRIDE: ${{ inputs.topic || '' }}
   RESEARCH_MODE: ${{ inputs.research_mode || 'fast' }}
@@ -100,8 +108,8 @@ env:
   CTA_LINE: "If you learned something new, support us by subscribing to the channel and following us for more."
 
 jobs:
-  # Daily target: a scheduled slot only does work while fewer than DAILY_TARGET videos of this kind were published
-  # today, so a failed slot is picked up by the next one. Manual runs always go.
+  # Daily target: a scheduled slot only does work while a video that is due by now (DUE_UTC, at most DAILY_TARGET a
+  # day) is still missing, so a dropped or failed slot is picked up by the next 30-minute retry. Manual runs always go.
   guard:
     name: Daily target reached?
     runs-on: ubuntu-latest
@@ -115,7 +123,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
-          python pipeline/published_today.py --repo "${{ github.repository }}" --index nlm.json --max "${DAILY_TARGET:-2}"
+          python pipeline/published_today.py --repo "${{ github.repository }}" --index nlm.json --max "${DAILY_TARGET:-2}" --due "$DUE_UTC"
 
   precheck:
     name: Precheck (token, quota, leftovers)

@@ -20,7 +20,7 @@ Shared, read-only: `pipeline/tts.py` (with `[pause N]` support), `pipeline/check
 
 ## Schedule and guard
 
-Crons at 07:30, 13:30 and 16:30 UTC (13:00, 19:00, 22:00 IST). Each slot first runs `published_today.py --index stickman.json --max 2`: it does work only while fewer than `DAILY_TARGET` (2) reels exist for today, so a failed slot is picked up by the next one and the day never exceeds two reels. Failures open/comment one issue via `report-failure.yml`.
+Crons every 30 minutes on :27 / :57 (GitHub delays or drops slots on the hour / half hour): 1:27 pm to 3:57 pm IST for the first reel, 5:57 pm to 7:57 pm for the second. Each slot first runs `published_today.py --index stickman.json --max 2 --due "07:57 12:27"`: it does work only while a reel that is due by then (1:27 pm / 5:57 pm IST) is missing, so a dropped or failed slot is picked up half an hour later, the second reel is never made early and the day never exceeds two reels. Failures open/comment one issue via `report-failure.yml`.
 
 ## Run it by hand
 
