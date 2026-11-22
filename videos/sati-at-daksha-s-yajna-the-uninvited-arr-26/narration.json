@@ -1,0 +1,161 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 123.25,
+ "lines": [
+  {
+   "i": 0,
+   "text": "A grand canopy of white silk rises proudly above the vast sacrificial grounds...",
+   "t0": 0.8,
+   "t1": 5.74,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "Drums beat a rhythmic pulse of immense royal pride, echoing far across the glittering capital of King Daksha.",
+   "t0": 6.64,
+   "t1": 12.72,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "From the high and silent mountains, a quiet longing suddenly stirs.",
+   "t0": 13.82,
+   "t1": 17.91,
+   "para": true
+  },
+  {
+   "i": 3,
+   "text": "Sati hears faint whispers of a great gathering of all her kin...",
+   "t0": 18.46,
+   "t1": 21.81,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "and her gentle heart reaches out for the distant home she left behind.",
+   "t0": 22.71,
+   "t1": 26.52,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "She speaks her heartfelt wish to the blue-skinned lord of Kailash.",
+   "t0": 27.62,
+   "t1": 31.11,
+   "para": true
+  },
+  {
+   "i": 6,
+   "text": "Shiva slowly closes his dark, knowing eyes, sensing the heavy shadow of fate...",
+   "t0": 31.66,
+   "t1": 36.45,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "and gently warns her of the bitter cold that always awaits uninvited guests.",
+   "t0": 37.35,
+   "t1": 41.4,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "Undeterred, Sati steps through the towering golden gates completely alone.",
+   "t0": 42.5,
+   "t1": 46.68,
+   "para": true
+  },
+  {
+   "i": 9,
+   "text": "The festive music falters and dies.",
+   "t0": 47.23,
+   "t1": 49.54,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "The assembled priests turn away in shame, their eyes sharp with quiet judgment and deep unspoken contempt.",
+   "t0": 50.09,
+   "t1": 55.99,
+   "para": false
+  },
+  {
+   "i": 11,
+   "text": "King Daksha stands tall before the crackling sacred fire.",
+   "t0": 57.09,
+   "t1": 60.42,
+   "para": true
+  },
+  {
+   "i": 12,
+   "text": "He sees his youngest daughter standing there, wrapped in simple mountain ash and dust...",
+   "t0": 60.97,
+   "t1": 65.29,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "and his royal face darkens rapidly like a furious monsoon storm.",
+   "t0": 66.19,
+   "t1": 70.12,
+   "para": false
+  },
+  {
+   "i": 14,
+   "text": "He raises his booming voice to pierce the heavy silence of the hall.",
+   "t0": 71.22,
+   "t1": 74.71,
+   "para": true
+  },
+  {
+   "i": 15,
+   "text": "He mocks the wild ascetic husband who sits in lonely cremation grounds, openly calling him a vagrant wanderer entirely unworthy of respect.",
+   "t0": 75.26,
+   "t1": 83.19,
+   "para": false
+  },
+  {
+   "i": 16,
+   "text": "Sati feels the blistering heat of the ritual fire, but an infinitely deeper fire awakens violently within her chest.",
+   "t0": 84.29,
+   "t1": 91.05,
+   "para": true
+  },
+  {
+   "i": 17,
+   "text": "The fierce blood of the primordial mother boils instantly at the open insult to her beloved lord.",
+   "t0": 91.6,
+   "t1": 96.89,
+   "para": false
+  },
+  {
+   "i": 18,
+   "text": "She stands entirely tall against the gathering storm of her father's unchecked wrath.",
+   "t0": 97.99,
+   "t1": 102.53,
+   "para": true
+  },
+  {
+   "i": 19,
+   "text": "Every wide eye in the grand assembly turns to watch the unfolding tragedy of a broken family.",
+   "t0": 103.08,
+   "t1": 108.07,
+   "para": false
+  },
+  {
+   "i": 20,
+   "text": "Royal pride shatters completely under the crushing weight of blinding arrogance.",
+   "t0": 109.17,
+   "t1": 113.23,
+   "para": true
+  },
+  {
+   "i": 21,
+   "text": "The stage is finally set for the ultimate sacrifice of the heart, and the terrifying fury of the awakening cosmos.",
+   "t0": 113.78,
+   "t1": 120.25,
+   "para": false
+  }
+ ]
+}
