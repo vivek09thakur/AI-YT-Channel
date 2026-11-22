@@ -6,10 +6,10 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 
 | Workflow | Output | How it runs | Needs |
 |---|---|---|---|
-| NotebookLM short | 60 s vertical explainer on a fresh topic an LLM picks from what was published before (science, technology, ai, space, physics), auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (tried every 30 min until published, 9:07 am to 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (LLM key optional: without one topics come from topics.json; upload accounts optional) |
+| NotebookLM short | 60 s vertical explainer on a fresh topic an LLM picks from what was published before (science, technology, ai, space, physics), auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (tried every 30 min until published, 9:07 am to 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON + at least one upload account for group `nlm` (LLM key optional: without one topics come from topics.json) |
 | Upload video | Uploads an already made video from the `videos` branch to every account of a group (no NotebookLM quota) | By hand, or called by the three generation workflows | at least one complete IG_USERn_* or YT_* account |
-| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (tried every 30 min until published, 11:17 am to 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
-| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (tried every 30 min until published, 1:27 pm to 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
+| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (tried every 30 min until published, 11:17 am to 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY + at least one upload account for group `story` |
+| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (tried every 30 min until published, 1:27 pm to 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY + at least one upload account for group `stickman` |
 | Pre-run check only | Probes LLM keys and the TTS voice, checks remaining Actions minutes when BILLING_TOKEN is set | By hand | one LLM key to pass |
 | Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success | Called by the daily workflows | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
@@ -52,6 +52,8 @@ Without upload accounts the workflows still make the videos and publish them to 
 ## Which account gets which video
 
 Every workflow uploads with a **group** name: `nlm`, `story` or `stickman`. An account is eligible when its `*_FOR` secret lists that group, is unset, or is `all`; a comma list such as `nlm,story` joins several groups. One run makes one video and the same file goes unchanged to every eligible account on that platform. The story workflow (default `formats=both`) makes two files: `shorts.mp4` goes to eligible YouTube and Instagram accounts, `landscape.mp4` only to eligible YouTube accounts.
+
+Each generation workflow checks this in its first job (Pre-run check / Precheck): when the group has no eligible YouTube **and** no eligible Instagram account the run fails there with an error naming the missing secrets, before any video is made. One account on either platform is enough. The check is skipped only for a manual run with `upload=off` (artifact-only test).
 
 | Workflow | Group | File(s) | Goes to |
 |---|---|---|---|

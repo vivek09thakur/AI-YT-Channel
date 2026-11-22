@@ -15,6 +15,8 @@ of groups, e.g. "story" or "nlm,story". Unset or "all" = every workflow. `list -
 
   list   --upload auto|off [--group G] [--platforms youtube,instagram]
                                     print {"matrix": ["platform/key", ...], "count": N, "summary": [...]}
+  require [--group G]               exit 1 with a ::error:: when no YouTube or Instagram account is configured for the
+                                    group (the daily workflows run this in precheck so no video is made that cannot be uploaded)
   select --platform P --name N --env-file FILE
                                     write shell exports for that one account and print ::add-mask:: lines
 
@@ -187,6 +189,19 @@ def cmd_list(a):
         print("upload accounts: " + ", ".join(matrix), file=sys.stderr)
 
 
+def cmd_require(a):
+    acc = accounts()
+    ok = [f"{p}/{x['name']}" for p in ("youtube", "instagram") for x in acc[p] if allowed(x, a.group)]
+    group = a.group or "all"
+    if ok:
+        print(f"upload accounts for group '{group}': " + ", ".join(ok))
+        return
+    print(f"::error::no upload account for workflow group '{group}'. Add a YouTube account (YT_CLIENT_ID + YT_CLIENT_SECRET + "
+          f"YT_USERn_REFRESH_TOKEN) or an Instagram account (IG_USERn_ID + IG_USERn_TOKEN); when YT_USERn_FOR / IG_USERn_FOR is set "
+          f"it must include '{group}'. The run stops here so no video is made that cannot be uploaded.", file=sys.stderr)
+    sys.exit(1)
+
+
 def cmd_select(a):
     acc = accounts()
     match = [x for x in acc.get(a.platform, []) if x["name"] == a.name]
@@ -219,6 +234,9 @@ def main():
     l.add_argument("--group", default="", help="workflow group (nlm, story ...); accounts with *_FOR not listing it are skipped")
     l.add_argument("--platforms", default="youtube,instagram")
     l.set_defaults(fn=cmd_list)
+    r = sub.add_parser("require")
+    r.add_argument("--group", default="")
+    r.set_defaults(fn=cmd_require)
     s = sub.add_parser("select")
     s.add_argument("--platform", required=True, choices=list(REQ))
     s.add_argument("--name", required=True)

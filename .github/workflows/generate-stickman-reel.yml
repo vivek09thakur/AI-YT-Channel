@@ -118,7 +118,7 @@ jobs:
           python pipeline/published_today.py --repo "${{ github.repository }}" --index stickman.json --max "${DAILY_TARGET:-2}" --due "$DUE_UTC"
 
   precheck:
-    name: Pre-run check (AI, runner, TTS quota)
+    name: Pre-run check (upload accounts, AI, runner, TTS quota)
     needs: guard
     if: needs.guard.outputs.go == 'true'
     runs-on: ubuntu-latest
@@ -130,6 +130,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+      - name: At least one upload account (YouTube or Instagram) for group stickman
+        # stops the run before any minutes are spent when nothing could be uploaded; skipped for manual upload=off runs
+        if: ${{ inputs.upload != 'off' }}
+        env:
+          ALL_SECRETS: ${{ toJSON(secrets) }}
+        run: python pipeline/notebooklm/upload_accounts.py require --group stickman
       - run: pip install -q -r pipeline/requirements.txt
       - name: Check quotas
         id: check

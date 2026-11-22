@@ -227,7 +227,7 @@ Change the wording:
 | Job | What it checks or does |
 |---|---|
 | Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 9:07 am / 3:07 pm IST, counted per UTC day) is still missing, so the 30-minute slots keep trying until the short is published and do nothing afterwards |
-| Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
+| Precheck | at least one upload account (YouTube or Instagram) eligible for group `nlm`, otherwise the run stops here (skipped for manual `upload=off` runs); token present and valid, NotebookLM quota, deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
 | Make | topic (LLM, checked against `nlm.json` for repeats; `topics.json` without a key), research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
@@ -259,5 +259,6 @@ Same workflow for a story video: folder `videos/<slug>-<run>`, video `shorts.mp4
 | no public URL for the video | tmpfiles.org down, re-run |
 | YouTube video is private | `yt_privacy` input or `YT_USERn_PRIVACY` secret set to private, or the channel's default upload visibility |
 | account incomplete - skipped | one of the numbered secrets is missing |
+| no upload account for workflow group (Precheck fails) | no complete YouTube or Instagram account whose `*_FOR` includes that group (or is unset). Add the secrets from Section 2 / 3, or set `upload=off` for an artifact-only test |
 | Upload job shows "Waiting for pending jobs" and the run fails, or "Upload targets sanity" fails | a multi-line secret (usually NOTEBOOKLM_MASTER_TOKEN_JSON) made GitHub drop the upload matrix. Re-save it as one line (Section 1), then use the upload workflow above for that video |
 | reel.mp4 not found on the videos branch | wrong folder name, copy it from `nlm/README.md` on the `videos` branch |
