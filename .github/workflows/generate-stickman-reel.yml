@@ -76,6 +76,11 @@ on:
         required: false
         type: string
         default: 'If you like knowing facts like this, subscribe and follow for more.'
+      auto:
+        description: 'Behave like a scheduled slot (daily target + due-time guard applies). Set by the external trigger; leave off for a real manual run'
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: generate-stickman-reel
@@ -102,7 +107,8 @@ env:
 
 jobs:
   # Daily target: a scheduled slot only does work while a reel that is due by now (DUE_UTC, at most DAILY_TARGET a
-  # day) is still missing, so a dropped or failed slot is picked up by the next 30-minute retry. Manual runs always go.
+  # day) is still missing, so a dropped or failed slot is picked up by the next 30-minute retry. Runs dispatched by the
+  # external trigger (input auto=true, see dashboard /api/trigger) are treated like scheduled slots. Manual runs always go.
   guard:
     name: Daily target reached?
     runs-on: ubuntu-latest
@@ -115,7 +121,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
+          if [ "${{ github.event_name }}" != "schedule" ] && [ "${{ inputs.auto }}" != "true" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; echo "manual run - go"; exit 0; fi
           python pipeline/published_today.py --repo "${{ github.repository }}" --index stickman.json --max "${DAILY_TARGET:-2}" --due "$DUE_UTC"
 
   precheck:
