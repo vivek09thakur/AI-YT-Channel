@@ -1,0 +1,1747 @@
+{
+ "fps": 30,
+ "duration": 123.25,
+ "total_frames": 3698,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "A grand canopy",
+   "t0": 0.8,
+   "t1": 1.712,
+   "f0": 24,
+   "f1": 51,
+   "words": [
+    {
+     "w": "A",
+     "f": 24
+    },
+    {
+     "w": "grand",
+     "f": 26
+    },
+    {
+     "w": "canopy",
+     "f": 38
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "of white silk rises proudly above",
+   "t0": 1.712,
+   "t1": 3.84,
+   "f0": 51,
+   "f1": 115,
+   "words": [
+    {
+     "w": "of",
+     "f": 51
+    },
+    {
+     "w": "white",
+     "f": 56
+    },
+    {
+     "w": "silk",
+     "f": 67
+    },
+    {
+     "w": "rises",
+     "f": 76
+    },
+    {
+     "w": "proudly",
+     "f": 88
+    },
+    {
+     "w": "above",
+     "f": 104
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 0,
+   "text": "the vast sacrificial grounds...",
+   "t0": 3.84,
+   "t1": 5.74,
+   "f0": 115,
+   "f1": 172,
+   "words": [
+    {
+     "w": "the",
+     "f": 115
+    },
+    {
+     "w": "vast",
+     "f": 122
+    },
+    {
+     "w": "sacrificial",
+     "f": 131
+    },
+    {
+     "w": "grounds...",
+     "f": 156
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "Drums beat a rhythmic pulse of immense royal pride,",
+   "t0": 6.64,
+   "t1": 9.477,
+   "f0": 199,
+   "f1": 284,
+   "words": [
+    {
+     "w": "Drums",
+     "f": 199
+    },
+    {
+     "w": "beat",
+     "f": 209
+    },
+    {
+     "w": "a",
+     "f": 217
+    },
+    {
+     "w": "rhythmic",
+     "f": 219
+    },
+    {
+     "w": "pulse",
+     "f": 236
+    },
+    {
+     "w": "of",
+     "f": 246
+    },
+    {
+     "w": "immense",
+     "f": 250
+    },
+    {
+     "w": "royal",
+     "f": 264
+    },
+    {
+     "w": "pride,",
+     "f": 274
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 1,
+   "text": "echoing far across the glittering capital of King Daksha.",
+   "t0": 9.477,
+   "t1": 12.72,
+   "f0": 284,
+   "f1": 382,
+   "words": [
+    {
+     "w": "echoing",
+     "f": 284
+    },
+    {
+     "w": "far",
+     "f": 299
+    },
+    {
+     "w": "across",
+     "f": 305
+    },
+    {
+     "w": "the",
+     "f": 317
+    },
+    {
+     "w": "glittering",
+     "f": 323
+    },
+    {
+     "w": "capital",
+     "f": 343
+    },
+    {
+     "w": "of",
+     "f": 357
+    },
+    {
+     "w": "King",
+     "f": 361
+    },
+    {
+     "w": "Daksha.",
+     "f": 369
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "From the high and silent mountains,",
+   "t0": 13.82,
+   "t1": 15.977,
+   "f0": 415,
+   "f1": 479,
+   "words": [
+    {
+     "w": "From",
+     "f": 415
+    },
+    {
+     "w": "the",
+     "f": 424
+    },
+    {
+     "w": "high",
+     "f": 430
+    },
+    {
+     "w": "and",
+     "f": 439
+    },
+    {
+     "w": "silent",
+     "f": 446
+    },
+    {
+     "w": "mountains,",
+     "f": 459
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 2,
+   "text": "a quiet longing suddenly stirs.",
+   "t0": 15.977,
+   "t1": 17.91,
+   "f0": 479,
+   "f1": 537,
+   "words": [
+    {
+     "w": "a",
+     "f": 479
+    },
+    {
+     "w": "quiet",
+     "f": 482
+    },
+    {
+     "w": "longing",
+     "f": 493
+    },
+    {
+     "w": "suddenly",
+     "f": 508
+    },
+    {
+     "w": "stirs.",
+     "f": 526
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 3,
+   "text": "Sati hears faint whispers of",
+   "t0": 18.46,
+   "t1": 20.068,
+   "f0": 554,
+   "f1": 602,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 554
+    },
+    {
+     "w": "hears",
+     "f": 562
+    },
+    {
+     "w": "faint",
+     "f": 572
+    },
+    {
+     "w": "whispers",
+     "f": 582
+    },
+    {
+     "w": "of",
+     "f": 598
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "a great gathering of all her kin...",
+   "t0": 20.068,
+   "t1": 21.81,
+   "f0": 602,
+   "f1": 654,
+   "words": [
+    {
+     "w": "a",
+     "f": 602
+    },
+    {
+     "w": "great",
+     "f": 604
+    },
+    {
+     "w": "gathering",
+     "f": 614
+    },
+    {
+     "w": "of",
+     "f": 632
+    },
+    {
+     "w": "all",
+     "f": 636
+    },
+    {
+     "w": "her",
+     "f": 642
+    },
+    {
+     "w": "kin...",
+     "f": 648
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 4,
+   "text": "and her gentle heart reaches out",
+   "t0": 22.71,
+   "t1": 24.515,
+   "f0": 681,
+   "f1": 735,
+   "words": [
+    {
+     "w": "and",
+     "f": 681
+    },
+    {
+     "w": "her",
+     "f": 687
+    },
+    {
+     "w": "gentle",
+     "f": 693
+    },
+    {
+     "w": "heart",
+     "f": 705
+    },
+    {
+     "w": "reaches",
+     "f": 715
+    },
+    {
+     "w": "out",
+     "f": 729
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 4,
+   "text": "for the distant home she left behind.",
+   "t0": 24.515,
+   "t1": 26.52,
+   "f0": 735,
+   "f1": 796,
+   "words": [
+    {
+     "w": "for",
+     "f": 735
+    },
+    {
+     "w": "the",
+     "f": 741
+    },
+    {
+     "w": "distant",
+     "f": 747
+    },
+    {
+     "w": "home",
+     "f": 762
+    },
+    {
+     "w": "she",
+     "f": 770
+    },
+    {
+     "w": "left",
+     "f": 776
+    },
+    {
+     "w": "behind.",
+     "f": 784
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "She speaks her heartfelt wish",
+   "t0": 27.62,
+   "t1": 29.236,
+   "f0": 829,
+   "f1": 877,
+   "words": [
+    {
+     "w": "She",
+     "f": 829
+    },
+    {
+     "w": "speaks",
+     "f": 834
+    },
+    {
+     "w": "her",
+     "f": 846
+    },
+    {
+     "w": "heartfelt",
+     "f": 852
+    },
+    {
+     "w": "wish",
+     "f": 869
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 5,
+   "text": "to the blue-skinned lord of Kailash.",
+   "t0": 29.236,
+   "t1": 31.11,
+   "f0": 877,
+   "f1": 933,
+   "words": [
+    {
+     "w": "to",
+     "f": 877
+    },
+    {
+     "w": "the",
+     "f": 881
+    },
+    {
+     "w": "blue-skinned",
+     "f": 887
+    },
+    {
+     "w": "lord",
+     "f": 908
+    },
+    {
+     "w": "of",
+     "f": 916
+    },
+    {
+     "w": "Kailash.",
+     "f": 920
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 6,
+   "text": "Shiva slowly closes his dark, knowing eyes,",
+   "t0": 31.66,
+   "t1": 34.364,
+   "f0": 950,
+   "f1": 1031,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 950
+    },
+    {
+     "w": "slowly",
+     "f": 961
+    },
+    {
+     "w": "closes",
+     "f": 975
+    },
+    {
+     "w": "his",
+     "f": 989
+    },
+    {
+     "w": "dark,",
+     "f": 996
+    },
+    {
+     "w": "knowing",
+     "f": 1005
+    },
+    {
+     "w": "eyes,",
+     "f": 1022
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 6,
+   "text": "sensing the heavy shadow of fate...",
+   "t0": 34.364,
+   "t1": 36.45,
+   "f0": 1031,
+   "f1": 1094,
+   "words": [
+    {
+     "w": "sensing",
+     "f": 1031
+    },
+    {
+     "w": "the",
+     "f": 1047
+    },
+    {
+     "w": "heavy",
+     "f": 1054
+    },
+    {
+     "w": "shadow",
+     "f": 1066
+    },
+    {
+     "w": "of",
+     "f": 1080
+    },
+    {
+     "w": "fate...",
+     "f": 1084
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 7,
+   "text": "and gently warns her of",
+   "t0": 37.35,
+   "t1": 38.571,
+   "f0": 1120,
+   "f1": 1157,
+   "words": [
+    {
+     "w": "and",
+     "f": 1120
+    },
+    {
+     "w": "gently",
+     "f": 1126
+    },
+    {
+     "w": "warns",
+     "f": 1138
+    },
+    {
+     "w": "her",
+     "f": 1148
+    },
+    {
+     "w": "of",
+     "f": 1153
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 7,
+   "text": "the bitter cold that always awaits uninvited guests.",
+   "t0": 38.571,
+   "t1": 41.4,
+   "f0": 1157,
+   "f1": 1242,
+   "words": [
+    {
+     "w": "the",
+     "f": 1157
+    },
+    {
+     "w": "bitter",
+     "f": 1163
+    },
+    {
+     "w": "cold",
+     "f": 1174
+    },
+    {
+     "w": "that",
+     "f": 1182
+    },
+    {
+     "w": "always",
+     "f": 1190
+    },
+    {
+     "w": "awaits",
+     "f": 1202
+    },
+    {
+     "w": "uninvited",
+     "f": 1213
+    },
+    {
+     "w": "guests.",
+     "f": 1230
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "Undeterred, Sati steps through",
+   "t0": 42.5,
+   "t1": 44.225,
+   "f0": 1275,
+   "f1": 1327,
+   "words": [
+    {
+     "w": "Undeterred,",
+     "f": 1275
+    },
+    {
+     "w": "Sati",
+     "f": 1295
+    },
+    {
+     "w": "steps",
+     "f": 1303
+    },
+    {
+     "w": "through",
+     "f": 1313
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 8,
+   "text": "the towering golden gates completely alone.",
+   "t0": 44.225,
+   "t1": 46.68,
+   "f0": 1327,
+   "f1": 1400,
+   "words": [
+    {
+     "w": "the",
+     "f": 1327
+    },
+    {
+     "w": "towering",
+     "f": 1333
+    },
+    {
+     "w": "golden",
+     "f": 1349
+    },
+    {
+     "w": "gates",
+     "f": 1361
+    },
+    {
+     "w": "completely",
+     "f": 1371
+    },
+    {
+     "w": "alone.",
+     "f": 1390
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 9,
+   "text": "The festive music falters and dies.",
+   "t0": 47.23,
+   "t1": 49.54,
+   "f0": 1417,
+   "f1": 1486,
+   "words": [
+    {
+     "w": "The",
+     "f": 1417
+    },
+    {
+     "w": "festive",
+     "f": 1424
+    },
+    {
+     "w": "music",
+     "f": 1441
+    },
+    {
+     "w": "falters",
+     "f": 1453
+    },
+    {
+     "w": "and",
+     "f": 1469
+    },
+    {
+     "w": "dies.",
+     "f": 1477
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 10,
+   "text": "The assembled priests turn away in shame,",
+   "t0": 50.09,
+   "t1": 52.37,
+   "f0": 1503,
+   "f1": 1571,
+   "words": [
+    {
+     "w": "The",
+     "f": 1503
+    },
+    {
+     "w": "assembled",
+     "f": 1509
+    },
+    {
+     "w": "priests",
+     "f": 1527
+    },
+    {
+     "w": "turn",
+     "f": 1541
+    },
+    {
+     "w": "away",
+     "f": 1549
+    },
+    {
+     "w": "in",
+     "f": 1557
+    },
+    {
+     "w": "shame,",
+     "f": 1561
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 10,
+   "text": "their eyes sharp with quiet judgment",
+   "t0": 52.37,
+   "t1": 54.448,
+   "f0": 1571,
+   "f1": 1633,
+   "words": [
+    {
+     "w": "their",
+     "f": 1571
+    },
+    {
+     "w": "eyes",
+     "f": 1581
+    },
+    {
+     "w": "sharp",
+     "f": 1589
+    },
+    {
+     "w": "with",
+     "f": 1599
+    },
+    {
+     "w": "quiet",
+     "f": 1607
+    },
+    {
+     "w": "judgment",
+     "f": 1617
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 10,
+   "text": "and deep unspoken contempt.",
+   "t0": 54.448,
+   "t1": 55.99,
+   "f0": 1633,
+   "f1": 1680,
+   "words": [
+    {
+     "w": "and",
+     "f": 1633
+    },
+    {
+     "w": "deep",
+     "f": 1639
+    },
+    {
+     "w": "unspoken",
+     "f": 1648
+    },
+    {
+     "w": "contempt.",
+     "f": 1664
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 11,
+   "text": "King Daksha stands tall before the crackling sacred fire.",
+   "t0": 57.09,
+   "t1": 60.42,
+   "f0": 1713,
+   "f1": 1813,
+   "words": [
+    {
+     "w": "King",
+     "f": 1713
+    },
+    {
+     "w": "Daksha",
+     "f": 1721
+    },
+    {
+     "w": "stands",
+     "f": 1734
+    },
+    {
+     "w": "tall",
+     "f": 1746
+    },
+    {
+     "w": "before",
+     "f": 1754
+    },
+    {
+     "w": "the",
+     "f": 1767
+    },
+    {
+     "w": "crackling",
+     "f": 1773
+    },
+    {
+     "w": "sacred",
+     "f": 1792
+    },
+    {
+     "w": "fire.",
+     "f": 1804
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 12,
+   "text": "He sees his youngest daughter standing there,",
+   "t0": 60.97,
+   "t1": 63.282,
+   "f0": 1829,
+   "f1": 1898,
+   "words": [
+    {
+     "w": "He",
+     "f": 1829
+    },
+    {
+     "w": "sees",
+     "f": 1833
+    },
+    {
+     "w": "his",
+     "f": 1840
+    },
+    {
+     "w": "youngest",
+     "f": 1846
+    },
+    {
+     "w": "daughter",
+     "f": 1860
+    },
+    {
+     "w": "standing",
+     "f": 1875
+    },
+    {
+     "w": "there,",
+     "f": 1889
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 12,
+   "text": "wrapped in simple mountain ash and dust...",
+   "t0": 63.282,
+   "t1": 65.29,
+   "f0": 1898,
+   "f1": 1959,
+   "words": [
+    {
+     "w": "wrapped",
+     "f": 1898
+    },
+    {
+     "w": "in",
+     "f": 1911
+    },
+    {
+     "w": "simple",
+     "f": 1915
+    },
+    {
+     "w": "mountain",
+     "f": 1926
+    },
+    {
+     "w": "ash",
+     "f": 1940
+    },
+    {
+     "w": "and",
+     "f": 1946
+    },
+    {
+     "w": "dust...",
+     "f": 1951
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 13,
+   "text": "and his royal face darkens rapidly like",
+   "t0": 66.19,
+   "t1": 68.637,
+   "f0": 1986,
+   "f1": 2059,
+   "words": [
+    {
+     "w": "and",
+     "f": 1986
+    },
+    {
+     "w": "his",
+     "f": 1992
+    },
+    {
+     "w": "royal",
+     "f": 1999
+    },
+    {
+     "w": "face",
+     "f": 2010
+    },
+    {
+     "w": "darkens",
+     "f": 2019
+    },
+    {
+     "w": "rapidly",
+     "f": 2035
+    },
+    {
+     "w": "like",
+     "f": 2050
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 13,
+   "text": "a furious monsoon storm.",
+   "t0": 68.637,
+   "t1": 70.12,
+   "f0": 2059,
+   "f1": 2104,
+   "words": [
+    {
+     "w": "a",
+     "f": 2059
+    },
+    {
+     "w": "furious",
+     "f": 2061
+    },
+    {
+     "w": "monsoon",
+     "f": 2077
+    },
+    {
+     "w": "storm.",
+     "f": 2092
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 14,
+   "text": "He raises his booming voice",
+   "t0": 71.22,
+   "t1": 72.679,
+   "f0": 2137,
+   "f1": 2180,
+   "words": [
+    {
+     "w": "He",
+     "f": 2137
+    },
+    {
+     "w": "raises",
+     "f": 2140
+    },
+    {
+     "w": "his",
+     "f": 2152
+    },
+    {
+     "w": "booming",
+     "f": 2158
+    },
+    {
+     "w": "voice",
+     "f": 2171
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 14,
+   "text": "to pierce the heavy silence of the hall.",
+   "t0": 72.679,
+   "t1": 74.71,
+   "f0": 2180,
+   "f1": 2241,
+   "words": [
+    {
+     "w": "to",
+     "f": 2180
+    },
+    {
+     "w": "pierce",
+     "f": 2184
+    },
+    {
+     "w": "the",
+     "f": 2196
+    },
+    {
+     "w": "heavy",
+     "f": 2201
+    },
+    {
+     "w": "silence",
+     "f": 2211
+    },
+    {
+     "w": "of",
+     "f": 2224
+    },
+    {
+     "w": "the",
+     "f": 2228
+    },
+    {
+     "w": "hall.",
+     "f": 2234
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 15,
+   "text": "He mocks the wild ascetic husband who sits",
+   "t0": 75.26,
+   "t1": 77.653,
+   "f0": 2258,
+   "f1": 2330,
+   "words": [
+    {
+     "w": "He",
+     "f": 2258
+    },
+    {
+     "w": "mocks",
+     "f": 2262
+    },
+    {
+     "w": "the",
+     "f": 2272
+    },
+    {
+     "w": "wild",
+     "f": 2278
+    },
+    {
+     "w": "ascetic",
+     "f": 2287
+    },
+    {
+     "w": "husband",
+     "f": 2301
+    },
+    {
+     "w": "who",
+     "f": 2315
+    },
+    {
+     "w": "sits",
+     "f": 2321
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 15,
+   "text": "in lonely cremation grounds,",
+   "t0": 77.653,
+   "t1": 79.293,
+   "f0": 2330,
+   "f1": 2379,
+   "words": [
+    {
+     "w": "in",
+     "f": 2330
+    },
+    {
+     "w": "lonely",
+     "f": 2334
+    },
+    {
+     "w": "cremation",
+     "f": 2346
+    },
+    {
+     "w": "grounds,",
+     "f": 2364
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 15,
+   "text": "openly calling him",
+   "t0": 79.293,
+   "t1": 80.387,
+   "f0": 2379,
+   "f1": 2412,
+   "words": [
+    {
+     "w": "openly",
+     "f": 2379
+    },
+    {
+     "w": "calling",
+     "f": 2391
+    },
+    {
+     "w": "him",
+     "f": 2405
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 15,
+   "text": "a vagrant wanderer entirely unworthy of respect.",
+   "t0": 80.387,
+   "t1": 83.19,
+   "f0": 2412,
+   "f1": 2496,
+   "words": [
+    {
+     "w": "a",
+     "f": 2412
+    },
+    {
+     "w": "vagrant",
+     "f": 2414
+    },
+    {
+     "w": "wanderer",
+     "f": 2428
+    },
+    {
+     "w": "entirely",
+     "f": 2444
+    },
+    {
+     "w": "unworthy",
+     "f": 2461
+    },
+    {
+     "w": "of",
+     "f": 2477
+    },
+    {
+     "w": "respect.",
+     "f": 2481
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 16,
+   "text": "Sati feels the blistering heat of the ritual fire,",
+   "t0": 84.29,
+   "t1": 87.177,
+   "f0": 2529,
+   "f1": 2615,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 2529
+    },
+    {
+     "w": "feels",
+     "f": 2537
+    },
+    {
+     "w": "the",
+     "f": 2548
+    },
+    {
+     "w": "blistering",
+     "f": 2554
+    },
+    {
+     "w": "heat",
+     "f": 2575
+    },
+    {
+     "w": "of",
+     "f": 2584
+    },
+    {
+     "w": "the",
+     "f": 2588
+    },
+    {
+     "w": "ritual",
+     "f": 2594
+    },
+    {
+     "w": "fire,",
+     "f": 2607
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 16,
+   "text": "but an infinitely deeper fire",
+   "t0": 87.177,
+   "t1": 88.938,
+   "f0": 2615,
+   "f1": 2668,
+   "words": [
+    {
+     "w": "but",
+     "f": 2615
+    },
+    {
+     "w": "an",
+     "f": 2622
+    },
+    {
+     "w": "infinitely",
+     "f": 2626
+    },
+    {
+     "w": "deeper",
+     "f": 2647
+    },
+    {
+     "w": "fire",
+     "f": 2660
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 16,
+   "text": "awakens violently within her chest.",
+   "t0": 88.938,
+   "t1": 91.05,
+   "f0": 2668,
+   "f1": 2732,
+   "words": [
+    {
+     "w": "awakens",
+     "f": 2668
+    },
+    {
+     "w": "violently",
+     "f": 2683
+    },
+    {
+     "w": "within",
+     "f": 2702
+    },
+    {
+     "w": "her",
+     "f": 2715
+    },
+    {
+     "w": "chest.",
+     "f": 2721
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 17,
+   "text": "The fierce blood of the primordial mother boils instantly",
+   "t0": 91.6,
+   "t1": 94.84,
+   "f0": 2748,
+   "f1": 2845,
+   "words": [
+    {
+     "w": "The",
+     "f": 2748
+    },
+    {
+     "w": "fierce",
+     "f": 2754
+    },
+    {
+     "w": "blood",
+     "f": 2766
+    },
+    {
+     "w": "of",
+     "f": 2776
+    },
+    {
+     "w": "the",
+     "f": 2780
+    },
+    {
+     "w": "primordial",
+     "f": 2786
+    },
+    {
+     "w": "mother",
+     "f": 2806
+    },
+    {
+     "w": "boils",
+     "f": 2817
+    },
+    {
+     "w": "instantly",
+     "f": 2827
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 17,
+   "text": "at the open insult to her beloved lord.",
+   "t0": 94.84,
+   "t1": 96.89,
+   "f0": 2845,
+   "f1": 2907,
+   "words": [
+    {
+     "w": "at",
+     "f": 2845
+    },
+    {
+     "w": "the",
+     "f": 2849
+    },
+    {
+     "w": "open",
+     "f": 2855
+    },
+    {
+     "w": "insult",
+     "f": 2863
+    },
+    {
+     "w": "to",
+     "f": 2875
+    },
+    {
+     "w": "her",
+     "f": 2879
+    },
+    {
+     "w": "beloved",
+     "f": 2885
+    },
+    {
+     "w": "lord.",
+     "f": 2899
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 18,
+   "text": "She stands entirely tall against",
+   "t0": 97.99,
+   "t1": 99.78,
+   "f0": 2940,
+   "f1": 2993,
+   "words": [
+    {
+     "w": "She",
+     "f": 2940
+    },
+    {
+     "w": "stands",
+     "f": 2945
+    },
+    {
+     "w": "entirely",
+     "f": 2957
+    },
+    {
+     "w": "tall",
+     "f": 2972
+    },
+    {
+     "w": "against",
+     "f": 2980
+    }
+   ]
+  },
+  {
+   "i": 40,
+   "line": 18,
+   "text": "the gathering storm of her father's unchecked wrath.",
+   "t0": 99.78,
+   "t1": 102.53,
+   "f0": 2993,
+   "f1": 3076,
+   "words": [
+    {
+     "w": "the",
+     "f": 2993
+    },
+    {
+     "w": "gathering",
+     "f": 2999
+    },
+    {
+     "w": "storm",
+     "f": 3016
+    },
+    {
+     "w": "of",
+     "f": 3026
+    },
+    {
+     "w": "her",
+     "f": 3030
+    },
+    {
+     "w": "father's",
+     "f": 3036
+    },
+    {
+     "w": "unchecked",
+     "f": 3049
+    },
+    {
+     "w": "wrath.",
+     "f": 3066
+    }
+   ]
+  },
+  {
+   "i": 41,
+   "line": 19,
+   "text": "Every wide eye in the grand assembly turns",
+   "t0": 103.08,
+   "t1": 105.378,
+   "f0": 3092,
+   "f1": 3161,
+   "words": [
+    {
+     "w": "Every",
+     "f": 3092
+    },
+    {
+     "w": "wide",
+     "f": 3102
+    },
+    {
+     "w": "eye",
+     "f": 3110
+    },
+    {
+     "w": "in",
+     "f": 3116
+    },
+    {
+     "w": "the",
+     "f": 3120
+    },
+    {
+     "w": "grand",
+     "f": 3126
+    },
+    {
+     "w": "assembly",
+     "f": 3136
+    },
+    {
+     "w": "turns",
+     "f": 3151
+    }
+   ]
+  },
+  {
+   "i": 42,
+   "line": 19,
+   "text": "to watch the unfolding tragedy of a broken family.",
+   "t0": 105.378,
+   "t1": 108.07,
+   "f0": 3161,
+   "f1": 3242,
+   "words": [
+    {
+     "w": "to",
+     "f": 3161
+    },
+    {
+     "w": "watch",
+     "f": 3165
+    },
+    {
+     "w": "the",
+     "f": 3175
+    },
+    {
+     "w": "unfolding",
+     "f": 3181
+    },
+    {
+     "w": "tragedy",
+     "f": 3199
+    },
+    {
+     "w": "of",
+     "f": 3213
+    },
+    {
+     "w": "a",
+     "f": 3216
+    },
+    {
+     "w": "broken",
+     "f": 3218
+    },
+    {
+     "w": "family.",
+     "f": 3230
+    }
+   ]
+  },
+  {
+   "i": 43,
+   "line": 20,
+   "text": "Royal pride shatters completely under",
+   "t0": 109.17,
+   "t1": 111.112,
+   "f0": 3275,
+   "f1": 3333,
+   "words": [
+    {
+     "w": "Royal",
+     "f": 3275
+    },
+    {
+     "w": "pride",
+     "f": 3284
+    },
+    {
+     "w": "shatters",
+     "f": 3293
+    },
+    {
+     "w": "completely",
+     "f": 3307
+    },
+    {
+     "w": "under",
+     "f": 3325
+    }
+   ]
+  },
+  {
+   "i": 44,
+   "line": 20,
+   "text": "the crushing weight of blinding arrogance.",
+   "t0": 111.112,
+   "t1": 113.23,
+   "f0": 3333,
+   "f1": 3397,
+   "words": [
+    {
+     "w": "the",
+     "f": 3333
+    },
+    {
+     "w": "crushing",
+     "f": 3339
+    },
+    {
+     "w": "weight",
+     "f": 3353
+    },
+    {
+     "w": "of",
+     "f": 3363
+    },
+    {
+     "w": "blinding",
+     "f": 3367
+    },
+    {
+     "w": "arrogance.",
+     "f": 3381
+    }
+   ]
+  },
+  {
+   "i": 45,
+   "line": 21,
+   "text": "The stage is finally set for",
+   "t0": 113.78,
+   "t1": 115.38,
+   "f0": 3413,
+   "f1": 3461,
+   "words": [
+    {
+     "w": "The",
+     "f": 3413
+    },
+    {
+     "w": "stage",
+     "f": 3420
+    },
+    {
+     "w": "is",
+     "f": 3430
+    },
+    {
+     "w": "finally",
+     "f": 3434
+    },
+    {
+     "w": "set",
+     "f": 3449
+    },
+    {
+     "w": "for",
+     "f": 3455
+    }
+   ]
+  },
+  {
+   "i": 46,
+   "line": 21,
+   "text": "the ultimate sacrifice of the heart,",
+   "t0": 115.38,
+   "t1": 117.467,
+   "f0": 3461,
+   "f1": 3524,
+   "words": [
+    {
+     "w": "the",
+     "f": 3461
+    },
+    {
+     "w": "ultimate",
+     "f": 3468
+    },
+    {
+     "w": "sacrifice",
+     "f": 3484
+    },
+    {
+     "w": "of",
+     "f": 3503
+    },
+    {
+     "w": "the",
+     "f": 3507
+    },
+    {
+     "w": "heart,",
+     "f": 3514
+    }
+   ]
+  },
+  {
+   "i": 47,
+   "line": 21,
+   "text": "and the terrifying fury of the awakening cosmos.",
+   "t0": 117.467,
+   "t1": 120.25,
+   "f0": 3524,
+   "f1": 3608,
+   "words": [
+    {
+     "w": "and",
+     "f": 3524
+    },
+    {
+     "w": "the",
+     "f": 3530
+    },
+    {
+     "w": "terrifying",
+     "f": 3537
+    },
+    {
+     "w": "fury",
+     "f": 3557
+    },
+    {
+     "w": "of",
+     "f": 3566
+    },
+    {
+     "w": "the",
+     "f": 3570
+    },
+    {
+     "w": "awakening",
+     "f": 3576
+    },
+    {
+     "w": "cosmos.",
+     "f": 3595
+    }
+   ]
+  }
+ ]
+}
