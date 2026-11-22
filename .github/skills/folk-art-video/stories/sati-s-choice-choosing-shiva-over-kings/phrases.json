@@ -1,0 +1,1335 @@
+{
+ "fps": 30,
+ "duration": 99.55,
+ "total_frames": 2986,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "The palace of Daksha echoes with whispers of discontent...",
+   "t0": 0.8,
+   "t1": 3.74,
+   "f0": 24,
+   "f1": 112,
+   "words": [
+    {
+     "w": "The",
+     "f": 24
+    },
+    {
+     "w": "palace",
+     "f": 30
+    },
+    {
+     "w": "of",
+     "f": 41
+    },
+    {
+     "w": "Daksha",
+     "f": 45
+    },
+    {
+     "w": "echoes",
+     "f": 56
+    },
+    {
+     "w": "with",
+     "f": 67
+    },
+    {
+     "w": "whispers",
+     "f": 75
+    },
+    {
+     "w": "of",
+     "f": 90
+    },
+    {
+     "w": "discontent...",
+     "f": 93
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 1,
+   "text": "and the clinking of royal gold.",
+   "t0": 4.64,
+   "t1": 6.37,
+   "f0": 139,
+   "f1": 191,
+   "words": [
+    {
+     "w": "and",
+     "f": 139
+    },
+    {
+     "w": "the",
+     "f": 145
+    },
+    {
+     "w": "clinking",
+     "f": 152
+    },
+    {
+     "w": "of",
+     "f": 168
+    },
+    {
+     "w": "royal",
+     "f": 172
+    },
+    {
+     "w": "gold.",
+     "f": 183
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 2,
+   "text": "Kings and princes from every corner",
+   "t0": 7.47,
+   "t1": 9.183,
+   "f0": 224,
+   "f1": 276,
+   "words": [
+    {
+     "w": "Kings",
+     "f": 224
+    },
+    {
+     "w": "and",
+     "f": 233
+    },
+    {
+     "w": "princes",
+     "f": 238
+    },
+    {
+     "w": "from",
+     "f": 250
+    },
+    {
+     "w": "every",
+     "f": 257
+    },
+    {
+     "w": "corner",
+     "f": 265
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 2,
+   "text": "of the earth have gathered.",
+   "t0": 9.183,
+   "t1": 10.44,
+   "f0": 276,
+   "f1": 313,
+   "words": [
+    {
+     "w": "of",
+     "f": 276
+    },
+    {
+     "w": "the",
+     "f": 279
+    },
+    {
+     "w": "earth",
+     "f": 284
+    },
+    {
+     "w": "have",
+     "f": 293
+    },
+    {
+     "w": "gathered.",
+     "f": 299
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 3,
+   "text": "They come adorned in rubies and silks.",
+   "t0": 10.99,
+   "t1": 13.15,
+   "f0": 330,
+   "f1": 394,
+   "words": [
+    {
+     "w": "They",
+     "f": 330
+    },
+    {
+     "w": "come",
+     "f": 338
+    },
+    {
+     "w": "adorned",
+     "f": 346
+    },
+    {
+     "w": "in",
+     "f": 361
+    },
+    {
+     "w": "rubies",
+     "f": 365
+    },
+    {
+     "w": "and",
+     "f": 378
+    },
+    {
+     "w": "silks.",
+     "f": 384
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 4,
+   "text": "They seek the hand of",
+   "t0": 13.7,
+   "t1": 14.727,
+   "f0": 411,
+   "f1": 442,
+   "words": [
+    {
+     "w": "They",
+     "f": 411
+    },
+    {
+     "w": "seek",
+     "f": 418
+    },
+    {
+     "w": "the",
+     "f": 426
+    },
+    {
+     "w": "hand",
+     "f": 431
+    },
+    {
+     "w": "of",
+     "f": 438
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 4,
+   "text": "the proud emperor's radiant daughter.",
+   "t0": 14.727,
+   "t1": 16.6,
+   "f0": 442,
+   "f1": 498,
+   "words": [
+    {
+     "w": "the",
+     "f": 442
+    },
+    {
+     "w": "proud",
+     "f": 447
+    },
+    {
+     "w": "emperor's",
+     "f": 456
+    },
+    {
+     "w": "radiant",
+     "f": 471
+    },
+    {
+     "w": "daughter.",
+     "f": 484
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 5,
+   "text": "Sati walks among them like a silent flame.",
+   "t0": 17.7,
+   "t1": 20.16,
+   "f0": 531,
+   "f1": 605,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 531
+    },
+    {
+     "w": "walks",
+     "f": 540
+    },
+    {
+     "w": "among",
+     "f": 551
+    },
+    {
+     "w": "them",
+     "f": 561
+    },
+    {
+     "w": "like",
+     "f": 570
+    },
+    {
+     "w": "a",
+     "f": 579
+    },
+    {
+     "w": "silent",
+     "f": 581
+    },
+    {
+     "w": "flame.",
+     "f": 594
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 6,
+   "text": "Her eyes do not linger on the glittering crowns.",
+   "t0": 20.71,
+   "t1": 23.31,
+   "f0": 621,
+   "f1": 699,
+   "words": [
+    {
+     "w": "Her",
+     "f": 621
+    },
+    {
+     "w": "eyes",
+     "f": 627
+    },
+    {
+     "w": "do",
+     "f": 635
+    },
+    {
+     "w": "not",
+     "f": 639
+    },
+    {
+     "w": "linger",
+     "f": 645
+    },
+    {
+     "w": "on",
+     "f": 657
+    },
+    {
+     "w": "the",
+     "f": 661
+    },
+    {
+     "w": "glittering",
+     "f": 667
+    },
+    {
+     "w": "crowns.",
+     "f": 687
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 7,
+   "text": "Her heart is already wandering the distant,",
+   "t0": 23.86,
+   "t1": 26.356,
+   "f0": 716,
+   "f1": 791,
+   "words": [
+    {
+     "w": "Her",
+     "f": 716
+    },
+    {
+     "w": "heart",
+     "f": 722
+    },
+    {
+     "w": "is",
+     "f": 732
+    },
+    {
+     "w": "already",
+     "f": 737
+    },
+    {
+     "w": "wandering",
+     "f": 751
+    },
+    {
+     "w": "the",
+     "f": 770
+    },
+    {
+     "w": "distant,",
+     "f": 776
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 7,
+   "text": "lonely peaks of Mount Kailash.",
+   "t0": 26.356,
+   "t1": 28.09,
+   "f0": 791,
+   "f1": 843,
+   "words": [
+    {
+     "w": "lonely",
+     "f": 791
+    },
+    {
+     "w": "peaks",
+     "f": 803
+    },
+    {
+     "w": "of",
+     "f": 814
+    },
+    {
+     "w": "Mount",
+     "f": 818
+    },
+    {
+     "w": "Kailash.",
+     "f": 828
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 8,
+   "text": "Her father points to the mightiest king of all.",
+   "t0": 29.19,
+   "t1": 31.62,
+   "f0": 876,
+   "f1": 949,
+   "words": [
+    {
+     "w": "Her",
+     "f": 876
+    },
+    {
+     "w": "father",
+     "f": 881
+    },
+    {
+     "w": "points",
+     "f": 893
+    },
+    {
+     "w": "to",
+     "f": 904
+    },
+    {
+     "w": "the",
+     "f": 908
+    },
+    {
+     "w": "mightiest",
+     "f": 914
+    },
+    {
+     "w": "king",
+     "f": 931
+    },
+    {
+     "w": "of",
+     "f": 939
+    },
+    {
+     "w": "all.",
+     "f": 943
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 9,
+   "text": "Sati simply shakes her head.",
+   "t0": 32.17,
+   "t1": 34.04,
+   "f0": 965,
+   "f1": 1021,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 965
+    },
+    {
+     "w": "simply",
+     "f": 975
+    },
+    {
+     "w": "shakes",
+     "f": 989
+    },
+    {
+     "w": "her",
+     "f": 1004
+    },
+    {
+     "w": "head.",
+     "f": 1011
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 10,
+   "text": "The court gasps in absolute shock.",
+   "t0": 34.59,
+   "t1": 36.78,
+   "f0": 1038,
+   "f1": 1103,
+   "words": [
+    {
+     "w": "The",
+     "f": 1038
+    },
+    {
+     "w": "court",
+     "f": 1045
+    },
+    {
+     "w": "gasps",
+     "f": 1056
+    },
+    {
+     "w": "in",
+     "f": 1068
+    },
+    {
+     "w": "absolute",
+     "f": 1073
+    },
+    {
+     "w": "shock.",
+     "f": 1092
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 11,
+   "text": "Daksha's face turns the color of bruised ash.",
+   "t0": 37.88,
+   "t1": 40.44,
+   "f0": 1136,
+   "f1": 1213,
+   "words": [
+    {
+     "w": "Daksha's",
+     "f": 1136
+    },
+    {
+     "w": "face",
+     "f": 1151
+    },
+    {
+     "w": "turns",
+     "f": 1160
+    },
+    {
+     "w": "the",
+     "f": 1171
+    },
+    {
+     "w": "color",
+     "f": 1177
+    },
+    {
+     "w": "of",
+     "f": 1188
+    },
+    {
+     "w": "bruised",
+     "f": 1192
+    },
+    {
+     "w": "ash.",
+     "f": 1207
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 12,
+   "text": "How can she reject such unmatched worldly wealth?",
+   "t0": 40.99,
+   "t1": 43.78,
+   "f0": 1230,
+   "f1": 1313,
+   "words": [
+    {
+     "w": "How",
+     "f": 1230
+    },
+    {
+     "w": "can",
+     "f": 1236
+    },
+    {
+     "w": "she",
+     "f": 1242
+    },
+    {
+     "w": "reject",
+     "f": 1248
+    },
+    {
+     "w": "such",
+     "f": 1260
+    },
+    {
+     "w": "unmatched",
+     "f": 1268
+    },
+    {
+     "w": "worldly",
+     "f": 1287
+    },
+    {
+     "w": "wealth?",
+     "f": 1301
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 13,
+   "text": "What king could possibly rival these sovereigns?",
+   "t0": 44.33,
+   "t1": 46.92,
+   "f0": 1330,
+   "f1": 1408,
+   "words": [
+    {
+     "w": "What",
+     "f": 1330
+    },
+    {
+     "w": "king",
+     "f": 1337
+    },
+    {
+     "w": "could",
+     "f": 1345
+    },
+    {
+     "w": "possibly",
+     "f": 1355
+    },
+    {
+     "w": "rival",
+     "f": 1370
+    },
+    {
+     "w": "these",
+     "f": 1379
+    },
+    {
+     "w": "sovereigns?",
+     "f": 1389
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 14,
+   "text": "Sati lifts her chin with quiet defiance.",
+   "t0": 48.02,
+   "t1": 50.64,
+   "f0": 1441,
+   "f1": 1519,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 1441
+    },
+    {
+     "w": "lifts",
+     "f": 1450
+    },
+    {
+     "w": "her",
+     "f": 1462
+    },
+    {
+     "w": "chin",
+     "f": 1469
+    },
+    {
+     "w": "with",
+     "f": 1479
+    },
+    {
+     "w": "quiet",
+     "f": 1488
+    },
+    {
+     "w": "defiance.",
+     "f": 1500
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 15,
+   "text": "She speaks no words of standard courtly praise.",
+   "t0": 51.19,
+   "t1": 53.98,
+   "f0": 1536,
+   "f1": 1619,
+   "words": [
+    {
+     "w": "She",
+     "f": 1536
+    },
+    {
+     "w": "speaks",
+     "f": 1542
+    },
+    {
+     "w": "no",
+     "f": 1555
+    },
+    {
+     "w": "words",
+     "f": 1559
+    },
+    {
+     "w": "of",
+     "f": 1570
+    },
+    {
+     "w": "standard",
+     "f": 1574
+    },
+    {
+     "w": "courtly",
+     "f": 1592
+    },
+    {
+     "w": "praise.",
+     "f": 1607
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 16,
+   "text": "She only holds out an empty palm...",
+   "t0": 54.53,
+   "t1": 56.5,
+   "f0": 1636,
+   "f1": 1695,
+   "words": [
+    {
+     "w": "She",
+     "f": 1636
+    },
+    {
+     "w": "only",
+     "f": 1643
+    },
+    {
+     "w": "holds",
+     "f": 1652
+    },
+    {
+     "w": "out",
+     "f": 1663
+    },
+    {
+     "w": "an",
+     "f": 1670
+    },
+    {
+     "w": "empty",
+     "f": 1675
+    },
+    {
+     "w": "palm...",
+     "f": 1686
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 17,
+   "text": "waiting for an unseen ash-smear.",
+   "t0": 57.4,
+   "t1": 59.27,
+   "f0": 1722,
+   "f1": 1778,
+   "words": [
+    {
+     "w": "waiting",
+     "f": 1722
+    },
+    {
+     "w": "for",
+     "f": 1737
+    },
+    {
+     "w": "an",
+     "f": 1744
+    },
+    {
+     "w": "unseen",
+     "f": 1748
+    },
+    {
+     "w": "ash-smear.",
+     "f": 1761
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 18,
+   "text": "In her mind, the grand thrones dissolve into mist.",
+   "t0": 60.37,
+   "t1": 63.44,
+   "f0": 1811,
+   "f1": 1903,
+   "words": [
+    {
+     "w": "In",
+     "f": 1811
+    },
+    {
+     "w": "her",
+     "f": 1816
+    },
+    {
+     "w": "mind,",
+     "f": 1823
+    },
+    {
+     "w": "the",
+     "f": 1832
+    },
+    {
+     "w": "grand",
+     "f": 1839
+    },
+    {
+     "w": "thrones",
+     "f": 1850
+    },
+    {
+     "w": "dissolve",
+     "f": 1866
+    },
+    {
+     "w": "into",
+     "f": 1885
+    },
+    {
+     "w": "mist.",
+     "f": 1894
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 19,
+   "text": "She sees only wild matted locks",
+   "t0": 63.99,
+   "t1": 65.957,
+   "f0": 1920,
+   "f1": 1979,
+   "words": [
+    {
+     "w": "She",
+     "f": 1920
+    },
+    {
+     "w": "sees",
+     "f": 1927
+    },
+    {
+     "w": "only",
+     "f": 1936
+    },
+    {
+     "w": "wild",
+     "f": 1945
+    },
+    {
+     "w": "matted",
+     "f": 1954
+    },
+    {
+     "w": "locks",
+     "f": 1967
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 19,
+   "text": "and a tiger skin.",
+   "t0": 65.957,
+   "t1": 66.94,
+   "f0": 1979,
+   "f1": 2008,
+   "words": [
+    {
+     "w": "and",
+     "f": 1979
+    },
+    {
+     "w": "a",
+     "f": 1986
+    },
+    {
+     "w": "tiger",
+     "f": 1988
+    },
+    {
+     "w": "skin.",
+     "f": 1999
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 20,
+   "text": "She hears only the beat of a distant damru.",
+   "t0": 67.49,
+   "t1": 69.88,
+   "f0": 2025,
+   "f1": 2096,
+   "words": [
+    {
+     "w": "She",
+     "f": 2025
+    },
+    {
+     "w": "hears",
+     "f": 2031
+    },
+    {
+     "w": "only",
+     "f": 2042
+    },
+    {
+     "w": "the",
+     "f": 2050
+    },
+    {
+     "w": "beat",
+     "f": 2056
+    },
+    {
+     "w": "of",
+     "f": 2065
+    },
+    {
+     "w": "a",
+     "f": 2069
+    },
+    {
+     "w": "distant",
+     "f": 2071
+    },
+    {
+     "w": "damru.",
+     "f": 2086
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 21,
+   "text": "True royalty wears no gold,",
+   "t0": 70.98,
+   "t1": 72.713,
+   "f0": 2129,
+   "f1": 2181,
+   "words": [
+    {
+     "w": "True",
+     "f": 2129
+    },
+    {
+     "w": "royalty",
+     "f": 2139
+    },
+    {
+     "w": "wears",
+     "f": 2155
+    },
+    {
+     "w": "no",
+     "f": 2167
+    },
+    {
+     "w": "gold,",
+     "f": 2172
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 21,
+   "text": "she whispers to the silent hall.",
+   "t0": 72.713,
+   "t1": 74.76,
+   "f0": 2181,
+   "f1": 2243,
+   "words": [
+    {
+     "w": "she",
+     "f": 2181
+    },
+    {
+     "w": "whispers",
+     "f": 2188
+    },
+    {
+     "w": "to",
+     "f": 2207
+    },
+    {
+     "w": "the",
+     "f": 2212
+    },
+    {
+     "w": "silent",
+     "f": 2219
+    },
+    {
+     "w": "hall.",
+     "f": 2233
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 22,
+   "text": "True power sits in meditation upon the snow.",
+   "t0": 75.31,
+   "t1": 77.83,
+   "f0": 2259,
+   "f1": 2335,
+   "words": [
+    {
+     "w": "True",
+     "f": 2259
+    },
+    {
+     "w": "power",
+     "f": 2268
+    },
+    {
+     "w": "sits",
+     "f": 2278
+    },
+    {
+     "w": "in",
+     "f": 2287
+    },
+    {
+     "w": "meditation",
+     "f": 2291
+    },
+    {
+     "w": "upon",
+     "f": 2312
+    },
+    {
+     "w": "the",
+     "f": 2320
+    },
+    {
+     "w": "snow.",
+     "f": 2326
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 23,
+   "text": "She leaves the assembly hall before",
+   "t0": 78.93,
+   "t1": 80.965,
+   "f0": 2368,
+   "f1": 2429,
+   "words": [
+    {
+     "w": "She",
+     "f": 2368
+    },
+    {
+     "w": "leaves",
+     "f": 2374
+    },
+    {
+     "w": "the",
+     "f": 2386
+    },
+    {
+     "w": "assembly",
+     "f": 2392
+    },
+    {
+     "w": "hall",
+     "f": 2409
+    },
+    {
+     "w": "before",
+     "f": 2417
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 23,
+   "text": "her father can roar.",
+   "t0": 80.965,
+   "t1": 82.05,
+   "f0": 2429,
+   "f1": 2462,
+   "words": [
+    {
+     "w": "her",
+     "f": 2429
+    },
+    {
+     "w": "father",
+     "f": 2435
+    },
+    {
+     "w": "can",
+     "f": 2447
+    },
+    {
+     "w": "roar.",
+     "f": 2453
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 24,
+   "text": "Her bare feet touch",
+   "t0": 82.6,
+   "t1": 83.696,
+   "f0": 2478,
+   "f1": 2511,
+   "words": [
+    {
+     "w": "Her",
+     "f": 2478
+    },
+    {
+     "w": "bare",
+     "f": 2484
+    },
+    {
+     "w": "feet",
+     "f": 2492
+    },
+    {
+     "w": "touch",
+     "f": 2501
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 24,
+   "text": "the marble floor like falling petals.",
+   "t0": 83.696,
+   "t1": 85.82,
+   "f0": 2511,
+   "f1": 2575,
+   "words": [
+    {
+     "w": "the",
+     "f": 2511
+    },
+    {
+     "w": "marble",
+     "f": 2517
+    },
+    {
+     "w": "floor",
+     "f": 2529
+    },
+    {
+     "w": "like",
+     "f": 2540
+    },
+    {
+     "w": "falling",
+     "f": 2548
+    },
+    {
+     "w": "petals.",
+     "f": 2562
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 25,
+   "text": "The path to the ascetic lord",
+   "t0": 86.92,
+   "t1": 88.598,
+   "f0": 2608,
+   "f1": 2658,
+   "words": [
+    {
+     "w": "The",
+     "f": 2608
+    },
+    {
+     "w": "path",
+     "f": 2614
+    },
+    {
+     "w": "to",
+     "f": 2623
+    },
+    {
+     "w": "the",
+     "f": 2627
+    },
+    {
+     "w": "ascetic",
+     "f": 2634
+    },
+    {
+     "w": "lord",
+     "f": 2649
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 25,
+   "text": "is long and steep.",
+   "t0": 88.598,
+   "t1": 89.62,
+   "f0": 2658,
+   "f1": 2689,
+   "words": [
+    {
+     "w": "is",
+     "f": 2658
+    },
+    {
+     "w": "long",
+     "f": 2662
+    },
+    {
+     "w": "and",
+     "f": 2671
+    },
+    {
+     "w": "steep.",
+     "f": 2678
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 26,
+   "text": "But Sati has already made her eternal choice...",
+   "t0": 90.17,
+   "t1": 92.98,
+   "f0": 2705,
+   "f1": 2789,
+   "words": [
+    {
+     "w": "But",
+     "f": 2705
+    },
+    {
+     "w": "Sati",
+     "f": 2712
+    },
+    {
+     "w": "has",
+     "f": 2721
+    },
+    {
+     "w": "already",
+     "f": 2728
+    },
+    {
+     "w": "made",
+     "f": 2744
+    },
+    {
+     "w": "her",
+     "f": 2753
+    },
+    {
+     "w": "eternal",
+     "f": 2760
+    },
+    {
+     "w": "choice...",
+     "f": 2776
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 27,
+   "text": "And the mountains are already waiting.",
+   "t0": 94.43,
+   "t1": 96.55,
+   "f0": 2833,
+   "f1": 2896,
+   "words": [
+    {
+     "w": "And",
+     "f": 2833
+    },
+    {
+     "w": "the",
+     "f": 2839
+    },
+    {
+     "w": "mountains",
+     "f": 2845
+    },
+    {
+     "w": "are",
+     "f": 2863
+    },
+    {
+     "w": "already",
+     "f": 2869
+    },
+    {
+     "w": "waiting.",
+     "f": 2883
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,203 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 99.55,
+ "lines": [
+  {
+   "i": 0,
+   "text": "The palace of Daksha echoes with whispers of discontent...",
+   "t0": 0.8,
+   "t1": 3.74,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "and the clinking of royal gold.",
+   "t0": 4.64,
+   "t1": 6.37,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Kings and princes from every corner of the earth have gathered.",
+   "t0": 7.47,
+   "t1": 10.44,
+   "para": true
+  },
+  {
+   "i": 3,
+   "text": "They come adorned in rubies and silks.",
+   "t0": 10.99,
+   "t1": 13.15,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "They seek the hand of the proud emperor's radiant daughter.",
+   "t0": 13.7,
+   "t1": 16.6,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "Sati walks among them like a silent flame.",
+   "t0": 17.7,
+   "t1": 20.16,
+   "para": true
+  },
+  {
+   "i": 6,
+   "text": "Her eyes do not linger on the glittering crowns.",
+   "t0": 20.71,
+   "t1": 23.31,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "Her heart is already wandering the distant, lonely peaks of Mount Kailash.",
+   "t0": 23.86,
+   "t1": 28.09,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "Her father points to the mightiest king of all.",
+   "t0": 29.19,
+   "t1": 31.62,
+   "para": true
+  },
+  {
+   "i": 9,
+   "text": "Sati simply shakes her head.",
+   "t0": 32.17,
+   "t1": 34.04,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "The court gasps in absolute shock.",
+   "t0": 34.59,
+   "t1": 36.78,
+   "para": false
+  },
+  {
+   "i": 11,
+   "text": "Daksha's face turns the color of bruised ash.",
+   "t0": 37.88,
+   "t1": 40.44,
+   "para": true
+  },
+  {
+   "i": 12,
+   "text": "How can she reject such unmatched worldly wealth?",
+   "t0": 40.99,
+   "t1": 43.78,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "What king could possibly rival these sovereigns?",
+   "t0": 44.33,
+   "t1": 46.92,
+   "para": false
+  },
+  {
+   "i": 14,
+   "text": "Sati lifts her chin with quiet defiance.",
+   "t0": 48.02,
+   "t1": 50.64,
+   "para": true
+  },
+  {
+   "i": 15,
+   "text": "She speaks no words of standard courtly praise.",
+   "t0": 51.19,
+   "t1": 53.98,
+   "para": false
+  },
+  {
+   "i": 16,
+   "text": "She only holds out an empty palm...",
+   "t0": 54.53,
+   "t1": 56.5,
+   "para": false
+  },
+  {
+   "i": 17,
+   "text": "waiting for an unseen ash-smear.",
+   "t0": 57.4,
+   "t1": 59.27,
+   "para": false
+  },
+  {
+   "i": 18,
+   "text": "In her mind, the grand thrones dissolve into mist.",
+   "t0": 60.37,
+   "t1": 63.44,
+   "para": true
+  },
+  {
+   "i": 19,
+   "text": "She sees only wild matted locks and a tiger skin.",
+   "t0": 63.99,
+   "t1": 66.94,
+   "para": false
+  },
+  {
+   "i": 20,
+   "text": "She hears only the beat of a distant damru.",
+   "t0": 67.49,
+   "t1": 69.88,
+   "para": false
+  },
+  {
+   "i": 21,
+   "text": "True royalty wears no gold, she whispers to the silent hall.",
+   "t0": 70.98,
+   "t1": 74.76,
+   "para": true
+  },
+  {
+   "i": 22,
+   "text": "True power sits in meditation upon the snow.",
+   "t0": 75.31,
+   "t1": 77.83,
+   "para": false
+  },
+  {
+   "i": 23,
+   "text": "She leaves the assembly hall before her father can roar.",
+   "t0": 78.93,
+   "t1": 82.05,
+   "para": true
+  },
+  {
+   "i": 24,
+   "text": "Her bare feet touch the marble floor like falling petals.",
+   "t0": 82.6,
+   "t1": 85.82,
+   "para": false
+  },
+  {
+   "i": 25,
+   "text": "The path to the ascetic lord is long and steep.",
+   "t0": 86.92,
+   "t1": 89.62,
+   "para": true
+  },
+  {
+   "i": 26,
+   "text": "But Sati has already made her eternal choice...",
+   "t0": 90.17,
+   "t1": 92.98,
+   "para": false
+  },
+  {
+   "i": 27,
+   "text": "And the mountains are already waiting.",
+   "t0": 94.43,
+   "t1": 96.55,
+   "para": true
+  }
+ ]
+}
