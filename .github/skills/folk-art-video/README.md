@@ -33,9 +33,9 @@ stories/<slug>/     generated: story.py meta.json phrases.json narration.json sh
    see `pipeline/notebooklm/README.md` section 4). The run page shows one `youtube / userN` / `instagram / userN` job per target.
 
 Schedule: stories are due at 11:17 am and 4:47 pm IST. GitHub delays or drops cron slots on the hour / half hour, so every
-slot sits on :17 / :47 and is repeated every 30 minutes (until 1:47 pm, then until 7:47 pm); a slot only runs while a story
-that is due by then is missing (`DUE_UTC`, at most `DAILY_TARGET` = 2 a day, from `videos.json` on the `videos` branch), so a
-dropped or failed slot is retried half an hour later, the second story is never made before its time and a third is never made.
+slot sits on :17 / :47 and the workflow is tried every 30 minutes from 11:17 am to 7:47 pm; a slot only runs while a story
+that is due by then is missing (`DUE_UTC`, at most `DAILY_TARGET` = 2 a day, from `videos.json` on the `videos` branch), so the
+retries keep going until the story is published, the second story is never made before its time and a third is never made.
 
 ## Local use
 

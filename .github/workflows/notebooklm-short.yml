@@ -15,17 +15,12 @@ name: NotebookLM short (auto topic)
 on:
   schedule:
     # 2 shorts a day, due 9:07 am and 3:07 pm IST (the second after NotebookLM's quota reset, about 1:30 pm).
-    # GitHub delays or drops cron slots that sit on the hour / half hour, so every slot is on :07 / :37 and is
-    # repeated every 30 minutes. The guard job lets a slot work only while a short that is due by then is still
-    # missing (DUE_UTC below), so retries never make a third short, or the second one before its time.
-    # Cron times are UTC (IST minus 5:30).
+    # GitHub delays or drops cron slots that sit on the hour / half hour, so every slot is on :07 / :37 and the
+    # workflow is tried every 30 minutes from 9:07 am to 8:07 pm. The guard job lets a slot work only while a short
+    # that is due by then is still missing (DUE_UTC below), so the retries keep going until the short is published,
+    # never make a third short, and never make the second one before 3:07 pm. Cron times are UTC (IST minus 5:30).
     - cron: '37 3 * * *'        # 9:07 am IST, first short
-    - cron: '7,37 4-5 * * *'    # 9:37, 10:07, 10:37, 11:07 am IST retries
-    - cron: '7 6 * * *'         # 11:37 am IST retry
-    - cron: '37 9 * * *'        # 3:07 pm IST, second short
-    - cron: '7,37 10-11 * * *'  # 3:37, 4:07, 4:37, 5:07 pm IST retries
-    - cron: '7 12 * * *'        # 5:37 pm IST retry
-    - cron: '37 14 * * *'       # 8:07 pm IST, last chance for anything still missing (a short takes about 15 min)
+    - cron: '7,37 4-14 * * *'   # 9:37 am ... 8:07 pm IST, every 30 min (second short due from 3:07 pm; a short takes about 15 min)
   workflow_dispatch:
     inputs:
       genre:

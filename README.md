@@ -6,10 +6,10 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 
 | Workflow | Output | How it runs | Needs |
 |---|---|---|---|
-| NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (retried every 30 min, last 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (upload accounts optional) |
+| NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (tried every 30 min until published, 9:07 am to 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (upload accounts optional) |
 | Upload video | Uploads an already made video from the `videos` branch to every account of a group (no NotebookLM quota) | By hand, or called by the three generation workflows | at least one complete IG_USERn_* or YT_* account |
-| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (retried every 30 min, last 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
-| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (retried every 30 min, last 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
+| Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (tried every 30 min until published, 11:17 am to 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
+| Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (tried every 30 min until published, 1:27 pm to 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
 | Pre-run check only | Probes LLM keys and the TTS voice, checks remaining Actions minutes when BILLING_TOKEN is set | By hand | one LLM key to pass |
 | Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success | Called by the daily workflows | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
@@ -163,9 +163,9 @@ GitHub Actions minutes: unlimited on a **public** repo; a **private** repo gets 
 | Story video, `both` formats (default) | ~90 (one format ~55) |
 | Stickman fact reel | ~35 |
 | NotebookLM short | ~25 (mostly waiting on NotebookLM) |
-| Guard job on a skipped cron slot | ~1 (37 slots a day, about 31 of them skipped) |
+| Guard job on a skipped cron slot | ~1 (55 slots a day, about 49 of them skipped) |
 
-At 2 a day for all three workflows that is roughly 330 min/day, about 10,000 min/month, so a private repo on the free plan stops after about a week. Options: make the repo public, run fewer videos a day (`DAILY_TARGET` and `DUE_UTC` at the top of each workflow file, and drop the cron lines of the second video), story with one format, or a self-hosted runner. `BILLING_TOKEN` makes the story / stickman precheck stop before a run that would not fit; it warns instead when `ACTIONS_ALLOW_OVERAGE=1` or the account already uses paid minutes, and it is not fail-closed: without the token, or when the billing API call fails, the check is skipped and the run continues.
+At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min/month, so a private repo on the free plan stops after about a week. Options: make the repo public, run fewer videos a day (`DAILY_TARGET` and `DUE_UTC` at the top of each workflow file, and shorten the cron range), story with one format, or a self-hosted runner. `BILLING_TOKEN` makes the story / stickman precheck stop before a run that would not fit; it warns instead when `ACTIONS_ALLOW_OVERAGE=1` or the account already uses paid minutes, and it is not fail-closed: without the token, or when the billing API call fails, the check is skipped and the run continues.
 
 ### Known limits
 
