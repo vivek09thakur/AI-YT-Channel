@@ -163,7 +163,7 @@ Known limits:
 
 ## 4. More accounts
 
-- Repeat the secrets with 2, 3, 4 ... (`IG_USER2_ID`, `IG_USER2_TOKEN`, `YT_USER2_CLIENT_ID` ...)
+- Repeat the secrets with 2, 3, 4, 5 (`IG_USER2_ID`, `IG_USER2_TOKEN`, `YT_USER2_CLIENT_ID` ...). Five per platform are wired; a sixth needs the env blocks in `upload-video.yml` and the three daily workflows extended (the workflows name every secret explicitly: GitHub holds a workflow that reads the whole secrets context as potentially malicious, and its scheduled runs never start).
 - Each account uploads in its own job. One bad token does not stop the others.
 - Incomplete sets are skipped with a warning in the "Detect upload accounts" job.
 - Old style single secrets `IG_USER_ID`, `IG_ACCESS_TOKEN`, `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` still work as account "default" (`IG_FOR` / `YT_FOR` restrict them).

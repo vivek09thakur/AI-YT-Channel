@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Resolve upload accounts for YouTube / Instagram from secrets.
 
-Sources (all optional, combined). Secrets are read from the environment or from ALL_SECRETS (toJSON(secrets)).
+Sources (all optional, combined). Secrets arrive as named environment variables: the workflows map each one explicitly
+(user1..user5 per platform; extend the env blocks for more). Never pass the whole secrets context as JSON - GitHub holds
+such a workflow as potentially malicious and its scheduled runs never start.
   IG_USER_ID + IG_ACCESS_TOKEN                          -> Instagram account "default"
   IG_USER1_ID + IG_USER1_TOKEN, IG_USER2_ID + ...       -> Instagram accounts "user1", "user2", ... (IG_USERn_NAME optional)
   YT_CLIENT_ID + YT_CLIENT_SECRET + YT_REFRESH_TOKEN    -> YouTube account "default"
@@ -61,27 +63,8 @@ def warn(msg):
     print(f"::warning::{msg}", file=sys.stderr)
 
 
-def _secrets():
-    merged = dict(os.environ)
-    raw = os.environ.get("ALL_SECRETS", "")
-    if raw:
-        try:
-            data = json.loads(raw)
-            if isinstance(data, dict):
-                merged.update({k: str(v) for k, v in data.items()})
-        except json.JSONDecodeError:
-            warn("ALL_SECRETS is not valid JSON - ignored")
-    return merged
-
-
-SECRETS = None
-
-
 def env(k):
-    global SECRETS
-    if SECRETS is None:
-        SECRETS = _secrets()
-    return (SECRETS.get(k) or "").strip()
+    return (os.environ.get(k) or "").strip()
 
 
 def groups(raw):
@@ -93,9 +76,9 @@ def groups(raw):
 def numbered(platform):
     """Collect IG_USER<n>_ID / YT_USER<n>_CLIENT_ID ... style accounts, ordered by n."""
     prefix, suffix = NUMBERED[platform]
-    if SECRETS is None:
-        env("")
-    nums = sorted({int(m.group(1)) for k in SECRETS for m in [re.fullmatch(rf"{prefix}(\d+)_[A-Z_]+", k)] if m})
+    # unused slots are present but empty (the workflows map user1..user5 explicitly), so only a slot with a value counts
+    nums = sorted({int(m.group(1)) for k, v in os.environ.items() if v.strip()
+                   for m in [re.fullmatch(rf"{prefix}(\d+)_[A-Z_]+", k)] if m})
     out = []
     for n in nums:
         acc = {k: env(f"{prefix}{n}_{s}") for k, s in suffix.items()}

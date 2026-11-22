@@ -106,8 +106,69 @@ jobs:
       - name: Detect upload accounts
         id: targets
         env:
-          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
-          ALL_SECRETS: ${{ toJSON(secrets) }}
+          # named secrets only, never the whole secrets context serialised as JSON: GitHub holds a workflow that dumps all secrets as potentially malicious
+          # (manual runs need 'Approve and run', scheduled runs are silently skipped). Up to 5 accounts per platform (user1..user5);
+          # keep this block identical in upload-video.yml (2x) and the three daily workflows.
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_ACCOUNT_PRIVACY: ${{ secrets.YT_ACCOUNT_PRIVACY }}
+          YT_FOR: ${{ secrets.YT_FOR }}
+          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_FOR: ${{ secrets.IG_FOR }}
+          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
+          YT_USER1_REFRESH_TOKEN: ${{ secrets.YT_USER1_REFRESH_TOKEN }}
+          YT_USER1_CLIENT_ID: ${{ secrets.YT_USER1_CLIENT_ID }}
+          YT_USER1_CLIENT_SECRET: ${{ secrets.YT_USER1_CLIENT_SECRET }}
+          YT_USER1_PRIVACY: ${{ secrets.YT_USER1_PRIVACY }}
+          YT_USER1_FOR: ${{ secrets.YT_USER1_FOR }}
+          YT_USER1_NAME: ${{ secrets.YT_USER1_NAME }}
+          YT_USER2_REFRESH_TOKEN: ${{ secrets.YT_USER2_REFRESH_TOKEN }}
+          YT_USER2_CLIENT_ID: ${{ secrets.YT_USER2_CLIENT_ID }}
+          YT_USER2_CLIENT_SECRET: ${{ secrets.YT_USER2_CLIENT_SECRET }}
+          YT_USER2_PRIVACY: ${{ secrets.YT_USER2_PRIVACY }}
+          YT_USER2_FOR: ${{ secrets.YT_USER2_FOR }}
+          YT_USER2_NAME: ${{ secrets.YT_USER2_NAME }}
+          YT_USER3_REFRESH_TOKEN: ${{ secrets.YT_USER3_REFRESH_TOKEN }}
+          YT_USER3_CLIENT_ID: ${{ secrets.YT_USER3_CLIENT_ID }}
+          YT_USER3_CLIENT_SECRET: ${{ secrets.YT_USER3_CLIENT_SECRET }}
+          YT_USER3_PRIVACY: ${{ secrets.YT_USER3_PRIVACY }}
+          YT_USER3_FOR: ${{ secrets.YT_USER3_FOR }}
+          YT_USER3_NAME: ${{ secrets.YT_USER3_NAME }}
+          YT_USER4_REFRESH_TOKEN: ${{ secrets.YT_USER4_REFRESH_TOKEN }}
+          YT_USER4_CLIENT_ID: ${{ secrets.YT_USER4_CLIENT_ID }}
+          YT_USER4_CLIENT_SECRET: ${{ secrets.YT_USER4_CLIENT_SECRET }}
+          YT_USER4_PRIVACY: ${{ secrets.YT_USER4_PRIVACY }}
+          YT_USER4_FOR: ${{ secrets.YT_USER4_FOR }}
+          YT_USER4_NAME: ${{ secrets.YT_USER4_NAME }}
+          YT_USER5_REFRESH_TOKEN: ${{ secrets.YT_USER5_REFRESH_TOKEN }}
+          YT_USER5_CLIENT_ID: ${{ secrets.YT_USER5_CLIENT_ID }}
+          YT_USER5_CLIENT_SECRET: ${{ secrets.YT_USER5_CLIENT_SECRET }}
+          YT_USER5_PRIVACY: ${{ secrets.YT_USER5_PRIVACY }}
+          YT_USER5_FOR: ${{ secrets.YT_USER5_FOR }}
+          YT_USER5_NAME: ${{ secrets.YT_USER5_NAME }}
+          IG_USER1_ID: ${{ secrets.IG_USER1_ID }}
+          IG_USER1_TOKEN: ${{ secrets.IG_USER1_TOKEN }}
+          IG_USER1_FOR: ${{ secrets.IG_USER1_FOR }}
+          IG_USER1_NAME: ${{ secrets.IG_USER1_NAME }}
+          IG_USER2_ID: ${{ secrets.IG_USER2_ID }}
+          IG_USER2_TOKEN: ${{ secrets.IG_USER2_TOKEN }}
+          IG_USER2_FOR: ${{ secrets.IG_USER2_FOR }}
+          IG_USER2_NAME: ${{ secrets.IG_USER2_NAME }}
+          IG_USER3_ID: ${{ secrets.IG_USER3_ID }}
+          IG_USER3_TOKEN: ${{ secrets.IG_USER3_TOKEN }}
+          IG_USER3_FOR: ${{ secrets.IG_USER3_FOR }}
+          IG_USER3_NAME: ${{ secrets.IG_USER3_NAME }}
+          IG_USER4_ID: ${{ secrets.IG_USER4_ID }}
+          IG_USER4_TOKEN: ${{ secrets.IG_USER4_TOKEN }}
+          IG_USER4_FOR: ${{ secrets.IG_USER4_FOR }}
+          IG_USER4_NAME: ${{ secrets.IG_USER4_NAME }}
+          IG_USER5_ID: ${{ secrets.IG_USER5_ID }}
+          IG_USER5_TOKEN: ${{ secrets.IG_USER5_TOKEN }}
+          IG_USER5_FOR: ${{ secrets.IG_USER5_FOR }}
+          IG_USER5_NAME: ${{ secrets.IG_USER5_NAME }}
           UPLOAD: ${{ inputs.upload || 'auto' }}
           GROUP: ${{ inputs.group == 'all' && '' || inputs.group }}
           PLATFORMS: ${{ inputs.platforms || 'youtube,instagram' }}
@@ -182,8 +243,69 @@ jobs:
       - name: Select account credentials
         id: acct
         env:
-          # all repo secrets as JSON so any IG_USERn_* / YT_USERn_* / *_ACCOUNTS_JSON works without editing this file
-          ALL_SECRETS: ${{ toJSON(secrets) }}
+          # named secrets only, never the whole secrets context serialised as JSON: GitHub holds a workflow that dumps all secrets as potentially malicious
+          # (manual runs need 'Approve and run', scheduled runs are silently skipped). Up to 5 accounts per platform (user1..user5);
+          # keep this block identical in upload-video.yml (2x) and the three daily workflows.
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_ACCOUNT_PRIVACY: ${{ secrets.YT_ACCOUNT_PRIVACY }}
+          YT_FOR: ${{ secrets.YT_FOR }}
+          YT_ACCOUNTS_JSON: ${{ secrets.YT_ACCOUNTS_JSON }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_FOR: ${{ secrets.IG_FOR }}
+          IG_ACCOUNTS_JSON: ${{ secrets.IG_ACCOUNTS_JSON }}
+          YT_USER1_REFRESH_TOKEN: ${{ secrets.YT_USER1_REFRESH_TOKEN }}
+          YT_USER1_CLIENT_ID: ${{ secrets.YT_USER1_CLIENT_ID }}
+          YT_USER1_CLIENT_SECRET: ${{ secrets.YT_USER1_CLIENT_SECRET }}
+          YT_USER1_PRIVACY: ${{ secrets.YT_USER1_PRIVACY }}
+          YT_USER1_FOR: ${{ secrets.YT_USER1_FOR }}
+          YT_USER1_NAME: ${{ secrets.YT_USER1_NAME }}
+          YT_USER2_REFRESH_TOKEN: ${{ secrets.YT_USER2_REFRESH_TOKEN }}
+          YT_USER2_CLIENT_ID: ${{ secrets.YT_USER2_CLIENT_ID }}
+          YT_USER2_CLIENT_SECRET: ${{ secrets.YT_USER2_CLIENT_SECRET }}
+          YT_USER2_PRIVACY: ${{ secrets.YT_USER2_PRIVACY }}
+          YT_USER2_FOR: ${{ secrets.YT_USER2_FOR }}
+          YT_USER2_NAME: ${{ secrets.YT_USER2_NAME }}
+          YT_USER3_REFRESH_TOKEN: ${{ secrets.YT_USER3_REFRESH_TOKEN }}
+          YT_USER3_CLIENT_ID: ${{ secrets.YT_USER3_CLIENT_ID }}
+          YT_USER3_CLIENT_SECRET: ${{ secrets.YT_USER3_CLIENT_SECRET }}
+          YT_USER3_PRIVACY: ${{ secrets.YT_USER3_PRIVACY }}
+          YT_USER3_FOR: ${{ secrets.YT_USER3_FOR }}
+          YT_USER3_NAME: ${{ secrets.YT_USER3_NAME }}
+          YT_USER4_REFRESH_TOKEN: ${{ secrets.YT_USER4_REFRESH_TOKEN }}
+          YT_USER4_CLIENT_ID: ${{ secrets.YT_USER4_CLIENT_ID }}
+          YT_USER4_CLIENT_SECRET: ${{ secrets.YT_USER4_CLIENT_SECRET }}
+          YT_USER4_PRIVACY: ${{ secrets.YT_USER4_PRIVACY }}
+          YT_USER4_FOR: ${{ secrets.YT_USER4_FOR }}
+          YT_USER4_NAME: ${{ secrets.YT_USER4_NAME }}
+          YT_USER5_REFRESH_TOKEN: ${{ secrets.YT_USER5_REFRESH_TOKEN }}
+          YT_USER5_CLIENT_ID: ${{ secrets.YT_USER5_CLIENT_ID }}
+          YT_USER5_CLIENT_SECRET: ${{ secrets.YT_USER5_CLIENT_SECRET }}
+          YT_USER5_PRIVACY: ${{ secrets.YT_USER5_PRIVACY }}
+          YT_USER5_FOR: ${{ secrets.YT_USER5_FOR }}
+          YT_USER5_NAME: ${{ secrets.YT_USER5_NAME }}
+          IG_USER1_ID: ${{ secrets.IG_USER1_ID }}
+          IG_USER1_TOKEN: ${{ secrets.IG_USER1_TOKEN }}
+          IG_USER1_FOR: ${{ secrets.IG_USER1_FOR }}
+          IG_USER1_NAME: ${{ secrets.IG_USER1_NAME }}
+          IG_USER2_ID: ${{ secrets.IG_USER2_ID }}
+          IG_USER2_TOKEN: ${{ secrets.IG_USER2_TOKEN }}
+          IG_USER2_FOR: ${{ secrets.IG_USER2_FOR }}
+          IG_USER2_NAME: ${{ secrets.IG_USER2_NAME }}
+          IG_USER3_ID: ${{ secrets.IG_USER3_ID }}
+          IG_USER3_TOKEN: ${{ secrets.IG_USER3_TOKEN }}
+          IG_USER3_FOR: ${{ secrets.IG_USER3_FOR }}
+          IG_USER3_NAME: ${{ secrets.IG_USER3_NAME }}
+          IG_USER4_ID: ${{ secrets.IG_USER4_ID }}
+          IG_USER4_TOKEN: ${{ secrets.IG_USER4_TOKEN }}
+          IG_USER4_FOR: ${{ secrets.IG_USER4_FOR }}
+          IG_USER4_NAME: ${{ secrets.IG_USER4_NAME }}
+          IG_USER5_ID: ${{ secrets.IG_USER5_ID }}
+          IG_USER5_TOKEN: ${{ secrets.IG_USER5_TOKEN }}
+          IG_USER5_FOR: ${{ secrets.IG_USER5_FOR }}
+          IG_USER5_NAME: ${{ secrets.IG_USER5_NAME }}
         run: python pipeline/notebooklm/upload_accounts.py select --platform "${{ steps.t.outputs.platform }}" --name "${{ steps.t.outputs.name }}" --env-file "$RUNNER_TEMP/creds.sh"
 
       - name: Upload to YouTube

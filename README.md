@@ -133,7 +133,7 @@ Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in 
 
 | Name | Type | Required? | What / how to get it |
 |---|---|---|---|
-| IG_USERn_ID, IG_USERn_TOKEN | Secret | per Instagram account | professional (Creator / Business) account id + token: [guide section 2](pipeline/notebooklm/README.md#2-instagram-upload-optional), steps 2.1-2.7 with screenshots |
+| IG_USERn_ID, IG_USERn_TOKEN | Secret | per Instagram account | professional (Creator / Business) account id + token: [guide section 2](pipeline/notebooklm/README.md#2-instagram-upload-optional), steps 2.1-2.7 with screenshots. `n` = 1 to 5 (the workflows pass each secret by name; for a sixth account extend the env blocks in `upload-video.yml` and the three daily workflows) |
 | IG_GRAPH_HOST | Variable | optional | `graph.facebook.com` (default, Facebook-Login tokens) or `graph.instagram.com` for Instagram-Login tokens (`instagram_business_*` permissions, as in the guide). Set it if Instagram uploads fail with an OAuth / host error |
 | YT_CLIENT_ID, YT_CLIENT_SECRET | Secret | for YouTube (shared) | one Google Cloud OAuth client (Desktop app) used by every numbered channel that has no own `YT_USERn_CLIENT_*`, and by the legacy account: [guide section 3](pipeline/notebooklm/README.md#3-youtube-upload-optional) |
 | YT_USERn_REFRESH_TOKEN | Secret | per YouTube channel | `python pipeline/notebooklm/yt_get_refresh_token.py --client-id ID --client-secret SECRET` on your PC, logged in as that channel ([section 3](pipeline/notebooklm/README.md#3-youtube-upload-optional)) |
@@ -182,3 +182,4 @@ At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min
 | Instagram | the Graph API downloads the video from a public URL. Public repo: the `videos` branch raw URL. Private repo: the file is parked about 1 hour on tmpfiles.org, i.e. briefly public, and that host can be down |
 | Instagram tokens | the token from the guide (configuration template) does not expire; the account must be an app tester (no App Review) |
 | NotebookLM | free accounts get a few Video Overviews per day, reset around 1:30 pm IST. The 2-a-day schedule is a target; the precheck shows the remaining quota, and a run that hits the limit cancels itself (grey) instead of failing |
+| "GitHub detected that this workflow file may be malicious" / **Approve and run** on a manual run | GitHub holds workflows that look like credential theft (public repos, since July 2026). While a workflow is held, scheduled runs are not created at all, so the daily videos silently stop. The usual trigger is reading the whole secrets context (`toJSON(secrets)`) into one variable; these workflows name every secret explicitly instead, so keep it that way when editing them |
