@@ -6,7 +6,8 @@ usage: sweep_notebooks.py --notebooks notebooks.json --topics topics.json
 notebooks.json is the output of `notebooklm list --json`. A notebook is a leftover of an earlier (crashed / cancelled)
 workflow run when its title exactly matches a topic in topics.json - those are printed as `DELETE <id>` lines for the
 workflow to act on. Anything else is only reported (`KEEP <id> <title>`), so a notebook created by hand on the same
-account is never touched.
+account is never touched. Topics picked by the LLM (pick_topic.py) are not in topics.json, so a leftover with such a
+title shows up as KEEP; this is rare because the make job deletes its own notebook even when it fails.
 """
 import argparse, json
 from pathlib import Path

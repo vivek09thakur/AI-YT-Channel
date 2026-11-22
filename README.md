@@ -6,7 +6,7 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 
 | Workflow | Output | How it runs | Needs |
 |---|---|---|---|
-| NotebookLM short | 60 s vertical explainer on a random topic, auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (tried every 30 min until published, 9:07 am to 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (upload accounts optional) |
+| NotebookLM short | 60 s vertical explainer on a fresh topic an LLM picks from what was published before (science, technology, ai, space, physics), auto upload to YouTube and Instagram | Daily, due 9:07 am and 3:07 pm IST (tried every 30 min until published, 9:07 am to 8:07 pm), 2 a day, or by hand | NOTEBOOKLM_MASTER_TOKEN_JSON (LLM key optional: without one topics come from topics.json; upload accounts optional) |
 | Upload video | Uploads an already made video from the `videos` branch to every account of a group (no NotebookLM quota) | By hand, or called by the three generation workflows | at least one complete IG_USERn_* or YT_* account |
 | Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (tried every 30 min until published, 11:17 am to 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
 | Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (tried every 30 min until published, 1:27 pm to 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY (upload accounts optional) |
@@ -147,7 +147,7 @@ Numbered, legacy and JSON accounts are all combined, so define each real account
 | Path | What |
 |---|---|
 | `.github/workflows/` | the workflows |
-| `pipeline/notebooklm/` | NotebookLM short scripts, topics.json, setup guide |
+| `pipeline/notebooklm/` | NotebookLM short scripts, LLM topic picker (topics.json fallback), setup guide |
 | `.github/skills/folk-art-video/` | story video engine |
 | `.github/skills/stickman-reel/` | stickman fact reel engine (`pipeline/stick/` scripts) |
 | `videos` branch | finished videos, `nlm.json` + `videos.json` + `stickman.json` indexes (also drive the 2-a-day guard) |

@@ -2,7 +2,8 @@
 
 Twice a day (due 9:07 am and 3:07 pm IST, tried every 30 minutes until published, 9:07 am to 8:07 pm) or by hand, this workflow:
 
-- picks a random unused topic from `topics.json`
+- asks an LLM for a fresh topic, looking at the shorts already published (`nlm.json`) and rotating the genres
+  (science, technology, ai, space, physics); with no LLM key it picks a random unused topic from `topics.json`
 - lets NotebookLM research it on the web
 - makes a 60 s vertical video: question hook, clear explanation, "subscribe and follow us" line
 - cuts the NotebookLM end card
@@ -11,6 +12,11 @@ Twice a day (due 9:07 am and 3:07 pm IST, tried every 30 minutes until published
 - uploads to every YouTube and Instagram account you configured (optional)
 
 Where to add secrets: repo > Settings > Secrets and variables > Actions > New repository secret.
+
+LLM key (optional): any one of `GEMINI_API_KEY` (free: aistudio.google.com/apikey), `MISTRAL_API_KEY`, `CEREBRAS_API_KEY`,
+`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`. It is only used to pick the topic; the story and stickman
+workflows use the same secrets, so nothing extra is needed when one of them is already set up. `PROVIDER` at the top of
+the workflow file forces a provider (default `auto` = first working key, free tiers first).
 
 ---
 
@@ -197,8 +203,8 @@ Actions tab > NotebookLM short > Run workflow.
 
 | Input | Default | Values |
 |---|---|---|
-| genre | auto | science, technology, ai, space, physics |
-| topic | empty | exact topic instead of random |
+| genre | auto | science, technology, ai, space, physics (auto = the LLM rotates them) |
+| topic | empty | exact topic instead of the LLM pick |
 | research_mode | fast | fast, deep |
 | format | short | short (9:16), explainer, cinematic (16:9) |
 | style | auto | explainer only |
@@ -212,7 +218,7 @@ Change the wording:
 
 - Closing line: `CTA_LINE` in `.github/workflows/notebooklm-short.yml`
 - End card trim fallback seconds: `OUTRO_TRIM` in the same file
-- Topics: `topics.json`
+- Topic picker: `PROVIDER` in the same file; genres and the topic prompt in `pick_topic.py`; fallback list `topics.json`
 
 ---
 
@@ -221,8 +227,8 @@ Change the wording:
 | Job | What it checks or does |
 |---|---|
 | Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 9:07 am / 3:07 pm IST, counted per UTC day) is still missing, so the 30-minute slots keep trying until the short is published and do nothing afterwards |
-| Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks |
-| Make | topic, research, video, trim, thumbnail, captions |
+| Precheck | token present and valid, NotebookLM quota, deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
+| Make | topic (LLM, checked against `nlm.json` for repeats; `topics.json` without a key), research, video, trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
 | Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it |

@@ -44,7 +44,7 @@ PAGE = '''<!doctype html>
 <main>
 %CARDS%
 </main>
-<footer>Each card links to the workflow run that made it. Topics come from pipeline/notebooklm/topics.json on main.</footer>
+<footer>Each card links to the workflow run that made it. Topics are picked by an LLM from what was published before (pipeline/notebooklm/pick_topic.py on main).</footer>
 </body></html>
 '''
 

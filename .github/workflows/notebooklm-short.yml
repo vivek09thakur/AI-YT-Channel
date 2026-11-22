@@ -1,8 +1,10 @@
 name: NotebookLM short (auto topic)
 
-# Fully automatic: picks a random unpublished topic from pipeline/notebooklm/topics.json (science, technology, ai, space,
-# physics), lets NotebookLM research it on the web, generates a 9:16 Video Overview and publishes it to the videos branch
-# under nlm/. Independent of the other workflows: own scripts (pipeline/notebooklm/), own index (nlm.json), own folder.
+# Fully automatic: an LLM looks at the shorts already on the videos branch (nlm.json) and picks a fresh topic in a genre
+# not used lately (science, technology, ai, space, physics; falls back to a random unpublished topic from
+# pipeline/notebooklm/topics.json when no LLM key is set), lets NotebookLM research it on the web, generates a 9:16
+# Video Overview and publishes it to the videos branch under nlm/. Independent of the other workflows: own scripts
+# (pipeline/notebooklm/), own index (nlm.json), own folder.
 # Jobs: precheck (token present + works, quota, leftover notebooks) -> make -> publish -> upload (reusable workflow
 # upload-video.yml: YouTube Short / Instagram Reel for every account whose secrets are set; it can also be run by
 # hand for an already-published video; see pipeline/notebooklm/README.md).
@@ -24,13 +26,13 @@ on:
   workflow_dispatch:
     inputs:
       genre:
-        description: 'Topic pool (auto = random genre)'
+        description: 'Topic pool for the pick (auto = the LLM rotates genres)'
         required: true
         type: choice
         default: auto
         options: [auto, science, technology, ai, space, physics]
       topic:
-        description: 'Exact topic to use instead of a random pick (optional)'
+        description: 'Exact topic to use instead of letting the LLM pick one (optional)'
         required: false
         type: string
       research_mode:
@@ -92,6 +94,9 @@ env:
   DUE_UTC: '03:37 09:37'   # when the 1st and 2nd short of the day are due (9:07 am and 3:07 pm IST); guard job
   GENRE: ${{ inputs.genre || 'auto' }}
   TOPIC_OVERRIDE: ${{ inputs.topic || '' }}
+  # LLM that picks the topic: auto = first working key, free tiers first (gemini, mistral, cerebras, ...); with no key
+  # at all the pick falls back to a random unpublished topic from topics.json. Set a provider name to force one.
+  PROVIDER: auto
   RESEARCH_MODE: ${{ inputs.research_mode || 'fast' }}
   FORMAT: ${{ inputs.format || 'short' }}
   STYLE: ${{ inputs.style || 'auto' }}
@@ -200,6 +205,7 @@ jobs:
       slug: ${{ steps.pick.outputs.slug }}
       topic: ${{ steps.pick.outputs.topic }}
       genre: ${{ steps.pick.outputs.genre }}
+      picked: ${{ steps.pick.outputs.picked }}
       duration: ${{ steps.probe.outputs.duration }}
     steps:
       - uses: actions/checkout@v4
@@ -207,9 +213,9 @@ jobs:
         with: { python-version: '3.12' }
       - name: ffmpeg (preinstalled on ubuntu-latest, apt fallback)
         run: command -v ffmpeg >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg; }; ffmpeg -version | head -1
-      - name: Install notebooklm-py
+      - name: Install notebooklm-py (+ requests for the LLM topic pick)
         run: |
-          pip install -q "notebooklm-py[headless]"
+          pip install -q "notebooklm-py[headless]" requests
           notebooklm --version
 
       - name: Authenticate (master token -> session)
@@ -233,9 +239,20 @@ jobs:
           curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/videos/nlm.json" -o nlm.json \
             || { echo "no nlm.json on videos branch yet"; echo '[]' > nlm.json; }
 
-      - name: Pick topic
+      - name: Pick topic (LLM looks at what was published; topics.json when no key)
         id: pick
-        run: python pipeline/notebooklm/pick_topic.py --topics pipeline/notebooklm/topics.json --genre "$GENRE" --used nlm.json --topic "$TOPIC_OVERRIDE"
+        run: |
+          python pipeline/notebooklm/pick_topic.py --topics pipeline/notebooklm/topics.json --genre "$GENRE" --used nlm.json \
+            --provider "$PROVIDER" --topic "$TOPIC_OVERRIDE"
+        env:
+          LLM_TIMEOUT: '120'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          META_AI_API: ${{ secrets.META_AI_API }}
 
       - name: Create notebook + web research
         id: nb
@@ -372,7 +389,7 @@ jobs:
             echo "## NotebookLM short ready: $title"
             echo
             echo "- Genre: ${{ needs.make.outputs.genre }}"
-            echo "- Topic: ${{ needs.make.outputs.topic }}"
+            echo "- Topic: ${{ needs.make.outputs.topic }} (picked by ${{ needs.make.outputs.picked }})"
             echo "- Length: ${{ needs.make.outputs.duration }} s, format: $FORMAT"
             echo
             echo "| Download | Link |"; echo "|---|---|"
