@@ -88,6 +88,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write   # lets a job cancel this run for an expected stop (pipeline/stop_run.py) instead of failing it
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
@@ -137,10 +138,11 @@ jobs:
         with: { python-version: '3.12' }
 
       - name: At least one upload account (YouTube or Instagram) for group nlm
-        # stops the run before any minutes are spent when nothing could be uploaded; skipped for manual upload=off runs
+        # cancels the run (reason in the summary) before any minutes are spent when nothing could be uploaded; skipped for manual upload=off runs
         if: ${{ inputs.upload != 'off' }}
         env:
           ALL_SECRETS: ${{ toJSON(secrets) }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: python pipeline/notebooklm/upload_accounts.py require --group nlm
 
       - name: Master token secret present and valid JSON
@@ -174,10 +176,14 @@ jobs:
           rm -f work_auth.json
 
       - name: Quota check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           notebooklm usage --json > usage.json || { echo "::warning::usage meter unavailable"; echo '{}' > usage.json; }
           python - <<'PY'
-          import json
+          import json, sys
+          sys.path.insert(0, 'pipeline')
+          import stop_run
           d = json.load(open('usage.json'))
           if d.get('status') != 'ready':
               print('usage meter:', d.get('status', 'unknown'), '- continuing')
@@ -185,8 +191,8 @@ jobs:
           for w in d.get('windows', []):
               print(f"{w['kind']}: {w.get('used_percent', 0):.1f}% used, resets {w.get('resets_at')}")
           if d.get('is_exhausted'):
-              print('::error::NotebookLM compute quota exhausted for this account')
-              raise SystemExit(1)
+              resets = ', '.join(str(w.get('resets_at')) for w in d.get('windows', []) if w.get('resets_at'))
+              stop_run.stop('NotebookLM compute quota exhausted for this account' + (f' (resets {resets})' if resets else '') + '. Nothing to do until it resets.')
           PY
 
       - name: Sweep leftover notebooks from earlier runs
@@ -282,15 +288,18 @@ jobs:
           [ "$n" -gt 0 ] || { echo "::error::research imported no sources"; cat research.json; exit 1; }
 
       - name: Generate Video Overview
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           prompt="Make this for a general YouTube Shorts audience about the topic: ${{ steps.pick.outputs.topic }}. Follow this exact three-part structure. PART 1 - HOOK (first 3 seconds): open by asking the audience one short, intriguing question about the topic, for example 'Have you ever wondered...' or 'What if...'. Do not start with a statement or a title. PART 2 - EXPLANATION: answer that question clearly and step by step in simple everyday language, one idea at a time, with a concrete example or comparison, so a beginner fully understands it. PART 3 - CLOSING (last few seconds): give a one-line takeaway, then end by speaking this call to action word for word: '$CTA_LINE'. Keep the whole thing conversational and energetic."
           args=(--format "$FORMAT" --wait --timeout 2400 --retry 3 --json)
           if [ "$FORMAT" = "explainer" ]; then args+=(--style "$STYLE"); fi
           set -o pipefail
-          # RateLimitError on CREATE_ARTIFACT = the account's daily Video Overview quota is used up; retrying for minutes cannot help
+          # RateLimitError on CREATE_ARTIFACT = the account's daily Video Overview quota is used up; retrying for minutes cannot help,
+          # and it is not a fault: the run cancels itself (reason in the summary) and the next 30-minute slot tries again
           if ! notebooklm generate video "$prompt" "${args[@]}" 2> >(tee generate.err >&2) | tee generate.json; then
             if grep -q 'RateLimitError' generate.err; then
-              echo "::error::NotebookLM daily Video Overview quota reached for this account (RateLimitError on CREATE_ARTIFACT). Wait for the daily reset (about 13:30 IST) or use another throwaway account. No video was made, nothing to upload."
+              python pipeline/stop_run.py "NotebookLM daily Video Overview quota reached for this account (RateLimitError on CREATE_ARTIFACT). It resets daily around 1:30 pm IST; the next slot after that makes the short. No video was made, nothing to upload."
             else
               echo "::error::notebooklm generate video failed - see log above"
             fi
@@ -424,7 +433,8 @@ jobs:
   report:
     name: Report
     needs: [guard, precheck, make, publish, upload]
-    if: ${{ always() && needs.guard.outputs.go == 'true' }}
+    # not on a cancelled run: an expected stop (no account, no quota - see pipeline/stop_run.py) is not a failure to report
+    if: ${{ !cancelled() && needs.guard.outputs.go == 'true' }}
     uses: ./.github/workflows/report-failure.yml
     with:
       workflow: NotebookLM short

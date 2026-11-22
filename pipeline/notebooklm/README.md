@@ -227,11 +227,11 @@ Change the wording:
 | Job | What it checks or does |
 |---|---|
 | Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 9:07 am / 3:07 pm IST, counted per UTC day) is still missing, so the 30-minute slots keep trying until the short is published and do nothing afterwards |
-| Precheck | at least one upload account (YouTube or Instagram) eligible for group `nlm`, otherwise the run stops here (skipped for manual `upload=off` runs); token present and valid, NotebookLM quota, deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
-| Make | topic (LLM, checked against `nlm.json` for repeats; `topics.json` without a key), research, video, trim, thumbnail, captions |
+| Precheck | at least one upload account (YouTube or Instagram) eligible for group `nlm`, otherwise the run cancels itself here, grey **Cancelled** with the reason in the summary (skipped for manual `upload=off` runs); token present and valid, NotebookLM quota (exhausted = same cancel, not a failure), deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
+| Make | topic (LLM, checked against `nlm.json` for repeats; `topics.json` without a key), research, video (daily Video Overview quota reached = run cancels itself, reason in the summary), trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
-| Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it |
+| Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it. Not run for a cancelled run: the expected stops above are not failures |
 
 Schedule: shorts are due at 9:07 am and 3:07 pm IST (the second after the NotebookLM quota reset, about 1:30 pm). GitHub delays or drops cron slots on the hour / half hour, so every slot sits on :07 / :37 and the workflow is tried every 30 minutes from 9:07 am to 8:07 pm. A slot only runs while a short that is due by then is missing, so the retries keep going until the short is published, the second short is never made before 3:07 pm and a third short is never made.
 
@@ -249,16 +249,18 @@ Same workflow for a story video: folder `videos/<slug>-<run>`, video `shorts.mp4
 
 ## 7. Errors
 
+A grey **Cancelled** run is not an error: the pipeline stopped itself for an expected reason (no upload account, quota used up) and wrote it under "Run stopped" in the run's summary. The next 30-minute slot tries again. Red runs are real problems:
+
 | Log says | Do |
 |---|---|
 | secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set | Section 1 |
 | NotebookLM auth failed | Section 1 again, token expired |
-| quota exhausted | wait for the reset time printed in the log |
-| daily Video Overview quota reached (RateLimitError on CREATE_ARTIFACT) | the free account only gets a few videos per day; wait for the daily reset (about 13:30 IST) or use another throwaway account. The schedule already makes 2 videos per day, extra manual runs eat into this |
+| quota exhausted (run Cancelled) | wait for the reset time printed in the log |
+| daily Video Overview quota reached (RateLimitError on CREATE_ARTIFACT) (run Cancelled) | the free account only gets a few videos per day; wait for the daily reset (about 1:30 pm IST) or use another throwaway account. The schedule already makes 2 videos per day, extra manual runs eat into this |
 | research imported no sources | re-run, or pick another topic |
 | no public URL for the video | tmpfiles.org down, re-run |
 | YouTube video is private | `yt_privacy` input or `YT_USERn_PRIVACY` secret set to private, or the channel's default upload visibility |
 | account incomplete - skipped | one of the numbered secrets is missing |
-| no upload account for workflow group (Precheck fails) | no complete YouTube or Instagram account whose `*_FOR` includes that group (or is unset). Add the secrets from Section 2 / 3, or set `upload=off` for an artifact-only test |
+| No upload account for workflow group (run Cancelled at Precheck) | no complete YouTube or Instagram account whose `*_FOR` includes that group (or is unset). Add the secrets from Section 2 / 3, or set `upload=off` for an artifact-only test |
 | Upload job shows "Waiting for pending jobs" and the run fails, or "Upload targets sanity" fails | a multi-line secret (usually NOTEBOOKLM_MASTER_TOKEN_JSON) made GitHub drop the upload matrix. Re-save it as one line (Section 1), then use the upload workflow above for that video |
 | reel.mp4 not found on the videos branch | wrong folder name, copy it from `nlm/README.md` on the `videos` branch |

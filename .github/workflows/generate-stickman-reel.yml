@@ -84,6 +84,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write   # lets a job cancel this run for an expected stop (pipeline/stop_run.py) instead of failing it
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
@@ -131,10 +132,11 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
       - name: At least one upload account (YouTube or Instagram) for group stickman
-        # stops the run before any minutes are spent when nothing could be uploaded; skipped for manual upload=off runs
+        # cancels the run (reason in the summary) before any minutes are spent when nothing could be uploaded; skipped for manual upload=off runs
         if: ${{ inputs.upload != 'off' }}
         env:
           ALL_SECRETS: ${{ toJSON(secrets) }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: python pipeline/notebooklm/upload_accounts.py require --group stickman
       - run: pip install -q -r pipeline/requirements.txt
       - name: Check quotas
@@ -143,6 +145,7 @@ jobs:
         run: python pipeline/precheck.py --need-minutes 35 --prefer "$PROVIDER" --model "$MODEL" --voice "$VOICE"
         env:
           MODEL: ${{ inputs.model }}
+          GITHUB_TOKEN: ${{ github.token }}
           BILLING_TOKEN: ${{ secrets.BILLING_TOKEN }}
           ACTIONS_INCLUDED_MINUTES: ${{ vars.ACTIONS_INCLUDED_MINUTES }}
           ACTIONS_ALLOW_OVERAGE: ${{ vars.ACTIONS_ALLOW_OVERAGE }}
@@ -450,7 +453,8 @@ jobs:
   report:
     name: Report
     needs: [guard, precheck, author, render, publish, upload]
-    if: ${{ always() && needs.guard.outputs.go == 'true' }}
+    # not on a cancelled run: an expected stop (no account, no minutes - see pipeline/stop_run.py) is not a failure to report
+    if: ${{ !cancelled() && needs.guard.outputs.go == 'true' }}
     uses: ./.github/workflows/report-failure.yml
     with:
       workflow: Generate stickman fact reel

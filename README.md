@@ -11,7 +11,7 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 | Generate story video | 2 min folk art story picked from what was published before (continues a saga or switches tradition), script, 16:9 and 9:16, captions, auto upload (shorts to YouTube + Instagram, landscape to YouTube) | Daily, due 11:17 am and 4:47 pm IST (tried every 30 min until published, 11:17 am to 7:47 pm), 2 a day, or by hand (own topic/script optional) | one LLM key, e.g. GEMINI_API_KEY + at least one upload account for group `story` |
 | Generate stickman fact reel | 35 s vertical "did you know" fact with animated stick figures, hook question + answer + why, auto upload | Daily, due 1:27 pm and 5:57 pm IST (tried every 30 min until published, 1:27 pm to 7:57 pm), 2 a day, or by hand (own fact/script optional) | one LLM key, e.g. GEMINI_API_KEY + at least one upload account for group `stickman` |
 | Pre-run check only | Probes LLM keys and the TTS voice, checks remaining Actions minutes when BILLING_TOKEN is set | By hand | one LLM key to pass |
-| Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success | Called by the daily workflows | nothing |
+| Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success. Expected stops (no upload account, NotebookLM quota used up, not enough Actions minutes) are not failures: the run cancels itself (grey **Cancelled**) and the reason is in the run's summary | Called by the daily workflows | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
 
 A scheduled slot only runs while fewer than 2 entries for today (UTC) exist in that workflow's index on the `videos` branch (`nlm.json`, `videos.json`, `stickman.json`); otherwise the guard job skips it. Manual runs ignore the guard. A story rendered in both formats counts as one entry. Even when you give your own script, the story and stickman workflows still need an LLM key: the model writes the scene code.
@@ -53,7 +53,9 @@ Without upload accounts the workflows still make the videos and publish them to 
 
 Every workflow uploads with a **group** name: `nlm`, `story` or `stickman`. An account is eligible when its `*_FOR` secret lists that group, is unset, or is `all`; a comma list such as `nlm,story` joins several groups. One run makes one video and the same file goes unchanged to every eligible account on that platform. The story workflow (default `formats=both`) makes two files: `shorts.mp4` goes to eligible YouTube and Instagram accounts, `landscape.mp4` only to eligible YouTube accounts.
 
-Each generation workflow checks this in its first job (Pre-run check / Precheck): when the group has no eligible YouTube **and** no eligible Instagram account the run fails there with an error naming the missing secrets, before any video is made. One account on either platform is enough. The check is skipped only for a manual run with `upload=off` (artifact-only test).
+Each generation workflow checks this in its first job (Pre-run check / Precheck): when the group has no eligible YouTube **and** no eligible Instagram account the run cancels itself there, before any video is made. It shows as grey **Cancelled** (not a red failure, no `pipeline-failure` issue) and the run's summary names the missing secrets under "Run stopped". One account on either platform is enough. The check is skipped only for a manual run with `upload=off` (artifact-only test).
+
+The same applies to the other expected stops: NotebookLM daily video quota used up, or (with `BILLING_TOKEN`) not enough Actions minutes left. Only real problems (bad token, no usable LLM key, render or upload error) stay red and open the issue.
 
 | Workflow | Group | File(s) | Goes to |
 |---|---|---|---|
@@ -150,6 +152,7 @@ Numbered, legacy and JSON accounts are all combined, so define each real account
 |---|---|
 | `.github/workflows/` | the workflows |
 | `pipeline/notebooklm/` | NotebookLM short scripts, LLM topic picker (topics.json fallback), setup guide |
+| `pipeline/stop_run.py` | shared helper: cancels the current run for an expected stop (reason in the run summary) instead of failing it |
 | `.github/skills/folk-art-video/` | story video engine |
 | `.github/skills/stickman-reel/` | stickman fact reel engine (`pipeline/stick/` scripts) |
 | `videos` branch | finished videos, `nlm.json` + `videos.json` + `stickman.json` indexes (also drive the 2-a-day guard) |
@@ -167,7 +170,7 @@ GitHub Actions minutes: unlimited on a **public** repo; a **private** repo gets 
 | NotebookLM short | ~25 (mostly waiting on NotebookLM) |
 | Guard job on a skipped cron slot | ~1 (55 slots a day, about 49 of them skipped) |
 
-At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min/month, so a private repo on the free plan stops after about a week. Options: make the repo public, run fewer videos a day (`DAILY_TARGET` and `DUE_UTC` at the top of each workflow file, and shorten the cron range), story with one format, or a self-hosted runner. `BILLING_TOKEN` makes the story / stickman precheck stop before a run that would not fit; it warns instead when `ACTIONS_ALLOW_OVERAGE=1` or the account already uses paid minutes, and it is not fail-closed: without the token, or when the billing API call fails, the check is skipped and the run continues.
+At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min/month, so a private repo on the free plan stops after about a week. Options: make the repo public, run fewer videos a day (`DAILY_TARGET` and `DUE_UTC` at the top of each workflow file, and shorten the cron range), story with one format, or a self-hosted runner. `BILLING_TOKEN` makes the story / stickman precheck stop before a run that would not fit (the run cancels itself, grey, reason in the summary); it warns instead when `ACTIONS_ALLOW_OVERAGE=1` or the account already uses paid minutes, and it is not fail-closed: without the token, or when the billing API call fails, the check is skipped and the run continues.
 
 ### Known limits
 
@@ -178,4 +181,4 @@ At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min
 | YouTube visibility | per the current API docs, uploads from unverified projects are **not** forced to private. If a video lands private, check the `yt_privacy` input / `YT_USERn_PRIVACY` and the channel's default upload settings |
 | Instagram | the Graph API downloads the video from a public URL. Public repo: the `videos` branch raw URL. Private repo: the file is parked about 1 hour on tmpfiles.org, i.e. briefly public, and that host can be down |
 | Instagram tokens | the token from the guide (configuration template) does not expire; the account must be an app tester (no App Review) |
-| NotebookLM | free accounts get a few Video Overviews per day, reset around 13:30 IST. The 2-a-day schedule is a target; the precheck shows the remaining quota |
+| NotebookLM | free accounts get a few Video Overviews per day, reset around 1:30 pm IST. The 2-a-day schedule is a target; the precheck shows the remaining quota, and a run that hits the limit cancels itself (grey) instead of failing |

@@ -15,8 +15,9 @@ of groups, e.g. "story" or "nlm,story". Unset or "all" = every workflow. `list -
 
   list   --upload auto|off [--group G] [--platforms youtube,instagram]
                                     print {"matrix": ["platform/key", ...], "count": N, "summary": [...]}
-  require [--group G]               exit 1 with a ::error:: when no YouTube or Instagram account is configured for the
-                                    group (the daily workflows run this in precheck so no video is made that cannot be uploaded)
+  require [--group G]               stop the run (cancelled, reason in the job summary - see pipeline/stop_run.py) when no
+                                    YouTube or Instagram account is configured for the group; the daily workflows run this
+                                    in precheck so no video is made that cannot be uploaded
   select --platform P --name N --env-file FILE
                                     write shell exports for that one account and print ::add-mask:: lines
 
@@ -32,6 +33,10 @@ import os
 import re
 import shlex
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import stop_run
 
 REQ = {
     "youtube": ("client_id", "client_secret", "refresh_token"),
@@ -196,10 +201,9 @@ def cmd_require(a):
     if ok:
         print(f"upload accounts for group '{group}': " + ", ".join(ok))
         return
-    print(f"::error::no upload account for workflow group '{group}'. Add a YouTube account (YT_CLIENT_ID + YT_CLIENT_SECRET + "
-          f"YT_USERn_REFRESH_TOKEN) or an Instagram account (IG_USERn_ID + IG_USERn_TOKEN); when YT_USERn_FOR / IG_USERn_FOR is set "
-          f"it must include '{group}'. The run stops here so no video is made that cannot be uploaded.", file=sys.stderr)
-    sys.exit(1)
+    stop_run.stop(f"No upload account for workflow group '{group}'. Add a YouTube account (YT_CLIENT_ID + YT_CLIENT_SECRET + "
+                  f"YT_USERn_REFRESH_TOKEN) or an Instagram account (IG_USERn_ID + IG_USERn_TOKEN); when YT_USERn_FOR / IG_USERn_FOR "
+                  f"is set it must include '{group}'. Stopped before making a video that could not be uploaded.")
 
 
 def cmd_select(a):

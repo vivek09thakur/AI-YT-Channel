@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""precheck.py --need-minutes N [--prefer auto --model X --voice en-US-AndrewNeural]
+"""precheck.py --need-minutes N [--prefer auto --model X --voice en-US-AndrewNeural] [--no-cancel]
 
 Pre-run gate for the video workflows. Checks, in order:
   1. AI quota      - every LLM provider key is probed with a 1-token request (check_keys.check_llm); picks the provider
@@ -7,6 +7,8 @@ Pre-run gate for the video workflows. Checks, in order:
                      a fine-grained PAT with Account permissions -> Plan: read; ACTIONS_INCLUDED_MINUTES defaults to 2000)
   3. TTS quota     - Azure Speech if AZURE_SPEECH_KEY is set (tiny synth), else an edge-tts probe (free, no quota)
 Writes a summary table to GITHUB_STEP_SUMMARY, provider/model to GITHUB_OUTPUT, exits 1 when the run cannot succeed.
+Out of Actions minutes is not an error but a budget condition: the run then cancels itself (stop_run) instead of failing,
+unless --no-cancel is given (the check-only workflow, which should just show the result).
 """
 import argparse, asyncio, datetime, html, os, sys, tempfile
 from pathlib import Path
@@ -14,6 +16,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 sys.path.insert(0, str(Path(__file__).parent))
 import requests
+import stop_run
 from check_keys import check_llm
 
 ICON = {'ok': '✅', 'warn': '⚠️', 'skip': '➖', 'fail': '❌'}
@@ -100,6 +103,8 @@ def main():
     ap.add_argument('--need-minutes', type=int, required=True, help='estimated Actions minutes this run will consume')
     ap.add_argument('--prefer', default='auto'); ap.add_argument('--model', default='')
     ap.add_argument('--voice', default='en-US-AndrewNeural')
+    ap.add_argument('--no-cancel', action='store_true',
+                    help='report-only mode: out of Actions minutes fails the job instead of cancelling the run')
     a = ap.parse_args()
 
     llm_lines, chosen = check_llm(a.prefer, a.model)
@@ -114,12 +119,17 @@ def main():
     print(text)
     if os.environ.get('GITHUB_STEP_SUMMARY'):
         Path(os.environ['GITHUB_STEP_SUMMARY']).open('a', encoding='utf-8').write(text + '\n\n')
+    failed = {n for n, s, _, _ in rows if s == 'fail'}
+    budget_stop = failed == {'Runner quota'} and not a.no_cancel
     for n, s, h, d in rows:
         if s == 'warn':
             print(f'::warning title={n}::{h} - {d}')
-        elif s == 'fail':
+        elif s == 'fail' and not budget_stop:
             print(f'::error title={n}::{h} - {d}')
-    if any(s == 'fail' for _, s, _, _ in rows):
+    if budget_stop:
+        # a budget limit, not something broken: cancel the run instead of failing it
+        stop_run.stop(f'Not enough GitHub Actions minutes left for this run: {runner[1]} ({runner[2]}).')
+    if failed:
         sys.exit(1)
     if os.environ.get('GITHUB_OUTPUT'):
         Path(os.environ['GITHUB_OUTPUT']).open('a', encoding='utf-8').write(f"provider={chosen['provider']}\nmodel={chosen['model']}\n")

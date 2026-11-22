@@ -35,7 +35,7 @@ Script format: paragraphs separated by blank lines: hook question ending with "?
 ## Pipeline
 
 1. **guard** – daily target check on `stickman.json`.
-2. **precheck** – at least one upload account for group `stickman` (YouTube or Instagram; the run stops here when both are missing, skipped for `upload=off`), keys and tool checks.
+2. **precheck** – at least one upload account for group `stickman` (YouTube or Instagram; when both are missing the run cancels itself, grey Cancelled with the reason in the run summary; skipped for `upload=off`), keys and tool checks (out of Actions minutes = same cancel).
 3. **author** – `pick_fact.py` (auto mode) → `tts.py` (narration.json) → `prepare.mjs` (fonts, sfx, pad) → `make_rms.py` → LLM writes `meta.json`, `data.ts`, `scenes.tsx` → `generate_stick_reel.py` checks: scenes tile the narration and cut on line boundaries, at least one `<Stick>` per scene, allowed imports and SFX names, `tsc`, headless-Chrome stills, flat-frame and **motion** check (two stills per scene must differ), up to 3 fix rounds. Scene code is committed to main under `facts/<slug>/`.
 4. **render** – `npx remotion render … --gl swangle`; `finalize_reel.py` (h264, loudnorm, thumbnail, probe checks).
 5. **publish** – `publish_reel.py` copies to `stickman/<slug>-<run>/` on the `videos` branch and rebuilds `stickman.json`, `stickman/index.html`, `stickman/README.md`; `captions.py --base-tags` writes the title/description/tags.

@@ -28,7 +28,7 @@ jobs:
       - name: Check quotas
         run: |
           case "$FORMATS" in both) n=90 ;; *) n=55 ;; esac
-          python pipeline/precheck.py --need-minutes "$n" --prefer auto --voice en-GB-RyanNeural
+          python pipeline/precheck.py --need-minutes "$n" --prefer auto --voice en-GB-RyanNeural --no-cancel
         env:
           FORMATS: ${{ inputs.formats }}
           BILLING_TOKEN: ${{ secrets.BILLING_TOKEN }}
