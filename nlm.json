@@ -1,5 +1,18 @@
 [
  {
+  "dir": "nlm/how-a-touchscreen-senses-your-finger-8",
+  "slug": "how-a-touchscreen-senses-your-finger",
+  "run": "8",
+  "run_url": "https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/44988189752",
+  "title": "How Does Your Phone Screen Sense Your Finger?",
+  "topic": "How a touchscreen senses your finger",
+  "genre": "technology",
+  "format": "short",
+  "duration": 74.566667,
+  "date": "2026-11-22",
+  "reel_bytes": 5846978
+ },
+ {
   "dir": "nlm/how-deepfakes-are-made-and-detected-5",
   "slug": "how-deepfakes-are-made-and-detected",
   "run": "5",
