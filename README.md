@@ -16,7 +16,7 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 
 A scheduled slot only runs while fewer than 2 entries for today (UTC) exist in that workflow's index on the `videos` branch (`nlm.json`, `videos.json`, `stickman.json`); otherwise the guard job skips it. Manual runs ignore the guard, except runs started with the `auto` input on (that is how the dashboard's external trigger starts them, see below). A story rendered in both formats counts as one entry. Even when you give your own script, the story and stickman workflows still need an LLM key: the model writes the scene code.
 
-**If GitHub's cron never fires** (it happens: scheduled runs are simply not created, nothing in the UI says why) the dashboard on the `dashboard` branch has an endpoint, `/api/trigger`, that Vercel's own scheduler calls every 15 minutes during the day (any other scheduler, such as cron-job.org, can call it too). It reads the same indexes, works out which of the three workflows is due right now (same due times as the cron) and starts it through the GitHub API with `auto=true`, so the guard job above still applies. Setup is in `dashboard/README.md`.
+**If GitHub's cron never fires** (it happens: scheduled runs are simply not created, nothing in the UI says why) the dashboard on the `dashboard` branch has an endpoint, `/api/trigger`, that Vercel's own scheduler calls every 15 minutes during the day (any other scheduler, such as cron-job.org, can call it too). It reads the same indexes, works out which of the three workflows is due right now (same due times as the cron) and starts it through the GitHub API with `auto=true`, so the guard job above still applies. Setup is in the README on the `dashboard` branch.
 
 ## Setup
 
@@ -109,6 +109,10 @@ Actions > **Upload video** > Run workflow re-posts a video that is already on th
 
 So "stickman + youtube" = every eligible YouTube channel: the one whose `YT_USERn_FOR` lists `stickman`, plus any channel with `_FOR` unset or `all`. For an artifact-only NotebookLM test set both `publish=false` and `upload=off`; `publish=false` alone still uploads.
 
+## Dashboard
+
+The [`dashboard` branch](https://github.com/vivek09thakur/AI-YT-Channel/tree/dashboard) holds a small read-only Next.js app (deployed on Vercel) and nothing else. It draws the pipeline as a board: workflows on the left, accounts on the right, arrows for who posts where. A Runs page lists today's videos with their upload results and the recent runs; a Secrets page shows which repo secrets and variables exist. Nothing can be changed from there. It needs a fine-grained GitHub token and a user list; the README on that branch has the token permissions, environment variables and Vercel steps. Check it out next to this one (`git worktree add ../AI-YT-Channel-dashboard dashboard`) rather than merging it into `main`.
+
 ## All secrets and variables
 
 Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in the Secrets tab, **Variable** in the Variables tab. `n` = 1, 2, 3 ... "one of" = at least one working LLM key is needed by the story and stickman workflows (and by Pre-run check); NotebookLM needs none. `provider=auto` probes the keys in the order gemini, mistral, cerebras, meta, openrouter, openai, anthropic and uses the first usable one (a key that is only rate-limited or busy still counts as usable and is retried).
@@ -157,6 +161,7 @@ Numbered, legacy and JSON accounts are all combined, so define each real account
 | `pipeline/stop_run.py` | shared helper: cancels the current run for an expected stop (reason in the run summary) instead of failing it |
 | `.github/skills/folk-art-video/` | story video engine |
 | `.github/skills/stickman-reel/` | stickman fact reel engine (`pipeline/stick/` scripts) |
+| `dashboard` branch | read-only monitoring board (Next.js, Vercel) plus the `/api/trigger` endpoint |
 | `videos` branch | finished videos, `nlm.json` + `videos.json` + `stickman.json` indexes (also drive the 2-a-day guard) |
 
 ## Costs
@@ -185,4 +190,4 @@ At 2 a day for all three workflows that is roughly 350 min/day, about 10,500 min
 | Instagram tokens | the token from the guide (configuration template) does not expire; the account must be an app tester (no App Review) |
 | NotebookLM | free accounts get a few Video Overviews per day, reset around 1:30 pm IST. The 2-a-day schedule is a target; the precheck shows the remaining quota, and a run that hits the limit cancels itself (grey) instead of failing |
 | "GitHub detected that this workflow file may be malicious" / **Approve and run** on a manual run | GitHub holds workflows that look like credential theft (public repos, since July 2026). While a workflow is held, scheduled runs are not created at all, so the daily videos silently stop. The usual trigger is reading the whole secrets context (`toJSON(secrets)`) into one variable; these workflows name every secret explicitly instead, so keep it that way when editing them |
-| Scheduled runs never appear (no run with trigger "scheduled" for a whole day, nothing held, nothing disabled) | GitHub-side; only Support can see why. Use the dashboard's `/api/trigger` endpoint, called by Vercel's scheduler (or any other, e.g. cron-job.org), so publishing does not depend on GitHub's cron at all; see `dashboard/README.md` |
+| Scheduled runs never appear (no run with trigger "scheduled" for a whole day, nothing held, nothing disabled) | GitHub-side; only Support can see why. Use the dashboard's `/api/trigger` endpoint, called by Vercel's scheduler (or any other, e.g. cron-job.org), so publishing does not depend on GitHub's cron at all; see the README on the `dashboard` branch |
