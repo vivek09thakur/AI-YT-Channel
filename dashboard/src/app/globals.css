@@ -13,9 +13,9 @@
   --color-ink: light-dark(#151c29, #e8eaed);
   --color-ink-soft: light-dark(#3f4a66, #b4bac3);
   --color-slate: light-dark(#6a7590, #8b949e);
-  --color-line: light-dark(#d3d9e6, #262b33);
-  --color-line-soft: light-dark(#e2e6ef, #1d2127);
-  --color-edge: light-dark(#98aad0, #3a414b);
+  --color-line: light-dark(#d3d9e6, #2b313a);
+  --color-line-soft: light-dark(#e2e6ef, #20252c);
+  --color-edge: light-dark(#98aad0, #3f4752);
   --color-accent: light-dark(#c6f26e, #e8eaed);
   --color-accent-emphasis: light-dark(#b9ea57, #ffffff);
   --color-accent-ink: light-dark(#151c29, #0e1013);
@@ -30,6 +30,8 @@
   --color-amber: light-dark(#9a6700, #d29922);
   --color-amber-emphasis: light-dark(#7a5200, #e3b341);
   --color-amber-tint: light-dark(#fbf4e3, #261d0b);
+  --color-sky: light-dark(#0969da, #58a6ff);
+  --color-sky-tint: light-dark(#e3effc, #142033);
   --color-focus: light-dark(#6f3ff5, #e8eaed);
   --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
   --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
@@ -148,13 +150,6 @@ a {
   border-color: var(--color-accent-emphasis);
   color: var(--color-accent-ink);
 }
-.btn-danger {
-  color: var(--color-sindoor);
-}
-.btn-danger:hover {
-  border-color: var(--color-sindoor);
-  background: var(--color-sindoor-tint);
-}
 .btn-quiet,
 .btn-icon {
   border-color: transparent;
@@ -166,6 +161,18 @@ a {
   border-color: transparent;
   background: var(--color-sunken);
   color: var(--color-ink);
+}
+/* After .btn-quiet so a quiet button can still be red when it points at a failure. */
+.btn-danger {
+  color: var(--color-sindoor);
+}
+.btn-danger:hover {
+  border-color: var(--color-sindoor);
+  background: var(--color-sindoor-tint);
+  color: var(--color-sindoor);
+}
+.btn-quiet.btn-danger:hover {
+  border-color: transparent;
 }
 .btn-icon {
   padding: 7px;
@@ -207,11 +214,11 @@ a {
   background: var(--color-sindoor);
 }
 .state-run {
-  color: var(--color-leaf);
+  color: var(--color-sky);
 }
 .state-run::before {
   background: transparent;
-  box-shadow: inset 0 0 0 1.5px var(--color-leaf);
+  box-shadow: inset 0 0 0 1.5px var(--color-sky);
 }
 
 .chip {
@@ -229,32 +236,169 @@ a {
 }
 .chip-ok {
   color: var(--color-leaf);
+  border-color: color-mix(in srgb, var(--color-leaf) 35%, transparent);
 }
 .chip-bad {
   color: var(--color-sindoor);
+  border-color: color-mix(in srgb, var(--color-sindoor) 40%, transparent);
 }
-.chip-wait,
+.chip-wait {
+  color: var(--color-sky);
+  border-color: color-mix(in srgb, var(--color-sky) 40%, transparent);
+}
 .chip-mute {
   color: var(--color-slate);
-}
-.chip-mute {
   border-color: transparent;
   padding: 0;
 }
 
-.segments {
+/* Something that needs the owner's attention: a quiet amber wash, never a red alarm. */
+.notice {
+  border: 1px solid color-mix(in srgb, var(--color-amber) 30%, transparent);
+  background: color-mix(in srgb, var(--color-amber) 7%, transparent);
+  border-radius: 10px;
+}
+
+/*
+ * Today's publishing windows. One row per workflow; each window is a band across the day,
+ * the dot inside it marks the run that decided its state.
+ */
+.sched {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sched-row {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 4px;
-  height: 6px;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
 }
-.segments > span {
-  background: var(--color-line);
-  border-radius: 999px;
+.sched-axis {
+  height: 18px;
+  margin-bottom: 2px;
 }
-.segments > .on {
-  background: var(--color-accent);
+.sched-name {
+  font-size: 14px;
+  color: var(--color-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sched-name:hover {
+  text-decoration: underline;
+}
+.sched-track {
+  position: relative;
+  height: 32px;
+}
+.sched-axis .sched-track {
+  height: 18px;
+}
+.sched-hour {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 11.5px;
+  line-height: 18px;
+  color: var(--color-slate);
+  white-space: nowrap;
+}
+.sched-hour[data-edge="start"] {
+  transform: none;
+}
+.sched-hour[data-edge="end"] {
+  transform: translateX(-100%);
+}
+.sched-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-line-soft);
+}
+.sched-win {
+  position: absolute;
+  top: 9px;
+  height: 14px;
+  border-radius: 7px;
+  border: 1px solid var(--color-edge);
+  box-sizing: border-box;
+}
+.sched-win.is-posted {
+  border-color: transparent;
+  background: var(--color-leaf-tint);
+}
+.sched-win.is-failed {
+  border-color: transparent;
+  background: var(--color-sindoor-tint);
+}
+.sched-win.is-running,
+.sched-win.is-open {
+  border-color: var(--color-sky);
+  background: var(--color-sky-tint);
+}
+.sched-win.is-missed {
+  border-style: dashed;
+  border-color: var(--color-slate);
+}
+.sched-dot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-leaf);
+}
+.sched-win.is-failed .sched-dot,
+.sched-win.is-open .sched-dot {
+  background: var(--color-sindoor);
+}
+.sched-win.is-running .sched-dot {
+  background: var(--color-sky);
+  animation: sched-pulse 1.6s ease-in-out infinite;
+}
+.sched-now {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--color-ink);
+}
+@keyframes sched-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-sky) 50%, transparent);
+  }
+  60% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sched-win.is-running .sched-dot {
+    animation: none;
+  }
+}
+@media (max-width: 639px) {
+  .sched-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+  .sched-axis > span {
+    display: none;
+  }
+  .sched-name {
+    font-size: 13px;
+    color: var(--color-ink-soft);
+  }
+  .sched-track {
+    height: 26px;
+  }
+  .sched-win {
+    top: 6px;
+  }
 }
 
 /* Seven small bars, one per day; height follows the share of the daily target. */
@@ -273,7 +417,7 @@ a {
   background: var(--color-line);
 }
 .week > .on {
-  background: var(--color-accent);
+  background: var(--color-leaf);
 }
 .week > .today {
   outline: 1px solid var(--color-edge);
@@ -292,6 +436,74 @@ a {
 .facts dd {
   margin: 4px 0 0;
   font-size: inherit;
+  color: var(--color-ink);
+}
+
+/* A publish log: the time leads, the thing that happened follows. */
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.log > li {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: baseline;
+}
+@media (min-width: 640px) {
+  .log > li {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+}
+.log-when {
+  font-size: 13px;
+  line-height: 24px;
+  color: var(--color-ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.log-runs {
+  gap: 8px;
+}
+.log-runs > li {
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: center;
+}
+@media (min-width: 640px) {
+  .log-runs > li {
+    grid-template-columns: 110px minmax(0, 1fr) 56px auto;
+  }
+}
+.log-runs .log-when {
+  line-height: inherit;
+}
+
+.history > summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink-soft);
+}
+.history > summary::-webkit-details-marker {
+  display: none;
+}
+.history > summary::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid var(--color-slate);
+  border-bottom: 1.5px solid var(--color-slate);
+  transform: rotate(-45deg);
+  transition: transform 150ms ease;
+  flex-shrink: 0;
+}
+.history[open] > summary::before {
+  transform: rotate(45deg);
+}
+.history > summary:hover {
   color: var(--color-ink);
 }
 
@@ -581,7 +793,7 @@ dialog.sheet[open] {
 }
 .dot-run {
   background: transparent;
-  box-shadow: inset 0 0 0 1.5px var(--color-leaf);
+  box-shadow: inset 0 0 0 1.5px var(--color-sky);
 }
 
 .lane-word {

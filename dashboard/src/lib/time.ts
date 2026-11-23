@@ -14,6 +14,12 @@ export function fmtDay(iso: string) {
   return new Intl.DateTimeFormat("en-IN", { weekday: "short", day: "numeric", month: "short", timeZone: IST }).format(new Date(iso));
 }
 
+export function fmtDayTime(iso: string) {
+  const d = new Date(iso);
+  const day = new Intl.DateTimeFormat("en-IN", { weekday: "short", timeZone: IST }).format(d);
+  return `${day} ${fmtTime(d.toISOString())}`;
+}
+
 export function fmtDayLong(iso: string) {
   return new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: IST }).format(new Date(iso));
 }

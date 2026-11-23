@@ -106,6 +106,8 @@ export type WorkflowInfo = {
   today: Posted[];
   recent: Posted[];
   runs: RunInfo[];
+  /** Every fetched run from today, so each publishing window can be matched to its attempts. */
+  todayRuns: RunInfo[];
   runStats: RunStats;
   week: DayCount[];
   observedAccounts: string[];
@@ -333,7 +335,7 @@ async function workflowInfo(
 ): Promise<WorkflowInfo> {
   const [entries, runs] = await Promise.all([
     readIndex(def.index).catch(() => [] as IndexEntry[]),
-    listRuns(def.file, 10).catch(() => [] as Run[]),
+    listRuns(def.file, 20).catch(() => [] as Run[]),
   ]);
   const todayEntries = entries.filter((e) => e.date === today);
   const runByNumber = new Map(runs.map((r) => [r.run_number, r]));
@@ -380,6 +382,7 @@ async function workflowInfo(
     today: todayPosted,
     recent,
     runs: runInfos.slice(0, 6),
+    todayRuns: runInfos.filter((r) => r.createdAt.slice(0, 10) === today),
     runStats: runStats(runInfos, today),
     week: weekCounts(entries, today),
     observedAccounts: observed,
