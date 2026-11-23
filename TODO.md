@@ -13,14 +13,15 @@ Tokens come from the account owner's login (Instagram: Meta Business account / a
 
 ### Repo
 
-- [ ] **Switch on the external trigger** (GitHub's cron has created no scheduled run since 21 Nov): Vercel → Environment Variables → `CRON_SECRET` (random string, 16+ characters) for Production, then Redeploy; make sure the Vercel `GITHUB_TOKEN` PAT has Actions **read and write**. Vercel's scheduler (vercel.json > schedules) then calls `/api/trigger` every 15 min 9 am to 9 pm IST; check the project's Schedules tab. Steps in `dashboard/README.md` > External trigger
+- [ ] **Add the `VERCEL_TOKEN` repo secret** so the Deploy dashboard workflow can deploy: Vercel → Account settings → Tokens → Create (scope: the team), then repo Settings → Secrets and variables → Actions → `VERCEL_TOKEN`. Then Actions → Deploy dashboard → Run workflow once; after it is green, Vercel → Settings → Git → Disconnect (the workflow is the only deploy path from then on, so bot pushes to `main` / `videos` no longer show up on Vercel)
 - [ ] Fill the `DASHBOARD_ACCOUNTS` repo variable with each account's name and workflow groups so the board draws solid arrows (`gh variable set DASHBOARD_ACCOUNTS`, format in `dashboard/README.md`)
 - [ ] Rotate the dashboard credentials: new fine-grained PAT (`Actions` read and write for the trigger; read-only `Secrets`, `Variables`, `Contents`, `Issues`) and a new `DASHBOARD_USERS` password; update `dashboard/.env.local` and the Vercel project (`vercel env add GITHUB_TOKEN production --sensitive --force`, same for `DASHBOARD_USERS`), then revoke the old PAT
 - [ ] Regenerate any other tokens that were ever pasted into chat or committed
 
 ## Done
 
-- [x] Dashboard moved into `dashboard/` on `main` (one branch for everything); Vercel: Root Directory `dashboard`, Production Branch `main`, Ignored Build Step skips pushes that do not touch `dashboard/`; the separate `dashboard` branch is gone (old copies in local `dashboard` and `dashboard-full-backup` branches)
+- [x] External trigger switched on: `CRON_SECRET` set on Vercel, schedule `daily-videos` active, first run started by it on 23 Nov 9:19 am (NotebookLM run 11)
+- [x] Dashboard moved into `dashboard/` on `main` (one branch for everything); deployed by the Deploy dashboard workflow (Vercel CLI, Root Directory `dashboard`, root `.vercelignore`) instead of Vercel's Git integration, which reacted to every bot push; the separate `dashboard` branch is gone (old copies in local `dashboard-branch-backup` and `dashboard-full-backup` branches)
 - [x] Dashboard deployed on Vercel (env vars in Production)
 - [x] Dashboard: read-only board of workflows -> accounts with today's posts and upload results, runs page, secrets page with a section sidebar, password login, `/api/trigger` for Vercel's scheduler
 - [x] README: Mermaid diagram of workflow group -> `YT_USERn` / `IG_USERn`

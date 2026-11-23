@@ -79,20 +79,17 @@ Open <http://localhost:3000>. `npm run lint` and `npm run build` must pass befor
 
 The app lives in `dashboard/` on `main`, next to the pipeline. `vercel.json` pins the Next.js preset and the Mumbai region (`bom1`, change if you are elsewhere) and declares the schedule that calls `/api/trigger`.
 
-1. Vercel → Add New → Project → import this repo.
-2. Root Directory: `dashboard`. Framework preset: Next.js (detected from `vercel.json`).
-3. Settings → Git → Production Branch: `main`.
-4. Settings → Git → Ignored Build Step → Custom command (exit 0 = skip, anything else = build):
+Vercel's Git integration is **not** connected to the repo. It would react to every push on every branch, and the workflows push to `main` (story and fact files) and to `videos` several times a day; each of those showed up as a failed or skipped deployment. Instead the **Deploy dashboard** workflow (`.github/workflows/deploy-dashboard.yml`) uploads this folder with the Vercel CLI and lets Vercel build it. It runs when a push to `main` changes something under `dashboard/`, or by hand from Actions → Deploy dashboard → Run workflow. The root `.vercelignore` limits the upload to `dashboard/` (minus `node_modules`, `.next`, `.env*`).
 
-   ```
-   [ "$VERCEL_GIT_COMMIT_REF" = "main" ] || exit 0; cd "$(git rev-parse --show-toplevel)"; base="$VERCEL_GIT_PREVIOUS_SHA"; git cat-file -e "$base^{commit}" 2>/dev/null || base=HEAD^; git diff --quiet "$base" HEAD -- dashboard
-   ```
+One-time setup:
 
-   Only `main` builds, and only when something under `dashboard/` changed since the last deployment. The workflows push to `main` (story and fact files) and to `videos` several times a day; without this each of those pushes would show up as a failed or pointless deployment.
-5. Settings → Environment Variables: the four required ones above (and any optional ones), for Production.
-6. Deploy. After that, every push to `main` that touches `dashboard/` redeploys.
+1. Vercel → Add New → Project → Create without a Git repository (or import the repo once, then Settings → Git → Disconnect). Framework preset: Next.js. Root Directory: `dashboard`.
+2. Settings → Environment Variables: the four required ones above (and any optional ones, plus `CRON_SECRET` for the schedule), for Production.
+3. `cd dashboard && npx vercel link` on your PC, pick the project. Copy `orgId` and `projectId` from the `.vercel/project.json` it writes into the `env` block at the top of `deploy-dashboard.yml` (they are ids, not secrets).
+4. Vercel → Account settings → Tokens → Create, scoped to the team that owns the project. Add it to the repo as the `VERCEL_TOKEN` secret (Settings → Secrets and variables → Actions). The workflow stops with a clear error when it is missing.
+5. Actions → Deploy dashboard → Run workflow. The run's summary shows the deployment URL; Vercel points the project domain at it.
 
-The free Hobby plan is enough; the app makes a handful of GitHub API calls per page load (well under the 5,000/hour token limit even with the one-minute refresh).
+Build errors show on Vercel (the CLI prints the inspect URL in the run log), so run `npm run lint` and `npm run build` before pushing. The free Hobby plan is enough; the app makes a handful of GitHub API calls per page load (well under the 5,000/hour token limit even with the one-minute refresh).
 
 ## External trigger
 
@@ -107,7 +104,7 @@ Request: `GET` or `POST https://<your-dashboard>/api/trigger` with header `Autho
 Setup:
 
 1. Vercel → Settings → Environment Variables → add `CRON_SECRET` (any random string, 16+ characters) for Production. Make sure the `GITHUB_TOKEN` there has **Actions: read and write**.
-2. Push to `dashboard` (or Redeploy). Vercel reads `CRON_SECRET` at build time and creates the schedule from `vercel.json`; it appears under the project's **Schedules** tab with its execution history, and can be paused or run now from there.
+2. Run the Deploy dashboard workflow (or Redeploy on Vercel). Vercel reads `CRON_SECRET` at build time and creates the schedule from `vercel.json`; it appears under the project's **Schedules** tab with its execution history, and can be paused or run now from there.
 3. Test: open `https://<your-dashboard>/api/trigger?dry=1&key=<CRON_SECRET>` in a browser; the response says what would start and why not. Or press "Run now" on the schedule and look at the execution history.
 
 Changing `CRON_SECRET` later needs a redeploy (Vercel sends the value the current deployment was built with). To use another scheduler as well or instead, for example [cron-job.org](https://cron-job.org) every 10 minutes 9 am to 10 pm `Asia/Kolkata`, set `TRIGGER_SECRET` and send it as `Authorization: Bearer <TRIGGER_SECRET>`; the route only starts a run when one is due, so two schedulers calling it do no harm.

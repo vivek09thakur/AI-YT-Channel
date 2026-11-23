@@ -13,6 +13,7 @@ GitHub Actions that make short videos by themselves. Finished files land on the 
 | Pre-run check only | Probes LLM keys and the TTS voice, checks remaining Actions minutes when BILLING_TOKEN is set | By hand | one LLM key to pass |
 | Report failure | Opens / updates one `pipeline-failure` issue when a daily run fails, closes it on the next success. Expected stops (no upload account, NotebookLM quota used up, not enough Actions minutes) are not failures: the run cancels itself (grey **Cancelled**) and the reason is in the run's summary | Called by the daily workflows | nothing |
 | Cleanup old videos | Deletes videos older than 7 days | Weekly | nothing |
+| Deploy dashboard | Uploads `dashboard/` to Vercel (production) with the Vercel CLI; Vercel's own Git integration is not connected, so bot pushes never reach it | When a push to `main` changes `dashboard/`, or by hand | VERCEL_TOKEN |
 
 A scheduled slot only runs while fewer than 2 entries for today (UTC) exist in that workflow's index on the `videos` branch (`nlm.json`, `videos.json`, `stickman.json`); otherwise the guard job skips it. Manual runs ignore the guard, except runs started with the `auto` input on (that is how the dashboard's external trigger starts them, see below). A story rendered in both formats counts as one entry. Even when you give your own script, the story and stickman workflows still need an LLM key: the model writes the scene code.
 
@@ -111,7 +112,7 @@ So "stickman + youtube" = every eligible YouTube channel: the one whose `YT_USER
 
 ## Dashboard
 
-`dashboard/` is a small read-only Next.js app (deployed on Vercel from this branch, Root Directory `dashboard`). It draws the pipeline as a board: workflows on the left, accounts on the right, arrows for who posts where. A Runs page lists today's videos with their upload results and the recent runs; a Secrets page shows which repo secrets and variables exist. Nothing can be changed from there. It needs a fine-grained GitHub token and a user list; see [dashboard/README.md](dashboard/README.md) for the token permissions, environment variables and Vercel steps. The workflows never read this folder, and Vercel only rebuilds when a push to `main` changes something inside it.
+`dashboard/` is a small read-only Next.js app (deployed on Vercel by the Deploy dashboard workflow, Root Directory `dashboard`). It draws the pipeline as a board: workflows on the left, accounts on the right, arrows for who posts where. A Runs page lists today's videos with their upload results and the recent runs; a Secrets page shows which repo secrets and variables exist. Nothing can be changed from there. It needs a fine-grained GitHub token and a user list; see [dashboard/README.md](dashboard/README.md) for the token permissions, environment variables and Vercel steps. The workflows never read this folder, and Vercel is not connected to the repo: the Deploy dashboard workflow redeploys only when a push to `main` changes something inside `dashboard/`.
 
 ## All secrets and variables
 
@@ -152,6 +153,12 @@ Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in 
 
 Numbered, legacy and JSON accounts are all combined, so define each real account once or it gets the video twice. `GITHUB_TOKEN` is provided by Actions; no extra token is needed for the `videos` branch or the failure issue.
 
+### Dashboard
+
+| Name | Type | Required? | What / how to get it |
+|---|---|---|---|
+| VERCEL_TOKEN | Secret | Deploy dashboard | Vercel > Account settings > [Tokens](https://vercel.com/account/tokens) > Create, scoped to the team that owns the project. Only the Deploy dashboard workflow uses it; the project and team ids are in the workflow file |
+
 ## Where things are
 
 | Path | What |
@@ -161,7 +168,7 @@ Numbered, legacy and JSON accounts are all combined, so define each real account
 | `pipeline/stop_run.py` | shared helper: cancels the current run for an expected stop (reason in the run summary) instead of failing it |
 | `.github/skills/folk-art-video/` | story video engine |
 | `.github/skills/stickman-reel/` | stickman fact reel engine (`pipeline/stick/` scripts) |
-| `dashboard/` | read-only monitoring board (Next.js, Vercel) plus the `/api/trigger` endpoint |
+| `dashboard/` | read-only monitoring board (Next.js, Vercel) plus the `/api/trigger` endpoint; deployed by `deploy-dashboard.yml`, root `.vercelignore` limits the upload to this folder |
 | `videos` branch | finished videos, `nlm.json` + `videos.json` + `stickman.json` indexes (also drive the 2-a-day guard) |
 
 ## Costs

@@ -1,0 +1,57 @@
+name: Deploy dashboard
+
+# Deploys dashboard/ to Vercel (production). Vercel's own Git integration is NOT connected to this repo on purpose:
+# it reacts to every push on every branch, and the daily workflows push to main and videos several times a day, so
+# each of those showed up as a failed or skipped deployment. This workflow is the only thing that deploys, and it
+# only runs when a push to main changes something under dashboard/ (or by hand).
+#
+# Needs the VERCEL_TOKEN repo secret (Vercel > Account settings > Tokens). The project ids below are not secrets;
+# they are the same values the Vercel CLI writes to .vercel/project.json when you run `vercel link` in dashboard/.
+# Vercel project settings that must stay as they are: Root Directory = dashboard, Framework = Next.js, the four
+# environment variables from dashboard/README.md (and CRON_SECRET for the schedule).
+
+on:
+  push:
+    branches: [main]
+    paths: ['dashboard/**']
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-dashboard
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  VERCEL_ORG_ID: team_UKqCyolgYQMQPXLsWhvLwffy
+  VERCEL_PROJECT_ID: prj_KW6HjVlMKEAhAjv9oIKcK3lrPyCX
+
+jobs:
+  deploy:
+    name: Deploy to Vercel (production)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          [ -n "$VERCEL_TOKEN" ] || { echo "::error::VERCEL_TOKEN repo secret is missing. Create a token at vercel.com > Account settings > Tokens and add it under Settings > Secrets and variables > Actions."; exit 1; }
+          npm install -g vercel@latest >/dev/null 2>&1
+          # run from the repo root: the project's Root Directory is dashboard/, and .vercelignore keeps the upload
+          # to that folder only (the build itself happens on Vercel, with the environment variables stored there)
+          url=$(vercel deploy --prod --yes --token="$VERCEL_TOKEN")
+          echo "deployed $url"
+          {
+            echo "### Dashboard deployed"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Commit | \`${GITHUB_SHA::7}\` |"
+            echo "| URL | $url |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,9 @@
+# The Vercel project builds dashboard/ (Root Directory); nothing else in the repo needs to be uploaded.
+# Used by `vercel deploy` from the repo root (.github/workflows/deploy-dashboard.yml). gitignore syntax.
+/*
+!/dashboard
+dashboard/node_modules
+dashboard/.next
+dashboard/.vercel
+dashboard/.env*
+!dashboard/.env.example
