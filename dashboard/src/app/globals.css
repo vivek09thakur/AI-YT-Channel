@@ -1,40 +1,40 @@
 @import "tailwindcss";
 @import "@xyflow/react/dist/style.css";
 
-/* Palette and type borrowed from vish.me: navy paper, lavender ink, lime highlighter, violet links. */
+/* Light mode borrows from vish.me (lavender paper, lime highlighter, violet links); dark mode is the original neutral near-black. */
 @theme inline {
-  --color-paper: light-dark(#eef0f5, #151c29);
-  --color-inset: light-dark(#f6f7fb, #151c29);
-  --color-sunken: light-dark(#e3e7f0, #1d2638);
-  --color-board: light-dark(#e7eaf2, #111724);
-  --color-grid: light-dark(rgba(21, 28, 41, 0.06), rgba(152, 170, 208, 0.07));
-  --color-card: light-dark(#ffffff, #1f283b);
-  --color-card-hover: light-dark(#f8f9fc, #263047);
-  --color-ink: light-dark(#151c29, #c7cfe0);
-  --color-ink-soft: light-dark(#3f4a66, #a6b0c8);
-  --color-slate: light-dark(#6a7590, #7f8cab);
-  --color-line: light-dark(#d3d9e6, rgba(199, 207, 224, 0.12));
-  --color-line-soft: light-dark(#e2e6ef, rgba(199, 207, 224, 0.07));
-  --color-edge: light-dark(#98aad0, #5b6a8c);
-  --color-accent: #c6f26e;
-  --color-accent-emphasis: light-dark(#b9ea57, #d4f78a);
-  --color-accent-ink: #151c29;
-  --color-violet: light-dark(#6f3ff5, #a98aff);
-  --color-violet-tint: light-dark(rgba(155, 107, 255, 0.22), rgba(155, 107, 255, 0.28));
-  --color-leaf: light-dark(#4f7d0c, #c6f26e);
-  --color-leaf-emphasis: light-dark(#41690a, #d4f78a);
-  --color-leaf-tint: light-dark(rgba(198, 242, 110, 0.3), rgba(198, 242, 110, 0.14));
-  --color-sindoor: light-dark(#c9372c, #f47a70);
-  --color-sindoor-emphasis: light-dark(#a52c23, #ff8a80);
-  --color-sindoor-tint: light-dark(#fbeceb, rgba(244, 122, 112, 0.14));
-  --color-amber: light-dark(#9a6700, #e3b341);
-  --color-amber-emphasis: light-dark(#7a5200, #f0c85a);
-  --color-amber-tint: light-dark(#fbf4e3, rgba(227, 179, 65, 0.14));
-  --color-focus: light-dark(#6f3ff5, #c6f26e);
+  --color-paper: light-dark(#eef0f5, #0e1013);
+  --color-inset: light-dark(#f6f7fb, #0e1013);
+  --color-sunken: light-dark(#e3e7f0, #13161a);
+  --color-board: light-dark(#e7eaf2, #0b0d10);
+  --color-grid: light-dark(rgba(21, 28, 41, 0.06), rgba(232, 234, 237, 0.045));
+  --color-card: light-dark(#ffffff, #171a1f);
+  --color-card-hover: light-dark(#f8f9fc, #1c2026);
+  --color-ink: light-dark(#151c29, #e8eaed);
+  --color-ink-soft: light-dark(#3f4a66, #b4bac3);
+  --color-slate: light-dark(#6a7590, #8b949e);
+  --color-line: light-dark(#d3d9e6, #262b33);
+  --color-line-soft: light-dark(#e2e6ef, #1d2127);
+  --color-edge: light-dark(#98aad0, #3a414b);
+  --color-accent: light-dark(#c6f26e, #e8eaed);
+  --color-accent-emphasis: light-dark(#b9ea57, #ffffff);
+  --color-accent-ink: light-dark(#151c29, #0e1013);
+  --color-violet: light-dark(#6f3ff5, #e8eaed);
+  --color-violet-tint: light-dark(rgba(155, 107, 255, 0.22), #1d2127);
+  --color-leaf: light-dark(#4f7d0c, #3fb950);
+  --color-leaf-emphasis: light-dark(#41690a, #56d364);
+  --color-leaf-tint: light-dark(rgba(198, 242, 110, 0.3), #122117);
+  --color-sindoor: light-dark(#c9372c, #f0665c);
+  --color-sindoor-emphasis: light-dark(#a52c23, #ff7b72);
+  --color-sindoor-tint: light-dark(#fbeceb, #2a1614);
+  --color-amber: light-dark(#9a6700, #d29922);
+  --color-amber-emphasis: light-dark(#7a5200, #e3b341);
+  --color-amber-tint: light-dark(#fbf4e3, #261d0b);
+  --color-focus: light-dark(#6f3ff5, #e8eaed);
   --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
   --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
   --radius-tile: 10px;
-  --shadow-overlay: light-dark(0 16px 40px rgba(21, 28, 41, 0.18), 0 16px 40px rgba(0, 0, 0, 0.55));
+  --shadow-overlay: light-dark(0 16px 40px rgba(21, 28, 41, 0.18), 0 16px 40px rgba(0, 0, 0, 0.6));
 }
 
 :root {
