@@ -18,6 +18,16 @@ export function fmtDayLong(iso: string) {
   return new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: IST }).format(new Date(iso));
 }
 
+export function fmtDuration(sec: number | null | undefined) {
+  if (sec === null || sec === undefined) return "";
+  if (sec < 60) return "<1 min";
+  const m = Math.round(sec / 60);
+  if (m < 60) return `${m} min`;
+  const h = Math.floor(m / 60);
+  const rest = m % 60;
+  return rest ? `${h} h ${rest} min` : `${h} h`;
+}
+
 export function ago(iso: string | undefined, now = Date.now()) {
   if (!iso) return "";
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));

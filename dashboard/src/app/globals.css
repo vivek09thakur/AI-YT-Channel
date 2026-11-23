@@ -33,7 +33,6 @@
   --color-focus: light-dark(#6f3ff5, #c6f26e);
   --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
   --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
-  --font-display: var(--font-archivo), "Archivo Black", sans-serif;
   --radius-tile: 10px;
   --shadow-overlay: light-dark(0 16px 40px rgba(21, 28, 41, 0.18), 0 16px 40px rgba(0, 0, 0, 0.55));
 }
@@ -84,10 +83,10 @@ a {
 }
 
 .wordmark {
-  font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
   color: var(--color-ink);
   text-decoration: none;
   white-space: nowrap;
@@ -169,8 +168,8 @@ a {
   color: var(--color-ink);
 }
 .btn-icon {
-  padding: 5px;
-  font-size: 16px;
+  padding: 7px;
+  font-size: 18px;
 }
 .btn:disabled {
   background: var(--color-sunken);
@@ -258,6 +257,44 @@ a {
   background: var(--color-accent);
 }
 
+/* Seven small bars, one per day; height follows the share of the daily target. */
+.week {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  width: 84px;
+}
+.week > span {
+  display: block;
+  flex: 1;
+  min-height: 3px;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+.week > .on {
+  background: var(--color-accent);
+}
+.week > .today {
+  outline: 1px solid var(--color-edge);
+  outline-offset: 1px;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px 20px;
+}
+.facts dt {
+  font-size: 12px;
+  color: var(--color-slate);
+}
+.facts dd {
+  margin: 2px 0 0;
+  font-size: inherit;
+  color: var(--color-ink);
+}
+
 dialog.sheet {
   margin: auto;
   border: 1px solid var(--color-line);
@@ -297,7 +334,7 @@ dialog.sheet[open] {
   top: calc(100% + 6px);
   right: 0;
   z-index: 20;
-  min-width: 200px;
+  min-width: 220px;
   padding: 6px;
   border: 1px solid var(--color-line);
   border-radius: 10px;
@@ -308,10 +345,10 @@ dialog.sheet[open] {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 36px;
-  padding: 0 10px;
+  height: 40px;
+  padding: 0 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-ink);
   text-decoration: none;
   white-space: nowrap;
@@ -336,8 +373,8 @@ dialog.sheet[open] {
   background: var(--color-line-soft);
 }
 .menu-note {
-  padding: 4px 10px 6px;
-  font-size: 12px;
+  padding: 4px 12px 6px;
+  font-size: 13px;
   color: var(--color-ink-soft);
 }
 

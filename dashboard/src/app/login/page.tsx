@@ -12,7 +12,7 @@ export default function LoginPage() {
     <main className="relative flex-1 grid place-items-center p-6">
       <ThemeToggle className="absolute top-3 right-3" />
       <div className="w-full max-w-[360px]">
-        <h1 className="font-display text-[26px] font-normal mb-2">AI YT Channel</h1>
+        <h1 className="text-[28px] mb-2">AI YT Channel</h1>
         <p className="text-ink-soft mb-8">Sign in to see today&apos;s board.</p>
         {problems.length > 0 ? (
           <div className="rounded-[10px] bg-sindoor-tint p-4 text-[14px]">

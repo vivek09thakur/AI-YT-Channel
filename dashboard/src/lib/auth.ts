@@ -1,4 +1,5 @@
 import "server-only";
+import { io } from "next/cache";
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, SESSION_DAYS, readSession, signSession, type Session } from "./session";
 
@@ -6,6 +7,8 @@ export { checkCredentials, parseUsers, readSession, signSession, SESSION_COOKIE,
 
 export async function getSession(): Promise<Session | null> {
   const jar = await cookies();
+  // jwtVerify reads the clock; keep it out of prerenders (cookies can resolve during runtime prefetch).
+  await io();
   return readSession(jar.get(SESSION_COOKIE)?.value);
 }
 

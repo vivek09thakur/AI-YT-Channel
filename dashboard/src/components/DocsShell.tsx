@@ -13,13 +13,13 @@ export function DocsShell({ slug, headings, children }: { slug: string; headings
   const repo = process.env.GITHUB_REPO;
   return (
     <div className="h-dvh flex flex-col">
-      <header className="h-[52px] shrink-0 bg-inset border-b border-line text-[14px]">
-        <div className="h-full flex items-center gap-2 px-4">
+      <header className="h-[60px] shrink-0 bg-inset border-b border-line text-[15px]">
+        <div className="h-full flex items-center gap-3 px-5">
           <Link href="/docs" className="wordmark">
             AI YT Channel
           </Link>
           <span className="text-slate">docs</span>
-          <div className="ml-auto flex items-center gap-1">
+          <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
             <Suspense fallback={null}>
               <SessionMenu />

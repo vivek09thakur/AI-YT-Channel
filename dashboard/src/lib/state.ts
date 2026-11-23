@@ -1,4 +1,5 @@
 import "server-only";
+import { io } from "next/cache";
 import { env } from "./env";
 import {
   actionsUrl,
@@ -81,6 +82,17 @@ export type RunInfo = {
   createdAt: string;
   url: string;
   event: string;
+  durationSec: number | null;
+};
+
+export type DayCount = { date: string; count: number };
+
+export type RunStats = {
+  completed: number;
+  ok: number;
+  failed: number;
+  typicalSec: number | null;
+  today: { total: number; failed: number; running: number };
 };
 
 export type WorkflowInfo = {
@@ -94,6 +106,8 @@ export type WorkflowInfo = {
   today: Posted[];
   recent: Posted[];
   runs: RunInfo[];
+  runStats: RunStats;
+  week: DayCount[];
   observedAccounts: string[];
   latestRun: RunInfo | null;
   nextSlot: string | null;
@@ -263,7 +277,35 @@ function parseUploads(jobs: Job[]): UploadOutcome[] {
 }
 
 function toRunInfo(r: Run): RunInfo {
-  return { id: r.id, number: r.run_number, status: r.status, conclusion: r.conclusion, createdAt: r.created_at, url: r.html_url, event: r.event };
+  const durationSec = r.status === "completed" ? Math.max(0, Math.round((Date.parse(r.updated_at) - Date.parse(r.created_at)) / 1000)) : null;
+  return { id: r.id, number: r.run_number, status: r.status, conclusion: r.conclusion, createdAt: r.created_at, url: r.html_url, event: r.event, durationSec };
+}
+
+export function runStats(runs: RunInfo[], today: string): RunStats {
+  const isFailure = (r: RunInfo) => r.status === "completed" && r.conclusion !== "success" && r.conclusion !== "skipped" && r.conclusion !== "cancelled";
+  const done = runs.filter((r) => r.status === "completed" && r.conclusion !== "skipped" && r.conclusion !== "cancelled");
+  const ok = done.filter((r) => r.conclusion === "success");
+  const secs = ok.map((r) => r.durationSec).filter((s): s is number => s !== null).sort((a, b) => a - b);
+  const todays = runs.filter((r) => r.createdAt.slice(0, 10) === today);
+  return {
+    completed: done.length,
+    ok: ok.length,
+    failed: done.length - ok.length,
+    typicalSec: secs.length ? secs[Math.floor(secs.length / 2)] : null,
+    today: {
+      total: todays.length,
+      failed: todays.filter(isFailure).length,
+      running: todays.filter((r) => r.status !== "completed").length,
+    },
+  };
+}
+
+export function weekCounts(entries: { date: string }[], today: string, days = 7): DayCount[] {
+  const end = Date.parse(`${today}T00:00:00Z`);
+  return Array.from({ length: days }, (_, i) => {
+    const date = new Date(end - (days - 1 - i) * 86_400_000).toISOString().slice(0, 10);
+    return { date, count: entries.filter((e) => e.date === date).length };
+  });
 }
 
 async function uploadsForRun(run: Run | undefined): Promise<UploadOutcome[]> {
@@ -314,7 +356,8 @@ async function workflowInfo(
   const todayPosted = await Promise.all(todayEntries.map(toPosted));
   const recent = await Promise.all(entries.filter((e) => e.date !== today).slice(0, 4).map(toPosted));
   const observed = await observedAccounts(runs);
-  const latest = runs[0] ? toRunInfo(runs[0]) : null;
+  const runInfos = runs.map(toRunInfo);
+  const latest = runInfos[0] ?? null;
   const remaining = def.target - todayPosted.length;
   const slot = nextSlot(def.slotsIST, def.dueIST, now, todayPosted.length, def.target);
 
@@ -336,7 +379,9 @@ async function workflowInfo(
     todayCount: todayPosted.length,
     today: todayPosted,
     recent,
-    runs: runs.slice(0, 6).map(toRunInfo),
+    runs: runInfos.slice(0, 6),
+    runStats: runStats(runInfos, today),
+    week: weekCounts(entries, today),
     observedAccounts: observed,
     latestRun: latest,
     nextSlot: slot,
@@ -350,6 +395,7 @@ async function workflowInfo(
 }
 
 export async function loadOverview(): Promise<Overview> {
+  await io();
   const today = todayUTC();
   const now = nowIST();
   const [secrets, variables, issues] = await Promise.all([
