@@ -15,8 +15,11 @@ import { fmtClock } from "@/lib/time";
 //   Authorization: Bearer <secret>   (or header x-trigger-key, or ?key=)
 //   ?dry=1          report what would be started, start nothing
 //   ?workflow=nlm   only this workflow (nlm | story | stickman)
+//   ?formats=both   story only: shorts | landscape | both (the workflow's own default, shorts, applies when omitted)
 
 export const maxDuration = 30;
+
+const STORY_FORMATS = ["shorts", "landscape", "both"] as const;
 
 function authorized(req: NextRequest, expected: string[]) {
   const header = req.headers.get("authorization");
@@ -36,6 +39,10 @@ async function handle(req: NextRequest) {
 
   const dry = req.nextUrl.searchParams.get("dry") === "1";
   const only = req.nextUrl.searchParams.get("workflow");
+  const formats = req.nextUrl.searchParams.get("formats");
+  if (formats && !(STORY_FORMATS as readonly string[]).includes(formats)) {
+    return NextResponse.json({ error: `formats must be one of ${STORY_FORMATS.join(", ")}` }, { status: 400 });
+  }
   const now = new Date();
   const ist = nowIST(now);
   const today = todayUTC(now);
@@ -53,7 +60,11 @@ async function handle(req: NextRequest) {
         activeRunUrl: active?.html_url,
         lastRunStartedMinAgo: latest ? minutesSince(latest.created_at, now.getTime()) : undefined,
       });
-      if (d.action === "dispatch" && !dry) await dispatchWorkflow(def.file, { auto: "true" });
+      if (d.action === "dispatch" && !dry) {
+        const inputs: Record<string, string> = { auto: "true" };
+        if (formats && def.id === "story") inputs.formats = formats;
+        await dispatchWorkflow(def.file, inputs);
+      }
       results.push({ ...d, dry });
     }
   } catch (e) {

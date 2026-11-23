@@ -102,7 +102,7 @@ GitHub's cron can stop creating scheduled runs for a repo with no error anywhere
 - a run is started only while a video that is due by now is still missing (first due time, then the second; 2 a day), never when a run of that workflow is queued or in progress, and not within 25 minutes of the previous run (the cron retried every 30);
 - the run is started with the `auto` input on, so the workflow's own guard job re-checks the index and still skips if a video appeared in the meantime. Started runs show as "manual" on the Runs page because GitHub records them as `workflow_dispatch`.
 
-Request: `GET` or `POST https://<your-dashboard>/api/trigger` with header `Authorization: Bearer <CRON_SECRET or TRIGGER_SECRET>` (also accepted: header `x-trigger-key`, or `?key=`). Add `?dry=1` to see the decision without starting anything, `?workflow=nlm|story|stickman` to look at one workflow. The answer is JSON: `time`, `date`, `started` (list of workflow ids), and one `results` entry per workflow with `action`, `reason`, `published` and `target`. Wrong key: 401. No secret set: 503. A GitHub error: 502 with the message.
+Request: `GET` or `POST https://<your-dashboard>/api/trigger` with header `Authorization: Bearer <CRON_SECRET or TRIGGER_SECRET>` (also accepted: header `x-trigger-key`, or `?key=`). Add `?dry=1` to see the decision without starting anything, `?workflow=nlm|story|stickman` to look at one workflow, and `?formats=shorts|landscape|both` to pick the story video's format for that call (only used when the story workflow is started; the schedule never sends it, so daily runs make shorts). The answer is JSON: `time`, `date`, `started` (list of workflow ids), and one `results` entry per workflow with `action`, `reason`, `published` and `target`. Wrong key: 401. No secret set: 503. A GitHub error: 502 with the message.
 
 Setup:
 
@@ -127,7 +127,7 @@ Because secret values cannot be read back, the display name, owner and the list 
 
 `for: []` means every workflow, matching how the pipeline treats an empty or `all` `_FOR` secret. Keep `for` in step with the account's `_FOR` secret; the workflows never read the variable. Only `upload-video.yml` (named `YT_*` / `IG_*` secrets passed to `pipeline/notebooklm/upload_accounts.py`) decides where a video goes. A key that exists only in the variable is shown as a planned account ("Planned, secrets to add") until its secrets are added. An account whose `for` is not recorded is drawn with dashed lines; once a run has posted there the dashboard uses the observed uploads instead.
 
-Upload results come from the job names of each run (`Upload shorts / Upload youtube/user1`). The story workflow uploads twice, `shorts.mp4` to YouTube and Instagram and `landscape.mp4` to YouTube only, so a YouTube channel can show two chips for one story; the second is marked "landscape".
+Upload results come from the job names of each run (`Upload shorts / Upload youtube/user1`). The story workflow uploads `shorts.mp4` to YouTube and Instagram and, when run with `formats=landscape` or `both`, `landscape.mp4` to YouTube only, so a YouTube channel can show two chips for one story; the second is marked "landscape".
 
 ## Files
 

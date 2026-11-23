@@ -2,7 +2,8 @@ name: Generate story video
 
 # Daily: an LLM looks at the stories already on the videos branch, picks the next one (continues a saga or moves to a
 # tradition not covered lately), writes the 2-minute narration, then renders, publishes and uploads it (group "story").
-# By hand: same, or give your own topic / script.
+# Scheduled and auto-triggered runs render shorts (9:16) only; pick formats=landscape or both by hand when you want
+# the 16:9 video. By hand: same, or give your own topic / script.
 
 on:
   schedule:
@@ -33,11 +34,11 @@ on:
         required: false
         type: string
       formats:
-        description: 'Which video(s) to render (shorts = 9:16 only, landscape = 16:9 only; one format halves render minutes)'
+        description: 'Which video(s) to render: shorts = 9:16 only (the daily default), landscape = 16:9 only, both (adds ~35 render minutes)'
         required: true
         type: choice
-        default: both
-        options: [both, shorts, landscape]
+        default: shorts
+        options: [shorts, landscape, both]
       voice:
         description: 'Narration voice (neural)'
         required: true
@@ -95,8 +96,8 @@ env:
   DUE_UTC: '05:47 11:17'   # when the 1st and 2nd story of the day are due (11:17 am and 4:47 pm IST); guard job
   KIT: .github/skills/folk-art-video
   PYTHONUNBUFFERED: '1'
-  # scheduled runs have no inputs: these are the defaults used then
-  FORMATS: ${{ inputs.formats || 'both' }}
+  # scheduled runs have no inputs: these are the defaults used then (shorts only; landscape is a manual choice)
+  FORMATS: ${{ inputs.formats || 'shorts' }}
   VOICE: ${{ inputs.voice || 'en-GB-RyanNeural' }}
   PROVIDER: ${{ inputs.provider || 'auto' }}
   UPLOAD: ${{ inputs.upload || 'auto' }}
@@ -488,7 +489,8 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   # Uploads go to accounts allowed for group "story" (YT_USERn_FOR / IG_USERn_FOR secrets). Shorts -> YouTube + Instagram,
-  # landscape -> YouTube only. Re-run by hand with the "Upload video" workflow and folder videos/<slug>-<run>.
+  # landscape -> YouTube only (only rendered when formats is landscape or both; scheduled runs have no inputs = shorts).
+  # Re-run by hand with the "Upload video" workflow and folder videos/<slug>-<run>.
   upload_shorts:
     name: Upload shorts
     needs: [author, publish]
@@ -508,7 +510,7 @@ jobs:
   upload_landscape:
     name: Upload landscape
     needs: [author, publish]
-    if: ${{ inputs.formats != 'shorts' && inputs.upload != 'off' }}
+    if: ${{ (inputs.formats == 'landscape' || inputs.formats == 'both') && inputs.upload != 'off' }}
     uses: ./.github/workflows/upload-video.yml
     secrets: inherit
     with:
