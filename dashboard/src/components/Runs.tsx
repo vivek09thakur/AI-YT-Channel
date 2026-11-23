@@ -55,7 +55,7 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
   return (
     <section className="rounded-[10px] border border-line bg-card" aria-labelledby={`wf-${wf.id}`}>
       <header className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 border-b border-line-soft">
-        <h2 id={`wf-${wf.id}`} className="text-[15px] font-medium">
+        <h2 id={`wf-${wf.id}`} className="text-[16px]">
           {wf.title}
         </h2>
         <StateChip wf={wf} long />
@@ -75,8 +75,8 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
       </header>
 
       <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-line-soft">
-        <div className="px-4 py-3 min-w-0">
-          <h3 className="text-[13px] text-slate mb-2">Today&rsquo;s videos</h3>
+        <div className="px-4 py-4 min-w-0">
+          <h3 className="text-[13px] text-slate mb-3">Today&rsquo;s videos</h3>
           {wf.today.length === 0 ? (
             <p className="text-ink-soft">Nothing posted yet today.</p>
           ) : (
@@ -100,14 +100,14 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
           )}
         </div>
 
-        <div className="px-4 py-3 min-w-0">
-          <h3 className="text-[13px] text-slate mb-2">Recent runs</h3>
+        <div className="px-4 py-4 min-w-0">
+          <h3 className="text-[13px] text-slate mb-3">Recent runs</h3>
           {wf.runs.length === 0 ? (
             <p className="text-ink-soft">No runs yet.</p>
           ) : (
             <ul className="divide-y divide-line-soft">
               {wf.runs.map((r) => (
-                <li key={r.id} className="flex items-center gap-3 py-1.5">
+                <li key={r.id} className="flex items-center gap-3 py-2">
                   <span className="w-[140px] shrink-0 font-mono text-[11.5px] text-ink-soft whitespace-nowrap">
                     {fmtDay(r.createdAt)} {fmtTime(r.createdAt)}
                   </span>

@@ -58,15 +58,15 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3 {
-  font-weight: 500;
-  line-height: 1.25;
+  font-weight: 400;
+  line-height: 1.3;
 }
 
 a {
@@ -126,7 +126,7 @@ a {
   border-radius: 8px;
   padding: 5px 12px;
   font: inherit;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px;
   border: 1px solid var(--color-line);
   background: var(--color-paper);
@@ -323,7 +323,7 @@ dialog.sheet[open] {
   background: var(--color-sunken);
 }
 .menu-item[aria-current="page"] {
-  font-weight: 500;
+  color: var(--color-ink);
   background: var(--color-sunken);
 }
 .menu-item:focus-visible {
@@ -391,7 +391,6 @@ dialog.sheet[open] {
 }
 .rail-item[aria-current="true"] {
   color: var(--color-ink);
-  font-weight: 500;
   background: var(--color-sunken);
 }
 .rail-item:focus-visible {
@@ -423,7 +422,7 @@ dialog.sheet[open] {
 .rail-toc .rail-item[aria-current="true"] {
   background: none;
   color: var(--color-ink);
-  font-weight: 500;
+  box-shadow: inset 2px 0 0 var(--color-accent);
 }
 @media (min-width: 768px) {
   .rail {
@@ -505,7 +504,7 @@ dialog.sheet[open] {
 .tile-workflow,
 .tile-account {
   width: 260px;
-  height: 76px;
+  height: 80px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -513,7 +512,7 @@ dialog.sheet[open] {
 }
 .tile-ghost {
   width: 260px;
-  height: 76px;
+  height: 80px;
   padding: 14px 16px;
   display: flex;
   align-items: center;
@@ -551,16 +550,15 @@ dialog.sheet[open] {
 .lane-word {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   width: 320px;
   color: var(--color-ink);
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.3;
+  font-weight: 400;
+  line-height: 1.4;
 }
 .lane-hint {
   font-size: 12px;
-  font-weight: 400;
   color: var(--color-slate);
 }
 .lane-junction {
@@ -585,7 +583,7 @@ dialog.sheet[open] {
 .doc {
   max-width: 820px;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.8;
   overflow-wrap: break-word;
 }
 .doc > :first-child {
@@ -594,24 +592,25 @@ dialog.sheet[open] {
 .doc h1 {
   font-size: 26px;
   letter-spacing: -0.01em;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
 }
 .doc h2 {
   font-size: 19px;
-  margin: 44px 0 12px;
+  margin: 48px 0 14px;
   scroll-margin-top: 20px;
 }
 .doc h3 {
   font-size: 16px;
-  margin: 28px 0 8px;
+  margin: 32px 0 10px;
   scroll-margin-top: 20px;
 }
 .doc h4,
 .doc h5,
 .doc h6 {
   font-size: 15px;
-  font-weight: 500;
-  margin: 20px 0 6px;
+  font-weight: 400;
+  color: var(--color-ink-soft);
+  margin: 24px 0 8px;
   scroll-margin-top: 20px;
 }
 .doc p,
@@ -620,7 +619,7 @@ dialog.sheet[open] {
 .doc pre,
 .doc blockquote,
 .doc .doc-table {
-  margin: 0 0 14px;
+  margin: 0 0 18px;
 }
 .doc ul,
 .doc ol {
@@ -633,17 +632,17 @@ dialog.sheet[open] {
   list-style: decimal;
 }
 .doc li + li {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 .doc li > ul,
 .doc li > ol {
-  margin: 4px 0 0;
+  margin: 6px 0 0;
 }
 .doc li > p {
   margin: 0;
 }
 .doc strong {
-  font-weight: 600;
+  font-weight: 500;
 }
 .doc a {
   color: var(--color-violet);
@@ -704,15 +703,16 @@ dialog.sheet[open] {
   font-size: 14px;
 }
 .doc th {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--color-line);
   background: var(--color-sunken);
-  font-weight: 500;
+  font-weight: 400;
+  color: var(--color-ink-soft);
   text-align: left;
   white-space: nowrap;
 }
 .doc td {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-top: 1px solid var(--color-line-soft);
   vertical-align: top;
 }

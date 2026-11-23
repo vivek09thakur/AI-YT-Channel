@@ -14,9 +14,9 @@ export type JunctionNode = Node<Record<string, never>, "junction">;
 export type BoardNode = WfNode | AccNode | GhostNode | LaneNode | JunctionNode;
 
 export const WF_W = 260;
-export const WF_H = 76;
+export const WF_H = 80;
 export const ACC_W = 260;
-export const ACC_H = 76;
+export const ACC_H = 80;
 
 export function WorkflowNode({ data }: NodeProps<WfNode>) {
   const { wf } = data;
@@ -24,7 +24,7 @@ export function WorkflowNode({ data }: NodeProps<WfNode>) {
     <div className="tile tile-workflow" role="button" aria-label={`${wf.title}: ${wf.todayCount} of ${wf.target} posted today, ${stateText(wf)}`}>
       <Handle type="source" position={Position.Right} />
       <div className="flex items-center justify-between gap-2">
-        <span className="font-medium leading-5 truncate">{wf.title}</span>
+        <span className="leading-6 truncate">{wf.title}</span>
         <span className={stateDot(wf)} aria-hidden />
       </div>
       <div className="flex items-center justify-between gap-2 text-[12px] text-slate tabular-nums">
@@ -45,7 +45,7 @@ export function AccountNode({ data }: NodeProps<AccNode>) {
     <div className="tile tile-account" role="button" aria-label={`${acc.name}, ${PLATFORMS[acc.platform].label}, ${status}`} title={status}>
       <Handle type="target" position={Position.Left} />
       <div className="flex items-center justify-between gap-2">
-        <span className="font-medium leading-5 truncate">{acc.name}</span>
+        <span className="leading-6 truncate">{acc.name}</span>
         <span className={`dot ${acc.configured ? "dot-ok" : "dot-bad"}`} aria-hidden />
       </div>
       <div className="flex items-center justify-between gap-2 text-[12px] text-slate">
@@ -64,7 +64,7 @@ export function GhostSlotNode({ data }: NodeProps<GhostNode>) {
   return (
     <div className="tile tile-ghost" aria-label={`${data.lane}: no ${label} account yet`}>
       <Handle type="target" position={Position.Left} />
-      <span className="inline-flex items-center gap-1.5 text-[13px] font-medium">
+      <span className="inline-flex items-center gap-1.5 text-[13px]">
         <PlatformIcon platform={data.platform} className="shrink-0" />
         No {label} account
       </span>

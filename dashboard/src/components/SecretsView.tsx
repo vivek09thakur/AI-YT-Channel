@@ -108,12 +108,12 @@ function Status({ row }: { row: Row }) {
 function RowView({ row }: { row: Row }) {
   return (
     <tr className="align-middle">
-      <td className="px-4 py-2.5">
-        <div className="font-mono text-[13px] font-medium break-all">
+      <td className="px-4 py-3">
+        <div className="font-mono text-[13px] break-all">
           {row.name}
-          {row.type === "variable" && <span className="ml-2 text-[11px] font-normal text-slate align-middle whitespace-nowrap">variable</span>}
+          {row.type === "variable" && <span className="ml-2 text-[11px] text-slate align-middle whitespace-nowrap font-sans">variable</span>}
         </div>
-        <div className="text-[12px] text-slate">
+        <div className="text-[12px] text-slate mt-0.5">
           {row.hint}
           {row.link && (
             <a href={row.link} target="_blank" rel="noreferrer" className="ml-1.5 inline-flex align-middle hover:text-ink" aria-label={`Get ${row.name}`}>
@@ -122,7 +122,7 @@ function RowView({ row }: { row: Row }) {
           )}
         </div>
       </td>
-      <td className="px-4 py-2.5 w-[32%] text-[13px]">
+      <td className="px-4 py-3 w-[32%] text-[13px]">
         <Status row={row} />
       </td>
     </tr>

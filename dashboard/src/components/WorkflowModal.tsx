@@ -138,9 +138,9 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
 
 export function PostRow({ post, accounts }: { post: Posted; accounts: AccountInfo[] }) {
   return (
-    <li className="rounded-[10px] bg-sunken px-3 py-2 text-[14px]">
+    <li className="rounded-[10px] bg-sunken px-3 py-2.5 text-[14px]">
       <div className="flex items-center gap-2">
-        <a href={post.videoUrl} target="_blank" rel="noreferrer" className="font-medium truncate underline">
+        <a href={post.videoUrl} target="_blank" rel="noreferrer" className="truncate underline">
           {post.title}
         </a>
         <a href={post.runUrl} target="_blank" rel="noreferrer" className="ml-auto text-ink-soft shrink-0 hover:text-ink">
