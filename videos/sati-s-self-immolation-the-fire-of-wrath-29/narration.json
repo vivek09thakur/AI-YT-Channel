@@ -1,0 +1,231 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 120.69,
+ "lines": [
+  {
+   "i": 0,
+   "text": "The sacrificial arena falls dead silent.",
+   "t0": 0.8,
+   "t1": 3.38,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "All eyes turn toward the uninvited princess...",
+   "t0": 3.93,
+   "t1": 6.6,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Daksha stands tall on his elevated platform.",
+   "t0": 8.05,
+   "t1": 10.83,
+   "para": true
+  },
+  {
+   "i": 3,
+   "text": "His face contorts with blinding rage.",
+   "t0": 11.38,
+   "t1": 13.74,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "He hurls insults at the ascetic lord of mountains.",
+   "t0": 14.29,
+   "t1": 17.32,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "He mocks Shiva's matted locks, his ash-covered skin, his ghostly companions...",
+   "t0": 17.87,
+   "t1": 22.62,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "Sati listens.",
+   "t0": 24.07,
+   "t1": 25.23,
+   "para": true
+  },
+  {
+   "i": 7,
+   "text": "Every word is a poisoned dagger piercing her heart.",
+   "t0": 25.78,
+   "t1": 28.7,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "She tries to defend her divine husband.",
+   "t0": 29.25,
+   "t1": 31.57,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "She speaks of his infinite compassion, his cosmic grace, his boundless love...",
+   "t0": 32.12,
+   "t1": 36.98,
+   "para": false
+  },
+  {
+   "i": 10,
+   "text": "Daksha refuses to listen.",
+   "t0": 38.43,
+   "t1": 40.07,
+   "para": true
+  },
+  {
+   "i": 11,
+   "text": "He turns his back on his own flesh and blood.",
+   "t0": 40.62,
+   "t1": 43.26,
+   "para": false
+  },
+  {
+   "i": 12,
+   "text": "He utters the ultimate blasphemy against the destroyer of worlds...",
+   "t0": 43.81,
+   "t1": 47.19,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "Something inside Sati breaks.",
+   "t0": 48.64,
+   "t1": 50.66,
+   "para": true
+  },
+  {
+   "i": 14,
+   "text": "The daughter of Daksha dies in that exact instant.",
+   "t0": 51.21,
+   "t1": 53.94,
+   "para": false
+  },
+  {
+   "i": 15,
+   "text": "Only the primordial Goddess remains.",
+   "t0": 54.49,
+   "t1": 56.75,
+   "para": false
+  },
+  {
+   "i": 16,
+   "text": "The supreme power of the universe wakes within a mortal form...",
+   "t0": 57.3,
+   "t1": 60.66,
+   "para": false
+  },
+  {
+   "i": 17,
+   "text": "She steps forward.",
+   "t0": 62.11,
+   "t1": 63.32,
+   "para": true
+  },
+  {
+   "i": 18,
+   "text": "Her eyes burn with a terrifying inner light.",
+   "t0": 63.87,
+   "t1": 66.27,
+   "para": false
+  },
+  {
+   "i": 19,
+   "text": "She raises her hand and speaks a final, chilling truth.",
+   "t0": 66.82,
+   "t1": 70.39,
+   "para": false
+  },
+  {
+   "i": 20,
+   "text": "If a body born of a father's blood cannot honor the lord of all, this body must be cast away...",
+   "t0": 70.94,
+   "t1": 76.08,
+   "para": false
+  },
+  {
+   "i": 21,
+   "text": "She sits in deep meditation.",
+   "t0": 77.53,
+   "t1": 79.29,
+   "para": true
+  },
+  {
+   "i": 22,
+   "text": "She closes her eyes and focuses her inner life-force.",
+   "t0": 79.84,
+   "t1": 83.2,
+   "para": false
+  },
+  {
+   "i": 23,
+   "text": "A mystical fire ignites from within her own soul.",
+   "t0": 83.75,
+   "t1": 86.68,
+   "para": false
+  },
+  {
+   "i": 24,
+   "text": "It blazes outward, fierce and pure, consuming her physical form in seconds...",
+   "t0": 87.23,
+   "t1": 92.35,
+   "para": false
+  },
+  {
+   "i": 25,
+   "text": "Panic erupts among the gods.",
+   "t0": 93.8,
+   "t1": 95.53,
+   "para": true
+  },
+  {
+   "i": 26,
+   "text": "The sacred fire turns ash.",
+   "t0": 96.08,
+   "t1": 97.88,
+   "para": false
+  },
+  {
+   "i": 27,
+   "text": "The sacrifice is defiled.",
+   "t0": 98.43,
+   "t1": 100.19,
+   "para": false
+  },
+  {
+   "i": 28,
+   "text": "A grief so immense begins to take shape across the cosmos...",
+   "t0": 100.74,
+   "t1": 104.04,
+   "para": false
+  },
+  {
+   "i": 29,
+   "text": "When a wife's honor is trampled, the universe itself burns.",
+   "t0": 105.49,
+   "t1": 109.27,
+   "para": true
+  },
+  {
+   "i": 30,
+   "text": "This is the tragic fire that awakens the wrath of Shiva.",
+   "t0": 109.82,
+   "t1": 112.74,
+   "para": false
+  },
+  {
+   "i": 31,
+   "text": "From the ashes of devotion, the storm of vengeance is about to be born.",
+   "t0": 113.84,
+   "t1": 117.69,
+   "para": true
+  }
+ ]
+}
