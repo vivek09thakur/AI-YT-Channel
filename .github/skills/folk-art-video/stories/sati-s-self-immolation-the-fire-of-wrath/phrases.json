@@ -1,0 +1,1562 @@
+{
+ "fps": 30,
+ "duration": 120.69,
+ "total_frames": 3621,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "The sacrificial arena falls dead silent.",
+   "t0": 0.8,
+   "t1": 3.38,
+   "f0": 24,
+   "f1": 101,
+   "words": [
+    {
+     "w": "The",
+     "f": 24
+    },
+    {
+     "w": "sacrificial",
+     "f": 31
+    },
+    {
+     "w": "arena",
+     "f": 56
+    },
+    {
+     "w": "falls",
+     "f": 67
+    },
+    {
+     "w": "dead",
+     "f": 79
+    },
+    {
+     "w": "silent.",
+     "f": 88
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 1,
+   "text": "All eyes turn toward the uninvited princess...",
+   "t0": 3.93,
+   "t1": 6.6,
+   "f0": 118,
+   "f1": 198,
+   "words": [
+    {
+     "w": "All",
+     "f": 118
+    },
+    {
+     "w": "eyes",
+     "f": 124
+    },
+    {
+     "w": "turn",
+     "f": 133
+    },
+    {
+     "w": "toward",
+     "f": 142
+    },
+    {
+     "w": "the",
+     "f": 155
+    },
+    {
+     "w": "uninvited",
+     "f": 161
+    },
+    {
+     "w": "princess...",
+     "f": 181
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 2,
+   "text": "Daksha stands tall on his elevated platform.",
+   "t0": 8.05,
+   "t1": 10.83,
+   "f0": 242,
+   "f1": 325,
+   "words": [
+    {
+     "w": "Daksha",
+     "f": 242
+    },
+    {
+     "w": "stands",
+     "f": 255
+    },
+    {
+     "w": "tall",
+     "f": 269
+    },
+    {
+     "w": "on",
+     "f": 278
+    },
+    {
+     "w": "his",
+     "f": 282
+    },
+    {
+     "w": "elevated",
+     "f": 289
+    },
+    {
+     "w": "platform.",
+     "f": 307
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 3,
+   "text": "His face contorts with blinding rage.",
+   "t0": 11.38,
+   "t1": 13.74,
+   "f0": 341,
+   "f1": 412,
+   "words": [
+    {
+     "w": "His",
+     "f": 341
+    },
+    {
+     "w": "face",
+     "f": 348
+    },
+    {
+     "w": "contorts",
+     "f": 357
+    },
+    {
+     "w": "with",
+     "f": 376
+    },
+    {
+     "w": "blinding",
+     "f": 385
+    },
+    {
+     "w": "rage.",
+     "f": 403
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 4,
+   "text": "He hurls insults at the ascetic lord of mountains.",
+   "t0": 14.29,
+   "t1": 17.32,
+   "f0": 429,
+   "f1": 520,
+   "words": [
+    {
+     "w": "He",
+     "f": 429
+    },
+    {
+     "w": "hurls",
+     "f": 433
+    },
+    {
+     "w": "insults",
+     "f": 444
+    },
+    {
+     "w": "at",
+     "f": 460
+    },
+    {
+     "w": "the",
+     "f": 464
+    },
+    {
+     "w": "ascetic",
+     "f": 471
+    },
+    {
+     "w": "lord",
+     "f": 486
+    },
+    {
+     "w": "of",
+     "f": 495
+    },
+    {
+     "w": "mountains.",
+     "f": 500
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 5,
+   "text": "He mocks Shiva's matted locks,",
+   "t0": 17.87,
+   "t1": 19.739,
+   "f0": 536,
+   "f1": 592,
+   "words": [
+    {
+     "w": "He",
+     "f": 536
+    },
+    {
+     "w": "mocks",
+     "f": 541
+    },
+    {
+     "w": "Shiva's",
+     "f": 552
+    },
+    {
+     "w": "matted",
+     "f": 566
+    },
+    {
+     "w": "locks,",
+     "f": 580
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 5,
+   "text": "his ash-covered skin, his ghostly companions...",
+   "t0": 19.739,
+   "t1": 22.62,
+   "f0": 592,
+   "f1": 679,
+   "words": [
+    {
+     "w": "his",
+     "f": 592
+    },
+    {
+     "w": "ash-covered",
+     "f": 599
+    },
+    {
+     "w": "skin,",
+     "f": 623
+    },
+    {
+     "w": "his",
+     "f": 632
+    },
+    {
+     "w": "ghostly",
+     "f": 639
+    },
+    {
+     "w": "companions...",
+     "f": 655
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 6,
+   "text": "Sati listens.",
+   "t0": 24.07,
+   "t1": 25.23,
+   "f0": 722,
+   "f1": 757,
+   "words": [
+    {
+     "w": "Sati",
+     "f": 722
+    },
+    {
+     "w": "listens.",
+     "f": 735
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 7,
+   "text": "Every word is a poisoned dagger piercing her heart.",
+   "t0": 25.78,
+   "t1": 28.7,
+   "f0": 773,
+   "f1": 861,
+   "words": [
+    {
+     "w": "Every",
+     "f": 773
+    },
+    {
+     "w": "word",
+     "f": 784
+    },
+    {
+     "w": "is",
+     "f": 792
+    },
+    {
+     "w": "a",
+     "f": 796
+    },
+    {
+     "w": "poisoned",
+     "f": 798
+    },
+    {
+     "w": "dagger",
+     "f": 815
+    },
+    {
+     "w": "piercing",
+     "f": 828
+    },
+    {
+     "w": "her",
+     "f": 844
+    },
+    {
+     "w": "heart.",
+     "f": 851
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 8,
+   "text": "She tries to defend her divine husband.",
+   "t0": 29.25,
+   "t1": 31.57,
+   "f0": 878,
+   "f1": 947,
+   "words": [
+    {
+     "w": "She",
+     "f": 878
+    },
+    {
+     "w": "tries",
+     "f": 884
+    },
+    {
+     "w": "to",
+     "f": 895
+    },
+    {
+     "w": "defend",
+     "f": 899
+    },
+    {
+     "w": "her",
+     "f": 912
+    },
+    {
+     "w": "divine",
+     "f": 919
+    },
+    {
+     "w": "husband.",
+     "f": 932
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 9,
+   "text": "She speaks of his infinite compassion,",
+   "t0": 32.12,
+   "t1": 34.628,
+   "f0": 964,
+   "f1": 1039,
+   "words": [
+    {
+     "w": "She",
+     "f": 964
+    },
+    {
+     "w": "speaks",
+     "f": 971
+    },
+    {
+     "w": "of",
+     "f": 985
+    },
+    {
+     "w": "his",
+     "f": 989
+    },
+    {
+     "w": "infinite",
+     "f": 997
+    },
+    {
+     "w": "compassion,",
+     "f": 1015
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 9,
+   "text": "his cosmic grace, his boundless love...",
+   "t0": 34.628,
+   "t1": 36.98,
+   "f0": 1039,
+   "f1": 1109,
+   "words": [
+    {
+     "w": "his",
+     "f": 1039
+    },
+    {
+     "w": "cosmic",
+     "f": 1046
+    },
+    {
+     "w": "grace,",
+     "f": 1060
+    },
+    {
+     "w": "his",
+     "f": 1072
+    },
+    {
+     "w": "boundless",
+     "f": 1079
+    },
+    {
+     "w": "love...",
+     "f": 1100
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 10,
+   "text": "Daksha refuses to listen.",
+   "t0": 38.43,
+   "t1": 40.07,
+   "f0": 1153,
+   "f1": 1202,
+   "words": [
+    {
+     "w": "Daksha",
+     "f": 1153
+    },
+    {
+     "w": "refuses",
+     "f": 1167
+    },
+    {
+     "w": "to",
+     "f": 1183
+    },
+    {
+     "w": "listen.",
+     "f": 1188
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 11,
+   "text": "He turns his back on",
+   "t0": 40.62,
+   "t1": 41.827,
+   "f0": 1219,
+   "f1": 1255,
+   "words": [
+    {
+     "w": "He",
+     "f": 1219
+    },
+    {
+     "w": "turns",
+     "f": 1223
+    },
+    {
+     "w": "his",
+     "f": 1234
+    },
+    {
+     "w": "back",
+     "f": 1241
+    },
+    {
+     "w": "on",
+     "f": 1250
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 11,
+   "text": "his own flesh and blood.",
+   "t0": 41.827,
+   "t1": 43.26,
+   "f0": 1255,
+   "f1": 1298,
+   "words": [
+    {
+     "w": "his",
+     "f": 1255
+    },
+    {
+     "w": "own",
+     "f": 1262
+    },
+    {
+     "w": "flesh",
+     "f": 1268
+    },
+    {
+     "w": "and",
+     "f": 1280
+    },
+    {
+     "w": "blood.",
+     "f": 1286
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 12,
+   "text": "He utters the ultimate blasphemy against",
+   "t0": 43.81,
+   "t1": 45.961,
+   "f0": 1314,
+   "f1": 1379,
+   "words": [
+    {
+     "w": "He",
+     "f": 1314
+    },
+    {
+     "w": "utters",
+     "f": 1318
+    },
+    {
+     "w": "the",
+     "f": 1329
+    },
+    {
+     "w": "ultimate",
+     "f": 1335
+    },
+    {
+     "w": "blasphemy",
+     "f": 1349
+    },
+    {
+     "w": "against",
+     "f": 1366
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 12,
+   "text": "the destroyer of worlds...",
+   "t0": 45.961,
+   "t1": 47.19,
+   "f0": 1379,
+   "f1": 1416,
+   "words": [
+    {
+     "w": "the",
+     "f": 1379
+    },
+    {
+     "w": "destroyer",
+     "f": 1384
+    },
+    {
+     "w": "of",
+     "f": 1401
+    },
+    {
+     "w": "worlds...",
+     "f": 1405
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 13,
+   "text": "Something inside Sati breaks.",
+   "t0": 48.64,
+   "t1": 50.66,
+   "f0": 1459,
+   "f1": 1520,
+   "words": [
+    {
+     "w": "Something",
+     "f": 1459
+    },
+    {
+     "w": "inside",
+     "f": 1481
+    },
+    {
+     "w": "Sati",
+     "f": 1496
+    },
+    {
+     "w": "breaks.",
+     "f": 1505
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 14,
+   "text": "The daughter of Daksha dies in that exact instant.",
+   "t0": 51.21,
+   "t1": 53.94,
+   "f0": 1536,
+   "f1": 1618,
+   "words": [
+    {
+     "w": "The",
+     "f": 1536
+    },
+    {
+     "w": "daughter",
+     "f": 1542
+    },
+    {
+     "w": "of",
+     "f": 1558
+    },
+    {
+     "w": "Daksha",
+     "f": 1562
+    },
+    {
+     "w": "dies",
+     "f": 1574
+    },
+    {
+     "w": "in",
+     "f": 1582
+    },
+    {
+     "w": "that",
+     "f": 1586
+    },
+    {
+     "w": "exact",
+     "f": 1594
+    },
+    {
+     "w": "instant.",
+     "f": 1604
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 15,
+   "text": "Only the primordial Goddess remains.",
+   "t0": 54.49,
+   "t1": 56.75,
+   "f0": 1635,
+   "f1": 1702,
+   "words": [
+    {
+     "w": "Only",
+     "f": 1635
+    },
+    {
+     "w": "the",
+     "f": 1643
+    },
+    {
+     "w": "primordial",
+     "f": 1650
+    },
+    {
+     "w": "Goddess",
+     "f": 1672
+    },
+    {
+     "w": "remains.",
+     "f": 1687
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 16,
+   "text": "The supreme power of",
+   "t0": 57.3,
+   "t1": 58.442,
+   "f0": 1719,
+   "f1": 1753,
+   "words": [
+    {
+     "w": "The",
+     "f": 1719
+    },
+    {
+     "w": "supreme",
+     "f": 1725
+    },
+    {
+     "w": "power",
+     "f": 1739
+    },
+    {
+     "w": "of",
+     "f": 1749
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 16,
+   "text": "the universe wakes within a mortal form...",
+   "t0": 58.442,
+   "t1": 60.66,
+   "f0": 1753,
+   "f1": 1820,
+   "words": [
+    {
+     "w": "the",
+     "f": 1753
+    },
+    {
+     "w": "universe",
+     "f": 1759
+    },
+    {
+     "w": "wakes",
+     "f": 1775
+    },
+    {
+     "w": "within",
+     "f": 1786
+    },
+    {
+     "w": "a",
+     "f": 1798
+    },
+    {
+     "w": "mortal",
+     "f": 1800
+    },
+    {
+     "w": "form...",
+     "f": 1812
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 17,
+   "text": "She steps forward.",
+   "t0": 62.11,
+   "t1": 63.32,
+   "f0": 1863,
+   "f1": 1900,
+   "words": [
+    {
+     "w": "She",
+     "f": 1863
+    },
+    {
+     "w": "steps",
+     "f": 1871
+    },
+    {
+     "w": "forward.",
+     "f": 1883
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 18,
+   "text": "Her eyes burn with a terrifying inner light.",
+   "t0": 63.87,
+   "t1": 66.27,
+   "f0": 1916,
+   "f1": 1988,
+   "words": [
+    {
+     "w": "Her",
+     "f": 1916
+    },
+    {
+     "w": "eyes",
+     "f": 1922
+    },
+    {
+     "w": "burn",
+     "f": 1930
+    },
+    {
+     "w": "with",
+     "f": 1938
+    },
+    {
+     "w": "a",
+     "f": 1946
+    },
+    {
+     "w": "terrifying",
+     "f": 1948
+    },
+    {
+     "w": "inner",
+     "f": 1968
+    },
+    {
+     "w": "light.",
+     "f": 1978
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 19,
+   "text": "She raises her hand and speaks a final,",
+   "t0": 66.82,
+   "t1": 69.335,
+   "f0": 2005,
+   "f1": 2080,
+   "words": [
+    {
+     "w": "She",
+     "f": 2005
+    },
+    {
+     "w": "raises",
+     "f": 2012
+    },
+    {
+     "w": "her",
+     "f": 2027
+    },
+    {
+     "w": "hand",
+     "f": 2034
+    },
+    {
+     "w": "and",
+     "f": 2044
+    },
+    {
+     "w": "speaks",
+     "f": 2051
+    },
+    {
+     "w": "a",
+     "f": 2065
+    },
+    {
+     "w": "final,",
+     "f": 2068
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 19,
+   "text": "chilling truth.",
+   "t0": 69.335,
+   "t1": 70.39,
+   "f0": 2080,
+   "f1": 2112,
+   "words": [
+    {
+     "w": "chilling",
+     "f": 2080
+    },
+    {
+     "w": "truth.",
+     "f": 2100
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 20,
+   "text": "If a body born of",
+   "t0": 70.94,
+   "t1": 71.881,
+   "f0": 2128,
+   "f1": 2156,
+   "words": [
+    {
+     "w": "If",
+     "f": 2128
+    },
+    {
+     "w": "a",
+     "f": 2133
+    },
+    {
+     "w": "body",
+     "f": 2135
+    },
+    {
+     "w": "born",
+     "f": 2143
+    },
+    {
+     "w": "of",
+     "f": 2152
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 20,
+   "text": "a father's blood cannot honor the lord of all,",
+   "t0": 71.881,
+   "t1": 74.487,
+   "f0": 2156,
+   "f1": 2235,
+   "words": [
+    {
+     "w": "a",
+     "f": 2156
+    },
+    {
+     "w": "father's",
+     "f": 2159
+    },
+    {
+     "w": "blood",
+     "f": 2174
+    },
+    {
+     "w": "cannot",
+     "f": 2185
+    },
+    {
+     "w": "honor",
+     "f": 2198
+    },
+    {
+     "w": "the",
+     "f": 2209
+    },
+    {
+     "w": "lord",
+     "f": 2215
+    },
+    {
+     "w": "of",
+     "f": 2224
+    },
+    {
+     "w": "all,",
+     "f": 2228
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 20,
+   "text": "this body must be cast away...",
+   "t0": 74.487,
+   "t1": 76.08,
+   "f0": 2235,
+   "f1": 2282,
+   "words": [
+    {
+     "w": "this",
+     "f": 2235
+    },
+    {
+     "w": "body",
+     "f": 2243
+    },
+    {
+     "w": "must",
+     "f": 2252
+    },
+    {
+     "w": "be",
+     "f": 2261
+    },
+    {
+     "w": "cast",
+     "f": 2265
+    },
+    {
+     "w": "away...",
+     "f": 2274
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 21,
+   "text": "She sits in deep meditation.",
+   "t0": 77.53,
+   "t1": 79.29,
+   "f0": 2326,
+   "f1": 2379,
+   "words": [
+    {
+     "w": "She",
+     "f": 2326
+    },
+    {
+     "w": "sits",
+     "f": 2333
+    },
+    {
+     "w": "in",
+     "f": 2342
+    },
+    {
+     "w": "deep",
+     "f": 2347
+    },
+    {
+     "w": "meditation.",
+     "f": 2356
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 22,
+   "text": "She closes her eyes and focuses her inner life-force.",
+   "t0": 79.84,
+   "t1": 83.2,
+   "f0": 2395,
+   "f1": 2496,
+   "words": [
+    {
+     "w": "She",
+     "f": 2395
+    },
+    {
+     "w": "closes",
+     "f": 2402
+    },
+    {
+     "w": "her",
+     "f": 2416
+    },
+    {
+     "w": "eyes",
+     "f": 2423
+    },
+    {
+     "w": "and",
+     "f": 2433
+    },
+    {
+     "w": "focuses",
+     "f": 2440
+    },
+    {
+     "w": "her",
+     "f": 2456
+    },
+    {
+     "w": "inner",
+     "f": 2463
+    },
+    {
+     "w": "life-force.",
+     "f": 2475
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 23,
+   "text": "A mystical fire ignites from within her own soul.",
+   "t0": 83.75,
+   "t1": 86.68,
+   "f0": 2512,
+   "f1": 2600,
+   "words": [
+    {
+     "w": "A",
+     "f": 2512
+    },
+    {
+     "w": "mystical",
+     "f": 2515
+    },
+    {
+     "w": "fire",
+     "f": 2532
+    },
+    {
+     "w": "ignites",
+     "f": 2541
+    },
+    {
+     "w": "from",
+     "f": 2556
+    },
+    {
+     "w": "within",
+     "f": 2565
+    },
+    {
+     "w": "her",
+     "f": 2578
+    },
+    {
+     "w": "own",
+     "f": 2585
+    },
+    {
+     "w": "soul.",
+     "f": 2592
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 24,
+   "text": "It blazes outward, fierce and pure,",
+   "t0": 87.23,
+   "t1": 89.58,
+   "f0": 2617,
+   "f1": 2687,
+   "words": [
+    {
+     "w": "It",
+     "f": 2617
+    },
+    {
+     "w": "blazes",
+     "f": 2622
+    },
+    {
+     "w": "outward,",
+     "f": 2637
+    },
+    {
+     "w": "fierce",
+     "f": 2655
+    },
+    {
+     "w": "and",
+     "f": 2670
+    },
+    {
+     "w": "pure,",
+     "f": 2677
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 24,
+   "text": "consuming her physical form in seconds...",
+   "t0": 89.58,
+   "t1": 92.35,
+   "f0": 2687,
+   "f1": 2770,
+   "words": [
+    {
+     "w": "consuming",
+     "f": 2687
+    },
+    {
+     "w": "her",
+     "f": 2710
+    },
+    {
+     "w": "physical",
+     "f": 2718
+    },
+    {
+     "w": "form",
+     "f": 2738
+    },
+    {
+     "w": "in",
+     "f": 2748
+    },
+    {
+     "w": "seconds...",
+     "f": 2753
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 25,
+   "text": "Panic erupts among the gods.",
+   "t0": 93.8,
+   "t1": 95.53,
+   "f0": 2814,
+   "f1": 2866,
+   "words": [
+    {
+     "w": "Panic",
+     "f": 2814
+    },
+    {
+     "w": "erupts",
+     "f": 2825
+    },
+    {
+     "w": "among",
+     "f": 2839
+    },
+    {
+     "w": "the",
+     "f": 2850
+    },
+    {
+     "w": "gods.",
+     "f": 2857
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 26,
+   "text": "The sacred fire turns ash.",
+   "t0": 96.08,
+   "t1": 97.88,
+   "f0": 2882,
+   "f1": 2936,
+   "words": [
+    {
+     "w": "The",
+     "f": 2882
+    },
+    {
+     "w": "sacred",
+     "f": 2890
+    },
+    {
+     "w": "fire",
+     "f": 2906
+    },
+    {
+     "w": "turns",
+     "f": 2916
+    },
+    {
+     "w": "ash.",
+     "f": 2929
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 27,
+   "text": "The sacrifice is defiled.",
+   "t0": 98.43,
+   "t1": 100.19,
+   "f0": 2953,
+   "f1": 3006,
+   "words": [
+    {
+     "w": "The",
+     "f": 2953
+    },
+    {
+     "w": "sacrifice",
+     "f": 2960
+    },
+    {
+     "w": "is",
+     "f": 2983
+    },
+    {
+     "w": "defiled.",
+     "f": 2988
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 28,
+   "text": "A grief so immense begins",
+   "t0": 100.74,
+   "t1": 102.214,
+   "f0": 3022,
+   "f1": 3066,
+   "words": [
+    {
+     "w": "A",
+     "f": 3022
+    },
+    {
+     "w": "grief",
+     "f": 3024
+    },
+    {
+     "w": "so",
+     "f": 3035
+    },
+    {
+     "w": "immense",
+     "f": 3039
+    },
+    {
+     "w": "begins",
+     "f": 3054
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 28,
+   "text": "to take shape across the cosmos...",
+   "t0": 102.214,
+   "t1": 104.04,
+   "f0": 3066,
+   "f1": 3121,
+   "words": [
+    {
+     "w": "to",
+     "f": 3066
+    },
+    {
+     "w": "take",
+     "f": 3071
+    },
+    {
+     "w": "shape",
+     "f": 3079
+    },
+    {
+     "w": "across",
+     "f": 3090
+    },
+    {
+     "w": "the",
+     "f": 3102
+    },
+    {
+     "w": "cosmos...",
+     "f": 3109
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 29,
+   "text": "When a wife's honor is trampled,",
+   "t0": 105.49,
+   "t1": 107.501,
+   "f0": 3165,
+   "f1": 3225,
+   "words": [
+    {
+     "w": "When",
+     "f": 3165
+    },
+    {
+     "w": "a",
+     "f": 3174
+    },
+    {
+     "w": "wife's",
+     "f": 3177
+    },
+    {
+     "w": "honor",
+     "f": 3189
+    },
+    {
+     "w": "is",
+     "f": 3201
+    },
+    {
+     "w": "trampled,",
+     "f": 3206
+    }
+   ]
+  },
+  {
+   "i": 40,
+   "line": 29,
+   "text": "the universe itself burns.",
+   "t0": 107.501,
+   "t1": 109.27,
+   "f0": 3225,
+   "f1": 3278,
+   "words": [
+    {
+     "w": "the",
+     "f": 3225
+    },
+    {
+     "w": "universe",
+     "f": 3232
+    },
+    {
+     "w": "itself",
+     "f": 3252
+    },
+    {
+     "w": "burns.",
+     "f": 3266
+    }
+   ]
+  },
+  {
+   "i": 41,
+   "line": 30,
+   "text": "This is the tragic fire that awakens",
+   "t0": 109.82,
+   "t1": 111.767,
+   "f0": 3295,
+   "f1": 3353,
+   "words": [
+    {
+     "w": "This",
+     "f": 3295
+    },
+    {
+     "w": "is",
+     "f": 3302
+    },
+    {
+     "w": "the",
+     "f": 3306
+    },
+    {
+     "w": "tragic",
+     "f": 3312
+    },
+    {
+     "w": "fire",
+     "f": 3324
+    },
+    {
+     "w": "that",
+     "f": 3332
+    },
+    {
+     "w": "awakens",
+     "f": 3339
+    }
+   ]
+  },
+  {
+   "i": 42,
+   "line": 30,
+   "text": "the wrath of Shiva.",
+   "t0": 111.767,
+   "t1": 112.74,
+   "f0": 3353,
+   "f1": 3382,
+   "words": [
+    {
+     "w": "the",
+     "f": 3353
+    },
+    {
+     "w": "wrath",
+     "f": 3359
+    },
+    {
+     "w": "of",
+     "f": 3369
+    },
+    {
+     "w": "Shiva.",
+     "f": 3372
+    }
+   ]
+  },
+  {
+   "i": 43,
+   "line": 31,
+   "text": "From the ashes of devotion,",
+   "t0": 113.84,
+   "t1": 115.353,
+   "f0": 3415,
+   "f1": 3461,
+   "words": [
+    {
+     "w": "From",
+     "f": 3415
+    },
+    {
+     "w": "the",
+     "f": 3423
+    },
+    {
+     "w": "ashes",
+     "f": 3430
+    },
+    {
+     "w": "of",
+     "f": 3440
+    },
+    {
+     "w": "devotion,",
+     "f": 3444
+    }
+   ]
+  },
+  {
+   "i": 44,
+   "line": 31,
+   "text": "the storm of vengeance is about to be born.",
+   "t0": 115.353,
+   "t1": 117.69,
+   "f0": 3461,
+   "f1": 3531,
+   "words": [
+    {
+     "w": "the",
+     "f": 3461
+    },
+    {
+     "w": "storm",
+     "f": 3467
+    },
+    {
+     "w": "of",
+     "f": 3477
+    },
+    {
+     "w": "vengeance",
+     "f": 3481
+    },
+    {
+     "w": "is",
+     "f": 3500
+    },
+    {
+     "w": "about",
+     "f": 3504
+    },
+    {
+     "w": "to",
+     "f": 3514
+    },
+    {
+     "w": "be",
+     "f": 3518
+    },
+    {
+     "w": "born.",
+     "f": 3522
+    }
+   ]
+  }
+ ]
+}
