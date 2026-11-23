@@ -2,7 +2,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 import type { Overview, WorkflowInfo } from "@/lib/state";
 import { fmtClock, fmtDay, fmtDayLong, fmtDuration, fmtTime } from "@/lib/time";
 import { AutoRefresh } from "./AutoRefresh";
-import { RunState, StateChip, runEvent, stateText } from "./status";
+import { RunState, StateChip, runEvent } from "./status";
 import { UploadChips } from "./WorkflowModal";
 
 export function Runs({ overview }: { overview: Overview }) {
@@ -40,7 +40,7 @@ export function Runs({ overview }: { overview: Overview }) {
           {posted} of {target} videos posted today
         </p>
 
-        <dl className="facts mt-6">
+        <dl className="facts mt-8">
           <div>
             <dt>Runs today</dt>
             <dd className="tabular-nums">
@@ -70,11 +70,11 @@ export function Runs({ overview }: { overview: Overview }) {
       </header>
 
       {overview.notes.length > 0 && (
-        <section className="mt-7 rounded-[10px] border border-line p-4 text-[13px]">
+        <section className="mt-8 rounded-[10px] border border-line px-5 py-4 text-[13px]">
           <h2 className="flex items-center gap-2 text-[14px] mb-2">
             <FiAlertTriangle className="text-amber shrink-0" aria-hidden /> Needs a look
           </h2>
-          <ul className="flex flex-col gap-1.5 pl-6">
+          <ul className="flex flex-col gap-2 pl-6">
             {overview.notes.map((n) => (
               <li key={n}>{n}</li>
             ))}
@@ -82,7 +82,7 @@ export function Runs({ overview }: { overview: Overview }) {
         </section>
       )}
 
-      <div className="mt-7 flex flex-col gap-5">
+      <div className="mt-8 flex flex-col gap-6">
         {overview.workflows.map((wf) => (
           <WorkflowCard key={wf.id} wf={wf} overview={overview} />
         ))}
@@ -113,12 +113,12 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
   const { runStats } = wf;
   return (
     <section className="rounded-[10px] border border-line bg-card" aria-labelledby={`wf-${wf.id}`}>
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 border-b border-line-soft">
-        <h2 id={`wf-${wf.id}`} className="text-[16px]">
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-2 px-6 py-4 border-b border-line-soft">
+        <h2 id={`wf-${wf.id}`} className="text-[17px]">
           {wf.title}
         </h2>
-        <StateChip wf={wf} />
-        <span className="text-[12px] text-slate tabular-nums">
+        <StateChip wf={wf} long />
+        <span className="text-[13px] text-slate tabular-nums">
           {wf.todayCount} of {wf.target} posted
         </span>
         <div className="ml-auto flex items-center gap-2">
@@ -133,11 +133,7 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
         </div>
       </header>
 
-      <dl className="facts px-4 py-4 border-b border-line-soft text-[13px]">
-        <div>
-          <dt>Status</dt>
-          <dd>{stateText(wf)}</dd>
-        </div>
+      <dl className="facts px-6 py-5 border-b border-line-soft">
         <div>
           <dt>Due</dt>
           <dd>{wf.due.map(fmtClock).join(" and ")}</dd>
@@ -168,12 +164,12 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
       </dl>
 
       <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-line-soft">
-        <div className="px-4 py-4 min-w-0">
-          <h3 className="text-[13px] text-slate mb-3">Today&rsquo;s videos</h3>
+        <div className="px-6 py-5 min-w-0">
+          <h3 className="text-[13px] text-slate mb-4">Today&rsquo;s videos</h3>
           {wf.today.length === 0 ? (
             <p className="text-ink-soft">Nothing posted yet today.</p>
           ) : (
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-5">
               {wf.today.map((p) => (
                 <li key={p.dir}>
                   <div className="flex items-center gap-2">
@@ -184,45 +180,37 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
                       run #{p.run}
                     </a>
                   </div>
-                  <div className="flex flex-wrap gap-1 mt-1">
+                  <div className="flex flex-wrap gap-1.5 mt-2">
                     <UploadChips post={p} accounts={overview.accounts} />
                   </div>
                 </li>
               ))}
             </ul>
           )}
-          {wf.recent.length > 0 && (
-            <>
-              <h3 className="text-[13px] text-slate mt-5 mb-3">Earlier</h3>
-              <ul className="flex flex-col gap-2">
-                {wf.recent.map((p) => (
-                  <li key={p.dir} className="flex items-center gap-3 min-w-0">
-                    <span className="shrink-0 font-mono text-[11.5px] text-ink-soft whitespace-nowrap">{fmtDay(`${p.date}T12:00:00Z`)}</span>
-                    <a href={p.videoUrl} target="_blank" rel="noreferrer" className="truncate hover:underline">
-                      {p.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
         </div>
 
-        <div className="px-4 py-4 min-w-0">
+        <div className="px-6 py-5 min-w-0">
           <h3 className="text-[13px] text-slate mb-3">Recent runs</h3>
           {wf.runs.length === 0 ? (
             <p className="text-ink-soft">No runs yet.</p>
           ) : (
             <ul className="divide-y divide-line-soft">
-              {wf.runs.map((r) => (
-                <li key={r.id} className="flex items-center gap-3 py-2">
-                  <span className="w-[140px] shrink-0 font-mono text-[11.5px] text-ink-soft whitespace-nowrap">
+              {wf.runs.slice(0, 5).map((r) => (
+                <li key={r.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
+                  <span className="sm:w-[140px] shrink-0 font-mono text-[11.5px] text-ink-soft whitespace-nowrap">
                     {fmtDay(r.createdAt)} {fmtTime(r.createdAt)}
                   </span>
-                  <a href={r.url} target="_blank" rel="noreferrer" className="flex-1 truncate hover:underline tabular-nums">
+                  <a
+                    href={r.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="order-last basis-full sm:order-none sm:basis-0 sm:flex-1 truncate hover:underline tabular-nums"
+                  >
                     #{r.number} <span className="text-slate">{runEvent(r)}</span>
                   </a>
-                  {r.durationSec !== null && <span className="hidden sm:inline text-[12px] text-slate whitespace-nowrap tabular-nums">{fmtDuration(r.durationSec)}</span>}
+                  {r.durationSec !== null && (
+                    <span className="ml-auto sm:ml-0 text-[12px] text-slate whitespace-nowrap tabular-nums">{fmtDuration(r.durationSec)}</span>
+                  )}
                   <RunState run={r} />
                 </li>
               ))}

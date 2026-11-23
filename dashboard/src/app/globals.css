@@ -282,15 +282,15 @@ a {
 
 .facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px 28px;
 }
 .facts dt {
   font-size: 12px;
   color: var(--color-slate);
 }
 .facts dd {
-  margin: 2px 0 0;
+  margin: 4px 0 0;
   font-size: inherit;
   color: var(--color-ink);
 }
