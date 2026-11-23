@@ -13,7 +13,7 @@ The app is the `dashboard/` folder of the pipeline repo on `main`. It runs on Ve
 | Docs | These pages, rendered from `content/docs/*.md`. Open to anyone with the link, no sign-in; the Board, Runs and Secrets pages still need one. |
 | Secrets | A sidebar lists the shared secrets by purpose, then one entry per account (red dot = a required secret is missing), then anything else in the repo. Pick one to see its secrets and variables, whether each is set and when it was last updated. Values are never shown; GitHub does not return them. The link to the repo's GitHub settings sits at the foot of the sidebar. |
 
-The menu in the top right switches pages and signs out. Pages refresh themselves every minute.
+The menu in the top right switches pages and signs out; the sun or moon button next to it switches between light and dark mode (the choice is kept in the browser, and until you pick one the system setting is followed). Pages refresh themselves every minute.
 
 ## Environment variables
 

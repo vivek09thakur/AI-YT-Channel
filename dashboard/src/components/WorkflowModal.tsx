@@ -100,7 +100,7 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
             <ul className="text-[14px] divide-y divide-line-soft">
               {wf.runs.map((r) => (
                 <li key={r.id} className="flex items-center gap-3 py-1.5">
-                  <span className="w-[132px] shrink-0 text-ink-soft whitespace-nowrap tabular-nums">
+                  <span className="w-[148px] shrink-0 font-mono text-[12px] text-ink-soft whitespace-nowrap">
                     {fmtDay(r.createdAt)} {fmtTime(r.createdAt)}
                   </span>
                   <span className="flex-1 truncate">
@@ -122,7 +122,7 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
             <ul className="flex flex-col gap-1 text-[14px]">
               {wf.recent.map((p) => (
                 <li key={p.dir} className="flex items-center gap-3">
-                  <span className="w-[132px] shrink-0 text-ink-soft whitespace-nowrap tabular-nums">{fmtDay(`${p.date}T12:00:00Z`)}</span>
+                  <span className="w-[148px] shrink-0 font-mono text-[12px] text-ink-soft whitespace-nowrap">{fmtDay(`${p.date}T12:00:00Z`)}</span>
                   <a href={p.videoUrl} className="truncate underline" target="_blank" rel="noreferrer">
                     {p.title}
                   </a>

@@ -51,7 +51,7 @@ export function AccountNode({ data }: NodeProps<AccNode>) {
       <div className="flex items-center justify-between gap-2 text-[12px] text-slate">
         <span className="inline-flex items-center gap-1.5 min-w-0">
           <PlatformIcon platform={acc.platform} className="text-[14px] shrink-0" />
-          <span className="truncate">{acc.legacy ? "legacy secrets" : acc.key}</span>
+          <span className="font-mono text-[11.5px] truncate">{acc.legacy ? "legacy secrets" : acc.key}</span>
         </span>
         {!acc.configured && <span className="text-sindoor truncate">{status}</span>}
       </div>

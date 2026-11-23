@@ -1,12 +1,12 @@
 "use client";
 
-import { Background, BackgroundVariant, ReactFlow, ReactFlowProvider, useNodesInitialized, useReactFlow, type BuiltInEdge, type FitViewOptions } from "@xyflow/react";
+import { Background, BackgroundVariant, ReactFlow, ReactFlowProvider, useNodesInitialized, useReactFlow, type BuiltInEdge, type CoordinateExtent, type FitViewOptions } from "@xyflow/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PLATFORMS, type Platform } from "@/lib/model";
 import type { AccountInfo, Overview } from "@/lib/state";
 import { AccountModal } from "./AccountModal";
 import { AutoRefresh } from "./AutoRefresh";
-import { ACC_H, WF_H, nodeTypes, type BoardNode } from "./nodes";
+import { ACC_H, ACC_W, WF_H, nodeTypes, type BoardNode } from "./nodes";
 import { WorkflowModal } from "./WorkflowModal";
 
 const WF_X = 0;
@@ -14,6 +14,8 @@ const ACC_X = 440;
 const TRUNK_X = 350;
 const GAP = 16;
 const LANE_PAD = 28;
+/** How far past the outermost tiles the canvas may be panned. */
+const EXTENT_PAD = 80;
 
 type Selection = { kind: "workflow"; id: string } | { kind: "account"; key: string } | null;
 
@@ -53,7 +55,7 @@ function BoardInner({ overview }: { overview: Overview }) {
   const [sel, setSel] = useState<Selection>(null);
   const box = useRef<HTMLDivElement>(null);
 
-  const { nodes, edges } = useMemo(() => {
+  const { nodes, edges, extent } = useMemo(() => {
     const nodes: BoardNode[] = [];
     const edges: BuiltInEdge[] = [];
     let top = 0;
@@ -121,9 +123,15 @@ function BoardInner({ overview }: { overview: Overview }) {
       slots.forEach((acc, j) => {
         nodes.push({ id: `acc:${acc.key}@none`, type: "account", position: { x: ACC_X, y: top + LANE_PAD + j * (ACC_H + GAP) }, data: { acc }, draggable: false });
       });
+      top += h;
     }
 
-    return { nodes, edges };
+    const extent: CoordinateExtent = [
+      [WF_X - EXTENT_PAD, -EXTENT_PAD],
+      [ACC_X + ACC_W + EXTENT_PAD, top + EXTENT_PAD],
+    ];
+
+    return { nodes, edges, extent };
   }, [overview]);
 
   const selectedAccount = sel?.kind === "account" ? overview.accounts.find((a) => a.key === sel.key) ?? null : null;
@@ -140,6 +148,7 @@ function BoardInner({ overview }: { overview: Overview }) {
         fitViewOptions={FIT}
         minZoom={0.35}
         maxZoom={1.4}
+        translateExtent={extent}
         nodesConnectable={false}
         elementsSelectable={false}
         edgesFocusable={false}

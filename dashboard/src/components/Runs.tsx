@@ -108,7 +108,7 @@ function WorkflowCard({ wf, overview }: { wf: WorkflowInfo; overview: Overview }
             <ul className="divide-y divide-line-soft">
               {wf.runs.map((r) => (
                 <li key={r.id} className="flex items-center gap-3 py-1.5">
-                  <span className="w-[112px] shrink-0 text-[12px] text-ink-soft whitespace-nowrap tabular-nums">
+                  <span className="w-[140px] shrink-0 font-mono text-[11.5px] text-ink-soft whitespace-nowrap">
                     {fmtDay(r.createdAt)} {fmtTime(r.createdAt)}
                   </span>
                   <a href={r.url} target="_blank" rel="noreferrer" className="flex-1 truncate hover:underline tabular-nums">

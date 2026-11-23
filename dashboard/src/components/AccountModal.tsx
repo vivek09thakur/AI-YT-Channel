@@ -77,7 +77,7 @@ export function AccountModal({ open, account, overview, onClose }: { open: boole
                   <li key={f.suffix} className="flex items-center gap-3 py-2">
                     <span className="flex-1 min-w-0">
                       <span className="block truncate">{f.label}</span>
-                      <span className="block text-[12px] text-slate truncate">{secretName(f.suffix)}</span>
+                      <span className="block font-mono text-[11.5px] text-slate truncate">{secretName(f.suffix)}</span>
                     </span>
                     {isSet ? (
                       <span className="state state-ok">Set, {ago(state?.updatedAt)}</span>

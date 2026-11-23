@@ -109,7 +109,7 @@ function RowView({ row }: { row: Row }) {
   return (
     <tr className="align-middle">
       <td className="px-4 py-2.5">
-        <div className="font-medium break-all">
+        <div className="font-mono text-[13px] font-medium break-all">
           {row.name}
           {row.type === "variable" && <span className="ml-2 text-[11px] font-normal text-slate align-middle whitespace-nowrap">variable</span>}
         </div>

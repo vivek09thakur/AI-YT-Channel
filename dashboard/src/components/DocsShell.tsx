@@ -4,6 +4,7 @@ import { FiGithub } from "react-icons/fi";
 import { getSession } from "@/lib/auth";
 import { docHref, PAGES, type Heading } from "@/lib/docs";
 import { NavMenu } from "./NavMenu";
+import { ThemeToggle } from "./ThemeToggle";
 import { Toc } from "./Toc";
 
 const SCROLL_ID = "doc-scroll";
@@ -14,11 +15,12 @@ export function DocsShell({ slug, headings, children }: { slug: string; headings
     <div className="h-dvh flex flex-col">
       <header className="h-[52px] shrink-0 bg-inset border-b border-line text-[14px]">
         <div className="h-full flex items-center gap-2 px-4">
-          <Link href="/docs" className="font-medium text-ink no-underline">
+          <Link href="/docs" className="wordmark">
             AI YT Channel
           </Link>
           <span className="text-slate">docs</span>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-1">
+            <ThemeToggle />
             <Suspense fallback={null}>
               <SessionMenu />
             </Suspense>

@@ -1,39 +1,51 @@
 @import "tailwindcss";
 @import "@xyflow/react/dist/style.css";
 
+/* Palette and type borrowed from vish.me: navy paper, lavender ink, lime highlighter, violet links. */
 @theme inline {
-  --color-paper: light-dark(#ffffff, #0e1013);
-  --color-inset: light-dark(#ffffff, #0e1013);
-  --color-sunken: light-dark(#f6f7f8, #13161a);
-  --color-board: light-dark(#eceef1, #0b0d10);
-  --color-grid: light-dark(rgba(21, 24, 29, 0.055), rgba(232, 234, 237, 0.045));
-  --color-card: light-dark(#ffffff, #171a1f);
-  --color-card-hover: light-dark(#fafbfb, #1c2026);
-  --color-ink: light-dark(#15181d, #e8eaed);
-  --color-ink-soft: light-dark(#454c56, #b4bac3);
-  --color-slate: light-dark(#6e7781, #8b949e);
-  --color-line: light-dark(#e3e6ea, #262b33);
-  --color-line-soft: light-dark(#eef0f2, #1d2127);
-  --color-edge: light-dark(#c3c8cf, #3a414b);
-  --color-accent: light-dark(#15181d, #e8eaed);
-  --color-accent-emphasis: light-dark(#000000, #ffffff);
-  --color-accent-tint: light-dark(#eef0f2, #1d2127);
-  --color-leaf: light-dark(#1a7f4b, #3fb950);
-  --color-leaf-emphasis: light-dark(#14633a, #56d364);
-  --color-leaf-tint: light-dark(#e6f4ec, #122117);
-  --color-sindoor: light-dark(#c9372c, #f0665c);
-  --color-sindoor-emphasis: light-dark(#a52c23, #ff7b72);
-  --color-sindoor-tint: light-dark(#fbeceb, #2a1614);
-  --color-amber: light-dark(#9a6700, #d29922);
-  --color-amber-emphasis: light-dark(#7a5200, #e3b341);
-  --color-amber-tint: light-dark(#fbf4e3, #261d0b);
-  --font-sans: var(--font-plex), "IBM Plex Sans", system-ui, sans-serif;
+  --color-paper: light-dark(#eef0f5, #151c29);
+  --color-inset: light-dark(#f6f7fb, #151c29);
+  --color-sunken: light-dark(#e3e7f0, #1d2638);
+  --color-board: light-dark(#e7eaf2, #111724);
+  --color-grid: light-dark(rgba(21, 28, 41, 0.06), rgba(152, 170, 208, 0.07));
+  --color-card: light-dark(#ffffff, #1f283b);
+  --color-card-hover: light-dark(#f8f9fc, #263047);
+  --color-ink: light-dark(#151c29, #c7cfe0);
+  --color-ink-soft: light-dark(#3f4a66, #a6b0c8);
+  --color-slate: light-dark(#6a7590, #7f8cab);
+  --color-line: light-dark(#d3d9e6, rgba(199, 207, 224, 0.12));
+  --color-line-soft: light-dark(#e2e6ef, rgba(199, 207, 224, 0.07));
+  --color-edge: light-dark(#98aad0, #5b6a8c);
+  --color-accent: #c6f26e;
+  --color-accent-emphasis: light-dark(#b9ea57, #d4f78a);
+  --color-accent-ink: #151c29;
+  --color-violet: light-dark(#6f3ff5, #a98aff);
+  --color-violet-tint: light-dark(rgba(155, 107, 255, 0.22), rgba(155, 107, 255, 0.28));
+  --color-leaf: light-dark(#4f7d0c, #c6f26e);
+  --color-leaf-emphasis: light-dark(#41690a, #d4f78a);
+  --color-leaf-tint: light-dark(rgba(198, 242, 110, 0.3), rgba(198, 242, 110, 0.14));
+  --color-sindoor: light-dark(#c9372c, #f47a70);
+  --color-sindoor-emphasis: light-dark(#a52c23, #ff8a80);
+  --color-sindoor-tint: light-dark(#fbeceb, rgba(244, 122, 112, 0.14));
+  --color-amber: light-dark(#9a6700, #e3b341);
+  --color-amber-emphasis: light-dark(#7a5200, #f0c85a);
+  --color-amber-tint: light-dark(#fbf4e3, rgba(227, 179, 65, 0.14));
+  --color-focus: light-dark(#6f3ff5, #c6f26e);
+  --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
+  --font-display: var(--font-archivo), "Archivo Black", sans-serif;
   --radius-tile: 10px;
-  --shadow-overlay: light-dark(0 16px 40px rgba(21, 24, 29, 0.16), 0 16px 40px rgba(0, 0, 0, 0.6));
+  --shadow-overlay: light-dark(0 16px 40px rgba(21, 28, 41, 0.18), 0 16px 40px rgba(0, 0, 0, 0.55));
 }
 
 :root {
   color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 html,
@@ -46,7 +58,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 14px;
-  line-height: 1.45;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -62,12 +74,23 @@ a {
 }
 
 ::selection {
-  background: var(--color-accent-tint);
+  background: var(--color-violet-tint);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .field {
@@ -84,7 +107,7 @@ a {
   border-color: var(--color-slate);
 }
 .field:focus {
-  border-color: var(--color-ink);
+  border-color: var(--color-violet);
   outline: none;
 }
 .field:disabled {
@@ -117,14 +140,14 @@ a {
   background: var(--color-card-hover);
 }
 .btn-primary {
-  background: var(--color-ink);
-  border-color: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 .btn-primary:hover {
   background: var(--color-accent-emphasis);
   border-color: var(--color-accent-emphasis);
-  color: var(--color-paper);
+  color: var(--color-accent-ink);
 }
 .btn-danger {
   color: var(--color-sindoor);
@@ -142,7 +165,7 @@ a {
 .btn-quiet:hover,
 .btn-icon:hover {
   border-color: transparent;
-  background: var(--color-accent-tint);
+  background: var(--color-sunken);
   color: var(--color-ink);
 }
 .btn-icon {
@@ -232,7 +255,7 @@ a {
   border-radius: 999px;
 }
 .segments > .on {
-  background: var(--color-leaf);
+  background: var(--color-accent);
 }
 
 dialog.sheet {
@@ -304,7 +327,7 @@ dialog.sheet[open] {
   background: var(--color-sunken);
 }
 .menu-item:focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-focus);
   outline-offset: -2px;
 }
 .menu-rule {
@@ -372,7 +395,7 @@ dialog.sheet[open] {
   background: var(--color-sunken);
 }
 .rail-item:focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-focus);
   outline-offset: -2px;
 }
 .rail-icon {
@@ -459,8 +482,8 @@ dialog.sheet[open] {
   cursor: pointer;
 }
 .react-flow__node:focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
   border-radius: var(--radius-tile);
 }
 .react-flow__attribution {
@@ -623,17 +646,17 @@ dialog.sheet[open] {
   font-weight: 600;
 }
 .doc a {
-  color: var(--color-ink);
+  color: var(--color-violet);
   text-decoration: underline;
-  text-decoration-color: var(--color-edge);
+  text-decoration-color: color-mix(in srgb, var(--color-violet) 40%, transparent);
 }
 .doc a:hover {
-  text-decoration-color: var(--color-ink);
+  text-decoration-color: var(--color-violet);
 }
 .doc code {
-  font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.9em;
-  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 1px 5px;
   border-radius: 5px;
   background: var(--color-sunken);
 }
