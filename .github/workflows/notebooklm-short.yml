@@ -16,13 +16,15 @@ name: NotebookLM short (auto topic)
 
 on:
   schedule:
-    # 2 shorts a day, due 9:07 am and 3:07 pm IST (the second after NotebookLM's quota reset, about 1:30 pm).
+    # 2 shorts a day, due 7:00 am and 3:00 pm IST (the second after NotebookLM's quota reset, about 1:30 pm).
     # GitHub delays or drops cron slots that sit on the hour / half hour, so every slot is on :07 / :37 and the
-    # workflow is tried every 30 minutes from 9:07 am to 8:07 pm. The guard job lets a slot work only while a short
-    # that is due by then is still missing (DUE_UTC below), so the retries keep going until the short is published,
-    # never make a third short, and never make the second one before 3:07 pm. Cron times are UTC (IST minus 5:30).
-    - cron: '37 3 * * *'        # 9:07 am IST, first short
-    - cron: '7,37 4-14 * * *'   # 9:37 am ... 8:07 pm IST, every 30 min (second short due from 3:07 pm; a short takes about 15 min)
+    # workflow is tried every 30 minutes from 7:07 to 10:37 am and from 3:07 to 5:37 pm. The guard job lets a slot
+    # work only while a short that is due by then is still missing (DUE_UTC below), so the retries keep going until
+    # the short is published, never make a third short, and never make the second one before 3:00 pm. Cron times
+    # are UTC (IST minus 5:30). The dashboard's /api/trigger starts the same runs every 15 min when this cron does not.
+    - cron: '37 1,9 * * *'             # 7:07 am and 3:07 pm IST, first try of each window
+    - cron: '7,37 2-4,10-11 * * *'     # 7:37 ... 10:07 am and 3:37 ... 5:07 pm IST, every 30 min
+    - cron: '7 5,12 * * *'             # 10:37 am and 5:37 pm IST, last tries
   workflow_dispatch:
     inputs:
       genre:
@@ -97,7 +99,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
-  DUE_UTC: '03:37 09:37'   # when the 1st and 2nd short of the day are due (9:07 am and 3:07 pm IST); guard job
+  DUE_UTC: '01:30 09:30'   # when the 1st and 2nd short of the day are due (7:00 am and 3:00 pm IST); guard job
   GENRE: ${{ inputs.genre || 'auto' }}
   TOPIC_OVERRIDE: ${{ inputs.topic || '' }}
   # LLM that picks the topic: auto = first working key, free tiers first (gemini, mistral, cerebras, ...); with no key

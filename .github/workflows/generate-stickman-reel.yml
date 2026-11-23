@@ -9,14 +9,15 @@ name: Generate stickman fact reel
 
 on:
   schedule:
-    # 2 reels a day, due 1:27 pm and 5:57 pm IST. GitHub delays or drops cron slots that sit on the hour / half hour,
-    # so every slot is on :27 / :57 and the workflow is tried every 30 minutes from 1:27 pm to 7:57 pm. The guard
-    # job lets a slot work only while a reel that is due by then is still missing (DUE_UTC below), so the retries
-    # keep going until the reel is published, never make a third reel, and never make the second one before
-    # 5:57 pm. Cron times are UTC (IST minus 5:30).
-    - cron: '57 7 * * *'        # 1:27 pm IST, first reel
-    - cron: '27,57 8-13 * * *'  # 1:57 pm ... 7:27 pm IST, every 30 min (second reel due from 5:57 pm)
-    - cron: '27 14 * * *'       # 7:57 pm IST last try (a reel takes up to ~70 min, so it is still posted before 10 pm)
+    # 2 reels a day, due 8:00 am and 4:00 pm IST. GitHub delays or drops cron slots that sit on the hour / half hour,
+    # so every slot is on :27 / :57 and the workflow is tried every 30 minutes from 8:27 to 10:57 am and from 4:27 to
+    # 5:57 pm. The guard job lets a slot work only while a reel that is due by then is still missing (DUE_UTC below),
+    # so the retries keep going until the reel is published, never make a third reel, and never make the second one
+    # before 4:00 pm. Cron times are UTC (IST minus 5:30). The dashboard's /api/trigger starts the same runs every
+    # 15 min when this cron does not.
+    - cron: '57 2,10 * * *'            # 8:27 am and 4:27 pm IST, first try of each window
+    - cron: '27,57 3-4,11 * * *'       # 8:57 ... 10:27 am and 4:57, 5:27 pm IST, every 30 min
+    - cron: '27 5,12 * * *'            # 10:57 am and 5:57 pm IST, last tries
   workflow_dispatch:
     inputs:
       topic:
@@ -93,7 +94,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
-  DUE_UTC: '07:57 12:27'   # when the 1st and 2nd reel of the day are due (1:27 pm and 5:57 pm IST); guard job
+  DUE_UTC: '02:30 10:30'   # when the 1st and 2nd reel of the day are due (8:00 am and 4:00 pm IST); guard job
   KIT: .github/skills/stickman-reel
   PROJECT: work/reel
   PYTHONUNBUFFERED: '1'

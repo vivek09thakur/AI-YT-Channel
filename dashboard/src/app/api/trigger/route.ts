@@ -8,7 +8,8 @@ import { ConfigError, env } from "@/lib/env";
 import { fmtClock } from "@/lib/time";
 
 // External trigger for the daily workflows, for when GitHub's own cron does not create scheduled runs.
-// Vercel's scheduler (the "schedules" entry in vercel.json) calls GET /api/trigger every 15 minutes during the day
+// Vercel's scheduler (the "schedules" entry in vercel.json) calls GET /api/trigger every 15 minutes, 7 to 11 am and
+// 3 to 6 pm IST,
 // with "Authorization: Bearer <CRON_SECRET>"; any other scheduler can do the same with TRIGGER_SECRET. The route
 // works out which workflow is due right now and starts it with workflow_dispatch and auto=true, so the workflow's
 // guard job applies exactly as it does for a scheduled slot.

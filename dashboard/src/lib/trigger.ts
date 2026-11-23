@@ -2,7 +2,7 @@ import type { WorkflowDef } from "./model";
 
 // Decides, for one workflow, whether the external trigger should start a run right now. Pure: the route feeds it
 // what it read from GitHub. Mirrors the guard job (pipeline/published_today.py --due): a run is wanted only while a
-// video that is due by now is still missing, at most `target` a day, and only inside the hours the cron used to try.
+// video that is due by now is still missing, at most `target` a day, and only inside the workflow's hours.
 
 /** A new run is not started while the previous one began less than this many minutes ago (the cron retried every 30). */
 export const RETRY_SPACING_MIN = 25;
@@ -33,10 +33,10 @@ export function dueCount(dueIST: string[], nowIST: string, target: number) {
   return Math.max(1, Math.min(target, passed));
 }
 
-/** From the first slot up to 30 minutes after the last one (the last slot was a retry too). */
-export function inWindow(slotsIST: string[], nowIST: string) {
+/** Inside one of the workflow's [from, to) ranges (morning and afternoon). */
+export function inWindow(windowsIST: [string, string][], nowIST: string) {
   const n = toMin(nowIST);
-  return n >= toMin(slotsIST[0]) && n < toMin(slotsIST[slotsIST.length - 1]) + 30;
+  return windowsIST.some(([from, to]) => n >= toMin(from) && n < toMin(to));
 }
 
 export function decide(def: WorkflowDef, f: Facts): Decision {
@@ -44,8 +44,8 @@ export function decide(def: WorkflowDef, f: Facts): Decision {
   const base = { workflow: def.id, file: def.file, published: f.publishedToday, target };
   const skip = (reason: string): Decision => ({ ...base, action: "skip", reason });
 
-  if (!inWindow(def.slotsIST, f.nowIST)) {
-    return skip(`outside the window (${def.slotsIST[0]} to ${def.slotsIST[def.slotsIST.length - 1]} IST)`);
+  if (!inWindow(def.windowsIST, f.nowIST)) {
+    return skip(`outside the hours (${def.windowsIST.map(([a, b]) => `${a} to ${b}`).join(", ")} IST)`);
   }
   if (f.publishedToday >= target) {
     if (target >= def.target) return skip("daily target reached");

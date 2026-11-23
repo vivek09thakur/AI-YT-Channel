@@ -1,6 +1,6 @@
 # NotebookLM short
 
-Twice a day (due 9:07 am and 3:07 pm IST, tried every 30 minutes until published, 9:07 am to 8:07 pm) or by hand, this workflow:
+Twice a day (due 7:00 am and 3:00 pm IST, tried every 15 to 30 minutes until published, until 11:00 am / 6:00 pm) or by hand, this workflow:
 
 - asks an LLM for a fresh topic, looking at the shorts already published (`nlm.json`) and rotating the genres
   (science, technology, ai, space, physics); with no LLM key it picks a random unused topic from `topics.json`
@@ -226,14 +226,14 @@ Change the wording:
 
 | Job | What it checks or does |
 |---|---|
-| Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 9:07 am / 3:07 pm IST, counted per UTC day) is still missing, so the 30-minute slots keep trying until the short is published and do nothing afterwards |
+| Guard | scheduled runs only: skips everything unless a short that is due by now (`DUE_UTC`: 7:00 am / 3:00 pm IST, counted per UTC day) is still missing, so the 30-minute slots keep trying until the short is published and do nothing afterwards |
 | Precheck | at least one upload account (YouTube or Instagram) eligible for group `nlm`, otherwise the run cancels itself here, grey **Cancelled** with the reason in the summary (skipped for manual `upload=off` runs); token present and valid, NotebookLM quota (exhausted = same cancel, not a failure), deletes leftover notebooks whose title is a `topics.json` topic (the make job deletes its own notebook even when it fails, so leftovers are rare; one left by a killed run with an LLM topic is listed as KEEP and can be deleted by hand) |
 | Make | topic (LLM, checked against `nlm.json` for repeats; `topics.json` without a key), research, video (daily Video Overview quota reached = run cancels itself, reason in the summary), trim, thumbnail, captions |
 | Publish | copies to `videos` branch, updates `nlm.json` |
 | Upload | calls `upload-video.yml` with group `nlm`: detects accounts, one job per account (`instagram / user1` ...); each upload is tried 3 times |
 | Report | on failure opens (or comments on) one issue labelled `pipeline-failure` with the run link; the next good run closes it. Not run for a cancelled run: the expected stops above are not failures |
 
-Schedule: shorts are due at 9:07 am and 3:07 pm IST (the second after the NotebookLM quota reset, about 1:30 pm). GitHub delays or drops cron slots on the hour / half hour, so every slot sits on :07 / :37 and the workflow is tried every 30 minutes from 9:07 am to 8:07 pm. A slot only runs while a short that is due by then is missing, so the retries keep going until the short is published, the second short is never made before 3:07 pm and a third short is never made.
+Schedule: shorts are due at 7:00 am and 3:00 pm IST (the second after the NotebookLM quota reset, about 1:30 pm). GitHub delays or drops cron slots on the hour / half hour, so every slot sits on :07 / :37 and the workflow is tried every 30 minutes from 7:07 to 10:37 am and from 3:07 to 5:37 pm (the dashboard's `/api/trigger` tries every 15 minutes in the same hours). A slot only runs while a short that is due by then is missing, so the retries keep going until the short is published, the second short is never made before 3:00 pm and a third short is never made.
 
 ### Upload an already made video (no NotebookLM quota)
 

@@ -98,6 +98,7 @@ export type WorkflowInfo = {
   latestRun: RunInfo | null;
   nextSlot: string | null;
   slots: string[];
+  windows: [string, string][];
   due: string[];
   state: "done" | "partial" | "waiting" | "running" | "failed" | "idle";
   issueUrl: string | null;
@@ -340,6 +341,7 @@ async function workflowInfo(
     latestRun: latest,
     nextSlot: slot,
     slots: def.slotsIST,
+    windows: def.windowsIST,
     due: def.dueIST,
     state,
     issueUrl: issue?.html_url ?? null,

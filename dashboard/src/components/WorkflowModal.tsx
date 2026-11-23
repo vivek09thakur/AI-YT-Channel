@@ -57,7 +57,7 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
           <StateChip wf={wf} />
         </div>
         <p className="text-[13px] text-ink-soft -mt-3">
-          Due {wf.due.map(fmtClock).join(" and ")} IST. Tried every 30 minutes until the video is published, from {fmtClock(wf.slots[0] ?? "")} to {fmtClock(wf.slots.at(-1) ?? "")}; a slot only runs while a video due by then is still missing.
+          Due {wf.due.map(fmtClock).join(" and ")} IST. Tried again every 15 to 30 minutes until the video is published, {wf.windows.map(([a, b]) => `${fmtClock(a)} to ${fmtClock(b)}`).join(" and ")}; a try only runs while a video due by then is still missing.
         </p>
 
         <section>

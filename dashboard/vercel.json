@@ -4,7 +4,7 @@
   "regions": ["bom1"],
   "schedules": {
     "daily-videos": {
-      "schedule": "*/15 9-20 * * *",
+      "schedule": "*/15 7-10,15-17 * * *",
       "timezone": "Asia/Kolkata",
       "path": "/api/trigger",
       "requestMethod": "GET"

@@ -7,14 +7,14 @@ name: Generate story video
 
 on:
   schedule:
-    # 2 stories a day, due 11:17 am and 4:47 pm IST. GitHub delays or drops cron slots that sit on the hour / half
-    # hour, so every slot is on :17 / :47 and the workflow is tried every 30 minutes from 11:17 am to 7:47 pm. The
-    # guard job lets a slot work only while a story that is due by then is still missing (DUE_UTC below), so the
-    # retries keep going until the story is published, never make a third story, and never make the second one
-    # before 4:47 pm. Cron times are UTC (IST minus 5:30).
-    - cron: '47 5 * * *'        # 11:17 am IST, first story
-    - cron: '17,47 6-13 * * *'  # 11:47 am ... 7:17 pm IST, every 30 min (second story due from 4:47 pm)
-    - cron: '17 14 * * *'       # 7:47 pm IST last try (a story takes up to ~70 min, so it is still posted before 10 pm)
+    # 2 stories a day, due 7:30 am and 3:30 pm IST. GitHub delays or drops cron slots that sit on the hour / half
+    # hour, so every slot is on :17 / :47 and the workflow is tried every 30 minutes from 7:47 to 10:47 am and from
+    # 3:47 to 5:47 pm. The guard job lets a slot work only while a story that is due by then is still missing
+    # (DUE_UTC below), so the retries keep going until the story is published, never make a third story, and never
+    # make the second one before 3:30 pm. Cron times are UTC (IST minus 5:30). The dashboard's /api/trigger starts
+    # the same runs every 15 min when this cron does not.
+    - cron: '17,47 2-4,10-11 * * *'    # 7:47 ... 10:17 am and 3:47 ... 5:17 pm IST, every 30 min
+    - cron: '17 5,12 * * *'            # 10:47 am and 5:47 pm IST, last tries
   workflow_dispatch:
     inputs:
       topic:
@@ -93,7 +93,7 @@ permissions:
 
 env:
   DAILY_TARGET: '2'   # scheduled videos per day (guard job)
-  DUE_UTC: '05:47 11:17'   # when the 1st and 2nd story of the day are due (11:17 am and 4:47 pm IST); guard job
+  DUE_UTC: '02:00 10:00'   # when the 1st and 2nd story of the day are due (7:30 am and 3:30 pm IST); guard job
   KIT: .github/skills/folk-art-video
   PYTHONUNBUFFERED: '1'
   # scheduled runs have no inputs: these are the defaults used then (shorts only; landscape is a manual choice)
@@ -471,7 +471,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "video: ${{ needs.author.outputs.slug }} (run ${{ github.run_number }})"
-          git push origin videos
+          # another workflow may have published to the videos branch meanwhile (the three run close together)
+          ok=0
+          for i in 1 2 3; do
+            if git push origin videos; then ok=1; break; fi
+            git pull --rebase origin videos || true; sleep 5
+          done
+          test "$ok" = 1 || { echo "::error::could not push to the videos branch after 3 tries"; exit 1; }
       - name: Summary
         run: |
           slug="${{ needs.author.outputs.slug }}"; dir="videos/${slug}-${{ github.run_number }}"

@@ -93,9 +93,9 @@ Build errors show on Vercel (the CLI prints the inspect URL in the run log), so 
 
 ## External trigger
 
-GitHub's cron can stop creating scheduled runs for a repo with no error anywhere (this repo had a day with zero scheduled runs across 55 slots). `/api/trigger` makes publishing independent of it. Vercel's own scheduler calls the route every 15 minutes from 9 am to 9 pm IST (the `schedules` entry in `vercel.json`, [Vercel Schedules](https://vercel.com/docs/schedules), free on Hobby, where a run can arrive up to 15 minutes after its slot). On each call the route reads the `videos` branch indexes and the run list, and for each workflow decides exactly what the guard job would decide for a cron slot:
+GitHub's cron can stop creating scheduled runs for a repo with no error anywhere (this repo had a day with zero scheduled runs across 55 slots). `/api/trigger` makes publishing independent of it. Vercel's own scheduler calls the route every 15 minutes from 7 to 11 am and from 3 to 6 pm IST (the `schedules` entry in `vercel.json`, [Vercel Schedules](https://vercel.com/docs/schedules), free on Hobby, where a run can arrive up to 15 minutes after its slot). On each call the route reads the `videos` branch indexes and the run list, and for each workflow decides exactly what the guard job would decide for a cron slot:
 
-- inside the workflow's hours only (fact short 9:07 am to 8:07 pm, story 11:17 am to 7:47 pm, stickman 1:27 pm to 7:57 pm IST, plus 30 minutes after the last slot);
+- inside the workflow's hours only: from the video's due time until 11:00 am (morning video) or 6:00 pm (afternoon video); fact short is due 7:00 am / 3:00 pm, story 7:30 am / 3:30 pm, stickman 8:00 am / 4:00 pm IST (`windowsIST` in `src/lib/model.ts`);
 - a run is started only while a video that is due by now is still missing (first due time, then the second; 2 a day), never when a run of that workflow is queued or in progress, and not within 25 minutes of the previous run (the cron retried every 30);
 - the run is started with the `auto` input on, so the workflow's own guard job re-checks the index and still skips if a video appeared in the meantime. Started runs show as "manual" on the Runs page because GitHub records them as `workflow_dispatch`.
 

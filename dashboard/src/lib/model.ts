@@ -10,7 +10,10 @@ export type WorkflowDef = {
   file: string;
   index: string;
   dueIST: string[];
+  /** cron retry slots (every 30 min, GitHub's backup) */
   slotsIST: string[];
+  /** [from, to) ranges the external trigger may start a run in; each starts at that video's due time */
+  windowsIST: [string, string][];
   target: number;
   video: string;
   needs: string;
@@ -25,6 +28,8 @@ function every30(from: string, to: string): string[] {
   return out;
 }
 
+// Two videos a day per workflow: one in the morning (7 to 11 am IST), one in the afternoon (3 to 6 pm IST). The three
+// workflows are due 30 minutes apart so their runs and their pushes to the videos branch do not pile up.
 export const WORKFLOWS: WorkflowDef[] = [
   {
     id: "nlm",
@@ -33,8 +38,9 @@ export const WORKFLOWS: WorkflowDef[] = [
     subtitle: "NotebookLM video overview",
     file: "notebooklm-short.yml",
     index: "nlm.json",
-    dueIST: ["09:07", "15:07"],
-    slotsIST: every30("09:07", "20:07"),
+    dueIST: ["07:00", "15:00"],
+    slotsIST: [...every30("07:07", "10:37"), ...every30("15:07", "17:37")],
+    windowsIST: [["07:00", "11:00"], ["15:00", "18:00"]],
     target: 2,
     video: "reel.mp4",
     needs: "NOTEBOOKLM_MASTER_TOKEN_JSON",
@@ -46,8 +52,9 @@ export const WORKFLOWS: WorkflowDef[] = [
     subtitle: "Folk-art narrated story",
     file: "generate-video.yml",
     index: "videos.json",
-    dueIST: ["11:17", "16:47"],
-    slotsIST: every30("11:17", "19:47"),
+    dueIST: ["07:30", "15:30"],
+    slotsIST: [...every30("07:47", "10:47"), ...every30("15:47", "17:47")],
+    windowsIST: [["07:30", "11:00"], ["15:30", "18:00"]],
     target: 2,
     video: "shorts.mp4",
     needs: "one LLM key",
@@ -59,8 +66,9 @@ export const WORKFLOWS: WorkflowDef[] = [
     subtitle: "Stick-figure fact reel",
     file: "generate-stickman-reel.yml",
     index: "stickman.json",
-    dueIST: ["13:27", "17:57"],
-    slotsIST: every30("13:27", "19:57"),
+    dueIST: ["08:00", "16:00"],
+    slotsIST: [...every30("08:27", "10:57"), ...every30("16:27", "17:57")],
+    windowsIST: [["08:00", "11:00"], ["16:00", "18:00"]],
     target: 2,
     video: "reel.mp4",
     needs: "one LLM key",
