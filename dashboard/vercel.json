@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "regions": ["bom1"],
+  "schedules": {
+    "daily-videos": {
+      "schedule": "*/15 9-20 * * *",
+      "timezone": "Asia/Kolkata",
+      "path": "/api/trigger",
+      "requestMethod": "GET"
+    }
+  }
+}
