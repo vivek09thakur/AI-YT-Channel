@@ -1,25 +1,19 @@
 "use client";
 
-import { useMemo, useRef, useSyncExternalStore } from "react";
+import { useMemo, useRef } from "react";
 import { FiAlertCircle, FiCheck, FiExternalLink, FiMinus } from "react-icons/fi";
 import type { Row, SecretSection } from "@/lib/secrets";
 import { ago } from "@/lib/time";
 import { PlatformIcon } from "./icons";
-
-const onHash = (cb: () => void) => {
-  window.addEventListener("hashchange", cb);
-  return () => window.removeEventListener("hashchange", cb);
-};
-const readHash = () => decodeURIComponent(window.location.hash.slice(1));
+import { setHash, useHash } from "./useHash";
 
 export function SecretsView({ groups, settingsUrl }: { groups: SecretSection[][]; settingsUrl: string }) {
   const sections = useMemo(() => groups.flat(), [groups]);
-  const hash = useSyncExternalStore(onHash, readHash, () => "");
+  const hash = useHash();
   const panel = useRef<HTMLElement>(null);
 
   const select = (key: string) => {
-    window.history.replaceState(null, "", `#${key}`);
-    window.dispatchEvent(new Event("hashchange"));
+    setHash(key);
     panel.current?.scrollTo({ top: 0 });
   };
 

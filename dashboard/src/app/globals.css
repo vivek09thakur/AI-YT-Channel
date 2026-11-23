@@ -286,7 +286,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sched-name:hover {
+a.sched-name:hover {
   text-decoration: underline;
 }
 .sched-track {

@@ -131,6 +131,10 @@ export function actionsUrl(workflowFile: string) {
   return `https://github.com/${env.repo()}/actions/workflows/${workflowFile}`;
 }
 
+export function allActionsUrl() {
+  return `https://github.com/${env.repo()}/actions`;
+}
+
 export function secretsSettingsUrl() {
   return `https://github.com/${env.repo()}/settings/secrets/actions`;
 }

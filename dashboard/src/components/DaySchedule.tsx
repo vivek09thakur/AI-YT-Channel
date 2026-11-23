@@ -20,12 +20,13 @@ function slotText(s: WindowSlot): string {
   }
 }
 
-export function DaySchedule({ overview }: { overview: Overview }) {
+export function DaySchedule({ overview, only }: { overview: Overview; only?: string }) {
   const sched = daySchedule(overview.workflows, overview.date, overview.nowIST);
+  const rows = only ? sched.rows.filter((r) => r.wf.id === only) : sched.rows;
   const x = (hhmm: string) => `${pct(hhmm, sched.start, sched.end)}%`;
 
   return (
-    <div className="sched" role="group" aria-label="Today's publishing windows">
+    <div className="sched" role="group" aria-label={only ? "Today's publishing windows" : "Today's publishing windows for every workflow"}>
       <div className="sched-row sched-axis" aria-hidden>
         <span />
         <div className="sched-track">
@@ -37,11 +38,15 @@ export function DaySchedule({ overview }: { overview: Overview }) {
         </div>
       </div>
 
-      {sched.rows.map(({ wf, windows }) => (
+      {rows.map(({ wf, windows }) => (
         <div key={wf.id} className="sched-row">
-          <a href={`#wf-${wf.id}`} className="sched-name">
-            {wf.title}
-          </a>
+          {only ? (
+            <span className="sched-name text-ink-soft">Today</span>
+          ) : (
+            <a href={`#${wf.id}`} className="sched-name">
+              {wf.title}
+            </a>
+          )}
           <div className="sched-track" role="img" aria-label={`${wf.title}. ${windows.map(slotText).join(". ")}.`}>
             {sched.hours.map((h) => (
               <i key={h} className="sched-line" style={{ left: x(h) }} />

@@ -6,6 +6,7 @@ import { Problem } from "@/components/Problem";
 import { Runs } from "@/components/Runs";
 import { TopBar } from "@/components/TopBar";
 import { getSession } from "@/lib/auth";
+import { allActionsUrl } from "@/lib/github";
 import { loadOverview } from "@/lib/state";
 
 export const metadata: Metadata = { title: "Runs" };
@@ -38,9 +39,9 @@ async function RunsPage() {
   const target = overview.workflows.reduce((n, w) => n + w.target, 0);
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="h-dvh flex flex-col">
       <TopBar session={session} current="runs" summary={<>{posted} of {target} videos posted today</>} />
-      <Runs overview={overview} />
+      <Runs overview={overview} actionsUrl={allActionsUrl()} />
     </div>
   );
 }
