@@ -7,9 +7,9 @@ name: NotebookLM short (auto topic)
 # (pipeline/notebooklm/), own index (nlm.json), own folder.
 # Jobs: precheck (token present + works, quota, leftover notebooks) -> make -> publish -> upload (reusable workflow
 # upload-video.yml: YouTube Short / Instagram Reel for every account whose secrets are set; it can also be run by
-# hand for an already-published video; see pipeline/notebooklm/README.md).
+# hand for an already-published video; see dashboard/content/docs/notebooklm.md).
 #
-# One-time setup (see pipeline/notebooklm/README.md): with a DEDICATED/throwaway Google account run
+# One-time setup (see dashboard/content/docs/notebooklm.md): with a DEDICATED/throwaway Google account run
 #   pip install "notebooklm-py[headless,browser]"
 #   notebooklm login --master-token --account you@gmail.com
 # and store ~/.notebooklm/profiles/default/master_token.json as the repo secret NOTEBOOKLM_MASTER_TOKEN_JSON.
@@ -219,7 +219,7 @@ jobs:
         env:
           NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
         run: |
-          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see pipeline/notebooklm/README.md)"; exit 1; }
+          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see dashboard/content/docs/notebooklm.md)"; exit 1; }
           python -c "import json,os; d=json.loads(os.environ['NOTEBOOKLM_MASTER_TOKEN_JSON']); assert isinstance(d, dict) and d, 'empty'" \
             || { echo "::error::NOTEBOOKLM_MASTER_TOKEN_JSON is not a JSON object - paste the whole master_token.json file"; exit 1; }
           if [ "$(printf '%s' "$NOTEBOOKLM_MASTER_TOKEN_JSON" | wc -l)" -gt 0 ]; then
@@ -305,7 +305,7 @@ jobs:
         env:
           NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
         run: |
-          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see pipeline/notebooklm/README.md)"; exit 1; }
+          test -n "$NOTEBOOKLM_MASTER_TOKEN_JSON" || { echo "::error::secret NOTEBOOKLM_MASTER_TOKEN_JSON is not set (see dashboard/content/docs/notebooklm.md)"; exit 1; }
           umask 077
           mkdir -p ~/.notebooklm/profiles/default
           printf '%s' "$NOTEBOOKLM_MASTER_TOKEN_JSON" > ~/.notebooklm/profiles/default/master_token.json

@@ -10,7 +10,7 @@ such a workflow as potentially malicious and its scheduled runs never start.
   YT_CLIENT_ID + YT_CLIENT_SECRET + YT_USERn_REFRESH_TOKEN -> YouTube "usern" (shared OAuth client, one token per channel)
   YT_USER1_CLIENT_ID + YT_USER1_CLIENT_SECRET + YT_USER1_REFRESH_TOKEN, ...
                                                         -> YouTube accounts "user1", ... (YT_USERn_NAME / YT_USERn_PRIVACY optional)
-  YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see README. "enabled": false skips an entry.
+  YT_ACCOUNTS_JSON / IG_ACCOUNTS_JSON                    -> JSON lists, see dashboard/content/docs/overview.md. "enabled": false skips an entry.
 
 Which workflow may use an account (optional): IG_USERn_FOR / YT_USERn_FOR / IG_FOR / YT_FOR / JSON "for" = comma list
 of groups, e.g. "story" or "nlm,story". Unset or "all" = every workflow. `list --group story` keeps only matching accounts.

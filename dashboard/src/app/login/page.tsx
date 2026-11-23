@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { configProblems } from "@/lib/env";
 import { LoginForm } from "./LoginForm";
 
@@ -15,7 +16,11 @@ export default function LoginPage() {
           <div className="rounded-[10px] bg-sindoor-tint p-4 text-[14px]">
             <p className="font-medium text-sindoor mb-1">The dashboard is not configured yet.</p>
             <p>
-              Set {problems.join(", ")} in <code>dashboard/.env.local</code> or the Vercel project. See <code>dashboard/README.md</code>.
+              Set {problems.join(", ")} in <code>dashboard/.env.local</code> or the Vercel project. See the{" "}
+              <Link href="/docs/dashboard" className="underline">
+                dashboard docs
+              </Link>
+              .
             </p>
           </div>
         ) : (

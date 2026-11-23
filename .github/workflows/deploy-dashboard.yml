@@ -8,7 +8,7 @@ name: Deploy dashboard
 # Needs the VERCEL_TOKEN repo secret (Vercel > Account settings > Tokens). The project ids below are not secrets;
 # they are the same values the Vercel CLI writes to .vercel/project.json when you run `vercel link` in dashboard/.
 # Vercel project settings that must stay as they are: Root Directory = dashboard, Framework = Next.js, the four
-# environment variables from dashboard/README.md (and CRON_SECRET for the schedule).
+# environment variables from dashboard/content/docs/dashboard.md (and CRON_SECRET for the schedule).
 
 on:
   push:

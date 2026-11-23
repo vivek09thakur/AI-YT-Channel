@@ -9,7 +9,7 @@ env: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN  (mint the refresh token o
 deps: pip install google-api-python-client google-auth
 
 Title / description / tags come from meta.json (title, caption_youtube, hashtags). Writes {"id", "url"} to --out.
-Note: YouTube forces videos uploaded by an UNVERIFIED Google Cloud OAuth app to private; see README.
+Note: YouTube forces videos uploaded by an UNVERIFIED Google Cloud OAuth app to private; see dashboard/content/docs/notebooklm.md.
 """
 import argparse, json, os, re, sys, time
 from pathlib import Path

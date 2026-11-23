@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import { FiActivity, FiGrid, FiKey, FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import { FiActivity, FiBookOpen, FiGrid, FiKey, FiLogOut, FiMenu, FiX } from "react-icons/fi";
 import { logout } from "@/app/actions";
 import type { Session } from "@/lib/auth";
 
-export type Section = "board" | "runs" | "secrets";
+export type Section = "board" | "runs" | "secrets" | "docs";
 
 const SECTIONS: { id: Section; href: string; label: string; Icon: typeof FiGrid }[] = [
   { id: "board", href: "/", label: "Board", Icon: FiGrid },
   { id: "runs", href: "/runs", label: "Runs", Icon: FiActivity },
   { id: "secrets", href: "/secrets", label: "Secrets", Icon: FiKey },
+  { id: "docs", href: "/docs", label: "Docs", Icon: FiBookOpen },
 ];
 
 export function NavMenu({ session, current }: { session: Session; current: Section }) {
