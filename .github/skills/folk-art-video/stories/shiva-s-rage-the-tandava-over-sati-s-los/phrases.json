@@ -1,0 +1,1372 @@
+{
+ "fps": 30,
+ "duration": 106.12,
+ "total_frames": 3184,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Silence falls over the entire cosmos as",
+   "t0": 0.8,
+   "t1": 3.045,
+   "f0": 24,
+   "f1": 91,
+   "words": [
+    {
+     "w": "Silence",
+     "f": 24
+    },
+    {
+     "w": "falls",
+     "f": 38
+    },
+    {
+     "w": "over",
+     "f": 48
+    },
+    {
+     "w": "the",
+     "f": 57
+    },
+    {
+     "w": "entire",
+     "f": 63
+    },
+    {
+     "w": "cosmos",
+     "f": 75
+    },
+    {
+     "w": "as",
+     "f": 87
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "the sacred flames finally consume",
+   "t0": 3.045,
+   "t1": 5.018,
+   "f0": 91,
+   "f1": 151,
+   "words": [
+    {
+     "w": "the",
+     "f": 91
+    },
+    {
+     "w": "sacred",
+     "f": 97
+    },
+    {
+     "w": "flames",
+     "f": 110
+    },
+    {
+     "w": "finally",
+     "f": 122
+    },
+    {
+     "w": "consume",
+     "f": 136
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 0,
+   "text": "the mortal form of Sati...",
+   "t0": 5.018,
+   "t1": 6.31,
+   "f0": 151,
+   "f1": 189,
+   "words": [
+    {
+     "w": "the",
+     "f": 151
+    },
+    {
+     "w": "mortal",
+     "f": 157
+    },
+    {
+     "w": "form",
+     "f": 169
+    },
+    {
+     "w": "of",
+     "f": 177
+    },
+    {
+     "w": "Sati...",
+     "f": 181
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "leaving behind",
+   "t0": 7.21,
+   "t1": 8.117,
+   "f0": 216,
+   "f1": 243,
+   "words": [
+    {
+     "w": "leaving",
+     "f": 216
+    },
+    {
+     "w": "behind",
+     "f": 231
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 1,
+   "text": "a void that no god can ever fill.",
+   "t0": 8.117,
+   "t1": 9.86,
+   "f0": 243,
+   "f1": 296,
+   "words": [
+    {
+     "w": "a",
+     "f": 243
+    },
+    {
+     "w": "void",
+     "f": 246
+    },
+    {
+     "w": "that",
+     "f": 254
+    },
+    {
+     "w": "no",
+     "f": 262
+    },
+    {
+     "w": "god",
+     "f": 267
+    },
+    {
+     "w": "can",
+     "f": 273
+    },
+    {
+     "w": "ever",
+     "f": 279
+    },
+    {
+     "w": "fill.",
+     "f": 287
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "Lord Shiva arrives at",
+   "t0": 10.96,
+   "t1": 12.25,
+   "f0": 329,
+   "f1": 367,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 329
+    },
+    {
+     "w": "Shiva",
+     "f": 337
+    },
+    {
+     "w": "arrives",
+     "f": 348
+    },
+    {
+     "w": "at",
+     "f": 363
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 2,
+   "text": "the devastated yajna arena far too late",
+   "t0": 12.25,
+   "t1": 14.614,
+   "f0": 367,
+   "f1": 438,
+   "words": [
+    {
+     "w": "the",
+     "f": 367
+    },
+    {
+     "w": "devastated",
+     "f": 374
+    },
+    {
+     "w": "yajna",
+     "f": 395
+    },
+    {
+     "w": "arena",
+     "f": 406
+    },
+    {
+     "w": "far",
+     "f": 417
+    },
+    {
+     "w": "too",
+     "f": 423
+    },
+    {
+     "w": "late",
+     "f": 430
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 2,
+   "text": "to stop the unimaginable tragedy.",
+   "t0": 14.614,
+   "t1": 16.62,
+   "f0": 438,
+   "f1": 499,
+   "words": [
+    {
+     "w": "to",
+     "f": 438
+    },
+    {
+     "w": "stop",
+     "f": 443
+    },
+    {
+     "w": "the",
+     "f": 451
+    },
+    {
+     "w": "unimaginable",
+     "f": 458
+    },
+    {
+     "w": "tragedy.",
+     "f": 484
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "He moves through the ruined courtyard like a phantom,",
+   "t0": 17.72,
+   "t1": 20.672,
+   "f0": 532,
+   "f1": 620,
+   "words": [
+    {
+     "w": "He",
+     "f": 532
+    },
+    {
+     "w": "moves",
+     "f": 536
+    },
+    {
+     "w": "through",
+     "f": 546
+    },
+    {
+     "w": "the",
+     "f": 560
+    },
+    {
+     "w": "ruined",
+     "f": 566
+    },
+    {
+     "w": "courtyard",
+     "f": 578
+    },
+    {
+     "w": "like",
+     "f": 596
+    },
+    {
+     "w": "a",
+     "f": 604
+    },
+    {
+     "w": "phantom,",
+     "f": 606
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 3,
+   "text": "bypassing terrified priests and trembling kings.",
+   "t0": 20.672,
+   "t1": 23.49,
+   "f0": 620,
+   "f1": 705,
+   "words": [
+    {
+     "w": "bypassing",
+     "f": 620
+    },
+    {
+     "w": "terrified",
+     "f": 638
+    },
+    {
+     "w": "priests",
+     "f": 656
+    },
+    {
+     "w": "and",
+     "f": 670
+    },
+    {
+     "w": "trembling",
+     "f": 677
+    },
+    {
+     "w": "kings.",
+     "f": 695
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 4,
+   "text": "He finds her lifeless body resting gently",
+   "t0": 24.59,
+   "t1": 27.024,
+   "f0": 738,
+   "f1": 811,
+   "words": [
+    {
+     "w": "He",
+     "f": 738
+    },
+    {
+     "w": "finds",
+     "f": 742
+    },
+    {
+     "w": "her",
+     "f": 752
+    },
+    {
+     "w": "lifeless",
+     "f": 759
+    },
+    {
+     "w": "body",
+     "f": 775
+    },
+    {
+     "w": "resting",
+     "f": 784
+    },
+    {
+     "w": "gently",
+     "f": 798
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 4,
+   "text": "in his arms...",
+   "t0": 27.024,
+   "t1": 27.65,
+   "f0": 811,
+   "f1": 830,
+   "words": [
+    {
+     "w": "in",
+     "f": 811
+    },
+    {
+     "w": "his",
+     "f": 815
+    },
+    {
+     "w": "arms...",
+     "f": 821
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 5,
+   "text": "cold, still, and completely devoid of breath.",
+   "t0": 28.55,
+   "t1": 31.51,
+   "f0": 856,
+   "f1": 945,
+   "words": [
+    {
+     "w": "cold,",
+     "f": 856
+    },
+    {
+     "w": "still,",
+     "f": 866
+    },
+    {
+     "w": "and",
+     "f": 879
+    },
+    {
+     "w": "completely",
+     "f": 886
+    },
+    {
+     "w": "devoid",
+     "f": 911
+    },
+    {
+     "w": "of",
+     "f": 926
+    },
+    {
+     "w": "breath.",
+     "f": 931
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 6,
+   "text": "Time freezes across the three worlds.",
+   "t0": 32.61,
+   "t1": 35.01,
+   "f0": 978,
+   "f1": 1050,
+   "words": [
+    {
+     "w": "Time",
+     "f": 978
+    },
+    {
+     "w": "freezes",
+     "f": 988
+    },
+    {
+     "w": "across",
+     "f": 1004
+    },
+    {
+     "w": "the",
+     "f": 1018
+    },
+    {
+     "w": "three",
+     "f": 1025
+    },
+    {
+     "w": "worlds.",
+     "f": 1036
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 7,
+   "text": "The great god of destruction does not weep.",
+   "t0": 35.56,
+   "t1": 37.76,
+   "f0": 1067,
+   "f1": 1133,
+   "words": [
+    {
+     "w": "The",
+     "f": 1067
+    },
+    {
+     "w": "great",
+     "f": 1072
+    },
+    {
+     "w": "god",
+     "f": 1082
+    },
+    {
+     "w": "of",
+     "f": 1088
+    },
+    {
+     "w": "destruction",
+     "f": 1091
+    },
+    {
+     "w": "does",
+     "f": 1112
+    },
+    {
+     "w": "not",
+     "f": 1120
+    },
+    {
+     "w": "weep.",
+     "f": 1125
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 8,
+   "text": "Instead, an ocean",
+   "t0": 38.86,
+   "t1": 39.908,
+   "f0": 1166,
+   "f1": 1197,
+   "words": [
+    {
+     "w": "Instead,",
+     "f": 1166
+    },
+    {
+     "w": "an",
+     "f": 1182
+    },
+    {
+     "w": "ocean",
+     "f": 1186
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 8,
+   "text": "of uncontainable grief turns instantly into absolute,",
+   "t0": 39.908,
+   "t1": 43.353,
+   "f0": 1197,
+   "f1": 1301,
+   "words": [
+    {
+     "w": "of",
+     "f": 1197
+    },
+    {
+     "w": "uncontainable",
+     "f": 1202
+    },
+    {
+     "w": "grief",
+     "f": 1231
+    },
+    {
+     "w": "turns",
+     "f": 1242
+    },
+    {
+     "w": "instantly",
+     "f": 1253
+    },
+    {
+     "w": "into",
+     "f": 1274
+    },
+    {
+     "w": "absolute,",
+     "f": 1283
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "blinding, universe-shattering fury...",
+   "t0": 43.353,
+   "t1": 45.6,
+   "f0": 1301,
+   "f1": 1368,
+   "words": [
+    {
+     "w": "blinding,",
+     "f": 1301
+    },
+    {
+     "w": "universe-shattering",
+     "f": 1319
+    },
+    {
+     "w": "fury...",
+     "f": 1359
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 9,
+   "text": "a wrath never before witnessed by creation.",
+   "t0": 46.5,
+   "t1": 49.04,
+   "f0": 1395,
+   "f1": 1471,
+   "words": [
+    {
+     "w": "a",
+     "f": 1395
+    },
+    {
+     "w": "wrath",
+     "f": 1397
+    },
+    {
+     "w": "never",
+     "f": 1408
+    },
+    {
+     "w": "before",
+     "f": 1418
+    },
+    {
+     "w": "witnessed",
+     "f": 1431
+    },
+    {
+     "w": "by",
+     "f": 1450
+    },
+    {
+     "w": "creation.",
+     "f": 1454
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 10,
+   "text": "Shiva lifts Sati upon his mighty shoulder",
+   "t0": 50.14,
+   "t1": 52.546,
+   "f0": 1504,
+   "f1": 1576,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 1504
+    },
+    {
+     "w": "lifts",
+     "f": 1515
+    },
+    {
+     "w": "Sati",
+     "f": 1525
+    },
+    {
+     "w": "upon",
+     "f": 1533
+    },
+    {
+     "w": "his",
+     "f": 1541
+    },
+    {
+     "w": "mighty",
+     "f": 1548
+    },
+    {
+     "w": "shoulder",
+     "f": 1560
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 10,
+   "text": "and begins the terrifying Tandava...",
+   "t0": 52.546,
+   "t1": 54.54,
+   "f0": 1576,
+   "f1": 1636,
+   "words": [
+    {
+     "w": "and",
+     "f": 1576
+    },
+    {
+     "w": "begins",
+     "f": 1583
+    },
+    {
+     "w": "the",
+     "f": 1595
+    },
+    {
+     "w": "terrifying",
+     "f": 1601
+    },
+    {
+     "w": "Tandava...",
+     "f": 1622
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 11,
+   "text": "the cosmic dance of destruction.",
+   "t0": 55.44,
+   "t1": 57.17,
+   "f0": 1663,
+   "f1": 1715,
+   "words": [
+    {
+     "w": "the",
+     "f": 1663
+    },
+    {
+     "w": "cosmic",
+     "f": 1669
+    },
+    {
+     "w": "dance",
+     "f": 1680
+    },
+    {
+     "w": "of",
+     "f": 1690
+    },
+    {
+     "w": "destruction.",
+     "f": 1694
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 12,
+   "text": "Every heavy stomp of his ash-covered foot shatters",
+   "t0": 58.27,
+   "t1": 60.755,
+   "f0": 1748,
+   "f1": 1823,
+   "words": [
+    {
+     "w": "Every",
+     "f": 1748
+    },
+    {
+     "w": "heavy",
+     "f": 1757
+    },
+    {
+     "w": "stomp",
+     "f": 1766
+    },
+    {
+     "w": "of",
+     "f": 1775
+    },
+    {
+     "w": "his",
+     "f": 1778
+    },
+    {
+     "w": "ash-covered",
+     "f": 1784
+    },
+    {
+     "w": "foot",
+     "f": 1801
+    },
+    {
+     "w": "shatters",
+     "f": 1808
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 12,
+   "text": "the tectonic foundations of the earth beneath him.",
+   "t0": 60.755,
+   "t1": 63.24,
+   "f0": 1823,
+   "f1": 1897,
+   "words": [
+    {
+     "w": "the",
+     "f": 1823
+    },
+    {
+     "w": "tectonic",
+     "f": 1828
+    },
+    {
+     "w": "foundations",
+     "f": 1842
+    },
+    {
+     "w": "of",
+     "f": 1862
+    },
+    {
+     "w": "the",
+     "f": 1865
+    },
+    {
+     "w": "earth",
+     "f": 1871
+    },
+    {
+     "w": "beneath",
+     "f": 1879
+    },
+    {
+     "w": "him.",
+     "f": 1892
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 13,
+   "text": "The heavens tremble in mortal terror.",
+   "t0": 64.34,
+   "t1": 66.33,
+   "f0": 1930,
+   "f1": 1990,
+   "words": [
+    {
+     "w": "The",
+     "f": 1930
+    },
+    {
+     "w": "heavens",
+     "f": 1936
+    },
+    {
+     "w": "tremble",
+     "f": 1949
+    },
+    {
+     "w": "in",
+     "f": 1963
+    },
+    {
+     "w": "mortal",
+     "f": 1967
+    },
+    {
+     "w": "terror.",
+     "f": 1978
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 14,
+   "text": "The stars fall from",
+   "t0": 66.88,
+   "t1": 67.907,
+   "f0": 2006,
+   "f1": 2037,
+   "words": [
+    {
+     "w": "The",
+     "f": 2006
+    },
+    {
+     "w": "stars",
+     "f": 2012
+    },
+    {
+     "w": "fall",
+     "f": 2022
+    },
+    {
+     "w": "from",
+     "f": 2030
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 14,
+   "text": "their celestial orbits like dying embers",
+   "t0": 67.907,
+   "t1": 70.153,
+   "f0": 2037,
+   "f1": 2105,
+   "words": [
+    {
+     "w": "their",
+     "f": 2037
+    },
+    {
+     "w": "celestial",
+     "f": 2047
+    },
+    {
+     "w": "orbits",
+     "f": 2064
+    },
+    {
+     "w": "like",
+     "f": 2076
+    },
+    {
+     "w": "dying",
+     "f": 2083
+    },
+    {
+     "w": "embers",
+     "f": 2093
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 14,
+   "text": "of a forgotten fire.",
+   "t0": 70.153,
+   "t1": 71.18,
+   "f0": 2105,
+   "f1": 2135,
+   "words": [
+    {
+     "w": "of",
+     "f": 2105
+    },
+    {
+     "w": "a",
+     "f": 2108
+    },
+    {
+     "w": "forgotten",
+     "f": 2110
+    },
+    {
+     "w": "fire.",
+     "f": 2128
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 15,
+   "text": "Fear grips every god in the pantheon as",
+   "t0": 72.28,
+   "t1": 74.509,
+   "f0": 2168,
+   "f1": 2235,
+   "words": [
+    {
+     "w": "Fear",
+     "f": 2168
+    },
+    {
+     "w": "grips",
+     "f": 2177
+    },
+    {
+     "w": "every",
+     "f": 2187
+    },
+    {
+     "w": "god",
+     "f": 2198
+    },
+    {
+     "w": "in",
+     "f": 2204
+    },
+    {
+     "w": "the",
+     "f": 2208
+    },
+    {
+     "w": "pantheon",
+     "f": 2214
+    },
+    {
+     "w": "as",
+     "f": 2231
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 15,
+   "text": "the entire universe spirals rapidly toward total annihilation.",
+   "t0": 74.509,
+   "t1": 78.27,
+   "f0": 2235,
+   "f1": 2348,
+   "words": [
+    {
+     "w": "the",
+     "f": 2235
+    },
+    {
+     "w": "entire",
+     "f": 2242
+    },
+    {
+     "w": "universe",
+     "f": 2254
+    },
+    {
+     "w": "spirals",
+     "f": 2271
+    },
+    {
+     "w": "rapidly",
+     "f": 2285
+    },
+    {
+     "w": "toward",
+     "f": 2300
+    },
+    {
+     "w": "total",
+     "f": 2313
+    },
+    {
+     "w": "annihilation.",
+     "f": 2323
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 16,
+   "text": "Lord Vishnu steps forward bravely to intervene,",
+   "t0": 79.37,
+   "t1": 82.078,
+   "f0": 2381,
+   "f1": 2462,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 2381
+    },
+    {
+     "w": "Vishnu",
+     "f": 2389
+    },
+    {
+     "w": "steps",
+     "f": 2401
+    },
+    {
+     "w": "forward",
+     "f": 2412
+    },
+    {
+     "w": "bravely",
+     "f": 2426
+    },
+    {
+     "w": "to",
+     "f": 2440
+    },
+    {
+     "w": "intervene,",
+     "f": 2444
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 16,
+   "text": "casting his spinning discus to gracefully halt",
+   "t0": 82.078,
+   "t1": 84.787,
+   "f0": 2462,
+   "f1": 2544,
+   "words": [
+    {
+     "w": "casting",
+     "f": 2462
+    },
+    {
+     "w": "his",
+     "f": 2477
+    },
+    {
+     "w": "spinning",
+     "f": 2483
+    },
+    {
+     "w": "discus",
+     "f": 2499
+    },
+    {
+     "w": "to",
+     "f": 2511
+    },
+    {
+     "w": "gracefully",
+     "f": 2515
+    },
+    {
+     "w": "halt",
+     "f": 2535
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 16,
+   "text": "the catastrophic end of all things.",
+   "t0": 84.787,
+   "t1": 86.75,
+   "f0": 2544,
+   "f1": 2602,
+   "words": [
+    {
+     "w": "the",
+     "f": 2544
+    },
+    {
+     "w": "catastrophic",
+     "f": 2550
+    },
+    {
+     "w": "end",
+     "f": 2574
+    },
+    {
+     "w": "of",
+     "f": 2580
+    },
+    {
+     "w": "all",
+     "f": 2584
+    },
+    {
+     "w": "things.",
+     "f": 2590
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 17,
+   "text": "Sati's sacred body parts scatter across",
+   "t0": 87.85,
+   "t1": 90.094,
+   "f0": 2636,
+   "f1": 2703,
+   "words": [
+    {
+     "w": "Sati's",
+     "f": 2636
+    },
+    {
+     "w": "sacred",
+     "f": 2646
+    },
+    {
+     "w": "body",
+     "f": 2658
+    },
+    {
+     "w": "parts",
+     "f": 2666
+    },
+    {
+     "w": "scatter",
+     "f": 2676
+    },
+    {
+     "w": "across",
+     "f": 2691
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 17,
+   "text": "the geography of the earth...",
+   "t0": 90.094,
+   "t1": 91.59,
+   "f0": 2703,
+   "f1": 2748,
+   "words": [
+    {
+     "w": "the",
+     "f": 2703
+    },
+    {
+     "w": "geography",
+     "f": 2709
+    },
+    {
+     "w": "of",
+     "f": 2727
+    },
+    {
+     "w": "the",
+     "f": 2731
+    },
+    {
+     "w": "earth...",
+     "f": 2738
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 18,
+   "text": "anchoring this eternal grief into holy sanctuaries.",
+   "t0": 92.49,
+   "t1": 95.52,
+   "f0": 2775,
+   "f1": 2866,
+   "words": [
+    {
+     "w": "anchoring",
+     "f": 2775
+    },
+    {
+     "w": "this",
+     "f": 2793
+    },
+    {
+     "w": "eternal",
+     "f": 2802
+    },
+    {
+     "w": "grief",
+     "f": 2816
+    },
+    {
+     "w": "into",
+     "f": 2826
+    },
+    {
+     "w": "holy",
+     "f": 2835
+    },
+    {
+     "w": "sanctuaries.",
+     "f": 2843
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 19,
+   "text": "Even in his immense, blinding sorrow,",
+   "t0": 96.62,
+   "t1": 98.811,
+   "f0": 2899,
+   "f1": 2964,
+   "words": [
+    {
+     "w": "Even",
+     "f": 2899
+    },
+    {
+     "w": "in",
+     "f": 2907
+    },
+    {
+     "w": "his",
+     "f": 2912
+    },
+    {
+     "w": "immense,",
+     "f": 2918
+    },
+    {
+     "w": "blinding",
+     "f": 2934
+    },
+    {
+     "w": "sorrow,",
+     "f": 2951
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 19,
+   "text": "the seeds of divine rebirth are quietly planted across",
+   "t0": 98.811,
+   "t1": 102.171,
+   "f0": 2964,
+   "f1": 3065,
+   "words": [
+    {
+     "w": "the",
+     "f": 2964
+    },
+    {
+     "w": "seeds",
+     "f": 2971
+    },
+    {
+     "w": "of",
+     "f": 2982
+    },
+    {
+     "w": "divine",
+     "f": 2986
+    },
+    {
+     "w": "rebirth",
+     "f": 2999
+    },
+    {
+     "w": "are",
+     "f": 3015
+    },
+    {
+     "w": "quietly",
+     "f": 3021
+    },
+    {
+     "w": "planted",
+     "f": 3037
+    },
+    {
+     "w": "across",
+     "f": 3052
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 19,
+   "text": "the sacred land.",
+   "t0": 102.171,
+   "t1": 103.12,
+   "f0": 3065,
+   "f1": 3094,
+   "words": [
+    {
+     "w": "the",
+     "f": 3065
+    },
+    {
+     "w": "sacred",
+     "f": 3072
+    },
+    {
+     "w": "land.",
+     "f": 3085
+    }
+   ]
+  }
+ ]
+}
