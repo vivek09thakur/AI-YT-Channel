@@ -162,9 +162,9 @@ function Empty({ wf }: { wf: WorkflowInfo }) {
   if (wf.paused) {
     return (
       <p className="text-ink-soft">
-        Paused: no runs are scheduled and the trigger leaves it alone. You can still{" "}
+        Paused until an upload account for it is set up on the Secrets page; nothing starts on its own until then. You can still{" "}
         <a href={wf.actionsUrl} target="_blank" rel="noreferrer" className="text-ink underline">
-          start one by hand on GitHub
+          start a run by hand on GitHub
         </a>
         .
       </p>

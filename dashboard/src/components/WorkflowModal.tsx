@@ -58,7 +58,7 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
         </div>
         {wf.paused ? (
           <p className="text-[13px] text-ink-soft -mt-3">
-            Paused: the schedule is switched off and the trigger skips it, so nothing starts on its own. A run started by hand on GitHub still shows up here.
+            Paused until an upload account for it is set up, so nothing starts on its own. A run started by hand on GitHub still shows up here.
           </p>
         ) : (
           <p className="text-[13px] text-ink-soft -mt-3">

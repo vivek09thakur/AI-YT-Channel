@@ -12,6 +12,8 @@ export type Facts = {
   publishedToday: number;
   activeRunUrl?: string;
   lastRunStartedMinAgo?: number;
+  /** Only read for workflows flagged `pausedUntilAccount`: a configured upload account for the group exists. */
+  uploadAccount?: boolean;
 };
 
 export type Decision = {
@@ -44,7 +46,7 @@ export function decide(def: WorkflowDef, f: Facts): Decision {
   const base = { workflow: def.id, file: def.file, published: f.publishedToday, target };
   const skip = (reason: string): Decision => ({ ...base, action: "skip", reason });
 
-  if (def.paused) return skip("paused in dashboard/src/lib/model.ts");
+  if (def.pausedUntilAccount && !f.uploadAccount) return skip(`paused until an upload account for group ${def.id} is configured`);
   if (!inWindow(def.windowsIST, f.nowIST)) {
     return skip(`outside the hours (${def.windowsIST.map(([a, b]) => `${a} to ${b}`).join(", ")} IST)`);
   }

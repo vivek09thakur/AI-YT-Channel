@@ -7,13 +7,14 @@ Pre-run gate for the video workflows. Checks, in order:
                      with a warning: generation retries and falls back across keys on its own, so a slow network
                      must not fail the run before it starts. Rejected or exhausted keys still fail it.
   2. runner quota  - GitHub Actions minutes used this month vs the plan's included minutes (needs BILLING_TOKEN,
-                     a fine-grained PAT with Account permissions -> Plan: read; ACTIONS_INCLUDED_MINUTES defaults to 2000)
+                     a fine-grained PAT with Account permissions -> Plan: read; ACTIONS_INCLUDED_MINUTES defaults to 2000).
+                     Skipped as "free" in a public repository: standard hosted runners are not billed there.
   3. TTS quota     - Azure Speech if AZURE_SPEECH_KEY is set (tiny synth), else an edge-tts probe (free, no quota)
 Writes a summary table to GITHUB_STEP_SUMMARY, provider/model to GITHUB_OUTPUT, exits 1 when the run cannot succeed.
 Out of Actions minutes is not an error but a budget condition: the run then cancels itself (stop_run) instead of failing,
 unless --no-cancel is given (the check-only workflow, which should just show the result).
 """
-import argparse, asyncio, datetime, html, os, sys, tempfile
+import argparse, asyncio, datetime, html, json, os, sys, tempfile
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -27,8 +28,37 @@ GH_API = 'https://api.github.com'
 SKU_MULT = {'windows': 2, 'macos': 10}   # billing multipliers; linux = 1
 
 
+def repo_is_public():
+    """True / False, or None when it cannot be told. Standard GitHub-hosted runners are free in public repositories,
+    so the account's included minutes do not apply there; counting them would cancel runs that cost nothing."""
+    ev = os.environ.get('GITHUB_EVENT_PATH', '')
+    try:
+        if ev and Path(ev).is_file():
+            repo = json.loads(Path(ev).read_text(encoding='utf-8')).get('repository') or {}
+            if 'private' in repo:
+                return not repo['private']
+    except (OSError, ValueError):
+        pass
+    name = os.environ.get('GITHUB_REPOSITORY', '')
+    token = os.environ.get('GITHUB_TOKEN') or os.environ.get('BILLING_TOKEN') or ''
+    if not name:
+        return None
+    hdr = {'Accept': 'application/vnd.github+json'}
+    if token:
+        hdr['Authorization'] = f'Bearer {token}'
+    try:
+        r = requests.get(f'{GH_API}/repos/{name}', headers=hdr, timeout=30)
+        if r.status_code == 200:
+            return not r.json().get('private', True)
+    except requests.RequestException:
+        pass
+    return None
+
+
 def actions_minutes(need):
     """-> (state, headline, detail)"""
+    if repo_is_public():
+        return 'ok', 'free', 'public repository: standard GitHub-hosted runners are not billed, included minutes do not apply'
     token = os.environ.get('BILLING_TOKEN', '')
     owner = os.environ.get('GITHUB_REPOSITORY_OWNER') or os.environ.get('GITHUB_ACTOR', '')
     included = int(os.environ.get('ACTIONS_INCLUDED_MINUTES') or 2000)

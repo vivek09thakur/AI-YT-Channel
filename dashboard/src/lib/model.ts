@@ -17,8 +17,9 @@ export type WorkflowDef = {
   target: number;
   video: string;
   needs: string;
-  /** Paused: the trigger never starts it, the dashboard counts it out of today's totals and shows it as paused. Manual runs still work. */
-  paused?: boolean;
+  /** Skipped by the schedule and the trigger while no configured upload account is tagged for this group; lifts itself
+   * once one exists. Shown as paused on the dashboard and left out of the daily totals until then. Manual runs still work. */
+  pausedUntilAccount?: boolean;
 };
 
 function every30(from: string, to: string): string[] {
@@ -74,9 +75,9 @@ export const WORKFLOWS: WorkflowDef[] = [
     target: 2,
     video: "reel.mp4",
     needs: "one LLM key",
-    // No upload account for this group yet (YT_USER3 / IG_USER3), so every run cancelled itself. Remove this flag and
-    // uncomment the cron in .github/workflows/generate-stickman-reel.yml to resume.
-    paused: true,
+    // No upload account for this group yet (YT_USER3 / IG_USER3), so every run cancelled itself. The pause lifts on its
+    // own once one is configured; the cron in .github/workflows/generate-stickman-reel.yml still has to be uncommented.
+    pausedUntilAccount: true,
   },
 ];
 

@@ -2,8 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
 import { WORKFLOWS } from "@/lib/model";
 import { decide, type Decision } from "@/lib/trigger";
-import { dispatchWorkflow, listRuns, readIndex, GitHubError } from "@/lib/github";
-import { nowIST, todayUTC } from "@/lib/state";
+import { dispatchWorkflow, listRuns, listSecrets, listVariables, readIndex, GitHubError } from "@/lib/github";
+import { accountsFromSecrets, hasUploadAccount, nowIST, parseMapping, todayUTC, type AccountInfo } from "@/lib/state";
 import { ConfigError, env } from "@/lib/env";
 import { fmtClock } from "@/lib/time";
 
@@ -50,10 +50,17 @@ async function handle(req: NextRequest) {
   const results: (Decision & { dry: boolean })[] = [];
 
   try {
+    // Only workflows flagged pausedUntilAccount need the account list; one secrets + variables read covers them all.
+    let accounts: AccountInfo[] = [];
+    if (WORKFLOWS.some((d) => d.pausedUntilAccount && (!only || d.id === only))) {
+      const [secrets, variables] = await Promise.all([listSecrets(), listVariables()]);
+      accounts = accountsFromSecrets(secrets, parseMapping(variables.find((v) => v.name === env.accountsVar())?.value));
+    }
     for (const def of WORKFLOWS) {
       if (only && def.id !== only) continue;
-      if (def.paused) {
-        results.push({ ...decide(def, { nowIST: ist, publishedToday: 0 }), dry });
+      const uploadAccount = !def.pausedUntilAccount || hasUploadAccount(accounts, def.id);
+      if (!uploadAccount) {
+        results.push({ ...decide(def, { nowIST: ist, publishedToday: 0, uploadAccount }), dry });
         continue;
       }
       const [entries, runs] = await Promise.all([readIndex(def.index), listRuns(def.file, 10)]);
@@ -64,6 +71,7 @@ async function handle(req: NextRequest) {
         publishedToday: entries.filter((e) => e.date === today).length,
         activeRunUrl: active?.html_url,
         lastRunStartedMinAgo: latest ? minutesSince(latest.created_at, now.getTime()) : undefined,
+        uploadAccount,
       });
       if (d.action === "dispatch" && !dry) {
         const inputs: Record<string, string> = { auto: "true" };
