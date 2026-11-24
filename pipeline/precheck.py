@@ -2,7 +2,10 @@
 """precheck.py --need-minutes N [--prefer auto --model X --voice en-US-AndrewNeural] [--no-cancel]
 
 Pre-run gate for the video workflows. Checks, in order:
-  1. AI quota      - every LLM provider key is probed with a 1-token request (check_keys.check_llm); picks the provider
+  1. AI quota      - every LLM provider key is probed with a 1-token request (check_keys.check_llm); picks the provider.
+                     A probe that only times out is retried, and if nothing better answers the run still goes ahead
+                     with a warning: generation retries and falls back across keys on its own, so a slow network
+                     must not fail the run before it starts. Rejected or exhausted keys still fail it.
   2. runner quota  - GitHub Actions minutes used this month vs the plan's included minutes (needs BILLING_TOKEN,
                      a fine-grained PAT with Account permissions -> Plan: read; ACTIONS_INCLUDED_MINUTES defaults to 2000)
   3. TTS quota     - Azure Speech if AZURE_SPEECH_KEY is set (tiny synth), else an edge-tts probe (free, no quota)
@@ -111,7 +114,11 @@ def main():
     runner = actions_minutes(a.need_minutes)
     voice = tts(a.voice)
 
-    rows = [('AI quota', 'ok' if chosen else 'fail', f"{chosen['provider']} / `{chosen['model']}`" if chosen else 'no usable LLM provider', 'see table below'),
+    # unreachable = the probe timed out, not a rejected key: warn and let generation (which retries and falls back) try
+    ai_state = 'fail' if not chosen else 'warn' if chosen['state'] == 'unreachable' else 'ok'
+    ai_head = f"{chosen['provider']} / `{chosen['model']}`" if chosen else 'no usable LLM provider'
+    ai_detail = 'probe got no answer; generation will retry it and fall back to other keys' if ai_state == 'warn' else 'see table below'
+    rows = [('AI quota', ai_state, ai_head, ai_detail),
             ('Runner quota', *runner), ('TTS quota', *voice)]
     lines = ['## Pre-run check', '', '| Check | Status | Result | Detail |', '|---|---|---|---|']
     lines += [f'| {n} | {ICON[s]} {s} | {h} | {d} |' for n, s, h, d in rows]

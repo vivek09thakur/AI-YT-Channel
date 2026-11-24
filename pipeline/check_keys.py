@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, json, os, sys
+import argparse, json, os, sys, time
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -7,6 +7,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 import requests
 from generate_story import DEFAULT_MODEL, OPENAI_COMPAT, GEMINI_BASE, PRIORITY, FALLBACK_MODELS, KEY_ENV, REASONING_BODY
 PROBE_MSG = [{'role': 'user', 'content': 'Reply with the single word: ok'}]
+PROBE_TIMEOUT = 30
+PROBE_RETRY_WAITS = (5, 10)  # a slow or flaky network must not fail the run before generation even starts
 
 
 def classify(status, body):
@@ -28,29 +30,39 @@ def classify(status, body):
     return 'error', f'HTTP {status}: {body[:120]}'
 
 
-def probe_once(provider, model, key):
-    try:
-        if provider == 'gemini':
-            # a real 1-token generation so an exhausted free-tier quota (429 RESOURCE_EXHAUSTED) is caught up front
-            r = requests.post(f'{GEMINI_BASE}/models/{model}:generateContent', timeout=60, headers={'x-goog-api-key': key},
-                              json={'contents': [{'parts': [{'text': PROBE_MSG[0]['content']}]}], 'generationConfig': {'maxOutputTokens': 5}})
-            return classify(r.status_code, r.text)
-        if provider == 'anthropic':
-            r = requests.post('https://api.anthropic.com/v1/messages', timeout=60,
-                              headers={'x-api-key': key, 'anthropic-version': '2023-06-01'},
-                              json={'model': model, 'max_tokens': 5, 'messages': PROBE_MSG})
-        else:
-            url, _, extra = OPENAI_COMPAT[provider]
-            body = {'model': model, 'max_tokens': 5, 'messages': PROBE_MSG}
-            if provider in REASONING_BODY:
-                body.update(REASONING_BODY[provider], reasoning_effort='minimal', max_tokens=64)
-            r = requests.post(url, timeout=60, headers={'Authorization': f'Bearer {key}', **extra}, json=body)
-        state, note = classify(r.status_code, r.text)
-        if state == 'ok' and 'error' in r.text[:200] and '"choices"' not in r.text:
-            state, note = 'error', r.text[:120]
-    except requests.RequestException as e:
-        state, note = 'error', f'request failed: {e}'[:120]
+def _probe(provider, model, key):
+    if provider == 'gemini':
+        # a real 1-token generation so an exhausted free-tier quota (429 RESOURCE_EXHAUSTED) is caught up front
+        r = requests.post(f'{GEMINI_BASE}/models/{model}:generateContent', timeout=PROBE_TIMEOUT, headers={'x-goog-api-key': key},
+                          json={'contents': [{'parts': [{'text': PROBE_MSG[0]['content']}]}], 'generationConfig': {'maxOutputTokens': 5}})
+        return classify(r.status_code, r.text)
+    if provider == 'anthropic':
+        r = requests.post('https://api.anthropic.com/v1/messages', timeout=PROBE_TIMEOUT,
+                          headers={'x-api-key': key, 'anthropic-version': '2023-06-01'},
+                          json={'model': model, 'max_tokens': 5, 'messages': PROBE_MSG})
+    else:
+        url, _, extra = OPENAI_COMPAT[provider]
+        body = {'model': model, 'max_tokens': 5, 'messages': PROBE_MSG}
+        if provider in REASONING_BODY:
+            body.update(REASONING_BODY[provider], reasoning_effort='minimal', max_tokens=64)
+        r = requests.post(url, timeout=PROBE_TIMEOUT, headers={'Authorization': f'Bearer {key}', **extra}, json=body)
+    state, note = classify(r.status_code, r.text)
+    if state == 'ok' and 'error' in r.text[:200] and '"choices"' not in r.text:
+        state, note = 'error', r.text[:120]
     return state, note
+
+
+def probe_once(provider, model, key):
+    """One model probe. Network failures (timeouts, resets) are retried; if they persist the provider is 'unreachable',
+    which is not proof of a bad key, so check_llm may still pick it as a last resort."""
+    for attempt in range(len(PROBE_RETRY_WAITS) + 1):
+        try:
+            return _probe(provider, model, key)
+        except requests.RequestException as e:
+            err = f'{type(e).__name__}: {e}'[:100]
+            if attempt < len(PROBE_RETRY_WAITS):
+                time.sleep(PROBE_RETRY_WAITS[attempt])
+    return 'unreachable', f'probe got no answer {len(PROBE_RETRY_WAITS) + 1} times ({err})'
 
 
 def probe(provider, model, allow_fallback=True):
@@ -102,12 +114,14 @@ def check_llm(prefer='auto', model=''):
         res = probe(p, m, allow_fallback=not (model and p == prefer))
         rows.append(res or {'provider': p, 'model': m, 'state': 'missing', 'note': f'secret {KEY_ENV[p]} not set', 'credits': '-'})
 
-    icon = {'ok': '✅', 'ratelimit': '⏳', 'busy': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
+    icon = {'ok': '✅', 'ratelimit': '⏳', 'busy': '⏳', 'unreachable': '⏳', 'exhausted': '❌', 'bad': '❌', 'nomodel': '❌', 'error': '⚠️', 'missing': '➖'}
     lines = ['### LLM providers', '', '| Provider | Model | Status | Credits | Note |', '|---|---|---|---|---|']
     for r in rows:
         lines.append(f"| {r['provider']} | `{r['model']}` | {icon[r['state']]} {r['state']} | {r['credits']} | {r['note']} |")
 
     usable = [r for r in rows if r['state'] in ('ok', 'ratelimit', 'busy')]
+    # a provider that never answered is a last resort: nothing rejected the key, and generation retries and falls back on its own
+    last_resort = [r for r in rows if r['state'] == 'unreachable']
     chosen = None
     if prefer != 'auto':
         chosen = next((r for r in usable if r['provider'] == prefer), None)
@@ -116,6 +130,10 @@ def check_llm(prefer='auto', model=''):
             lines.append(f"\n> Requested provider **{prefer}** is not usable ({why}); falling back.")
     if not chosen and usable:
         chosen = usable[0]
+    if not chosen and last_resort:
+        chosen = next((r for r in last_resort if r['provider'] == prefer), last_resort[0])
+        lines.append(f"\n> No provider answered its probe. Trying **{chosen['provider']}** anyway: the request timed out rather than being rejected, "
+                     'and the generation step retries and falls back on its own.')
     if chosen:
         lines.append(f"\n**Using {chosen['provider']} / `{chosen['model']}`**")
     else:

@@ -100,7 +100,7 @@ So "stickman + youtube" = every eligible YouTube channel: the one whose `YT_USER
 
 ## All secrets and variables
 
-Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in the Secrets tab, **Variable** in the Variables tab. `n` = 1, 2, 3 ... "one of" = at least one working LLM key is needed by the story and stickman workflows (and by Pre-run check); NotebookLM needs none. `provider=auto` probes the keys in the order gemini, mistral, cerebras, meta, openrouter, openai, anthropic and uses the first usable one (a key that is only rate-limited or busy still counts as usable and is retried).
+Repo > Settings > Secrets and variables > Actions. Rows marked **Secret** go in the Secrets tab, **Variable** in the Variables tab. `n` = 1, 2, 3 ... "one of" = at least one working LLM key is needed by the story and stickman workflows (and by Pre-run check); NotebookLM needs none. `provider=auto` probes the keys in the order gemini, mistral, cerebras, meta, openrouter, openai, anthropic and uses the first usable one (a key that is only rate-limited or busy still counts as usable and is retried). A probe that gets no answer at all is retried three times over about a minute; if nothing better answers, the run still goes ahead with that provider and a warning, because the generation step retries and falls back across keys on its own. Only keys that were actually rejected or are out of credits fail the check.
 
 ### Generation
 
