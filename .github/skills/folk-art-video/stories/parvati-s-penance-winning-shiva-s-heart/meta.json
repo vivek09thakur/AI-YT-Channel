@@ -1,0 +1,10 @@
+{
+ "title": "Parvati's Penance: Winning Shiva's Heart",
+ "description": "Princess Parvati undertakes a fierce penance in the freezing Himalayas to win the heart of Lord Shiva, the lord of silence.",
+ "topic": "Parvati's Penance: Winning Shiva's Heart",
+ "voice": "en-GB-RyanNeural",
+ "duration": 116.12,
+ "engine": "folk-art-video",
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}

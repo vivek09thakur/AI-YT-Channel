@@ -1,0 +1,1559 @@
+{
+ "fps": 30,
+ "duration": 116.12,
+ "total_frames": 3484,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "The ashes of grief still linger",
+   "t0": 0.8,
+   "t1": 2.547,
+   "f0": 24,
+   "f1": 76,
+   "words": [
+    {
+     "w": "The",
+     "f": 24
+    },
+    {
+     "w": "ashes",
+     "f": 30
+    },
+    {
+     "w": "of",
+     "f": 40
+    },
+    {
+     "w": "grief",
+     "f": 44
+    },
+    {
+     "w": "still",
+     "f": 54
+    },
+    {
+     "w": "linger",
+     "f": 64
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "in the silent cosmos...",
+   "t0": 2.547,
+   "t1": 3.69,
+   "f0": 76,
+   "f1": 111,
+   "words": [
+    {
+     "w": "in",
+     "f": 76
+    },
+    {
+     "w": "the",
+     "f": 80
+    },
+    {
+     "w": "silent",
+     "f": 87
+    },
+    {
+     "w": "cosmos...",
+     "f": 99
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "but a fierce new fire",
+   "t0": 4.59,
+   "t1": 5.746,
+   "f0": 138,
+   "f1": 172,
+   "words": [
+    {
+     "w": "but",
+     "f": 138
+    },
+    {
+     "w": "a",
+     "f": 144
+    },
+    {
+     "w": "fierce",
+     "f": 146
+    },
+    {
+     "w": "new",
+     "f": 158
+    },
+    {
+     "w": "fire",
+     "f": 164
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "is quietly burning deep within the snow-capped Himalayas.",
+   "t0": 5.746,
+   "t1": 9.01,
+   "f0": 172,
+   "f1": 270,
+   "words": [
+    {
+     "w": "is",
+     "f": 172
+    },
+    {
+     "w": "quietly",
+     "f": 176
+    },
+    {
+     "w": "burning",
+     "f": 191
+    },
+    {
+     "w": "deep",
+     "f": 205
+    },
+    {
+     "w": "within",
+     "f": 213
+    },
+    {
+     "w": "the",
+     "f": 225
+    },
+    {
+     "w": "snow-capped",
+     "f": 232
+    },
+    {
+     "w": "Himalayas.",
+     "f": 252
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "Princess Parvati sheds her heavy silks and royal ornaments.",
+   "t0": 10.11,
+   "t1": 13.55,
+   "f0": 303,
+   "f1": 406,
+   "words": [
+    {
+     "w": "Princess",
+     "f": 303
+    },
+    {
+     "w": "Parvati",
+     "f": 320
+    },
+    {
+     "w": "sheds",
+     "f": 334
+    },
+    {
+     "w": "her",
+     "f": 345
+    },
+    {
+     "w": "heavy",
+     "f": 351
+    },
+    {
+     "w": "silks",
+     "f": 361
+    },
+    {
+     "w": "and",
+     "f": 371
+    },
+    {
+     "w": "royal",
+     "f": 378
+    },
+    {
+     "w": "ornaments.",
+     "f": 388
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 3,
+   "text": "She wears rough tree bark",
+   "t0": 14.1,
+   "t1": 15.533,
+   "f0": 423,
+   "f1": 466,
+   "words": [
+    {
+     "w": "She",
+     "f": 423
+    },
+    {
+     "w": "wears",
+     "f": 429
+    },
+    {
+     "w": "rough",
+     "f": 439
+    },
+    {
+     "w": "tree",
+     "f": 450
+    },
+    {
+     "w": "bark",
+     "f": 458
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "and smears her skin with simple forest mud.",
+   "t0": 15.533,
+   "t1": 17.92,
+   "f0": 466,
+   "f1": 538,
+   "words": [
+    {
+     "w": "and",
+     "f": 466
+    },
+    {
+     "w": "smears",
+     "f": 472
+    },
+    {
+     "w": "her",
+     "f": 484
+    },
+    {
+     "w": "skin",
+     "f": 491
+    },
+    {
+     "w": "with",
+     "f": 499
+    },
+    {
+     "w": "simple",
+     "f": 507
+    },
+    {
+     "w": "forest",
+     "f": 519
+    },
+    {
+     "w": "mud.",
+     "f": 531
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 4,
+   "text": "She trades lavish royal feasts for",
+   "t0": 18.47,
+   "t1": 20.328,
+   "f0": 554,
+   "f1": 610,
+   "words": [
+    {
+     "w": "She",
+     "f": 554
+    },
+    {
+     "w": "trades",
+     "f": 560
+    },
+    {
+     "w": "lavish",
+     "f": 571
+    },
+    {
+     "w": "royal",
+     "f": 583
+    },
+    {
+     "w": "feasts",
+     "f": 593
+    },
+    {
+     "w": "for",
+     "f": 604
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 4,
+   "text": "the bitter taste of falling leaves and morning dew.",
+   "t0": 20.328,
+   "t1": 23.02,
+   "f0": 610,
+   "f1": 691,
+   "words": [
+    {
+     "w": "the",
+     "f": 610
+    },
+    {
+     "w": "bitter",
+     "f": 616
+    },
+    {
+     "w": "taste",
+     "f": 627
+    },
+    {
+     "w": "of",
+     "f": 637
+    },
+    {
+     "w": "falling",
+     "f": 641
+    },
+    {
+     "w": "leaves",
+     "f": 654
+    },
+    {
+     "w": "and",
+     "f": 666
+    },
+    {
+     "w": "morning",
+     "f": 671
+    },
+    {
+     "w": "dew.",
+     "f": 685
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 5,
+   "text": "Far away,",
+   "t0": 24.12,
+   "t1": 24.66,
+   "f0": 724,
+   "f1": 740,
+   "words": [
+    {
+     "w": "Far",
+     "f": 724
+    },
+    {
+     "w": "away,",
+     "f": 731
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 5,
+   "text": "Lord Shiva sits deep in eternal meditation",
+   "t0": 24.66,
+   "t1": 27.437,
+   "f0": 740,
+   "f1": 823,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 740
+    },
+    {
+     "w": "Shiva",
+     "f": 749
+    },
+    {
+     "w": "sits",
+     "f": 761
+    },
+    {
+     "w": "deep",
+     "f": 770
+    },
+    {
+     "w": "in",
+     "f": 779
+    },
+    {
+     "w": "eternal",
+     "f": 784
+    },
+    {
+     "w": "meditation",
+     "f": 800
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "on his lonely snowy peak.",
+   "t0": 27.437,
+   "t1": 28.98,
+   "f0": 823,
+   "f1": 869,
+   "words": [
+    {
+     "w": "on",
+     "f": 823
+    },
+    {
+     "w": "his",
+     "f": 828
+    },
+    {
+     "w": "lonely",
+     "f": 835
+    },
+    {
+     "w": "snowy",
+     "f": 849
+    },
+    {
+     "w": "peak.",
+     "f": 860
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 6,
+   "text": "His eyes are closed to",
+   "t0": 29.53,
+   "t1": 30.645,
+   "f0": 886,
+   "f1": 919,
+   "words": [
+    {
+     "w": "His",
+     "f": 886
+    },
+    {
+     "w": "eyes",
+     "f": 891
+    },
+    {
+     "w": "are",
+     "f": 899
+    },
+    {
+     "w": "closed",
+     "f": 904
+    },
+    {
+     "w": "to",
+     "f": 916
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 6,
+   "text": "the shifting illusions of the material world.",
+   "t0": 30.645,
+   "t1": 33.0,
+   "f0": 919,
+   "f1": 990,
+   "words": [
+    {
+     "w": "the",
+     "f": 919
+    },
+    {
+     "w": "shifting",
+     "f": 925
+    },
+    {
+     "w": "illusions",
+     "f": 940
+    },
+    {
+     "w": "of",
+     "f": 957
+    },
+    {
+     "w": "the",
+     "f": 960
+    },
+    {
+     "w": "material",
+     "f": 966
+    },
+    {
+     "w": "world.",
+     "f": 981
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 7,
+   "text": "His heart is locked behind",
+   "t0": 33.55,
+   "t1": 34.987,
+   "f0": 1006,
+   "f1": 1050,
+   "words": [
+    {
+     "w": "His",
+     "f": 1006
+    },
+    {
+     "w": "heart",
+     "f": 1012
+    },
+    {
+     "w": "is",
+     "f": 1022
+    },
+    {
+     "w": "locked",
+     "f": 1026
+    },
+    {
+     "w": "behind",
+     "f": 1038
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 7,
+   "text": "an impenetrable wall of absolute detachment.",
+   "t0": 34.987,
+   "t1": 37.47,
+   "f0": 1050,
+   "f1": 1124,
+   "words": [
+    {
+     "w": "an",
+     "f": 1050
+    },
+    {
+     "w": "impenetrable",
+     "f": 1054
+    },
+    {
+     "w": "wall",
+     "f": 1077
+    },
+    {
+     "w": "of",
+     "f": 1085
+    },
+    {
+     "w": "absolute",
+     "f": 1089
+    },
+    {
+     "w": "detachment.",
+     "f": 1104
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 8,
+   "text": "Undeterred, Parvati stands unwavering upon",
+   "t0": 38.57,
+   "t1": 41.283,
+   "f0": 1157,
+   "f1": 1238,
+   "words": [
+    {
+     "w": "Undeterred,",
+     "f": 1157
+    },
+    {
+     "w": "Parvati",
+     "f": 1179
+    },
+    {
+     "w": "stands",
+     "f": 1194
+    },
+    {
+     "w": "unwavering",
+     "f": 1208
+    },
+    {
+     "w": "upon",
+     "f": 1230
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "one foot amidst freezing winter gales.",
+   "t0": 41.283,
+   "t1": 43.63,
+   "f0": 1238,
+   "f1": 1309,
+   "words": [
+    {
+     "w": "one",
+     "f": 1238
+    },
+    {
+     "w": "foot",
+     "f": 1245
+    },
+    {
+     "w": "amidst",
+     "f": 1254
+    },
+    {
+     "w": "freezing",
+     "f": 1267
+    },
+    {
+     "w": "winter",
+     "f": 1285
+    },
+    {
+     "w": "gales.",
+     "f": 1298
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 9,
+   "text": "She raises her delicate hands to the frozen sky.",
+   "t0": 44.18,
+   "t1": 47.06,
+   "f0": 1325,
+   "f1": 1412,
+   "words": [
+    {
+     "w": "She",
+     "f": 1325
+    },
+    {
+     "w": "raises",
+     "f": 1332
+    },
+    {
+     "w": "her",
+     "f": 1345
+    },
+    {
+     "w": "delicate",
+     "f": 1352
+    },
+    {
+     "w": "hands",
+     "f": 1370
+    },
+    {
+     "w": "to",
+     "f": 1381
+    },
+    {
+     "w": "the",
+     "f": 1385
+    },
+    {
+     "w": "frozen",
+     "f": 1392
+    },
+    {
+     "w": "sky.",
+     "f": 1405
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 10,
+   "text": "She whispers only one sacred name into",
+   "t0": 47.61,
+   "t1": 49.933,
+   "f0": 1428,
+   "f1": 1498,
+   "words": [
+    {
+     "w": "She",
+     "f": 1428
+    },
+    {
+     "w": "whispers",
+     "f": 1435
+    },
+    {
+     "w": "only",
+     "f": 1452
+    },
+    {
+     "w": "one",
+     "f": 1461
+    },
+    {
+     "w": "sacred",
+     "f": 1468
+    },
+    {
+     "w": "name",
+     "f": 1481
+    },
+    {
+     "w": "into",
+     "f": 1489
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 10,
+   "text": "the howling wind...",
+   "t0": 49.933,
+   "t1": 50.95,
+   "f0": 1498,
+   "f1": 1528,
+   "words": [
+    {
+     "w": "the",
+     "f": 1498
+    },
+    {
+     "w": "howling",
+     "f": 1505
+    },
+    {
+     "w": "wind...",
+     "f": 1520
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 11,
+   "text": "Shiva, Shiva, Shiva.",
+   "t0": 51.85,
+   "t1": 53.61,
+   "f0": 1556,
+   "f1": 1608,
+   "words": [
+    {
+     "w": "Shiva,",
+     "f": 1556
+    },
+    {
+     "w": "Shiva,",
+     "f": 1573
+    },
+    {
+     "w": "Shiva.",
+     "f": 1591
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 12,
+   "text": "Then summer arrives with scorching,",
+   "t0": 54.71,
+   "t1": 56.678,
+   "f0": 1641,
+   "f1": 1700,
+   "words": [
+    {
+     "w": "Then",
+     "f": 1641
+    },
+    {
+     "w": "summer",
+     "f": 1649
+    },
+    {
+     "w": "arrives",
+     "f": 1661
+    },
+    {
+     "w": "with",
+     "f": 1675
+    },
+    {
+     "w": "scorching,",
+     "f": 1683
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 12,
+   "text": "blistering heat across the land.",
+   "t0": 56.678,
+   "t1": 58.45,
+   "f0": 1700,
+   "f1": 1754,
+   "words": [
+    {
+     "w": "blistering",
+     "f": 1700
+    },
+    {
+     "w": "heat",
+     "f": 1720
+    },
+    {
+     "w": "across",
+     "f": 1728
+    },
+    {
+     "w": "the",
+     "f": 1740
+    },
+    {
+     "w": "land.",
+     "f": 1746
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 13,
+   "text": "Parvati sits calmly surrounded by four blazing sacrificial fires.",
+   "t0": 59.0,
+   "t1": 63.05,
+   "f0": 1770,
+   "f1": 1892,
+   "words": [
+    {
+     "w": "Parvati",
+     "f": 1770
+    },
+    {
+     "w": "sits",
+     "f": 1785
+    },
+    {
+     "w": "calmly",
+     "f": 1794
+    },
+    {
+     "w": "surrounded",
+     "f": 1807
+    },
+    {
+     "w": "by",
+     "f": 1829
+    },
+    {
+     "w": "four",
+     "f": 1833
+    },
+    {
+     "w": "blazing",
+     "f": 1842
+    },
+    {
+     "w": "sacrificial",
+     "f": 1857
+    },
+    {
+     "w": "fires.",
+     "f": 1881
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 14,
+   "text": "She stares unflinchingly at the burning, ruthless sun.",
+   "t0": 63.6,
+   "t1": 66.73,
+   "f0": 1908,
+   "f1": 2002,
+   "words": [
+    {
+     "w": "She",
+     "f": 1908
+    },
+    {
+     "w": "stares",
+     "f": 1914
+    },
+    {
+     "w": "unflinchingly",
+     "f": 1927
+    },
+    {
+     "w": "at",
+     "f": 1954
+    },
+    {
+     "w": "the",
+     "f": 1958
+    },
+    {
+     "w": "burning,",
+     "f": 1964
+    },
+    {
+     "w": "ruthless",
+     "f": 1979
+    },
+    {
+     "w": "sun.",
+     "f": 1996
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 15,
+   "text": "Her unrelenting penance shakes the heavens themselves.",
+   "t0": 67.28,
+   "t1": 70.3,
+   "f0": 2018,
+   "f1": 2109,
+   "words": [
+    {
+     "w": "Her",
+     "f": 2018
+    },
+    {
+     "w": "unrelenting",
+     "f": 2024
+    },
+    {
+     "w": "penance",
+     "f": 2045
+    },
+    {
+     "w": "shakes",
+     "f": 2059
+    },
+    {
+     "w": "the",
+     "f": 2070
+    },
+    {
+     "w": "heavens",
+     "f": 2076
+    },
+    {
+     "w": "themselves.",
+     "f": 2090
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 16,
+   "text": "The gods look down from",
+   "t0": 71.4,
+   "t1": 72.72,
+   "f0": 2142,
+   "f1": 2182,
+   "words": [
+    {
+     "w": "The",
+     "f": 2142
+    },
+    {
+     "w": "gods",
+     "f": 2148
+    },
+    {
+     "w": "look",
+     "f": 2157
+    },
+    {
+     "w": "down",
+     "f": 2165
+    },
+    {
+     "w": "from",
+     "f": 2173
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 16,
+   "text": "the clouds in sheer awe.",
+   "t0": 72.72,
+   "t1": 74.04,
+   "f0": 2182,
+   "f1": 2221,
+   "words": [
+    {
+     "w": "the",
+     "f": 2182
+    },
+    {
+     "w": "clouds",
+     "f": 2188
+    },
+    {
+     "w": "in",
+     "f": 2200
+    },
+    {
+     "w": "sheer",
+     "f": 2205
+    },
+    {
+     "w": "awe.",
+     "f": 2215
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 17,
+   "text": "Sage Narada watches the fierce,",
+   "t0": 74.59,
+   "t1": 76.536,
+   "f0": 2238,
+   "f1": 2296,
+   "words": [
+    {
+     "w": "Sage",
+     "f": 2238
+    },
+    {
+     "w": "Narada",
+     "f": 2247
+    },
+    {
+     "w": "watches",
+     "f": 2260
+    },
+    {
+     "w": "the",
+     "f": 2276
+    },
+    {
+     "w": "fierce,",
+     "f": 2283
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 17,
+   "text": "unbroken devotion unfold with a gentle smile.",
+   "t0": 76.536,
+   "t1": 79.38,
+   "f0": 2296,
+   "f1": 2381,
+   "words": [
+    {
+     "w": "unbroken",
+     "f": 2296
+    },
+    {
+     "w": "devotion",
+     "f": 2314
+    },
+    {
+     "w": "unfold",
+     "f": 2332
+    },
+    {
+     "w": "with",
+     "f": 2345
+    },
+    {
+     "w": "a",
+     "f": 2354
+    },
+    {
+     "w": "gentle",
+     "f": 2357
+    },
+    {
+     "w": "smile.",
+     "f": 2370
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 18,
+   "text": "Even the ancient mountains seem",
+   "t0": 79.93,
+   "t1": 81.729,
+   "f0": 2398,
+   "f1": 2452,
+   "words": [
+    {
+     "w": "Even",
+     "f": 2398
+    },
+    {
+     "w": "the",
+     "f": 2406
+    },
+    {
+     "w": "ancient",
+     "f": 2412
+    },
+    {
+     "w": "mountains",
+     "f": 2426
+    },
+    {
+     "w": "seem",
+     "f": 2444
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 18,
+   "text": "to bow in deep reverence to her unstoppable,",
+   "t0": 81.729,
+   "t1": 84.127,
+   "f0": 2452,
+   "f1": 2524,
+   "words": [
+    {
+     "w": "to",
+     "f": 2452
+    },
+    {
+     "w": "bow",
+     "f": 2456
+    },
+    {
+     "w": "in",
+     "f": 2462
+    },
+    {
+     "w": "deep",
+     "f": 2466
+    },
+    {
+     "w": "reverence",
+     "f": 2474
+    },
+    {
+     "w": "to",
+     "f": 2492
+    },
+    {
+     "w": "her",
+     "f": 2496
+    },
+    {
+     "w": "unstoppable,",
+     "f": 2502
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 18,
+   "text": "iron will.",
+   "t0": 84.127,
+   "t1": 84.66,
+   "f0": 2524,
+   "f1": 2540,
+   "words": [
+    {
+     "w": "iron",
+     "f": 2524
+    },
+    {
+     "w": "will.",
+     "f": 2532
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 19,
+   "text": "Day after day, month after month,",
+   "t0": 85.76,
+   "t1": 87.94,
+   "f0": 2573,
+   "f1": 2638,
+   "words": [
+    {
+     "w": "Day",
+     "f": 2573
+    },
+    {
+     "w": "after",
+     "f": 2580
+    },
+    {
+     "w": "day,",
+     "f": 2593
+    },
+    {
+     "w": "month",
+     "f": 2600
+    },
+    {
+     "w": "after",
+     "f": 2613
+    },
+    {
+     "w": "month,",
+     "f": 2626
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 19,
+   "text": "year after year, the holy discipline holds firm.",
+   "t0": 87.94,
+   "t1": 91.21,
+   "f0": 2638,
+   "f1": 2736,
+   "words": [
+    {
+     "w": "year",
+     "f": 2638
+    },
+    {
+     "w": "after",
+     "f": 2648
+    },
+    {
+     "w": "year,",
+     "f": 2661
+    },
+    {
+     "w": "the",
+     "f": 2671
+    },
+    {
+     "w": "holy",
+     "f": 2678
+    },
+    {
+     "w": "discipline",
+     "f": 2689
+    },
+    {
+     "w": "holds",
+     "f": 2714
+    },
+    {
+     "w": "firm.",
+     "f": 2726
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 20,
+   "text": "There are no complaints of fatigue or doubt.",
+   "t0": 91.76,
+   "t1": 94.08,
+   "f0": 2753,
+   "f1": 2822,
+   "words": [
+    {
+     "w": "There",
+     "f": 2753
+    },
+    {
+     "w": "are",
+     "f": 2762
+    },
+    {
+     "w": "no",
+     "f": 2768
+    },
+    {
+     "w": "complaints",
+     "f": 2772
+    },
+    {
+     "w": "of",
+     "f": 2791
+    },
+    {
+     "w": "fatigue",
+     "f": 2795
+    },
+    {
+     "w": "or",
+     "f": 2809
+    },
+    {
+     "w": "doubt.",
+     "f": 2813
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 21,
+   "text": "There is only love,",
+   "t0": 94.63,
+   "t1": 95.757,
+   "f0": 2839,
+   "f1": 2873,
+   "words": [
+    {
+     "w": "There",
+     "f": 2839
+    },
+    {
+     "w": "is",
+     "f": 2850
+    },
+    {
+     "w": "only",
+     "f": 2855
+    },
+    {
+     "w": "love,",
+     "f": 2864
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 21,
+   "text": "pure and unyielding as solid rock.",
+   "t0": 95.757,
+   "t1": 97.86,
+   "f0": 2873,
+   "f1": 2936,
+   "words": [
+    {
+     "w": "pure",
+     "f": 2873
+    },
+    {
+     "w": "and",
+     "f": 2882
+    },
+    {
+     "w": "unyielding",
+     "f": 2888
+    },
+    {
+     "w": "as",
+     "f": 2911
+    },
+    {
+     "w": "solid",
+     "f": 2916
+    },
+    {
+     "w": "rock.",
+     "f": 2927
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 22,
+   "text": "Shiva finally opens his third eye at last.",
+   "t0": 98.96,
+   "t1": 101.58,
+   "f0": 2969,
+   "f1": 3047,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 2969
+    },
+    {
+     "w": "finally",
+     "f": 2980
+    },
+    {
+     "w": "opens",
+     "f": 2997
+    },
+    {
+     "w": "his",
+     "f": 3008
+    },
+    {
+     "w": "third",
+     "f": 3015
+    },
+    {
+     "w": "eye",
+     "f": 3027
+    },
+    {
+     "w": "at",
+     "f": 3034
+    },
+    {
+     "w": "last.",
+     "f": 3038
+    }
+   ]
+  },
+  {
+   "i": 40,
+   "line": 23,
+   "text": "The cosmic ice begins to melt into rushing streams.",
+   "t0": 102.13,
+   "t1": 105.3,
+   "f0": 3064,
+   "f1": 3159,
+   "words": [
+    {
+     "w": "The",
+     "f": 3064
+    },
+    {
+     "w": "cosmic",
+     "f": 3071
+    },
+    {
+     "w": "ice",
+     "f": 3084
+    },
+    {
+     "w": "begins",
+     "f": 3091
+    },
+    {
+     "w": "to",
+     "f": 3105
+    },
+    {
+     "w": "melt",
+     "f": 3109
+    },
+    {
+     "w": "into",
+     "f": 3118
+    },
+    {
+     "w": "rushing",
+     "f": 3127
+    },
+    {
+     "w": "streams.",
+     "f": 3143
+    }
+   ]
+  },
+  {
+   "i": 41,
+   "line": 24,
+   "text": "A mighty tremor ripples through creation...",
+   "t0": 105.85,
+   "t1": 108.14,
+   "f0": 3176,
+   "f1": 3244,
+   "words": [
+    {
+     "w": "A",
+     "f": 3176
+    },
+    {
+     "w": "mighty",
+     "f": 3177
+    },
+    {
+     "w": "tremor",
+     "f": 3189
+    },
+    {
+     "w": "ripples",
+     "f": 3201
+    },
+    {
+     "w": "through",
+     "f": 3215
+    },
+    {
+     "w": "creation...",
+     "f": 3228
+    }
+   ]
+  },
+  {
+   "i": 42,
+   "line": 25,
+   "text": "because true,",
+   "t0": 109.04,
+   "t1": 109.841,
+   "f0": 3271,
+   "f1": 3295,
+   "words": [
+    {
+     "w": "because",
+     "f": 3271
+    },
+    {
+     "w": "true,",
+     "f": 3287
+    }
+   ]
+  },
+  {
+   "i": 43,
+   "line": 25,
+   "text": "selfless devotion can awaken even the lord of silence.",
+   "t0": 109.841,
+   "t1": 113.12,
+   "f0": 3295,
+   "f1": 3394,
+   "words": [
+    {
+     "w": "selfless",
+     "f": 3295
+    },
+    {
+     "w": "devotion",
+     "f": 3313
+    },
+    {
+     "w": "can",
+     "f": 3330
+    },
+    {
+     "w": "awaken",
+     "f": 3337
+    },
+    {
+     "w": "even",
+     "f": 3350
+    },
+    {
+     "w": "the",
+     "f": 3359
+    },
+    {
+     "w": "lord",
+     "f": 3365
+    },
+    {
+     "w": "of",
+     "f": 3374
+    },
+    {
+     "w": "silence.",
+     "f": 3378
+    }
+   ]
+  }
+ ]
+}
