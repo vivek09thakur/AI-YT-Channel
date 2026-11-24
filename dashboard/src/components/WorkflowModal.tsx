@@ -52,13 +52,19 @@ export function WorkflowModal({ open, wf, accounts, onClose }: { open: boolean; 
       <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between gap-3">
           <span className="text-[15px] tabular-nums">
-            {wf.todayCount} of {wf.target} posted today
+            {wf.paused ? `${wf.todayCount} posted today` : `${wf.todayCount} of ${wf.target} posted today`}
           </span>
           <StateChip wf={wf} />
         </div>
-        <p className="text-[13px] text-ink-soft -mt-3">
-          Due {wf.due.map(fmtClock).join(" and ")} IST. Tried again every 15 to 30 minutes until the video is published, {wf.windows.map(([a, b]) => `${fmtClock(a)} to ${fmtClock(b)}`).join(" and ")}; a try only runs while a video due by then is still missing.
-        </p>
+        {wf.paused ? (
+          <p className="text-[13px] text-ink-soft -mt-3">
+            Paused: the schedule is switched off and the trigger skips it, so nothing starts on its own. A run started by hand on GitHub still shows up here.
+          </p>
+        ) : (
+          <p className="text-[13px] text-ink-soft -mt-3">
+            Due {wf.due.map(fmtClock).join(" and ")} IST. Tried again every 15 to 30 minutes until the video is published, {wf.windows.map(([a, b]) => `${fmtClock(a)} to ${fmtClock(b)}`).join(" and ")}; a try only runs while a video due by then is still missing.
+          </p>
+        )}
 
         <section>
           <h3 className="text-[15px] mb-2">Today</h3>

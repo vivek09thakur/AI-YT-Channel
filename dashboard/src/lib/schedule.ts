@@ -1,6 +1,6 @@
 import type { Posted, RunInfo, WorkflowInfo } from "./state";
 
-export type WindowState = "posted" | "failed" | "running" | "open" | "ahead" | "missed";
+export type WindowState = "posted" | "failed" | "running" | "open" | "ahead" | "missed" | "paused";
 
 export type WindowSlot = {
   from: string;
@@ -112,6 +112,8 @@ export function windowSlots(wf: WorkflowInfo, today: string, now: string): Windo
     } else {
       s.state = "missed";
     }
+    // A paused workflow has no attempts to wait for or miss; only what a manual run produced is shown.
+    if (wf.paused && (s.state === "ahead" || s.state === "open" || s.state === "missed")) s.state = "paused";
   }
   return slots;
 }

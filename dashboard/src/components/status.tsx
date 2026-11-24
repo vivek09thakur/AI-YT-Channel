@@ -9,6 +9,8 @@ export function stateText(wf: WorkflowInfo): string {
       return "Running now";
     case "failed":
       return `Failed${wf.latestRun ? ` at ${fmtTime(wf.latestRun.createdAt)}` : ""}`;
+    case "paused":
+      return "Paused";
     case "partial":
     case "waiting":
       return wf.nextSlot ? `Next run ${fmtClock(wf.nextSlot)}` : "No run left today";
@@ -51,6 +53,8 @@ function stateWord(wf: WorkflowInfo): string {
       return "Running";
     case "failed":
       return "Failed";
+    case "paused":
+      return "Paused";
     case "partial":
     case "waiting":
       return "Scheduled";

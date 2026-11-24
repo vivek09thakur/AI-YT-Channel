@@ -7,7 +7,7 @@ import { Runs } from "@/components/Runs";
 import { TopBar } from "@/components/TopBar";
 import { getSession } from "@/lib/auth";
 import { allActionsUrl } from "@/lib/github";
-import { loadOverview } from "@/lib/state";
+import { dailyTotals, loadOverview } from "@/lib/state";
 
 export const metadata: Metadata = { title: "Runs" };
 
@@ -35,8 +35,7 @@ async function RunsPage() {
     );
   }
 
-  const posted = overview.workflows.reduce((n, w) => n + w.todayCount, 0);
-  const target = overview.workflows.reduce((n, w) => n + w.target, 0);
+  const { posted, target } = dailyTotals(overview.workflows);
 
   return (
     <div className="h-dvh flex flex-col">

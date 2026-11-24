@@ -5,7 +5,7 @@ import { Loading } from "@/components/Loading";
 import { Problem } from "@/components/Problem";
 import { TopBar } from "@/components/TopBar";
 import { getSession } from "@/lib/auth";
-import { loadOverview } from "@/lib/state";
+import { dailyTotals, loadOverview } from "@/lib/state";
 
 export default function Page() {
   return (
@@ -32,8 +32,7 @@ async function BoardPage() {
   }
 
   const ready = overview.accounts.filter((a) => a.configured).length;
-  const posted = overview.workflows.reduce((n, w) => n + w.todayCount, 0);
-  const target = overview.workflows.reduce((n, w) => n + w.target, 0);
+  const { posted, target } = dailyTotals(overview.workflows);
 
   return (
     <div className="h-dvh flex flex-col">

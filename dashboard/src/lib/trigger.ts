@@ -44,6 +44,7 @@ export function decide(def: WorkflowDef, f: Facts): Decision {
   const base = { workflow: def.id, file: def.file, published: f.publishedToday, target };
   const skip = (reason: string): Decision => ({ ...base, action: "skip", reason });
 
+  if (def.paused) return skip("paused in dashboard/src/lib/model.ts");
   if (!inWindow(def.windowsIST, f.nowIST)) {
     return skip(`outside the hours (${def.windowsIST.map(([a, b]) => `${a} to ${b}`).join(", ")} IST)`);
   }

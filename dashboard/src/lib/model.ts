@@ -17,6 +17,8 @@ export type WorkflowDef = {
   target: number;
   video: string;
   needs: string;
+  /** Paused: the trigger never starts it, the dashboard counts it out of today's totals and shows it as paused. Manual runs still work. */
+  paused?: boolean;
 };
 
 function every30(from: string, to: string): string[] {
@@ -72,6 +74,9 @@ export const WORKFLOWS: WorkflowDef[] = [
     target: 2,
     video: "reel.mp4",
     needs: "one LLM key",
+    // No upload account for this group yet (YT_USER3 / IG_USER3), so every run cancelled itself. Remove this flag and
+    // uncomment the cron in .github/workflows/generate-stickman-reel.yml to resume.
+    paused: true,
   },
 ];
 

@@ -15,6 +15,8 @@ function slotText(s: WindowSlot): string {
       return s.attempts ? `${when}: ${s.attempts} ${s.attempts === 1 ? "attempt" : "attempts"} failed so far, retrying` : `${when}: waiting for the first attempt`;
     case "ahead":
       return `${when}: later today`;
+    case "paused":
+      return `${when}: paused, no run is started`;
     default:
       return `${when}: no run happened`;
   }
@@ -43,11 +45,11 @@ export function DaySchedule({ overview, only }: { overview: Overview; only?: str
           {only ? (
             <span className="sched-name text-ink-soft">Today</span>
           ) : (
-            <a href={`#${wf.id}`} className="sched-name">
+            <a href={`#${wf.id}`} className={`sched-name${wf.paused ? " is-paused" : ""}`}>
               {wf.title}
             </a>
           )}
-          <div className="sched-track" role="img" aria-label={`${wf.title}. ${windows.map(slotText).join(". ")}.`}>
+          <div className="sched-track" role="img" aria-label={`${wf.title}${wf.paused ? " (paused)" : ""}. ${windows.map(slotText).join(". ")}.`}>
             {sched.hours.map((h) => (
               <i key={h} className="sched-line" style={{ left: x(h) }} />
             ))}

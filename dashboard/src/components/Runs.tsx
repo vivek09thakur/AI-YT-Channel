@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { FiAlertTriangle } from "react-icons/fi";
 import { PLATFORMS } from "@/lib/model";
 import type { AccountInfo, Overview, Posted, RunInfo, UploadOutcome, WorkflowInfo } from "@/lib/state";
+import { dailyTotals } from "@/lib/state";
 import { fmtClock, fmtDay, fmtDayLong, fmtDayTime, fmtDuration, fmtTime } from "@/lib/time";
 import { AutoRefresh } from "./AutoRefresh";
 import { DaySchedule } from "./DaySchedule";
@@ -25,8 +26,8 @@ export function Runs({ overview, actionsUrl }: { overview: Overview; actionsUrl:
 }
 
 function TodayView({ overview }: { overview: Overview }) {
-  const posted = overview.workflows.reduce((n, w) => n + w.todayCount, 0);
-  const target = overview.workflows.reduce((n, w) => n + w.target, 0);
+  const { posted, target } = dailyTotals(overview.workflows);
+  const active = overview.workflows.filter((w) => !w.paused);
 
   const runsToday = overview.workflows.reduce((n, w) => n + w.runStats.today.total, 0);
   const failedToday = overview.workflows.reduce((n, w) => n + w.runStats.today.failed, 0);
@@ -37,8 +38,8 @@ function TodayView({ overview }: { overview: Overview }) {
     .sort((a, b) => a.nextSlot!.localeCompare(b.nextSlot!))[0];
 
   const ready = overview.accounts.filter((a) => a.configured).length;
-  const weekPosted = overview.workflows.reduce((n, w) => n + w.week.reduce((m, d) => m + d.count, 0), 0);
-  const weekTarget = overview.workflows.reduce((n, w) => n + w.target * w.week.length, 0);
+  const weekPosted = active.reduce((n, w) => n + w.week.reduce((m, d) => m + d.count, 0), 0);
+  const weekTarget = active.reduce((n, w) => n + w.target * w.week.length, 0);
 
   return (
     <>
@@ -108,18 +109,17 @@ function TodayView({ overview }: { overview: Overview }) {
 function WeekBars({ wf, today }: { wf: WorkflowInfo; today: string }) {
   const total = wf.week.reduce((n, d) => n + d.count, 0);
   const target = wf.target * wf.week.length;
+  const words = wf.paused ? `${total} ${total === 1 ? "video" : "videos"} in the last 7 days` : `${total} of ${target} videos in the last 7 days`;
   return (
     <span className="inline-flex items-center gap-3">
-      <span className="week" role="img" aria-label={`${total} of ${target} videos in the last 7 days`}>
+      <span className="week" role="img" aria-label={words}>
         {wf.week.map((d) => {
           const share = Math.min(1, d.count / wf.target);
           const cls = [d.count > 0 ? "on" : "", d.date === today ? "today" : ""].join(" ").trim();
           return <span key={d.date} className={cls || undefined} style={{ height: `${Math.max(14, share * 100)}%` }} title={`${fmtDay(`${d.date}T12:00:00Z`)}: ${d.count} of ${wf.target}`} />;
         })}
       </span>
-      <span className="tabular-nums">
-        {total} of {target} videos this week
-      </span>
+      <span className="tabular-nums">{words.replace("in the last 7 days", "this week")}</span>
     </span>
   );
 }
@@ -159,6 +159,17 @@ function RunOutcome({ run }: { run: RunInfo }) {
 }
 
 function Empty({ wf }: { wf: WorkflowInfo }) {
+  if (wf.paused) {
+    return (
+      <p className="text-ink-soft">
+        Paused: no runs are scheduled and the trigger leaves it alone. You can still{" "}
+        <a href={wf.actionsUrl} target="_blank" rel="noreferrer" className="text-ink underline">
+          start one by hand on GitHub
+        </a>
+        .
+      </p>
+    );
+  }
   if (wf.state === "failed" && wf.latestRun) {
     return (
       <p className="text-ink-soft">

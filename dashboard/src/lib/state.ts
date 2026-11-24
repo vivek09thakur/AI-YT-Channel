@@ -116,10 +116,21 @@ export type WorkflowInfo = {
   slots: string[];
   windows: [string, string][];
   due: string[];
-  state: "done" | "partial" | "waiting" | "running" | "failed" | "idle";
+  /** Not started by the schedule or the trigger; manual runs still show. Left out of the daily totals. */
+  paused: boolean;
+  state: "done" | "partial" | "waiting" | "running" | "failed" | "paused" | "idle";
   issueUrl: string | null;
   actionsUrl: string;
 };
+
+/** Videos posted today against the daily target, counting only workflows that are not paused. */
+export function dailyTotals(workflows: WorkflowInfo[]): { posted: number; target: number } {
+  const active = workflows.filter((w) => !w.paused);
+  return {
+    posted: active.reduce((n, w) => n + w.todayCount, 0),
+    target: active.reduce((n, w) => n + w.target, 0),
+  };
+}
 
 export type Overview = {
   date: string;
@@ -361,11 +372,12 @@ async function workflowInfo(
   const runInfos = runs.map(toRunInfo);
   const latest = runInfos[0] ?? null;
   const remaining = def.target - todayPosted.length;
-  const slot = nextSlot(def.slotsIST, def.dueIST, now, todayPosted.length, def.target);
+  const slot = def.paused ? null : nextSlot(def.slotsIST, def.dueIST, now, todayPosted.length, def.target);
 
   let state: WorkflowInfo["state"] = "idle";
   if (remaining <= 0) state = "done";
   else if (latest && latest.status !== "completed") state = "running";
+  else if (def.paused) state = "paused";
   else if (latest && latest.createdAt.slice(0, 10) === today && latest.conclusion === "failure") state = "failed";
   else if (todayPosted.length > 0) state = "partial";
   else if (slot) state = "waiting";
@@ -391,6 +403,7 @@ async function workflowInfo(
     slots: def.slotsIST,
     windows: def.windowsIST,
     due: def.dueIST,
+    paused: def.paused === true,
     state,
     issueUrl: issue?.html_url ?? null,
     actionsUrl: actionsUrl(def.file),

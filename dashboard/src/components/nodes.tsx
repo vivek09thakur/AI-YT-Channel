@@ -20,17 +20,16 @@ export const ACC_H = 80;
 
 export function WorkflowNode({ data }: NodeProps<WfNode>) {
   const { wf } = data;
+  const count = wf.paused ? `${wf.todayCount} posted` : `${wf.todayCount} of ${wf.target} posted`;
   return (
-    <div className="tile tile-workflow" role="button" aria-label={`${wf.title}: ${wf.todayCount} of ${wf.target} posted today, ${stateText(wf)}`}>
+    <div className={`tile tile-workflow${wf.paused ? " tile-paused" : ""}`} role="button" aria-label={`${wf.title}: ${count} today, ${stateText(wf)}`}>
       <Handle type="source" position={Position.Right} />
       <div className="flex items-center justify-between gap-2">
         <span className="leading-6 truncate">{wf.title}</span>
         <span className={stateDot(wf)} aria-hidden />
       </div>
       <div className="flex items-center justify-between gap-2 text-[12px] text-slate tabular-nums">
-        <span>
-          {wf.todayCount} of {wf.target} posted
-        </span>
+        <span>{count}</span>
         <span className="truncate">{stateText(wf)}</span>
       </div>
     </div>

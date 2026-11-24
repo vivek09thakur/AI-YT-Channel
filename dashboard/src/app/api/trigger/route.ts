@@ -52,6 +52,10 @@ async function handle(req: NextRequest) {
   try {
     for (const def of WORKFLOWS) {
       if (only && def.id !== only) continue;
+      if (def.paused) {
+        results.push({ ...decide(def, { nowIST: ist, publishedToday: 0 }), dry });
+        continue;
+      }
       const [entries, runs] = await Promise.all([readIndex(def.index), listRuns(def.file, 10)]);
       const active = runs.find((r) => r.status !== "completed");
       const latest = runs[0];

@@ -20,7 +20,9 @@ Shared, read-only: `pipeline/tts.py` (with `[pause N]` support), `pipeline/check
 
 ## Schedule and guard
 
-Crons every 30 minutes on :27 / :57 from 8:27 to 10:57 am and from 4:27 to 5:57 pm IST (GitHub delays or drops slots on the hour / half hour; the dashboard's `/api/trigger` tries every 15 minutes in the same hours). Each slot first runs `published_today.py --index stickman.json --max 2 --due "02:30 10:30"`: it does work only while a reel that is due by then (8:00 am / 4:00 pm IST) is missing, so the workflow keeps trying every half hour until the reel is published, the second reel is never made early and the day never exceeds two reels. Failures open/comment one issue via `report-failure.yml`.
+**Currently paused.** No upload account is tagged for group `stickman` yet (`YT_USER3` / `IG_USER3`), so every scheduled run cancelled itself in the pre-run check and only used up runner minutes. The cron block in `generate-stickman-reel.yml` is commented out and the dashboard's `/api/trigger` skips the workflow (`paused: true` on its entry in `dashboard/src/lib/model.ts`); the dashboard shows it as Paused and leaves it out of the daily totals. Manual runs still work. To resume: add the upload secrets, uncomment the `schedule:` block and remove the `paused` flag.
+
+When running: crons every 30 minutes on :27 / :57 from 8:27 to 10:57 am and from 4:27 to 5:57 pm IST (GitHub delays or drops slots on the hour / half hour; the dashboard's `/api/trigger` tries every 15 minutes in the same hours). Each slot first runs `published_today.py --index stickman.json --max 2 --due "02:30 10:30"`: it does work only while a reel that is due by then (8:00 am / 4:00 pm IST) is missing, so the workflow keeps trying every half hour until the reel is published, the second reel is never made early and the day never exceeds two reels. Failures open/comment one issue via `report-failure.yml`.
 
 ## Run it by hand
 

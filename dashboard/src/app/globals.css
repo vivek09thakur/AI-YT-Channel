@@ -286,6 +286,9 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.sched-name.is-paused {
+  color: var(--color-slate);
+}
 a.sched-name:hover {
   text-decoration: underline;
 }
@@ -342,6 +345,10 @@ a.sched-name:hover {
 .sched-win.is-missed {
   border-style: dashed;
   border-color: var(--color-slate);
+}
+.sched-win.is-paused {
+  border-style: dotted;
+  border-color: var(--color-edge);
 }
 .sched-dot {
   position: absolute;
@@ -759,6 +766,13 @@ dialog.sheet[open] {
   flex-direction: column;
   justify-content: space-between;
 }
+/* Paused workflow: drawn like the empty slots, so the eye reads it as switched off rather than late. */
+.tile-paused {
+  border-style: dashed;
+  border-color: var(--color-edge);
+  background: transparent;
+  color: var(--color-ink-soft);
+}
 .tile-ghost {
   width: 260px;
   height: 80px;
@@ -775,6 +789,10 @@ dialog.sheet[open] {
 .react-flow__node:hover .tile-ghost {
   background: transparent;
   border-color: var(--color-edge);
+}
+.react-flow__node:hover .tile-paused {
+  background: var(--color-sunken);
+  border-color: var(--color-slate);
 }
 
 .dot {
