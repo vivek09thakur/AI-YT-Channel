@@ -1,0 +1,1831 @@
+{
+ "fps": 30,
+ "duration": 120.47,
+ "total_frames": 3614,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "The ashes of Sati grow cold,",
+   "t0": 0.8,
+   "t1": 2.504,
+   "f0": 24,
+   "f1": 75,
+   "words": [
+    {
+     "w": "The",
+     "f": 24
+    },
+    {
+     "w": "ashes",
+     "f": 31
+    },
+    {
+     "w": "of",
+     "f": 43
+    },
+    {
+     "w": "Sati",
+     "f": 47
+    },
+    {
+     "w": "grow",
+     "f": 57
+    },
+    {
+     "w": "cold,",
+     "f": 66
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "and the universe plunges into an endless,",
+   "t0": 2.504,
+   "t1": 5.138,
+   "f0": 75,
+   "f1": 154,
+   "words": [
+    {
+     "w": "and",
+     "f": 75
+    },
+    {
+     "w": "the",
+     "f": 82
+    },
+    {
+     "w": "universe",
+     "f": 89
+    },
+    {
+     "w": "plunges",
+     "f": 108
+    },
+    {
+     "w": "into",
+     "f": 124
+    },
+    {
+     "w": "an",
+     "f": 133
+    },
+    {
+     "w": "endless,",
+     "f": 138
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 0,
+   "text": "frozen winter of grief.",
+   "t0": 5.138,
+   "t1": 6.61,
+   "f0": 154,
+   "f1": 198,
+   "words": [
+    {
+     "w": "frozen",
+     "f": 154
+    },
+    {
+     "w": "winter",
+     "f": 168
+    },
+    {
+     "w": "of",
+     "f": 182
+    },
+    {
+     "w": "grief.",
+     "f": 187
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "Lord Shiva sits in deep,",
+   "t0": 7.16,
+   "t1": 8.635,
+   "f0": 215,
+   "f1": 259,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 215
+    },
+    {
+     "w": "Shiva",
+     "f": 224
+    },
+    {
+     "w": "sits",
+     "f": 236
+    },
+    {
+     "w": "in",
+     "f": 245
+    },
+    {
+     "w": "deep,",
+     "f": 250
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 1,
+   "text": "unmoving meditation upon Mount Kailash,",
+   "t0": 8.635,
+   "t1": 11.274,
+   "f0": 259,
+   "f1": 338,
+   "words": [
+    {
+     "w": "unmoving",
+     "f": 259
+    },
+    {
+     "w": "meditation",
+     "f": 278
+    },
+    {
+     "w": "upon",
+     "f": 301
+    },
+    {
+     "w": "Mount",
+     "f": 310
+    },
+    {
+     "w": "Kailash,",
+     "f": 322
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 1,
+   "text": "lost in a sorrow that time cannot heal.",
+   "t0": 11.274,
+   "t1": 13.68,
+   "f0": 338,
+   "f1": 410,
+   "words": [
+    {
+     "w": "lost",
+     "f": 338
+    },
+    {
+     "w": "in",
+     "f": 348
+    },
+    {
+     "w": "a",
+     "f": 352
+    },
+    {
+     "w": "sorrow",
+     "f": 355
+    },
+    {
+     "w": "that",
+     "f": 368
+    },
+    {
+     "w": "time",
+     "f": 378
+    },
+    {
+     "w": "cannot",
+     "f": 387
+    },
+    {
+     "w": "heal.",
+     "f": 401
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 2,
+   "text": "The gods tremble,",
+   "t0": 14.23,
+   "t1": 15.232,
+   "f0": 427,
+   "f1": 457,
+   "words": [
+    {
+     "w": "The",
+     "f": 427
+    },
+    {
+     "w": "gods",
+     "f": 433
+    },
+    {
+     "w": "tremble,",
+     "f": 442
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 2,
+   "text": "for without the divine balance of love and Shakti,",
+   "t0": 15.232,
+   "t1": 18.165,
+   "f0": 457,
+   "f1": 545,
+   "words": [
+    {
+     "w": "for",
+     "f": 457
+    },
+    {
+     "w": "without",
+     "f": 463
+    },
+    {
+     "w": "the",
+     "f": 478
+    },
+    {
+     "w": "divine",
+     "f": 485
+    },
+    {
+     "w": "balance",
+     "f": 498
+    },
+    {
+     "w": "of",
+     "f": 513
+    },
+    {
+     "w": "love",
+     "f": 517
+    },
+    {
+     "w": "and",
+     "f": 526
+    },
+    {
+     "w": "Shakti,",
+     "f": 532
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 2,
+   "text": "creation itself begins to wither into dust.",
+   "t0": 18.165,
+   "t1": 20.74,
+   "f0": 545,
+   "f1": 622,
+   "words": [
+    {
+     "w": "creation",
+     "f": 545
+    },
+    {
+     "w": "itself",
+     "f": 562
+    },
+    {
+     "w": "begins",
+     "f": 575
+    },
+    {
+     "w": "to",
+     "f": 588
+    },
+    {
+     "w": "wither",
+     "f": 592
+    },
+    {
+     "w": "into",
+     "f": 605
+    },
+    {
+     "w": "dust.",
+     "f": 614
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 3,
+   "text": "High in the Himalayas,",
+   "t0": 21.84,
+   "t1": 23.178,
+   "f0": 655,
+   "f1": 695,
+   "words": [
+    {
+     "w": "High",
+     "f": 655
+    },
+    {
+     "w": "in",
+     "f": 664
+    },
+    {
+     "w": "the",
+     "f": 669
+    },
+    {
+     "w": "Himalayas,",
+     "f": 675
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 3,
+   "text": "King Himavan and Queen Menavati pray",
+   "t0": 23.178,
+   "t1": 25.482,
+   "f0": 695,
+   "f1": 764,
+   "words": [
+    {
+     "w": "King",
+     "f": 695
+    },
+    {
+     "w": "Himavan",
+     "f": 704
+    },
+    {
+     "w": "and",
+     "f": 720
+    },
+    {
+     "w": "Queen",
+     "f": 727
+    },
+    {
+     "w": "Menavati",
+     "f": 738
+    },
+    {
+     "w": "pray",
+     "f": 756
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 3,
+   "text": "for a divine blessing.",
+   "t0": 25.482,
+   "t1": 26.82,
+   "f0": 764,
+   "f1": 805,
+   "words": [
+    {
+     "w": "for",
+     "f": 764
+    },
+    {
+     "w": "a",
+     "f": 771
+    },
+    {
+     "w": "divine",
+     "f": 773
+    },
+    {
+     "w": "blessing.",
+     "f": 787
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 4,
+   "text": "They yearn for a child who carries",
+   "t0": 27.37,
+   "t1": 29.227,
+   "f0": 821,
+   "f1": 877,
+   "words": [
+    {
+     "w": "They",
+     "f": 821
+    },
+    {
+     "w": "yearn",
+     "f": 829
+    },
+    {
+     "w": "for",
+     "f": 839
+    },
+    {
+     "w": "a",
+     "f": 845
+    },
+    {
+     "w": "child",
+     "f": 847
+    },
+    {
+     "w": "who",
+     "f": 857
+    },
+    {
+     "w": "carries",
+     "f": 863
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 4,
+   "text": "the very light of",
+   "t0": 29.227,
+   "t1": 30.156,
+   "f0": 877,
+   "f1": 905,
+   "words": [
+    {
+     "w": "the",
+     "f": 877
+    },
+    {
+     "w": "very",
+     "f": 883
+    },
+    {
+     "w": "light",
+     "f": 891
+    },
+    {
+     "w": "of",
+     "f": 901
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 4,
+   "text": "the cosmos in her innocent eyes.",
+   "t0": 30.156,
+   "t1": 31.88,
+   "f0": 905,
+   "f1": 956,
+   "words": [
+    {
+     "w": "the",
+     "f": 905
+    },
+    {
+     "w": "cosmos",
+     "f": 911
+    },
+    {
+     "w": "in",
+     "f": 923
+    },
+    {
+     "w": "her",
+     "f": 927
+    },
+    {
+     "w": "innocent",
+     "f": 933
+    },
+    {
+     "w": "eyes.",
+     "f": 948
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 5,
+   "text": "Their devotion pierces the heavens,",
+   "t0": 32.43,
+   "t1": 34.304,
+   "f0": 973,
+   "f1": 1029,
+   "words": [
+    {
+     "w": "Their",
+     "f": 973
+    },
+    {
+     "w": "devotion",
+     "f": 982
+    },
+    {
+     "w": "pierces",
+     "f": 997
+    },
+    {
+     "w": "the",
+     "f": 1010
+    },
+    {
+     "w": "heavens,",
+     "f": 1016
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 5,
+   "text": "melting the hardest stone of despair.",
+   "t0": 34.304,
+   "t1": 36.24,
+   "f0": 1029,
+   "f1": 1087,
+   "words": [
+    {
+     "w": "melting",
+     "f": 1029
+    },
+    {
+     "w": "the",
+     "f": 1042
+    },
+    {
+     "w": "hardest",
+     "f": 1048
+    },
+    {
+     "w": "stone",
+     "f": 1061
+    },
+    {
+     "w": "of",
+     "f": 1070
+    },
+    {
+     "w": "despair.",
+     "f": 1074
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 6,
+   "text": "From the ethereal realms,",
+   "t0": 37.34,
+   "t1": 38.88,
+   "f0": 1120,
+   "f1": 1166,
+   "words": [
+    {
+     "w": "From",
+     "f": 1120
+    },
+    {
+     "w": "the",
+     "f": 1129
+    },
+    {
+     "w": "ethereal",
+     "f": 1136
+    },
+    {
+     "w": "realms,",
+     "f": 1153
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 6,
+   "text": "the essence of Goddess Sati stirs once more.",
+   "t0": 38.88,
+   "t1": 41.52,
+   "f0": 1166,
+   "f1": 1246,
+   "words": [
+    {
+     "w": "the",
+     "f": 1166
+    },
+    {
+     "w": "essence",
+     "f": 1173
+    },
+    {
+     "w": "of",
+     "f": 1188
+    },
+    {
+     "w": "Goddess",
+     "f": 1193
+    },
+    {
+     "w": "Sati",
+     "f": 1208
+    },
+    {
+     "w": "stirs",
+     "f": 1217
+    },
+    {
+     "w": "once",
+     "f": 1228
+    },
+    {
+     "w": "more.",
+     "f": 1237
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 7,
+   "text": "She takes form not as a sudden illusion,",
+   "t0": 42.07,
+   "t1": 44.257,
+   "f0": 1262,
+   "f1": 1328,
+   "words": [
+    {
+     "w": "She",
+     "f": 1262
+    },
+    {
+     "w": "takes",
+     "f": 1268
+    },
+    {
+     "w": "form",
+     "f": 1279
+    },
+    {
+     "w": "not",
+     "f": 1287
+    },
+    {
+     "w": "as",
+     "f": 1293
+    },
+    {
+     "w": "a",
+     "f": 1297
+    },
+    {
+     "w": "sudden",
+     "f": 1299
+    },
+    {
+     "w": "illusion,",
+     "f": 1311
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 7,
+   "text": "but as a tiny,",
+   "t0": 44.257,
+   "t1": 44.941,
+   "f0": 1328,
+   "f1": 1348,
+   "words": [
+    {
+     "w": "but",
+     "f": 1328
+    },
+    {
+     "w": "as",
+     "f": 1334
+    },
+    {
+     "w": "a",
+     "f": 1338
+    },
+    {
+     "w": "tiny,",
+     "f": 1340
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 7,
+   "text": "breathing infant cradled in",
+   "t0": 44.941,
+   "t1": 46.581,
+   "f0": 1348,
+   "f1": 1397,
+   "words": [
+    {
+     "w": "breathing",
+     "f": 1348
+    },
+    {
+     "w": "infant",
+     "f": 1367
+    },
+    {
+     "w": "cradled",
+     "f": 1379
+    },
+    {
+     "w": "in",
+     "f": 1393
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 7,
+   "text": "the arms of the mountain queen.",
+   "t0": 46.581,
+   "t1": 48.29,
+   "f0": 1397,
+   "f1": 1449,
+   "words": [
+    {
+     "w": "the",
+     "f": 1397
+    },
+    {
+     "w": "arms",
+     "f": 1404
+    },
+    {
+     "w": "of",
+     "f": 1412
+    },
+    {
+     "w": "the",
+     "f": 1416
+    },
+    {
+     "w": "mountain",
+     "f": 1422
+    },
+    {
+     "w": "queen.",
+     "f": 1438
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 8,
+   "text": "They name her Parvati, the daughter of the mountains,",
+   "t0": 48.84,
+   "t1": 51.972,
+   "f0": 1465,
+   "f1": 1559,
+   "words": [
+    {
+     "w": "They",
+     "f": 1465
+    },
+    {
+     "w": "name",
+     "f": 1474
+    },
+    {
+     "w": "her",
+     "f": 1483
+    },
+    {
+     "w": "Parvati,",
+     "f": 1489
+    },
+    {
+     "w": "the",
+     "f": 1505
+    },
+    {
+     "w": "daughter",
+     "f": 1511
+    },
+    {
+     "w": "of",
+     "f": 1529
+    },
+    {
+     "w": "the",
+     "f": 1533
+    },
+    {
+     "w": "mountains,",
+     "f": 1539
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 8,
+   "text": "born with destiny written upon her tiny palms.",
+   "t0": 51.972,
+   "t1": 54.74,
+   "f0": 1559,
+   "f1": 1642,
+   "words": [
+    {
+     "w": "born",
+     "f": 1559
+    },
+    {
+     "w": "with",
+     "f": 1568
+    },
+    {
+     "w": "destiny",
+     "f": 1577
+    },
+    {
+     "w": "written",
+     "f": 1592
+    },
+    {
+     "w": "upon",
+     "f": 1607
+    },
+    {
+     "w": "her",
+     "f": 1616
+    },
+    {
+     "w": "tiny",
+     "f": 1623
+    },
+    {
+     "w": "palms.",
+     "f": 1631
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 9,
+   "text": "Even as a child, Parvati is unlike any other.",
+   "t0": 55.84,
+   "t1": 58.84,
+   "f0": 1675,
+   "f1": 1765,
+   "words": [
+    {
+     "w": "Even",
+     "f": 1675
+    },
+    {
+     "w": "as",
+     "f": 1685
+    },
+    {
+     "w": "a",
+     "f": 1691
+    },
+    {
+     "w": "child,",
+     "f": 1693
+    },
+    {
+     "w": "Parvati",
+     "f": 1706
+    },
+    {
+     "w": "is",
+     "f": 1724
+    },
+    {
+     "w": "unlike",
+     "f": 1729
+    },
+    {
+     "w": "any",
+     "f": 1745
+    },
+    {
+     "w": "other.",
+     "f": 1752
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 10,
+   "text": "She wanders through pine forests",
+   "t0": 59.39,
+   "t1": 61.239,
+   "f0": 1782,
+   "f1": 1837,
+   "words": [
+    {
+     "w": "She",
+     "f": 1782
+    },
+    {
+     "w": "wanders",
+     "f": 1788
+    },
+    {
+     "w": "through",
+     "f": 1802
+    },
+    {
+     "w": "pine",
+     "f": 1815
+    },
+    {
+     "w": "forests",
+     "f": 1823
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 10,
+   "text": "where flowers bloom instantly beneath",
+   "t0": 61.239,
+   "t1": 63.419,
+   "f0": 1837,
+   "f1": 1903,
+   "words": [
+    {
+     "w": "where",
+     "f": 1837
+    },
+    {
+     "w": "flowers",
+     "f": 1847
+    },
+    {
+     "w": "bloom",
+     "f": 1861
+    },
+    {
+     "w": "instantly",
+     "f": 1871
+    },
+    {
+     "w": "beneath",
+     "f": 1889
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 10,
+   "text": "her tiny bare feet.",
+   "t0": 63.419,
+   "t1": 64.41,
+   "f0": 1903,
+   "f1": 1932,
+   "words": [
+    {
+     "w": "her",
+     "f": 1903
+    },
+    {
+     "w": "tiny",
+     "f": 1909
+    },
+    {
+     "w": "bare",
+     "f": 1916
+    },
+    {
+     "w": "feet.",
+     "f": 1924
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 11,
+   "text": "Animals of",
+   "t0": 64.96,
+   "t1": 65.576,
+   "f0": 1949,
+   "f1": 1967,
+   "words": [
+    {
+     "w": "Animals",
+     "f": 1949
+    },
+    {
+     "w": "of",
+     "f": 1963
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 11,
+   "text": "the wild gather around her, sensing the immense,",
+   "t0": 65.576,
+   "t1": 68.243,
+   "f0": 1967,
+   "f1": 2047,
+   "words": [
+    {
+     "w": "the",
+     "f": 1967
+    },
+    {
+     "w": "wild",
+     "f": 1973
+    },
+    {
+     "w": "gather",
+     "f": 1982
+    },
+    {
+     "w": "around",
+     "f": 1994
+    },
+    {
+     "w": "her,",
+     "f": 2006
+    },
+    {
+     "w": "sensing",
+     "f": 2012
+    },
+    {
+     "w": "the",
+     "f": 2027
+    },
+    {
+     "w": "immense,",
+     "f": 2033
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 11,
+   "text": "slumbering power of",
+   "t0": 68.243,
+   "t1": 69.406,
+   "f0": 2047,
+   "f1": 2082,
+   "words": [
+    {
+     "w": "slumbering",
+     "f": 2047
+    },
+    {
+     "w": "power",
+     "f": 2068
+    },
+    {
+     "w": "of",
+     "f": 2078
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 11,
+   "text": "the supreme mother resting within a mortal child.",
+   "t0": 69.406,
+   "t1": 72.21,
+   "f0": 2082,
+   "f1": 2166,
+   "words": [
+    {
+     "w": "the",
+     "f": 2082
+    },
+    {
+     "w": "supreme",
+     "f": 2088
+    },
+    {
+     "w": "mother",
+     "f": 2103
+    },
+    {
+     "w": "resting",
+     "f": 2115
+    },
+    {
+     "w": "within",
+     "f": 2129
+    },
+    {
+     "w": "a",
+     "f": 2142
+    },
+    {
+     "w": "mortal",
+     "f": 2144
+    },
+    {
+     "w": "child.",
+     "f": 2156
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 12,
+   "text": "As the seasons turn,",
+   "t0": 73.31,
+   "t1": 74.456,
+   "f0": 2199,
+   "f1": 2234,
+   "words": [
+    {
+     "w": "As",
+     "f": 2199
+    },
+    {
+     "w": "the",
+     "f": 2204
+    },
+    {
+     "w": "seasons",
+     "f": 2210
+    },
+    {
+     "w": "turn,",
+     "f": 2225
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 12,
+   "text": "little Parvati grows into a graceful maiden",
+   "t0": 74.456,
+   "t1": 77.106,
+   "f0": 2234,
+   "f1": 2313,
+   "words": [
+    {
+     "w": "little",
+     "f": 2234
+    },
+    {
+     "w": "Parvati",
+     "f": 2247
+    },
+    {
+     "w": "grows",
+     "f": 2262
+    },
+    {
+     "w": "into",
+     "f": 2272
+    },
+    {
+     "w": "a",
+     "f": 2281
+    },
+    {
+     "w": "graceful",
+     "f": 2283
+    },
+    {
+     "w": "maiden",
+     "f": 2300
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 12,
+   "text": "with eyes like deep forest pools.",
+   "t0": 77.106,
+   "t1": 79.04,
+   "f0": 2313,
+   "f1": 2371,
+   "words": [
+    {
+     "w": "with",
+     "f": 2313
+    },
+    {
+     "w": "eyes",
+     "f": 2322
+    },
+    {
+     "w": "like",
+     "f": 2330
+    },
+    {
+     "w": "deep",
+     "f": 2339
+    },
+    {
+     "w": "forest",
+     "f": 2348
+    },
+    {
+     "w": "pools.",
+     "f": 2360
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 13,
+   "text": "Deep inside her soul, an ancient memory awakens.",
+   "t0": 79.59,
+   "t1": 82.68,
+   "f0": 2388,
+   "f1": 2480,
+   "words": [
+    {
+     "w": "Deep",
+     "f": 2388
+    },
+    {
+     "w": "inside",
+     "f": 2397
+    },
+    {
+     "w": "her",
+     "f": 2411
+    },
+    {
+     "w": "soul,",
+     "f": 2419
+    },
+    {
+     "w": "an",
+     "f": 2428
+    },
+    {
+     "w": "ancient",
+     "f": 2433
+    },
+    {
+     "w": "memory",
+     "f": 2450
+    },
+    {
+     "w": "awakens.",
+     "f": 2464
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 14,
+   "text": "She remembers a tiger-skin rug, a crescent moon,",
+   "t0": 83.23,
+   "t1": 86.128,
+   "f0": 2497,
+   "f1": 2584,
+   "words": [
+    {
+     "w": "She",
+     "f": 2497
+    },
+    {
+     "w": "remembers",
+     "f": 2504
+    },
+    {
+     "w": "a",
+     "f": 2524
+    },
+    {
+     "w": "tiger-skin",
+     "f": 2527
+    },
+    {
+     "w": "rug,",
+     "f": 2547
+    },
+    {
+     "w": "a",
+     "f": 2554
+    },
+    {
+     "w": "crescent",
+     "f": 2556
+    },
+    {
+     "w": "moon,",
+     "f": 2575
+    }
+   ]
+  },
+  {
+   "i": 38,
+   "line": 14,
+   "text": "and a blue-throated ascetic lost in the snows.",
+   "t0": 86.128,
+   "t1": 88.95,
+   "f0": 2584,
+   "f1": 2668,
+   "words": [
+    {
+     "w": "and",
+     "f": 2584
+    },
+    {
+     "w": "a",
+     "f": 2591
+    },
+    {
+     "w": "blue-throated",
+     "f": 2593
+    },
+    {
+     "w": "ascetic",
+     "f": 2620
+    },
+    {
+     "w": "lost",
+     "f": 2636
+    },
+    {
+     "w": "in",
+     "f": 2646
+    },
+    {
+     "w": "the",
+     "f": 2650
+    },
+    {
+     "w": "snows.",
+     "f": 2657
+    }
+   ]
+  },
+  {
+   "i": 39,
+   "line": 15,
+   "text": "One day,",
+   "t0": 90.05,
+   "t1": 90.477,
+   "f0": 2702,
+   "f1": 2714,
+   "words": [
+    {
+     "w": "One",
+     "f": 2702
+    },
+    {
+     "w": "day,",
+     "f": 2708
+    }
+   ]
+  },
+  {
+   "i": 40,
+   "line": 15,
+   "text": "her father leads her to",
+   "t0": 90.477,
+   "t1": 91.83,
+   "f0": 2714,
+   "f1": 2755,
+   "words": [
+    {
+     "w": "her",
+     "f": 2714
+    },
+    {
+     "w": "father",
+     "f": 2721
+    },
+    {
+     "w": "leads",
+     "f": 2734
+    },
+    {
+     "w": "her",
+     "f": 2744
+    },
+    {
+     "w": "to",
+     "f": 2751
+    }
+   ]
+  },
+  {
+   "i": 41,
+   "line": 15,
+   "text": "the hidden cave where Shiva meditates in absolute isolation.",
+   "t0": 91.83,
+   "t1": 95.46,
+   "f0": 2755,
+   "f1": 2864,
+   "words": [
+    {
+     "w": "the",
+     "f": 2755
+    },
+    {
+     "w": "hidden",
+     "f": 2761
+    },
+    {
+     "w": "cave",
+     "f": 2774
+    },
+    {
+     "w": "where",
+     "f": 2783
+    },
+    {
+     "w": "Shiva",
+     "f": 2793
+    },
+    {
+     "w": "meditates",
+     "f": 2804
+    },
+    {
+     "w": "in",
+     "f": 2823
+    },
+    {
+     "w": "absolute",
+     "f": 2827
+    },
+    {
+     "w": "isolation.",
+     "f": 2845
+    }
+   ]
+  },
+  {
+   "i": 42,
+   "line": 16,
+   "text": "Parvati steps forward, holding a single lotus flower,",
+   "t0": 96.01,
+   "t1": 99.295,
+   "f0": 2880,
+   "f1": 2979,
+   "words": [
+    {
+     "w": "Parvati",
+     "f": 2880
+    },
+    {
+     "w": "steps",
+     "f": 2896
+    },
+    {
+     "w": "forward,",
+     "f": 2907
+    },
+    {
+     "w": "holding",
+     "f": 2923
+    },
+    {
+     "w": "a",
+     "f": 2939
+    },
+    {
+     "w": "single",
+     "f": 2941
+    },
+    {
+     "w": "lotus",
+     "f": 2954
+    },
+    {
+     "w": "flower,",
+     "f": 2965
+    }
+   ]
+  },
+  {
+   "i": 43,
+   "line": 16,
+   "text": "ready to wake the universe from its long,",
+   "t0": 99.295,
+   "t1": 101.759,
+   "f0": 2979,
+   "f1": 3053,
+   "words": [
+    {
+     "w": "ready",
+     "f": 2979
+    },
+    {
+     "w": "to",
+     "f": 2990
+    },
+    {
+     "w": "wake",
+     "f": 2995
+    },
+    {
+     "w": "the",
+     "f": 3003
+    },
+    {
+     "w": "universe",
+     "f": 3010
+    },
+    {
+     "w": "from",
+     "f": 3028
+    },
+    {
+     "w": "its",
+     "f": 3037
+    },
+    {
+     "w": "long,",
+     "f": 3044
+    }
+   ]
+  },
+  {
+   "i": 44,
+   "line": 16,
+   "text": "frozen sleep.",
+   "t0": 101.759,
+   "t1": 102.58,
+   "f0": 3053,
+   "f1": 3077,
+   "words": [
+    {
+     "w": "frozen",
+     "f": 3053
+    },
+    {
+     "w": "sleep.",
+     "f": 3066
+    }
+   ]
+  },
+  {
+   "i": 45,
+   "line": 17,
+   "text": "The air grows still,",
+   "t0": 103.13,
+   "t1": 104.201,
+   "f0": 3094,
+   "f1": 3126,
+   "words": [
+    {
+     "w": "The",
+     "f": 3094
+    },
+    {
+     "w": "air",
+     "f": 3100
+    },
+    {
+     "w": "grows",
+     "f": 3106
+    },
+    {
+     "w": "still,",
+     "f": 3116
+    }
+   ]
+  },
+  {
+   "i": 46,
+   "line": 17,
+   "text": "and the first spark of a legendary love dares",
+   "t0": 104.201,
+   "t1": 106.678,
+   "f0": 3126,
+   "f1": 3200,
+   "words": [
+    {
+     "w": "and",
+     "f": 3126
+    },
+    {
+     "w": "the",
+     "f": 3132
+    },
+    {
+     "w": "first",
+     "f": 3138
+    },
+    {
+     "w": "spark",
+     "f": 3148
+    },
+    {
+     "w": "of",
+     "f": 3158
+    },
+    {
+     "w": "a",
+     "f": 3162
+    },
+    {
+     "w": "legendary",
+     "f": 3164
+    },
+    {
+     "w": "love",
+     "f": 3182
+    },
+    {
+     "w": "dares",
+     "f": 3190
+    }
+   ]
+  },
+  {
+   "i": 47,
+   "line": 17,
+   "text": "to flicker in the shadow of Kailash.",
+   "t0": 106.678,
+   "t1": 108.62,
+   "f0": 3200,
+   "f1": 3259,
+   "words": [
+    {
+     "w": "to",
+     "f": 3200
+    },
+    {
+     "w": "flicker",
+     "f": 3204
+    },
+    {
+     "w": "in",
+     "f": 3218
+    },
+    {
+     "w": "the",
+     "f": 3222
+    },
+    {
+     "w": "shadow",
+     "f": 3228
+    },
+    {
+     "w": "of",
+     "f": 3241
+    },
+    {
+     "w": "Kailash.",
+     "f": 3245
+    }
+   ]
+  },
+  {
+   "i": 48,
+   "line": 18,
+   "text": "Love is not merely born of the flesh;",
+   "t0": 109.72,
+   "t1": 111.698,
+   "f0": 3292,
+   "f1": 3351,
+   "words": [
+    {
+     "w": "Love",
+     "f": 3292
+    },
+    {
+     "w": "is",
+     "f": 3300
+    },
+    {
+     "w": "not",
+     "f": 3304
+    },
+    {
+     "w": "merely",
+     "f": 3310
+    },
+    {
+     "w": "born",
+     "f": 3322
+    },
+    {
+     "w": "of",
+     "f": 3330
+    },
+    {
+     "w": "the",
+     "f": 3335
+    },
+    {
+     "w": "flesh;",
+     "f": 3341
+    }
+   ]
+  },
+  {
+   "i": 49,
+   "line": 18,
+   "text": "it is",
+   "t0": 111.698,
+   "t1": 111.971,
+   "f0": 3351,
+   "f1": 3359,
+   "words": [
+    {
+     "w": "it",
+     "f": 3351
+    },
+    {
+     "w": "is",
+     "f": 3355
+    }
+   ]
+  },
+  {
+   "i": 50,
+   "line": 18,
+   "text": "an eternal force that even death cannot conquer,",
+   "t0": 111.971,
+   "t1": 114.7,
+   "f0": 3359,
+   "f1": 3441,
+   "words": [
+    {
+     "w": "an",
+     "f": 3359
+    },
+    {
+     "w": "eternal",
+     "f": 3363
+    },
+    {
+     "w": "force",
+     "f": 3378
+    },
+    {
+     "w": "that",
+     "f": 3388
+    },
+    {
+     "w": "even",
+     "f": 3396
+    },
+    {
+     "w": "death",
+     "f": 3404
+    },
+    {
+     "w": "cannot",
+     "f": 3414
+    },
+    {
+     "w": "conquer,",
+     "f": 3427
+    }
+   ]
+  },
+  {
+   "i": 51,
+   "line": 19,
+   "text": "waiting only for the right season to bloom anew.",
+   "t0": 114.92,
+   "t1": 117.47,
+   "f0": 3448,
+   "f1": 3524,
+   "words": [
+    {
+     "w": "waiting",
+     "f": 3448
+    },
+    {
+     "w": "only",
+     "f": 3461
+    },
+    {
+     "w": "for",
+     "f": 3469
+    },
+    {
+     "w": "the",
+     "f": 3475
+    },
+    {
+     "w": "right",
+     "f": 3481
+    },
+    {
+     "w": "season",
+     "f": 3491
+    },
+    {
+     "w": "to",
+     "f": 3503
+    },
+    {
+     "w": "bloom",
+     "f": 3506
+    },
+    {
+     "w": "anew.",
+     "f": 3516
+    }
+   ]
+  }
+ ]
+}
