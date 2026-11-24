@@ -1,0 +1,69 @@
+{
+ "title": "How Does AI Turn Words Into Pictures?",
+ "topic": "How text-to-image AI generates pictures from words",
+ "genre": "ai",
+ "slug": "how-text-to-image-ai-generates-pictures",
+ "format": "short",
+ "description": "Discover how text prompts are turned into numerical embeddings and transformed into images through diffusion denoising. Learn how models like CLIP and Stable Diffusion bridge the gap between human language and visual art. Subscribe and follow us for more.",
+ "hashtags": [
+  "#ai",
+  "#diffusion",
+  "#generative",
+  "#technology",
+  "#latentspace",
+  "#clip",
+  "#neural",
+  "#graphics",
+  "#prompts",
+  "#machinelearning",
+  "#deeplearning",
+  "#shorts"
+ ],
+ "cta": "If you learned something new, support us by subscribing to the channel and following us for more.",
+ "caption_youtube": "Discover how text prompts are turned into numerical embeddings and transformed into images through diffusion denoising. Learn how models like CLIP and Stable Diffusion bridge the gap between human language and visual art. Subscribe and follow us for more.\n\n#ai #diffusion #generative #technology #latentspace #clip #neural #graphics #prompts #machinelearning #deeplearning #shorts",
+ "caption_instagram": "Discover how text prompts are turned into numerical embeddings and transformed into images through diffusion denoising. Learn how models like CLIP and Stable Diffusion bridge the gap between human language and visual art. Subscribe and follow us for more.\n\n#ai #diffusion #generative #technology #latentspace #clip #neural #graphics #prompts #machinelearning #deeplearning #shorts #reels #explore #learnsomethingnew",
+ "notebook_id": "dd36bf9d-bdbb-4cec-bb4f-f4b15673f6ce",
+ "sources": [
+  {
+   "title": "CLIP (Contrastive Language-Image Pretraining) - GeeksforGeeks",
+   "url": "https://www.geeksforgeeks.org/deep-learning/clip-contrastive-language-image-pretraining/"
+  },
+  {
+   "title": "Comparative Analysis of GANs and Diffusion Models in Image Generation | Highlights in Science, Engineering and Technology - Darcy & Roy Press",
+   "url": "https://drpress.org/ojs/index.php/HSET/article/view/28780"
+  },
+  {
+   "title": "Diffusion Explainer: Visual Explanation for Text-to-image Stable Diffusion - Bunny.net",
+   "url": "https://ieeevis.b-cdn.net/vis_2024/pdfs/v-short-1224.pdf"
+  },
+  {
+   "title": "Diffusion model - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Diffusion_model"
+  },
+  {
+   "title": "How AI Image Generators Create Pictures From Text - How It Really Works - YouTube",
+   "url": "https://www.youtube.com/watch?v=hPFyWHSlPf4"
+  },
+  {
+   "title": "How Does Text to Image AI Actually Work? - Kumba AI",
+   "url": "https://www.kumba.ai/blog/insights-5/how-does-text-to-ai-work-51"
+  },
+  {
+   "title": "Image AI in 2026 — How Text-to-Image Models Work and What to Use Them For - Cubed",
+   "url": "https://cubed.run/blog/image-ai-in-2026-how-text-to-image-models-work-and-what-to-use-them-for"
+  },
+  {
+   "title": "Text-to-image model - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Text-to-image_model"
+  },
+  {
+   "title": "Towards Understanding the Working Mechanism of Text-to-Image Diffusion Model - NIPS",
+   "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/63e8bc7bbf1cfea36d1d1b6538aecce5-Paper-Conference.pdf"
+  },
+  {
+   "title": "What is Latent Space? | Stanford HAI",
+   "url": "https://hai.stanford.edu/ai-definitions/what-is-latent-space"
+  }
+ ],
+ "generator": "notebooklm video overview"
+}
