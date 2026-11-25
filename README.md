@@ -4,6 +4,7 @@ Newest first. Landscape = YouTube 16:9, Shorts = 9:16. Open `index.html` (or ena
 
 | Date | Title | Topic | Length | Landscape | Shorts | Run |
 |---|---|---|---|---|---|---|
+| 2026-11-25 | **The Birth of Ganesha: Creation of the Elephant-Headed God** | The Birth of Ganesha: Creation of the Elephant-Headed God | 1:37 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/the-birth-of-ganesha-creation-of-the-ele-40/shorts.mp4) (10 MB) | [#40](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45597587177) |
 | 2026-11-25 | **Shiva and Parvati's Wedding: The Divine Union** | Shiva and Parvati's Wedding: The Divine Union | 1:46 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/shiva-and-parvati-s-wedding-the-divine-u-38/shorts.mp4) (11 MB) | [#38](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45531303876) |
 | 2026-11-24 | **Parvati's Penance: Winning Shiva's Heart** | Parvati's Penance: Winning Shiva's Heart | 1:56 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/parvati-s-penance-winning-shiva-s-heart-35/shorts.mp4) (13 MB) | [#35](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45377363342) |
 | 2026-11-24 | **The Birth of Parvati: The Return of Sati** | The Birth of Parvati: The Return of Sati | 2:00 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/the-birth-of-parvati-the-return-of-sati-33/shorts.mp4) (14 MB) | [#33](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45310694547) |
