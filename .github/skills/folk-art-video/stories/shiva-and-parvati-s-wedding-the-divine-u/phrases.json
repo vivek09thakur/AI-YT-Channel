@@ -1,0 +1,1345 @@
+{
+ "fps": 30,
+ "duration": 106.66,
+ "total_frames": 3200,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "The Himalayas glow under a canopy of golden stars.",
+   "t0": 0.8,
+   "t1": 4.0,
+   "f0": 24,
+   "f1": 120,
+   "words": [
+    {
+     "w": "The",
+     "f": 24
+    },
+    {
+     "w": "Himalayas",
+     "f": 31
+    },
+    {
+     "w": "glow",
+     "f": 52
+    },
+    {
+     "w": "under",
+     "f": 61
+    },
+    {
+     "w": "a",
+     "f": 73
+    },
+    {
+     "w": "canopy",
+     "f": 76
+    },
+    {
+     "w": "of",
+     "f": 90
+    },
+    {
+     "w": "golden",
+     "f": 94
+    },
+    {
+     "w": "stars.",
+     "f": 108
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 1,
+   "text": "The great penance is finally over.",
+   "t0": 4.55,
+   "t1": 6.64,
+   "f0": 136,
+   "f1": 199,
+   "words": [
+    {
+     "w": "The",
+     "f": 136
+    },
+    {
+     "w": "great",
+     "f": 143
+    },
+    {
+     "w": "penance",
+     "f": 154
+    },
+    {
+     "w": "is",
+     "f": 170
+    },
+    {
+     "w": "finally",
+     "f": 175
+    },
+    {
+     "w": "over.",
+     "f": 190
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 2,
+   "text": "Lord Shiva accepts Parvati's pure love...",
+   "t0": 7.19,
+   "t1": 9.8,
+   "f0": 216,
+   "f1": 294,
+   "words": [
+    {
+     "w": "Lord",
+     "f": 216
+    },
+    {
+     "w": "Shiva",
+     "f": 225
+    },
+    {
+     "w": "accepts",
+     "f": 238
+    },
+    {
+     "w": "Parvati's",
+     "f": 255
+    },
+    {
+     "w": "pure",
+     "f": 274
+    },
+    {
+     "w": "love...",
+     "f": 284
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 3,
+   "text": "From every corner of the cosmos, the procession begins.",
+   "t0": 11.25,
+   "t1": 14.6,
+   "f0": 338,
+   "f1": 438,
+   "words": [
+    {
+     "w": "From",
+     "f": 338
+    },
+    {
+     "w": "every",
+     "f": 346
+    },
+    {
+     "w": "corner",
+     "f": 358
+    },
+    {
+     "w": "of",
+     "f": 371
+    },
+    {
+     "w": "the",
+     "f": 375
+    },
+    {
+     "w": "cosmos,",
+     "f": 382
+    },
+    {
+     "w": "the",
+     "f": 396
+    },
+    {
+     "w": "procession",
+     "f": 402
+    },
+    {
+     "w": "begins.",
+     "f": 425
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 4,
+   "text": "This is no ordinary gathering.",
+   "t0": 15.15,
+   "t1": 16.9,
+   "f0": 454,
+   "f1": 507,
+   "words": [
+    {
+     "w": "This",
+     "f": 454
+    },
+    {
+     "w": "is",
+     "f": 463
+    },
+    {
+     "w": "no",
+     "f": 467
+    },
+    {
+     "w": "ordinary",
+     "f": 471
+    },
+    {
+     "w": "gathering.",
+     "f": 488
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 5,
+   "text": "Gods, sages, spirits,",
+   "t0": 17.45,
+   "t1": 18.783,
+   "f0": 524,
+   "f1": 564,
+   "words": [
+    {
+     "w": "Gods,",
+     "f": 524
+    },
+    {
+     "w": "sages,",
+     "f": 534
+    },
+    {
+     "w": "spirits,",
+     "f": 546
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 5,
+   "text": "and celestial beings descend upon the sacred mountains.",
+   "t0": 18.783,
+   "t1": 22.7,
+   "f0": 564,
+   "f1": 681,
+   "words": [
+    {
+     "w": "and",
+     "f": 564
+    },
+    {
+     "w": "celestial",
+     "f": 571
+    },
+    {
+     "w": "beings",
+     "f": 594
+    },
+    {
+     "w": "descend",
+     "f": 608
+    },
+    {
+     "w": "upon",
+     "f": 626
+    },
+    {
+     "w": "the",
+     "f": 636
+    },
+    {
+     "w": "sacred",
+     "f": 644
+    },
+    {
+     "w": "mountains.",
+     "f": 658
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 6,
+   "text": "Shiva arrives atop his faithful bull, Nandi.",
+   "t0": 23.8,
+   "t1": 26.72,
+   "f0": 714,
+   "f1": 802,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 714
+    },
+    {
+     "w": "arrives",
+     "f": 726
+    },
+    {
+     "w": "atop",
+     "f": 743
+    },
+    {
+     "w": "his",
+     "f": 753
+    },
+    {
+     "w": "faithful",
+     "f": 760
+    },
+    {
+     "w": "bull,",
+     "f": 780
+    },
+    {
+     "w": "Nandi.",
+     "f": 789
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 7,
+   "text": "He wears tiger skin,",
+   "t0": 27.27,
+   "t1": 28.477,
+   "f0": 818,
+   "f1": 854,
+   "words": [
+    {
+     "w": "He",
+     "f": 818
+    },
+    {
+     "w": "wears",
+     "f": 823
+    },
+    {
+     "w": "tiger",
+     "f": 834
+    },
+    {
+     "w": "skin,",
+     "f": 845
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 7,
+   "text": "his body smeared with sacred ash,",
+   "t0": 28.477,
+   "t1": 30.515,
+   "f0": 854,
+   "f1": 915,
+   "words": [
+    {
+     "w": "his",
+     "f": 854
+    },
+    {
+     "w": "body",
+     "f": 861
+    },
+    {
+     "w": "smeared",
+     "f": 870
+    },
+    {
+     "w": "with",
+     "f": 886
+    },
+    {
+     "w": "sacred",
+     "f": 895
+    },
+    {
+     "w": "ash,",
+     "f": 909
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 7,
+   "text": "a garland of serpents resting quietly around his neck.",
+   "t0": 30.515,
+   "t1": 33.91,
+   "f0": 915,
+   "f1": 1017,
+   "words": [
+    {
+     "w": "a",
+     "f": 915
+    },
+    {
+     "w": "garland",
+     "f": 918
+    },
+    {
+     "w": "of",
+     "f": 934
+    },
+    {
+     "w": "serpents",
+     "f": 938
+    },
+    {
+     "w": "resting",
+     "f": 956
+    },
+    {
+     "w": "quietly",
+     "f": 972
+    },
+    {
+     "w": "around",
+     "f": 988
+    },
+    {
+     "w": "his",
+     "f": 1001
+    },
+    {
+     "w": "neck.",
+     "f": 1008
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 8,
+   "text": "The unusual groom smiles gently at the bewildered crowd.",
+   "t0": 34.46,
+   "t1": 37.72,
+   "f0": 1034,
+   "f1": 1132,
+   "words": [
+    {
+     "w": "The",
+     "f": 1034
+    },
+    {
+     "w": "unusual",
+     "f": 1040
+    },
+    {
+     "w": "groom",
+     "f": 1055
+    },
+    {
+     "w": "smiles",
+     "f": 1065
+    },
+    {
+     "w": "gently",
+     "f": 1077
+    },
+    {
+     "w": "at",
+     "f": 1090
+    },
+    {
+     "w": "the",
+     "f": 1094
+    },
+    {
+     "w": "bewildered",
+     "f": 1100
+    },
+    {
+     "w": "crowd.",
+     "f": 1121
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 9,
+   "text": "Queen Menavati gasps at",
+   "t0": 38.82,
+   "t1": 40.166,
+   "f0": 1165,
+   "f1": 1205,
+   "words": [
+    {
+     "w": "Queen",
+     "f": 1165
+    },
+    {
+     "w": "Menavati",
+     "f": 1175
+    },
+    {
+     "w": "gasps",
+     "f": 1191
+    },
+    {
+     "w": "at",
+     "f": 1201
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 9,
+   "text": "the sight of her prospective son-in-law.",
+   "t0": 40.166,
+   "t1": 42.32,
+   "f0": 1205,
+   "f1": 1270,
+   "words": [
+    {
+     "w": "the",
+     "f": 1205
+    },
+    {
+     "w": "sight",
+     "f": 1211
+    },
+    {
+     "w": "of",
+     "f": 1221
+    },
+    {
+     "w": "her",
+     "f": 1225
+    },
+    {
+     "w": "prospective",
+     "f": 1231
+    },
+    {
+     "w": "son-in-law.",
+     "f": 1253
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 10,
+   "text": "The fearsome ascetic, covered in dust and ghosts,",
+   "t0": 42.87,
+   "t1": 45.867,
+   "f0": 1286,
+   "f1": 1376,
+   "words": [
+    {
+     "w": "The",
+     "f": 1286
+    },
+    {
+     "w": "fearsome",
+     "f": 1293
+    },
+    {
+     "w": "ascetic,",
+     "f": 1311
+    },
+    {
+     "w": "covered",
+     "f": 1327
+    },
+    {
+     "w": "in",
+     "f": 1342
+    },
+    {
+     "w": "dust",
+     "f": 1347
+    },
+    {
+     "w": "and",
+     "f": 1356
+    },
+    {
+     "w": "ghosts,",
+     "f": 1363
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 10,
+   "text": "appears too wild for her royal palace.",
+   "t0": 45.867,
+   "t1": 48.19,
+   "f0": 1376,
+   "f1": 1446,
+   "words": [
+    {
+     "w": "appears",
+     "f": 1376
+    },
+    {
+     "w": "too",
+     "f": 1392
+    },
+    {
+     "w": "wild",
+     "f": 1398
+    },
+    {
+     "w": "for",
+     "f": 1407
+    },
+    {
+     "w": "her",
+     "f": 1414
+    },
+    {
+     "w": "royal",
+     "f": 1421
+    },
+    {
+     "w": "palace.",
+     "f": 1432
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 11,
+   "text": "Sensing her mother's sudden dread,",
+   "t0": 49.29,
+   "t1": 51.289,
+   "f0": 1479,
+   "f1": 1539,
+   "words": [
+    {
+     "w": "Sensing",
+     "f": 1479
+    },
+    {
+     "w": "her",
+     "f": 1494
+    },
+    {
+     "w": "mother's",
+     "f": 1500
+    },
+    {
+     "w": "sudden",
+     "f": 1515
+    },
+    {
+     "w": "dread,",
+     "f": 1528
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 11,
+   "text": "Parvati closes her eyes in quiet meditation.",
+   "t0": 51.289,
+   "t1": 53.93,
+   "f0": 1539,
+   "f1": 1618,
+   "words": [
+    {
+     "w": "Parvati",
+     "f": 1539
+    },
+    {
+     "w": "closes",
+     "f": 1554
+    },
+    {
+     "w": "her",
+     "f": 1567
+    },
+    {
+     "w": "eyes",
+     "f": 1573
+    },
+    {
+     "w": "in",
+     "f": 1581
+    },
+    {
+     "w": "quiet",
+     "f": 1586
+    },
+    {
+     "w": "meditation.",
+     "f": 1596
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 12,
+   "text": "She focuses her fierce resolve once more,",
+   "t0": 54.48,
+   "t1": 56.815,
+   "f0": 1634,
+   "f1": 1704,
+   "words": [
+    {
+     "w": "She",
+     "f": 1634
+    },
+    {
+     "w": "focuses",
+     "f": 1641
+    },
+    {
+     "w": "her",
+     "f": 1655
+    },
+    {
+     "w": "fierce",
+     "f": 1661
+    },
+    {
+     "w": "resolve",
+     "f": 1674
+    },
+    {
+     "w": "once",
+     "f": 1688
+    },
+    {
+     "w": "more,",
+     "f": 1696
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 12,
+   "text": "channeling the boundless energy of the universe.",
+   "t0": 56.815,
+   "t1": 59.63,
+   "f0": 1704,
+   "f1": 1789,
+   "words": [
+    {
+     "w": "channeling",
+     "f": 1704
+    },
+    {
+     "w": "the",
+     "f": 1725
+    },
+    {
+     "w": "boundless",
+     "f": 1731
+    },
+    {
+     "w": "energy",
+     "f": 1750
+    },
+    {
+     "w": "of",
+     "f": 1762
+    },
+    {
+     "w": "the",
+     "f": 1766
+    },
+    {
+     "w": "universe.",
+     "f": 1772
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 13,
+   "text": "Instantly, Shiva sheds his ascetic guise.",
+   "t0": 60.73,
+   "t1": 63.51,
+   "f0": 1822,
+   "f1": 1905,
+   "words": [
+    {
+     "w": "Instantly,",
+     "f": 1822
+    },
+    {
+     "w": "Shiva",
+     "f": 1844
+    },
+    {
+     "w": "sheds",
+     "f": 1856
+    },
+    {
+     "w": "his",
+     "f": 1869
+    },
+    {
+     "w": "ascetic",
+     "f": 1876
+    },
+    {
+     "w": "guise.",
+     "f": 1893
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 14,
+   "text": "He transforms into Sundareswarar, the lord of supreme beauty,",
+   "t0": 64.06,
+   "t1": 67.857,
+   "f0": 1922,
+   "f1": 2036,
+   "words": [
+    {
+     "w": "He",
+     "f": 1922
+    },
+    {
+     "w": "transforms",
+     "f": 1926
+    },
+    {
+     "w": "into",
+     "f": 1949
+    },
+    {
+     "w": "Sundareswarar,",
+     "f": 1958
+    },
+    {
+     "w": "the",
+     "f": 1987
+    },
+    {
+     "w": "lord",
+     "f": 1993
+    },
+    {
+     "w": "of",
+     "f": 2002
+    },
+    {
+     "w": "supreme",
+     "f": 2007
+    },
+    {
+     "w": "beauty,",
+     "f": 2022
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 14,
+   "text": "radiating a golden light that outshines",
+   "t0": 67.857,
+   "t1": 70.388,
+   "f0": 2036,
+   "f1": 2112,
+   "words": [
+    {
+     "w": "radiating",
+     "f": 2036
+    },
+    {
+     "w": "a",
+     "f": 2056
+    },
+    {
+     "w": "golden",
+     "f": 2058
+    },
+    {
+     "w": "light",
+     "f": 2071
+    },
+    {
+     "w": "that",
+     "f": 2083
+    },
+    {
+     "w": "outshines",
+     "f": 2092
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 14,
+   "text": "the sun and stars.",
+   "t0": 70.388,
+   "t1": 71.43,
+   "f0": 2112,
+   "f1": 2143,
+   "words": [
+    {
+     "w": "the",
+     "f": 2112
+    },
+    {
+     "w": "sun",
+     "f": 2118
+    },
+    {
+     "w": "and",
+     "f": 2125
+    },
+    {
+     "w": "stars.",
+     "f": 2132
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 15,
+   "text": "Overwhelmed with joy,",
+   "t0": 72.53,
+   "t1": 73.914,
+   "f0": 2176,
+   "f1": 2217,
+   "words": [
+    {
+     "w": "Overwhelmed",
+     "f": 2176
+    },
+    {
+     "w": "with",
+     "f": 2201
+    },
+    {
+     "w": "joy,",
+     "f": 2211
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 15,
+   "text": "Menavati drops her ceremonial plate of flowers.",
+   "t0": 73.914,
+   "t1": 76.99,
+   "f0": 2217,
+   "f1": 2310,
+   "words": [
+    {
+     "w": "Menavati",
+     "f": 2217
+    },
+    {
+     "w": "drops",
+     "f": 2236
+    },
+    {
+     "w": "her",
+     "f": 2247
+    },
+    {
+     "w": "ceremonial",
+     "f": 2254
+    },
+    {
+     "w": "plate",
+     "f": 2277
+    },
+    {
+     "w": "of",
+     "f": 2289
+    },
+    {
+     "w": "flowers.",
+     "f": 2294
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 16,
+   "text": "She bows deeply before",
+   "t0": 77.54,
+   "t1": 78.817,
+   "f0": 2326,
+   "f1": 2365,
+   "words": [
+    {
+     "w": "She",
+     "f": 2326
+    },
+    {
+     "w": "bows",
+     "f": 2332
+    },
+    {
+     "w": "deeply",
+     "f": 2340
+    },
+    {
+     "w": "before",
+     "f": 2352
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 16,
+   "text": "the supreme yogi who has won",
+   "t0": 78.817,
+   "t1": 80.363,
+   "f0": 2365,
+   "f1": 2411,
+   "words": [
+    {
+     "w": "the",
+     "f": 2365
+    },
+    {
+     "w": "supreme",
+     "f": 2371
+    },
+    {
+     "w": "yogi",
+     "f": 2385
+    },
+    {
+     "w": "who",
+     "f": 2393
+    },
+    {
+     "w": "has",
+     "f": 2399
+    },
+    {
+     "w": "won",
+     "f": 2405
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 16,
+   "text": "her daughter's steadfast heart.",
+   "t0": 80.363,
+   "t1": 82.11,
+   "f0": 2411,
+   "f1": 2463,
+   "words": [
+    {
+     "w": "her",
+     "f": 2411
+    },
+    {
+     "w": "daughter's",
+     "f": 2417
+    },
+    {
+     "w": "steadfast",
+     "f": 2435
+    },
+    {
+     "w": "heart.",
+     "f": 2453
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 17,
+   "text": "In the presence of sacred fires and chanting sages,",
+   "t0": 83.21,
+   "t1": 86.364,
+   "f0": 2496,
+   "f1": 2591,
+   "words": [
+    {
+     "w": "In",
+     "f": 2496
+    },
+    {
+     "w": "the",
+     "f": 2501
+    },
+    {
+     "w": "presence",
+     "f": 2508
+    },
+    {
+     "w": "of",
+     "f": 2526
+    },
+    {
+     "w": "sacred",
+     "f": 2530
+    },
+    {
+     "w": "fires",
+     "f": 2544
+    },
+    {
+     "w": "and",
+     "f": 2555
+    },
+    {
+     "w": "chanting",
+     "f": 2562
+    },
+    {
+     "w": "sages,",
+     "f": 2580
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 17,
+   "text": "the two hands meet.",
+   "t0": 86.364,
+   "t1": 87.49,
+   "f0": 2591,
+   "f1": 2625,
+   "words": [
+    {
+     "w": "the",
+     "f": 2591
+    },
+    {
+     "w": "two",
+     "f": 2598
+    },
+    {
+     "w": "hands",
+     "f": 2604
+    },
+    {
+     "w": "meet.",
+     "f": 2616
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 18,
+   "text": "The cosmic masculine",
+   "t0": 88.04,
+   "t1": 89.178,
+   "f0": 2641,
+   "f1": 2675,
+   "words": [
+    {
+     "w": "The",
+     "f": 2641
+    },
+    {
+     "w": "cosmic",
+     "f": 2647
+    },
+    {
+     "w": "masculine",
+     "f": 2658
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 18,
+   "text": "and feminine energies merge into one harmonious rhythm.",
+   "t0": 89.178,
+   "t1": 92.15,
+   "f0": 2675,
+   "f1": 2764,
+   "words": [
+    {
+     "w": "and",
+     "f": 2675
+    },
+    {
+     "w": "feminine",
+     "f": 2681
+    },
+    {
+     "w": "energies",
+     "f": 2696
+    },
+    {
+     "w": "merge",
+     "f": 2711
+    },
+    {
+     "w": "into",
+     "f": 2721
+    },
+    {
+     "w": "one",
+     "f": 2728
+    },
+    {
+     "w": "harmonious",
+     "f": 2734
+    },
+    {
+     "w": "rhythm.",
+     "f": 2753
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 19,
+   "text": "Mountains sing, rivers dance,",
+   "t0": 93.25,
+   "t1": 95.035,
+   "f0": 2798,
+   "f1": 2851,
+   "words": [
+    {
+     "w": "Mountains",
+     "f": 2798
+    },
+    {
+     "w": "sing,",
+     "f": 2818
+    },
+    {
+     "w": "rivers",
+     "f": 2827
+    },
+    {
+     "w": "dance,",
+     "f": 2840
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 19,
+   "text": "and the cosmos rejoices in",
+   "t0": 95.035,
+   "t1": 96.672,
+   "f0": 2851,
+   "f1": 2900,
+   "words": [
+    {
+     "w": "and",
+     "f": 2851
+    },
+    {
+     "w": "the",
+     "f": 2858
+    },
+    {
+     "w": "cosmos",
+     "f": 2864
+    },
+    {
+     "w": "rejoices",
+     "f": 2878
+    },
+    {
+     "w": "in",
+     "f": 2896
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 19,
+   "text": "the eternal balance of creation.",
+   "t0": 96.672,
+   "t1": 98.68,
+   "f0": 2900,
+   "f1": 2960,
+   "words": [
+    {
+     "w": "the",
+     "f": 2900
+    },
+    {
+     "w": "eternal",
+     "f": 2907
+    },
+    {
+     "w": "balance",
+     "f": 2922
+    },
+    {
+     "w": "of",
+     "f": 2938
+    },
+    {
+     "w": "creation.",
+     "f": 2943
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 20,
+   "text": "True love conquers all differences,",
+   "t0": 99.23,
+   "t1": 101.34,
+   "f0": 2977,
+   "f1": 3040,
+   "words": [
+    {
+     "w": "True",
+     "f": 2977
+    },
+    {
+     "w": "love",
+     "f": 2985
+    },
+    {
+     "w": "conquers",
+     "f": 2994
+    },
+    {
+     "w": "all",
+     "f": 3011
+    },
+    {
+     "w": "differences,",
+     "f": 3017
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 20,
+   "text": "binding the universe in sacred harmony.",
+   "t0": 101.34,
+   "t1": 103.66,
+   "f0": 3040,
+   "f1": 3110,
+   "words": [
+    {
+     "w": "binding",
+     "f": 3040
+    },
+    {
+     "w": "the",
+     "f": 3055
+    },
+    {
+     "w": "universe",
+     "f": 3061
+    },
+    {
+     "w": "in",
+     "f": 3078
+    },
+    {
+     "w": "sacred",
+     "f": 3082
+    },
+    {
+     "w": "harmony.",
+     "f": 3095
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,154 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 106.66,
+ "lines": [
+  {
+   "i": 0,
+   "text": "The Himalayas glow under a canopy of golden stars.",
+   "t0": 0.8,
+   "t1": 4.0,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "The great penance is finally over.",
+   "t0": 4.55,
+   "t1": 6.64,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Lord Shiva accepts Parvati's pure love...",
+   "t0": 7.19,
+   "t1": 9.8,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "From every corner of the cosmos, the procession begins.",
+   "t0": 11.25,
+   "t1": 14.6,
+   "para": true
+  },
+  {
+   "i": 4,
+   "text": "This is no ordinary gathering.",
+   "t0": 15.15,
+   "t1": 16.9,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "Gods, sages, spirits, and celestial beings descend upon the sacred mountains.",
+   "t0": 17.45,
+   "t1": 22.7,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "Shiva arrives atop his faithful bull, Nandi.",
+   "t0": 23.8,
+   "t1": 26.72,
+   "para": true
+  },
+  {
+   "i": 7,
+   "text": "He wears tiger skin, his body smeared with sacred ash, a garland of serpents resting quietly around his neck.",
+   "t0": 27.27,
+   "t1": 33.91,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "The unusual groom smiles gently at the bewildered crowd.",
+   "t0": 34.46,
+   "t1": 37.72,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Queen Menavati gasps at the sight of her prospective son-in-law.",
+   "t0": 38.82,
+   "t1": 42.32,
+   "para": true
+  },
+  {
+   "i": 10,
+   "text": "The fearsome ascetic, covered in dust and ghosts, appears too wild for her royal palace.",
+   "t0": 42.87,
+   "t1": 48.19,
+   "para": false
+  },
+  {
+   "i": 11,
+   "text": "Sensing her mother's sudden dread, Parvati closes her eyes in quiet meditation.",
+   "t0": 49.29,
+   "t1": 53.93,
+   "para": true
+  },
+  {
+   "i": 12,
+   "text": "She focuses her fierce resolve once more, channeling the boundless energy of the universe.",
+   "t0": 54.48,
+   "t1": 59.63,
+   "para": false
+  },
+  {
+   "i": 13,
+   "text": "Instantly, Shiva sheds his ascetic guise.",
+   "t0": 60.73,
+   "t1": 63.51,
+   "para": true
+  },
+  {
+   "i": 14,
+   "text": "He transforms into Sundareswarar, the lord of supreme beauty, radiating a golden light that outshines the sun and stars.",
+   "t0": 64.06,
+   "t1": 71.43,
+   "para": false
+  },
+  {
+   "i": 15,
+   "text": "Overwhelmed with joy, Menavati drops her ceremonial plate of flowers.",
+   "t0": 72.53,
+   "t1": 76.99,
+   "para": true
+  },
+  {
+   "i": 16,
+   "text": "She bows deeply before the supreme yogi who has won her daughter's steadfast heart.",
+   "t0": 77.54,
+   "t1": 82.11,
+   "para": false
+  },
+  {
+   "i": 17,
+   "text": "In the presence of sacred fires and chanting sages, the two hands meet.",
+   "t0": 83.21,
+   "t1": 87.49,
+   "para": true
+  },
+  {
+   "i": 18,
+   "text": "The cosmic masculine and feminine energies merge into one harmonious rhythm.",
+   "t0": 88.04,
+   "t1": 92.15,
+   "para": false
+  },
+  {
+   "i": 19,
+   "text": "Mountains sing, rivers dance, and the cosmos rejoices in the eternal balance of creation.",
+   "t0": 93.25,
+   "t1": 98.68,
+   "para": true
+  },
+  {
+   "i": 20,
+   "text": "True love conquers all differences, binding the universe in sacred harmony.",
+   "t0": 99.23,
+   "t1": 103.66,
+   "para": false
+  }
+ ]
+}
