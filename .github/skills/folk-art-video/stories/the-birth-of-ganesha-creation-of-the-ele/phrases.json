@@ -1,0 +1,1345 @@
+{
+ "fps": 30,
+ "duration": 97.4,
+ "total_frames": 2922,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Goddess Parvati sits alone in",
+   "t0": 0.8,
+   "t1": 2.457,
+   "f0": 24,
+   "f1": 74,
+   "words": [
+    {
+     "w": "Goddess",
+     "f": 24
+    },
+    {
+     "w": "Parvati",
+     "f": 38
+    },
+    {
+     "w": "sits",
+     "f": 52
+    },
+    {
+     "w": "alone",
+     "f": 60
+    },
+    {
+     "w": "in",
+     "f": 70
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "her quiet chamber on Mount Kailash...",
+   "t0": 2.457,
+   "t1": 4.38,
+   "f0": 74,
+   "f1": 131,
+   "words": [
+    {
+     "w": "her",
+     "f": 74
+    },
+    {
+     "w": "quiet",
+     "f": 80
+    },
+    {
+     "w": "chamber",
+     "f": 90
+    },
+    {
+     "w": "on",
+     "f": 104
+    },
+    {
+     "w": "Mount",
+     "f": 108
+    },
+    {
+     "w": "Kailash...",
+     "f": 117
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "her mind busy with thoughts",
+   "t0": 5.28,
+   "t1": 6.782,
+   "f0": 158,
+   "f1": 203,
+   "words": [
+    {
+     "w": "her",
+     "f": 158
+    },
+    {
+     "w": "mind",
+     "f": 164
+    },
+    {
+     "w": "busy",
+     "f": 172
+    },
+    {
+     "w": "with",
+     "f": 180
+    },
+    {
+     "w": "thoughts",
+     "f": 188
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "of absolute loyalty and protection.",
+   "t0": 6.782,
+   "t1": 8.74,
+   "f0": 203,
+   "f1": 262,
+   "words": [
+    {
+     "w": "of",
+     "f": 203
+    },
+    {
+     "w": "absolute",
+     "f": 207
+    },
+    {
+     "w": "loyalty",
+     "f": 223
+    },
+    {
+     "w": "and",
+     "f": 237
+    },
+    {
+     "w": "protection.",
+     "f": 243
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "She takes turmeric paste",
+   "t0": 9.84,
+   "t1": 11.384,
+   "f0": 295,
+   "f1": 342,
+   "words": [
+    {
+     "w": "She",
+     "f": 295
+    },
+    {
+     "w": "takes",
+     "f": 302
+    },
+    {
+     "w": "turmeric",
+     "f": 313
+    },
+    {
+     "w": "paste",
+     "f": 330
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "and sacred oils from her own skin...",
+   "t0": 11.384,
+   "t1": 13.37,
+   "f0": 342,
+   "f1": 401,
+   "words": [
+    {
+     "w": "and",
+     "f": 342
+    },
+    {
+     "w": "sacred",
+     "f": 348
+    },
+    {
+     "w": "oils",
+     "f": 361
+    },
+    {
+     "w": "from",
+     "f": 370
+    },
+    {
+     "w": "her",
+     "f": 379
+    },
+    {
+     "w": "own",
+     "f": 386
+    },
+    {
+     "w": "skin...",
+     "f": 392
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "and molds them with her own hands into",
+   "t0": 14.27,
+   "t1": 16.398,
+   "f0": 428,
+   "f1": 492,
+   "words": [
+    {
+     "w": "and",
+     "f": 428
+    },
+    {
+     "w": "molds",
+     "f": 434
+    },
+    {
+     "w": "them",
+     "f": 445
+    },
+    {
+     "w": "with",
+     "f": 453
+    },
+    {
+     "w": "her",
+     "f": 461
+    },
+    {
+     "w": "own",
+     "f": 467
+    },
+    {
+     "w": "hands",
+     "f": 473
+    },
+    {
+     "w": "into",
+     "f": 484
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 3,
+   "text": "the form of a handsome boy.",
+   "t0": 16.398,
+   "t1": 17.84,
+   "f0": 492,
+   "f1": 535,
+   "words": [
+    {
+     "w": "the",
+     "f": 492
+    },
+    {
+     "w": "form",
+     "f": 498
+    },
+    {
+     "w": "of",
+     "f": 506
+    },
+    {
+     "w": "a",
+     "f": 510
+    },
+    {
+     "w": "handsome",
+     "f": 513
+    },
+    {
+     "w": "boy.",
+     "f": 529
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 4,
+   "text": "She breathes life into the clay figure...",
+   "t0": 18.94,
+   "t1": 21.03,
+   "f0": 568,
+   "f1": 631,
+   "words": [
+    {
+     "w": "She",
+     "f": 568
+    },
+    {
+     "w": "breathes",
+     "f": 574
+    },
+    {
+     "w": "life",
+     "f": 590
+    },
+    {
+     "w": "into",
+     "f": 598
+    },
+    {
+     "w": "the",
+     "f": 605
+    },
+    {
+     "w": "clay",
+     "f": 611
+    },
+    {
+     "w": "figure...",
+     "f": 619
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 5,
+   "text": "and a radiant young prince opens his eyes,",
+   "t0": 21.93,
+   "t1": 24.326,
+   "f0": 658,
+   "f1": 730,
+   "words": [
+    {
+     "w": "and",
+     "f": 658
+    },
+    {
+     "w": "a",
+     "f": 664
+    },
+    {
+     "w": "radiant",
+     "f": 666
+    },
+    {
+     "w": "young",
+     "f": 681
+    },
+    {
+     "w": "prince",
+     "f": 692
+    },
+    {
+     "w": "opens",
+     "f": 704
+    },
+    {
+     "w": "his",
+     "f": 715
+    },
+    {
+     "w": "eyes,",
+     "f": 721
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 5,
+   "text": "bowing deeply to his divine mother.",
+   "t0": 24.326,
+   "t1": 26.37,
+   "f0": 730,
+   "f1": 791,
+   "words": [
+    {
+     "w": "bowing",
+     "f": 730
+    },
+    {
+     "w": "deeply",
+     "f": 742
+    },
+    {
+     "w": "to",
+     "f": 755
+    },
+    {
+     "w": "his",
+     "f": 759
+    },
+    {
+     "w": "divine",
+     "f": 766
+    },
+    {
+     "w": "mother.",
+     "f": 778
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 6,
+   "text": "Parvati smiles with fierce maternal love...",
+   "t0": 27.47,
+   "t1": 30.01,
+   "f0": 824,
+   "f1": 900,
+   "words": [
+    {
+     "w": "Parvati",
+     "f": 824
+    },
+    {
+     "w": "smiles",
+     "f": 839
+    },
+    {
+     "w": "with",
+     "f": 852
+    },
+    {
+     "w": "fierce",
+     "f": 861
+    },
+    {
+     "w": "maternal",
+     "f": 874
+    },
+    {
+     "w": "love...",
+     "f": 892
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 7,
+   "text": "and appoints him as her personal guardian,",
+   "t0": 30.91,
+   "t1": 33.323,
+   "f0": 927,
+   "f1": 1000,
+   "words": [
+    {
+     "w": "and",
+     "f": 927
+    },
+    {
+     "w": "appoints",
+     "f": 934
+    },
+    {
+     "w": "him",
+     "f": 950
+    },
+    {
+     "w": "as",
+     "f": 956
+    },
+    {
+     "w": "her",
+     "f": 960
+    },
+    {
+     "w": "personal",
+     "f": 967
+    },
+    {
+     "w": "guardian,",
+     "f": 983
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 7,
+   "text": "commanding him",
+   "t0": 33.323,
+   "t1": 34.219,
+   "f0": 1000,
+   "f1": 1027,
+   "words": [
+    {
+     "w": "commanding",
+     "f": 1000
+    },
+    {
+     "w": "him",
+     "f": 1020
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 7,
+   "text": "to let no one pass while she bathes.",
+   "t0": 34.219,
+   "t1": 36.15,
+   "f0": 1027,
+   "f1": 1084,
+   "words": [
+    {
+     "w": "to",
+     "f": 1027
+    },
+    {
+     "w": "let",
+     "f": 1031
+    },
+    {
+     "w": "no",
+     "f": 1037
+    },
+    {
+     "w": "one",
+     "f": 1041
+    },
+    {
+     "w": "pass",
+     "f": 1047
+    },
+    {
+     "w": "while",
+     "f": 1056
+    },
+    {
+     "w": "she",
+     "f": 1066
+    },
+    {
+     "w": "bathes.",
+     "f": 1072
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 8,
+   "text": "Soon, Lord Shiva himself arrives at the gates...",
+   "t0": 37.25,
+   "t1": 40.05,
+   "f0": 1118,
+   "f1": 1202,
+   "words": [
+    {
+     "w": "Soon,",
+     "f": 1118
+    },
+    {
+     "w": "Lord",
+     "f": 1127
+    },
+    {
+     "w": "Shiva",
+     "f": 1136
+    },
+    {
+     "w": "himself",
+     "f": 1147
+    },
+    {
+     "w": "arrives",
+     "f": 1163
+    },
+    {
+     "w": "at",
+     "f": 1179
+    },
+    {
+     "w": "the",
+     "f": 1183
+    },
+    {
+     "w": "gates...",
+     "f": 1190
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 9,
+   "text": "his majestic trident gleaming,",
+   "t0": 40.95,
+   "t1": 42.701,
+   "f0": 1228,
+   "f1": 1281,
+   "words": [
+    {
+     "w": "his",
+     "f": 1228
+    },
+    {
+     "w": "majestic",
+     "f": 1235
+    },
+    {
+     "w": "trident",
+     "f": 1251
+    },
+    {
+     "w": "gleaming,",
+     "f": 1265
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 9,
+   "text": "his matted locks swaying with the cosmic wind.",
+   "t0": 42.701,
+   "t1": 45.26,
+   "f0": 1281,
+   "f1": 1358,
+   "words": [
+    {
+     "w": "his",
+     "f": 1281
+    },
+    {
+     "w": "matted",
+     "f": 1287
+    },
+    {
+     "w": "locks",
+     "f": 1299
+    },
+    {
+     "w": "swaying",
+     "f": 1309
+    },
+    {
+     "w": "with",
+     "f": 1323
+    },
+    {
+     "w": "the",
+     "f": 1332
+    },
+    {
+     "w": "cosmic",
+     "f": 1338
+    },
+    {
+     "w": "wind.",
+     "f": 1350
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 10,
+   "text": "The divine boy steps forward,",
+   "t0": 46.36,
+   "t1": 47.975,
+   "f0": 1391,
+   "f1": 1439,
+   "words": [
+    {
+     "w": "The",
+     "f": 1391
+    },
+    {
+     "w": "divine",
+     "f": 1397
+    },
+    {
+     "w": "boy",
+     "f": 1409
+    },
+    {
+     "w": "steps",
+     "f": 1415
+    },
+    {
+     "w": "forward,",
+     "f": 1425
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 10,
+   "text": "blocking the path with quiet courage...",
+   "t0": 47.975,
+   "t1": 50.06,
+   "f0": 1439,
+   "f1": 1502,
+   "words": [
+    {
+     "w": "blocking",
+     "f": 1439
+    },
+    {
+     "w": "the",
+     "f": 1455
+    },
+    {
+     "w": "path",
+     "f": 1461
+    },
+    {
+     "w": "with",
+     "f": 1470
+    },
+    {
+     "w": "quiet",
+     "f": 1478
+    },
+    {
+     "w": "courage...",
+     "f": 1488
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 11,
+   "text": "refusing entry to the mighty destroyer of the universe.",
+   "t0": 50.96,
+   "t1": 54.08,
+   "f0": 1529,
+   "f1": 1622,
+   "words": [
+    {
+     "w": "refusing",
+     "f": 1529
+    },
+    {
+     "w": "entry",
+     "f": 1545
+    },
+    {
+     "w": "to",
+     "f": 1555
+    },
+    {
+     "w": "the",
+     "f": 1559
+    },
+    {
+     "w": "mighty",
+     "f": 1565
+    },
+    {
+     "w": "destroyer",
+     "f": 1578
+    },
+    {
+     "w": "of",
+     "f": 1596
+    },
+    {
+     "w": "the",
+     "f": 1600
+    },
+    {
+     "w": "universe.",
+     "f": 1606
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 12,
+   "text": "Shiva is stunned by the mortal child's audacity...",
+   "t0": 55.18,
+   "t1": 57.91,
+   "f0": 1655,
+   "f1": 1737,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 1655
+    },
+    {
+     "w": "is",
+     "f": 1666
+    },
+    {
+     "w": "stunned",
+     "f": 1670
+    },
+    {
+     "w": "by",
+     "f": 1685
+    },
+    {
+     "w": "the",
+     "f": 1689
+    },
+    {
+     "w": "mortal",
+     "f": 1695
+    },
+    {
+     "w": "child's",
+     "f": 1708
+    },
+    {
+     "w": "audacity...",
+     "f": 1720
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 13,
+   "text": "and his divine attendants rush forward",
+   "t0": 58.81,
+   "t1": 60.997,
+   "f0": 1764,
+   "f1": 1830,
+   "words": [
+    {
+     "w": "and",
+     "f": 1764
+    },
+    {
+     "w": "his",
+     "f": 1770
+    },
+    {
+     "w": "divine",
+     "f": 1776
+    },
+    {
+     "w": "attendants",
+     "f": 1788
+    },
+    {
+     "w": "rush",
+     "f": 1808
+    },
+    {
+     "w": "forward",
+     "f": 1816
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 13,
+   "text": "to clear the path,",
+   "t0": 60.997,
+   "t1": 61.925,
+   "f0": 1830,
+   "f1": 1858,
+   "words": [
+    {
+     "w": "to",
+     "f": 1830
+    },
+    {
+     "w": "clear",
+     "f": 1834
+    },
+    {
+     "w": "the",
+     "f": 1844
+    },
+    {
+     "w": "path,",
+     "f": 1850
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 13,
+   "text": "but the boy defeats them all with ease.",
+   "t0": 61.925,
+   "t1": 63.98,
+   "f0": 1858,
+   "f1": 1919,
+   "words": [
+    {
+     "w": "but",
+     "f": 1858
+    },
+    {
+     "w": "the",
+     "f": 1864
+    },
+    {
+     "w": "boy",
+     "f": 1870
+    },
+    {
+     "w": "defeats",
+     "f": 1876
+    },
+    {
+     "w": "them",
+     "f": 1890
+    },
+    {
+     "w": "all",
+     "f": 1898
+    },
+    {
+     "w": "with",
+     "f": 1903
+    },
+    {
+     "w": "ease.",
+     "f": 1911
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 14,
+   "text": "Enraged by this unknown challenger,",
+   "t0": 65.08,
+   "t1": 67.31,
+   "f0": 1952,
+   "f1": 2019,
+   "words": [
+    {
+     "w": "Enraged",
+     "f": 1952
+    },
+    {
+     "w": "by",
+     "f": 1968
+    },
+    {
+     "w": "this",
+     "f": 1972
+    },
+    {
+     "w": "unknown",
+     "f": 1981
+    },
+    {
+     "w": "challenger,",
+     "f": 1997
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 14,
+   "text": "Shiva draws his shiny blade...",
+   "t0": 67.31,
+   "t1": 69.02,
+   "f0": 2019,
+   "f1": 2071,
+   "words": [
+    {
+     "w": "Shiva",
+     "f": 2019
+    },
+    {
+     "w": "draws",
+     "f": 2030
+    },
+    {
+     "w": "his",
+     "f": 2042
+    },
+    {
+     "w": "shiny",
+     "f": 2048
+    },
+    {
+     "w": "blade...",
+     "f": 2059
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 15,
+   "text": "and in a sudden flash of cosmic wrath,",
+   "t0": 69.92,
+   "t1": 72.144,
+   "f0": 2098,
+   "f1": 2164,
+   "words": [
+    {
+     "w": "and",
+     "f": 2098
+    },
+    {
+     "w": "in",
+     "f": 2104
+    },
+    {
+     "w": "a",
+     "f": 2109
+    },
+    {
+     "w": "sudden",
+     "f": 2111
+    },
+    {
+     "w": "flash",
+     "f": 2124
+    },
+    {
+     "w": "of",
+     "f": 2135
+    },
+    {
+     "w": "cosmic",
+     "f": 2140
+    },
+    {
+     "w": "wrath,",
+     "f": 2153
+    }
+   ]
+  },
+  {
+   "i": 28,
+   "line": 15,
+   "text": "strikes off the boy's head.",
+   "t0": 72.144,
+   "t1": 73.7,
+   "f0": 2164,
+   "f1": 2211,
+   "words": [
+    {
+     "w": "strikes",
+     "f": 2164
+    },
+    {
+     "w": "off",
+     "f": 2180
+    },
+    {
+     "w": "the",
+     "f": 2187
+    },
+    {
+     "w": "boy's",
+     "f": 2193
+    },
+    {
+     "w": "head.",
+     "f": 2202
+    }
+   ]
+  },
+  {
+   "i": 29,
+   "line": 16,
+   "text": "Goddess Parvati rushes out from her chambers,",
+   "t0": 74.8,
+   "t1": 77.389,
+   "f0": 2244,
+   "f1": 2322,
+   "words": [
+    {
+     "w": "Goddess",
+     "f": 2244
+    },
+    {
+     "w": "Parvati",
+     "f": 2258
+    },
+    {
+     "w": "rushes",
+     "f": 2273
+    },
+    {
+     "w": "out",
+     "f": 2285
+    },
+    {
+     "w": "from",
+     "f": 2291
+    },
+    {
+     "w": "her",
+     "f": 2299
+    },
+    {
+     "w": "chambers,",
+     "f": 2305
+    }
+   ]
+  },
+  {
+   "i": 30,
+   "line": 16,
+   "text": "screaming in unbearable grief...",
+   "t0": 77.389,
+   "t1": 79.16,
+   "f0": 2322,
+   "f1": 2375,
+   "words": [
+    {
+     "w": "screaming",
+     "f": 2322
+    },
+    {
+     "w": "in",
+     "f": 2340
+    },
+    {
+     "w": "unbearable",
+     "f": 2344
+    },
+    {
+     "w": "grief...",
+     "f": 2365
+    }
+   ]
+  },
+  {
+   "i": 31,
+   "line": 17,
+   "text": "as she beholds her lifeless creation lying",
+   "t0": 80.06,
+   "t1": 82.501,
+   "f0": 2402,
+   "f1": 2475,
+   "words": [
+    {
+     "w": "as",
+     "f": 2402
+    },
+    {
+     "w": "she",
+     "f": 2406
+    },
+    {
+     "w": "beholds",
+     "f": 2412
+    },
+    {
+     "w": "her",
+     "f": 2426
+    },
+    {
+     "w": "lifeless",
+     "f": 2432
+    },
+    {
+     "w": "creation",
+     "f": 2449
+    },
+    {
+     "w": "lying",
+     "f": 2465
+    }
+   ]
+  },
+  {
+   "i": 32,
+   "line": 17,
+   "text": "in a pool of blood.",
+   "t0": 82.501,
+   "t1": 83.45,
+   "f0": 2475,
+   "f1": 2504,
+   "words": [
+    {
+     "w": "in",
+     "f": 2475
+    },
+    {
+     "w": "a",
+     "f": 2479
+    },
+    {
+     "w": "pool",
+     "f": 2481
+    },
+    {
+     "w": "of",
+     "f": 2489
+    },
+    {
+     "w": "blood.",
+     "f": 2493
+    }
+   ]
+  },
+  {
+   "i": 33,
+   "line": 18,
+   "text": "Realizing his terrible mistake,",
+   "t0": 84.55,
+   "t1": 86.516,
+   "f0": 2536,
+   "f1": 2595,
+   "words": [
+    {
+     "w": "Realizing",
+     "f": 2536
+    },
+    {
+     "w": "his",
+     "f": 2556
+    },
+    {
+     "w": "terrible",
+     "f": 2563
+    },
+    {
+     "w": "mistake,",
+     "f": 2580
+    }
+   ]
+  },
+  {
+   "i": 34,
+   "line": 18,
+   "text": "the Lord of Kailash vows",
+   "t0": 86.516,
+   "t1": 87.972,
+   "f0": 2595,
+   "f1": 2639,
+   "words": [
+    {
+     "w": "the",
+     "f": 2595
+    },
+    {
+     "w": "Lord",
+     "f": 2602
+    },
+    {
+     "w": "of",
+     "f": 2611
+    },
+    {
+     "w": "Kailash",
+     "f": 2615
+    },
+    {
+     "w": "vows",
+     "f": 2630
+    }
+   ]
+  },
+  {
+   "i": 35,
+   "line": 18,
+   "text": "to restore life to the brave child...",
+   "t0": 87.972,
+   "t1": 90.01,
+   "f0": 2639,
+   "f1": 2700,
+   "words": [
+    {
+     "w": "to",
+     "f": 2639
+    },
+    {
+     "w": "restore",
+     "f": 2644
+    },
+    {
+     "w": "life",
+     "f": 2659
+    },
+    {
+     "w": "to",
+     "f": 2668
+    },
+    {
+     "w": "the",
+     "f": 2672
+    },
+    {
+     "w": "brave",
+     "f": 2678
+    },
+    {
+     "w": "child...",
+     "f": 2689
+    }
+   ]
+  },
+  {
+   "i": 36,
+   "line": 19,
+   "text": "setting in motion",
+   "t0": 90.91,
+   "t1": 91.879,
+   "f0": 2727,
+   "f1": 2756,
+   "words": [
+    {
+     "w": "setting",
+     "f": 2727
+    },
+    {
+     "w": "in",
+     "f": 2741
+    },
+    {
+     "w": "motion",
+     "f": 2745
+    }
+   ]
+  },
+  {
+   "i": 37,
+   "line": 19,
+   "text": "a divine quest that will shake the three worlds.",
+   "t0": 91.879,
+   "t1": 94.4,
+   "f0": 2756,
+   "f1": 2832,
+   "words": [
+    {
+     "w": "a",
+     "f": 2756
+    },
+    {
+     "w": "divine",
+     "f": 2758
+    },
+    {
+     "w": "quest",
+     "f": 2770
+    },
+    {
+     "w": "that",
+     "f": 2780
+    },
+    {
+     "w": "will",
+     "f": 2787
+    },
+    {
+     "w": "shake",
+     "f": 2795
+    },
+    {
+     "w": "the",
+     "f": 2805
+    },
+    {
+     "w": "three",
+     "f": 2811
+    },
+    {
+     "w": "worlds.",
+     "f": 2820
+    }
+   ]
+  }
+ ]
+}
