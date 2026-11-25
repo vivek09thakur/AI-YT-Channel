@@ -90,7 +90,9 @@ def call_gemini(model, system, messages, max_tokens):
                 u = chunk['usageMetadata']
                 usage = {'prompt_tokens': u.get('promptTokenCount'), 'completion_tokens': u.get('candidatesTokenCount'),
                          'thinking_tokens': u.get('thoughtsTokenCount')}
-        if finish and finish not in ('STOP', 'MAX_TOKENS'):
+        if finish is None:
+            raise Unavailable('Gemini stream ended without a finishReason (connection dropped mid-answer)')
+        if finish not in ('STOP', 'MAX_TOKENS'):
             raise Unavailable(f'Gemini stopped with finishReason={finish}')
         return ''.join(text), usage
     raise RuntimeError('unreachable')
