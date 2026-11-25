@@ -19,7 +19,7 @@ Reply with exactly these blocks and nothing else (no prose, no markdown outside 
 
 1. Allowed imports only: `math`, `random`, `from folk2d import *`, `from folk2d.timeline import Timeline`. Nothing else (no os, sys, json, pathlib, PIL, numpy, subprocess, open(), exec(), eval(), `__import__`).
 2. Module-level: `T = Timeline()`, `SHOT_DEFS`, `SHOTS`, `FN`, `render_frame(f)`, `CUES`, `MUSIC` must exist, exactly like the example.
-3. `SHOT_DEFS` = list of `(shot_name, phrase_substring)`; each substring must be a distinctive **verbatim** fragment of one phrase from the brief (copy-paste it). Shots must follow narration order; the first shot starts at frame 0. Use 8-16 shots for a 2 minute script (one shot per idea or place; roughly every 2-5 phrases).
+3. `SHOT_DEFS` = list of `(shot_name, phrase_substring)`; each substring must be a distinctive **verbatim** fragment of one phrase from the brief (copy-paste it). Shots must follow narration order; the first shot starts at frame 0. Use 6-10 shots for a 60-80 second script (one shot per idea or place; roughly every 2-4 phrases).
 4. Every shot must draw at least one character (`draw_char`) or animal (`draw_animal`) in every frame. Only a final title-card shot may be an exception, and even then draw the hero.
 5. Only use the phrase texts given in the brief with `T.start/T.end/T.word/T.span` (again: verbatim substrings). Never invent frame numbers for narration timing; derive them from `T`.
 6. `render_frame(f)` must always return `c.finish()` of a fresh `Canvas()` and must call `sub(c, f)` (the subtitle) last. Never raise. Avoid division by zero when a shot is short (`max(1, n)`).

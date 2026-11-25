@@ -1,7 +1,8 @@
 name: Generate story video
 
-# Daily: an LLM looks at the stories already on the videos branch, picks the next one (continues a saga or moves to a
-# tradition not covered lately), writes the 2-minute narration, then renders, publishes and uploads it (group "story").
+# Daily: an LLM looks at the stories already on the videos branch, picks the next one (a self-contained episode from a
+# tradition not covered lately; never a saga continuation, never a repeat), writes the 60-80 s narration, then renders,
+# publishes and uploads it (group "story"). A subject that is already on the channel stops the run before rendering.
 # Scheduled and auto-triggered runs render shorts (9:16) only; pick formats=landscape or both by hand when you want
 # the 16:9 video. By hand: same, or give your own topic / script.
 
@@ -30,7 +31,7 @@ on:
         required: false
         type: string
       theme:
-        description: 'Auto mode only: steer the pick, e.g. "Ramayana" or "continue the Sati saga"'
+        description: 'Auto mode only: steer the pick, e.g. "Ramayana" or "Hanuman"'
         required: false
         type: string
       formats:
@@ -209,8 +210,8 @@ jobs:
       - name: Estimate Actions minutes for this run
         id: need
         run: |
-          # author ~15 min + ~35 min per rendered format + publish ~3 min
-          case "$FORMATS" in both) n=90 ;; *) n=55 ;; esac
+          # author ~15 min + ~20 min per rendered format (60-80 s video) + publish ~3 min
+          case "$FORMATS" in both) n=60 ;; *) n=40 ;; esac
           echo "minutes=$n" >> "$GITHUB_OUTPUT"
       - name: Check quotas
         id: check
@@ -251,7 +252,6 @@ jobs:
         run: |
           pip install -q -r pipeline/requirements.txt -r pipeline/folk/requirements.txt
       - name: Previously published stories (videos branch index)
-        if: inputs.topic == '' && inputs.script == '' && inputs.script_file == ''
         run: |
           mkdir -p site
           curl -fsSL -o site/videos.json -H "Authorization: Bearer ${{ github.token }}" -H "Accept: application/vnd.github.raw" \
@@ -295,6 +295,11 @@ jobs:
           slug=$(printf '%s' "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40)
           echo "slug=${slug:-story}" >> "$GITHUB_OUTPUT"
         env:
+          TOPIC: ${{ steps.topic.outputs.topic }}
+      - name: Not published before? (slug and title against the videos branch index)
+        run: python pipeline/dedupe.py --index site/videos.json --slug "$SLUG" --title "$TOPIC"
+        env:
+          SLUG: ${{ steps.slug.outputs.slug }}
           TOPIC: ${{ steps.topic.outputs.topic }}
       - name: Render matrix from formats input
         id: formats
@@ -461,6 +466,12 @@ jobs:
         run: |
           git clone --depth 1 --branch videos "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" site 2>/dev/null \
             || { git init site && cd site && git checkout -b videos && git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"; }
+      - name: Not published before? (fresh index; catches a repeat published since the pick)
+        run: |
+          title=$(python -c "import json;print(json.load(open('final/meta.json')).get('title',''))")
+          python main/pipeline/dedupe.py --index site/videos.json --slug "${{ needs.author.outputs.slug }}" --title "$TOPIC" --title "$title"
+        env:
+          TOPIC: ${{ needs.author.outputs.topic }}
       - name: Add video + script + rebuild overview
         run: |
           mkdir -p site/scripts && cp bundle/work/script.txt "site/scripts/${{ needs.author.outputs.slug }}-${{ github.run_number }}.txt"

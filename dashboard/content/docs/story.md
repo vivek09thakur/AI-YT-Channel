@@ -17,8 +17,14 @@ stories/<slug>/     generated: story.py meta.json phrases.json narration.json sh
 ## Pipeline (`pipeline/folk/`)
 
 0. `pick_story.py` (auto mode: no topic / script given, or the daily schedule) reads `videos.json` from the `videos` branch,
-   asks the LLM for the next story - continue the saga when the last ones form a sequence, otherwise a tradition not covered
-   lately - and writes the 230-320 word narration (`work/script.txt`, `work/pick.json`). `theme` input steers it.
+   asks the LLM for the next story - always a self-contained episode a first-time viewer can follow (no saga continuation, no
+   part / episode numbers, no teaser ending), from a tradition not used by the last two stories, with a curiosity-hook title -
+   and writes the 120-170 word narration (60-80 s; `work/script.txt`, `work/pick.json`). `theme` input steers it. A subject
+   that repeats or nearly repeats a published title (`pipeline/dedupe.py`: same slug, or 60 % of the meaningful title words
+   shared) is rejected and the LLM is asked again.
+   The workflow runs the same check against the index right after the slug is known (before any TTS / render minutes are
+   spent, also for a hand-given topic) and once more against a fresh index just before publishing, so a story that is
+   already on the channel is never posted twice; the run fails with `already on the channel: ...` and nothing is uploaded.
 1. `tts.py` narration -> `phrases.py` splits it into <= 9-word phrases with frame timings -> `work/phrases.json`
 2. `generate_folk.py` sends `prompt/CONTRACT_FOLK.md` + the example + the phrase brief to the LLM, parses `story.py`/`meta.json`,
    runs `check_story.py` and feeds the problems back (3 attempts, provider fallback via `generate_story.call_with_fallback`).
@@ -51,4 +57,4 @@ python pipeline/folk/render_folk.py --story .github/skills/folk-art-video/storie
 Env knobs: `FOLK_ASPECT` (shorts|landscape), `FOLK_SS` (supersampling, 2 = production, 1 = quick), `FOLK_PHRASES` (path),
 `FOLK_LZ` (landscape world scale, 0.7), `FOLK_STRICT=1` (frame errors fatal), `FOLK_DEVANAGARI=1` (require a Devanagari-capable font).
 
-Speed: about 0.25 s per frame per core at `FOLK_SS=2`; a 2 minute video (3600 frames) takes ~15 min on 10 cores, ~40 min on a 4-core runner.
+Speed: about 0.25 s per frame per core at `FOLK_SS=2`; a 75 s video (2250 frames) takes ~9 min on 10 cores, ~25 min on a 4-core runner.
