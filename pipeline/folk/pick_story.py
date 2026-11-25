@@ -93,7 +93,7 @@ def main():
     ap.add_argument('--model', default='')
     ap.add_argument('--theme', default='', help='steer the pick toward a tradition or a subject, e.g. "Ramayana" or "Hanuman"')
     ap.add_argument('--notes', default='')
-    ap.add_argument('--attempts', type=int, default=3)
+    ap.add_argument('--attempts', type=int, default=5)
     a = ap.parse_args()
 
     used = load_index(a.used)

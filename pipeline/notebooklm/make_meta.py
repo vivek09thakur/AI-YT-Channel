@@ -46,7 +46,8 @@ def parse_answer(text):
     if not m:
         return {}
     try:
-        d = json.loads(m.group(0))
+        # strict=False: models often put real newlines inside the "script" string (paragraph breaks), which strict JSON rejects
+        d = json.loads(m.group(0), strict=False)
     except json.JSONDecodeError:
         return {}
     return d if isinstance(d, dict) else {}
