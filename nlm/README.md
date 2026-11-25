@@ -4,6 +4,7 @@ Newest first. Auto-researched 9:16 Video Overviews. Open `nlm/index.html` for th
 
 | Date | Genre | Title | Length | Video | Run |
 |---|---|---|---|---|---|
+| 2026-11-25 | physics | **Why Are Soap Bubbles Always Round?** | 1:07 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-soap-bubbles-are-always-round-19/reel.mp4) (7 MB) | [#19](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45527740144) |
 | 2026-11-24 | space | **Why Do You Weigh Less at the Equator?** | 1:11 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-you-would-weigh-less-on-the-equator-15/reel.mp4) (5 MB) | [#15](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45367768507) |
 | 2026-11-24 | ai | **How Does AI Turn Words Into Pictures?** | 1:12 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/how-text-to-image-ai-generates-pictures-14/reel.mp4) (8 MB) | [#14](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45307054905) |
 | 2026-11-23 | science | **Does Time Pass Faster at Higher Altitudes?** | 1:04 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-time-moves-slower-at-higher-altitude-12/reel.mp4) (6 MB) | [#12](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45150488352) |
