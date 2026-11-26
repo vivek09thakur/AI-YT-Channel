@@ -4,6 +4,7 @@ Newest first. Landscape = YouTube 16:9, Shorts = 9:16. Open `index.html` (or ena
 
 | Date | Title | Topic | Length | Landscape | Shorts | Run |
 |---|---|---|---|---|---|---|
+| 2026-11-26 | **Why Krishna Stole the Clothes of the Gopis** | Why Krishna Stole the Clothes of the Gopis | 0:52 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-krishna-stole-the-clothes-of-the-gop-49/shorts.mp4) (5 MB) | [#49](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45799187525) |
 | 2026-11-26 | **Why Hanuman Forgot His Divine Powers** | Why Hanuman forgot his own divine powers | 1:01 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-hanuman-forgot-his-own-divine-powers-48/shorts.mp4) (7 MB) | [#48](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45750647804) |
 | 2026-11-25 | **The Birth of Ganesha: Creation of the Elephant-Headed God** | The Birth of Ganesha: Creation of the Elephant-Headed God | 1:37 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/the-birth-of-ganesha-creation-of-the-ele-40/shorts.mp4) (10 MB) | [#40](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45597587177) |
 | 2026-11-25 | **Shiva and Parvati's Wedding: The Divine Union** | Shiva and Parvati's Wedding: The Divine Union | 1:46 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/shiva-and-parvati-s-wedding-the-divine-u-38/shorts.mp4) (11 MB) | [#38](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45531303876) |
