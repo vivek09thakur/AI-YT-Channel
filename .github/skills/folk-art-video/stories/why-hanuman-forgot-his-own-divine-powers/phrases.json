@@ -1,0 +1,832 @@
+{
+ "fps": 30,
+ "duration": 61.33,
+ "total_frames": 1840,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "What happens when the strongest being",
+   "t0": 0.8,
+   "t1": 2.71,
+   "f0": 24,
+   "f1": 81,
+   "words": [
+    {
+     "w": "What",
+     "f": 24
+    },
+    {
+     "w": "happens",
+     "f": 31
+    },
+    {
+     "w": "when",
+     "f": 44
+    },
+    {
+     "w": "the",
+     "f": 51
+    },
+    {
+     "w": "strongest",
+     "f": 56
+    },
+    {
+     "w": "being",
+     "f": 72
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "in the universe forgets his own strength...",
+   "t0": 2.71,
+   "t1": 4.74,
+   "f0": 81,
+   "f1": 142,
+   "words": [
+    {
+     "w": "in",
+     "f": 81
+    },
+    {
+     "w": "the",
+     "f": 85
+    },
+    {
+     "w": "universe",
+     "f": 90
+    },
+    {
+     "w": "forgets",
+     "f": 105
+    },
+    {
+     "w": "his",
+     "f": 117
+    },
+    {
+     "w": "own",
+     "f": 123
+    },
+    {
+     "w": "strength...",
+     "f": 128
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "As a child, young Hanuman flies toward the sun,",
+   "t0": 6.19,
+   "t1": 9.2,
+   "f0": 186,
+   "f1": 276,
+   "words": [
+    {
+     "w": "As",
+     "f": 186
+    },
+    {
+     "w": "a",
+     "f": 191
+    },
+    {
+     "w": "child,",
+     "f": 193
+    },
+    {
+     "w": "young",
+     "f": 205
+    },
+    {
+     "w": "Hanuman",
+     "f": 217
+    },
+    {
+     "w": "flies",
+     "f": 235
+    },
+    {
+     "w": "toward",
+     "f": 247
+    },
+    {
+     "w": "the",
+     "f": 261
+    },
+    {
+     "w": "sun,",
+     "f": 269
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "mistaking it for a ripe golden fruit.",
+   "t0": 9.2,
+   "t1": 11.64,
+   "f0": 276,
+   "f1": 349,
+   "words": [
+    {
+     "w": "mistaking",
+     "f": 276
+    },
+    {
+     "w": "it",
+     "f": 298
+    },
+    {
+     "w": "for",
+     "f": 303
+    },
+    {
+     "w": "a",
+     "f": 310
+    },
+    {
+     "w": "ripe",
+     "f": 313
+    },
+    {
+     "w": "golden",
+     "f": 322
+    },
+    {
+     "w": "fruit.",
+     "f": 337
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "The gods panic, and Indra hurls his thunderbolt,",
+   "t0": 12.19,
+   "t1": 15.009,
+   "f0": 366,
+   "f1": 450,
+   "words": [
+    {
+     "w": "The",
+     "f": 366
+    },
+    {
+     "w": "gods",
+     "f": 372
+    },
+    {
+     "w": "panic,",
+     "f": 381
+    },
+    {
+     "w": "and",
+     "f": 392
+    },
+    {
+     "w": "Indra",
+     "f": 398
+    },
+    {
+     "w": "hurls",
+     "f": 409
+    },
+    {
+     "w": "his",
+     "f": 420
+    },
+    {
+     "w": "thunderbolt,",
+     "f": 426
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "striking the little monkey down.",
+   "t0": 15.009,
+   "t1": 16.96,
+   "f0": 450,
+   "f1": 509,
+   "words": [
+    {
+     "w": "striking",
+     "f": 450
+    },
+    {
+     "w": "the",
+     "f": 468
+    },
+    {
+     "w": "little",
+     "f": 474
+    },
+    {
+     "w": "monkey",
+     "f": 487
+    },
+    {
+     "w": "down.",
+     "f": 500
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "Vayu, the wind god, is heartbroken.",
+   "t0": 18.06,
+   "t1": 20.98,
+   "f0": 542,
+   "f1": 629,
+   "words": [
+    {
+     "w": "Vayu,",
+     "f": 542
+    },
+    {
+     "w": "the",
+     "f": 555
+    },
+    {
+     "w": "wind",
+     "f": 565
+    },
+    {
+     "w": "god,",
+     "f": 577
+    },
+    {
+     "w": "is",
+     "f": 587
+    },
+    {
+     "w": "heartbroken.",
+     "f": 594
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 4,
+   "text": "He draws all air from the three worlds,",
+   "t0": 21.53,
+   "t1": 23.682,
+   "f0": 646,
+   "f1": 710,
+   "words": [
+    {
+     "w": "He",
+     "f": 646
+    },
+    {
+     "w": "draws",
+     "f": 650
+    },
+    {
+     "w": "all",
+     "f": 660
+    },
+    {
+     "w": "air",
+     "f": 667
+    },
+    {
+     "w": "from",
+     "f": 673
+    },
+    {
+     "w": "the",
+     "f": 681
+    },
+    {
+     "w": "three",
+     "f": 688
+    },
+    {
+     "w": "worlds,",
+     "f": 698
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 4,
+   "text": "bringing creation to the brink of suffocation.",
+   "t0": 23.682,
+   "t1": 26.39,
+   "f0": 710,
+   "f1": 792,
+   "words": [
+    {
+     "w": "bringing",
+     "f": 710
+    },
+    {
+     "w": "creation",
+     "f": 727
+    },
+    {
+     "w": "to",
+     "f": 744
+    },
+    {
+     "w": "the",
+     "f": 748
+    },
+    {
+     "w": "brink",
+     "f": 754
+    },
+    {
+     "w": "of",
+     "f": 765
+    },
+    {
+     "w": "suffocation.",
+     "f": 769
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 5,
+   "text": "To restore balance,",
+   "t0": 26.94,
+   "t1": 28.056,
+   "f0": 808,
+   "f1": 842,
+   "words": [
+    {
+     "w": "To",
+     "f": 808
+    },
+    {
+     "w": "restore",
+     "f": 812
+    },
+    {
+     "w": "balance,",
+     "f": 827
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 5,
+   "text": "Brahma and the gods shower Hanuman",
+   "t0": 28.056,
+   "t1": 30.078,
+   "f0": 842,
+   "f1": 902,
+   "words": [
+    {
+     "w": "Brahma",
+     "f": 842
+    },
+    {
+     "w": "and",
+     "f": 854
+    },
+    {
+     "w": "the",
+     "f": 861
+    },
+    {
+     "w": "gods",
+     "f": 867
+    },
+    {
+     "w": "shower",
+     "f": 875
+    },
+    {
+     "w": "Hanuman",
+     "f": 888
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "with ultimate boons of invincibility.",
+   "t0": 30.078,
+   "t1": 32.31,
+   "f0": 902,
+   "f1": 969,
+   "words": [
+    {
+     "w": "with",
+     "f": 902
+    },
+    {
+     "w": "ultimate",
+     "f": 911
+    },
+    {
+     "w": "boons",
+     "f": 927
+    },
+    {
+     "w": "of",
+     "f": 938
+    },
+    {
+     "w": "invincibility.",
+     "f": 942
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 6,
+   "text": "Yet, a group",
+   "t0": 33.41,
+   "t1": 34.095,
+   "f0": 1002,
+   "f1": 1023,
+   "words": [
+    {
+     "w": "Yet,",
+     "f": 1002
+    },
+    {
+     "w": "a",
+     "f": 1009
+    },
+    {
+     "w": "group",
+     "f": 1011
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 6,
+   "text": "of playful sages worry about his endless pranks.",
+   "t0": 34.095,
+   "t1": 37.14,
+   "f0": 1023,
+   "f1": 1114,
+   "words": [
+    {
+     "w": "of",
+     "f": 1023
+    },
+    {
+     "w": "playful",
+     "f": 1027
+    },
+    {
+     "w": "sages",
+     "f": 1043
+    },
+    {
+     "w": "worry",
+     "f": 1055
+    },
+    {
+     "w": "about",
+     "f": 1066
+    },
+    {
+     "w": "his",
+     "f": 1078
+    },
+    {
+     "w": "endless",
+     "f": 1085
+    },
+    {
+     "w": "pranks.",
+     "f": 1100
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 7,
+   "text": "They place a gentle curse upon him...",
+   "t0": 37.69,
+   "t1": 39.62,
+   "f0": 1131,
+   "f1": 1189,
+   "words": [
+    {
+     "w": "They",
+     "f": 1131
+    },
+    {
+     "w": "place",
+     "f": 1139
+    },
+    {
+     "w": "a",
+     "f": 1149
+    },
+    {
+     "w": "gentle",
+     "f": 1151
+    },
+    {
+     "w": "curse",
+     "f": 1164
+    },
+    {
+     "w": "upon",
+     "f": 1174
+    },
+    {
+     "w": "him...",
+     "f": 1182
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 8,
+   "text": "he will completely forget",
+   "t0": 40.52,
+   "t1": 41.869,
+   "f0": 1216,
+   "f1": 1256,
+   "words": [
+    {
+     "w": "he",
+     "f": 1216
+    },
+    {
+     "w": "will",
+     "f": 1219
+    },
+    {
+     "w": "completely",
+     "f": 1227
+    },
+    {
+     "w": "forget",
+     "f": 1245
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 8,
+   "text": "his immense powers until someone reminds him",
+   "t0": 41.869,
+   "t1": 44.2,
+   "f0": 1256,
+   "f1": 1326,
+   "words": [
+    {
+     "w": "his",
+     "f": 1256
+    },
+    {
+     "w": "immense",
+     "f": 1262
+    },
+    {
+     "w": "powers",
+     "f": 1274
+    },
+    {
+     "w": "until",
+     "f": 1286
+    },
+    {
+     "w": "someone",
+     "f": 1295
+    },
+    {
+     "w": "reminds",
+     "f": 1308
+    },
+    {
+     "w": "him",
+     "f": 1320
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "in his hour of greatest need.",
+   "t0": 44.2,
+   "t1": 45.61,
+   "f0": 1326,
+   "f1": 1368,
+   "words": [
+    {
+     "w": "in",
+     "f": 1326
+    },
+    {
+     "w": "his",
+     "f": 1330
+    },
+    {
+     "w": "hour",
+     "f": 1335
+    },
+    {
+     "w": "of",
+     "f": 1343
+    },
+    {
+     "w": "greatest",
+     "f": 1346
+    },
+    {
+     "w": "need.",
+     "f": 1361
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 9,
+   "text": "Years later, sitting quietly on a shore,",
+   "t0": 46.71,
+   "t1": 49.054,
+   "f0": 1401,
+   "f1": 1472,
+   "words": [
+    {
+     "w": "Years",
+     "f": 1401
+    },
+    {
+     "w": "later,",
+     "f": 1412
+    },
+    {
+     "w": "sitting",
+     "f": 1423
+    },
+    {
+     "w": "quietly",
+     "f": 1439
+    },
+    {
+     "w": "on",
+     "f": 1454
+    },
+    {
+     "w": "a",
+     "f": 1458
+    },
+    {
+     "w": "shore,",
+     "f": 1461
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 9,
+   "text": "he needs this exact memory",
+   "t0": 49.054,
+   "t1": 50.665,
+   "f0": 1472,
+   "f1": 1520,
+   "words": [
+    {
+     "w": "he",
+     "f": 1472
+    },
+    {
+     "w": "needs",
+     "f": 1476
+    },
+    {
+     "w": "this",
+     "f": 1487
+    },
+    {
+     "w": "exact",
+     "f": 1496
+    },
+    {
+     "w": "memory",
+     "f": 1507
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 9,
+   "text": "to leap across the ocean.",
+   "t0": 50.665,
+   "t1": 52.13,
+   "f0": 1520,
+   "f1": 1564,
+   "words": [
+    {
+     "w": "to",
+     "f": 1520
+    },
+    {
+     "w": "leap",
+     "f": 1524
+    },
+    {
+     "w": "across",
+     "f": 1533
+    },
+    {
+     "w": "the",
+     "f": 1546
+    },
+    {
+     "w": "ocean.",
+     "f": 1553
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 10,
+   "text": "Sometimes, your greatest strength only awakens when",
+   "t0": 53.23,
+   "t1": 56.183,
+   "f0": 1597,
+   "f1": 1685,
+   "words": [
+    {
+     "w": "Sometimes,",
+     "f": 1597
+    },
+    {
+     "w": "your",
+     "f": 1615
+    },
+    {
+     "w": "greatest",
+     "f": 1623
+    },
+    {
+     "w": "strength",
+     "f": 1639
+    },
+    {
+     "w": "only",
+     "f": 1655
+    },
+    {
+     "w": "awakens",
+     "f": 1663
+    },
+    {
+     "w": "when",
+     "f": 1677
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 10,
+   "text": "you finally remember who you truly are.",
+   "t0": 56.183,
+   "t1": 58.33,
+   "f0": 1685,
+   "f1": 1750,
+   "words": [
+    {
+     "w": "you",
+     "f": 1685
+    },
+    {
+     "w": "finally",
+     "f": 1692
+    },
+    {
+     "w": "remember",
+     "f": 1706
+    },
+    {
+     "w": "who",
+     "f": 1722
+    },
+    {
+     "w": "you",
+     "f": 1728
+    },
+    {
+     "w": "truly",
+     "f": 1734
+    },
+    {
+     "w": "are.",
+     "f": 1744
+    }
+   ]
+  }
+ ]
+}
