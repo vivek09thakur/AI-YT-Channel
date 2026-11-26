@@ -1,0 +1,84 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 61.33,
+ "lines": [
+  {
+   "i": 0,
+   "text": "What happens when the strongest being in the universe forgets his own strength...",
+   "t0": 0.8,
+   "t1": 4.74,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "As a child, young Hanuman flies toward the sun, mistaking it for a ripe golden fruit.",
+   "t0": 6.19,
+   "t1": 11.64,
+   "para": true
+  },
+  {
+   "i": 2,
+   "text": "The gods panic, and Indra hurls his thunderbolt, striking the little monkey down.",
+   "t0": 12.19,
+   "t1": 16.96,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "Vayu, the wind god, is heartbroken.",
+   "t0": 18.06,
+   "t1": 20.98,
+   "para": true
+  },
+  {
+   "i": 4,
+   "text": "He draws all air from the three worlds, bringing creation to the brink of suffocation.",
+   "t0": 21.53,
+   "t1": 26.39,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "To restore balance, Brahma and the gods shower Hanuman with ultimate boons of invincibility.",
+   "t0": 26.94,
+   "t1": 32.31,
+   "para": false
+  },
+  {
+   "i": 6,
+   "text": "Yet, a group of playful sages worry about his endless pranks.",
+   "t0": 33.41,
+   "t1": 37.14,
+   "para": true
+  },
+  {
+   "i": 7,
+   "text": "They place a gentle curse upon him...",
+   "t0": 37.69,
+   "t1": 39.62,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "he will completely forget his immense powers until someone reminds him in his hour of greatest need.",
+   "t0": 40.52,
+   "t1": 45.61,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Years later, sitting quietly on a shore, he needs this exact memory to leap across the ocean.",
+   "t0": 46.71,
+   "t1": 52.13,
+   "para": true
+  },
+  {
+   "i": 10,
+   "text": "Sometimes, your greatest strength only awakens when you finally remember who you truly are.",
+   "t0": 53.23,
+   "t1": 58.33,
+   "para": true
+  }
+ ]
+}
