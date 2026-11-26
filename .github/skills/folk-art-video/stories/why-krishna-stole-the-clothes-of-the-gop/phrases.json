@@ -1,0 +1,743 @@
+{
+ "fps": 30,
+ "duration": 52.57,
+ "total_frames": 1577,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Why does the supreme playful god steal",
+   "t0": 0.8,
+   "t1": 2.902,
+   "f0": 24,
+   "f1": 87,
+   "words": [
+    {
+     "w": "Why",
+     "f": 24
+    },
+    {
+     "w": "does",
+     "f": 30
+    },
+    {
+     "w": "the",
+     "f": 38
+    },
+    {
+     "w": "supreme",
+     "f": 44
+    },
+    {
+     "w": "playful",
+     "f": 58
+    },
+    {
+     "w": "god",
+     "f": 71
+    },
+    {
+     "w": "steal",
+     "f": 77
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "the simple garments of village maidens?",
+   "t0": 2.902,
+   "t1": 5.07,
+   "f0": 87,
+   "f1": 152,
+   "words": [
+    {
+     "w": "the",
+     "f": 87
+    },
+    {
+     "w": "simple",
+     "f": 93
+    },
+    {
+     "w": "garments",
+     "f": 105
+    },
+    {
+     "w": "of",
+     "f": 121
+    },
+    {
+     "w": "village",
+     "f": 125
+    },
+    {
+     "w": "maidens?",
+     "f": 138
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "Deep in the forests of Vrindavan,",
+   "t0": 6.17,
+   "t1": 8.095,
+   "f0": 185,
+   "f1": 243,
+   "words": [
+    {
+     "w": "Deep",
+     "f": 185
+    },
+    {
+     "w": "in",
+     "f": 194
+    },
+    {
+     "w": "the",
+     "f": 198
+    },
+    {
+     "w": "forests",
+     "f": 204
+    },
+    {
+     "w": "of",
+     "f": 219
+    },
+    {
+     "w": "Vrindavan,",
+     "f": 224
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "young cowherd girls perform a sacred month-long vow.",
+   "t0": 8.095,
+   "t1": 11.16,
+   "f0": 243,
+   "f1": 335,
+   "words": [
+    {
+     "w": "young",
+     "f": 243
+    },
+    {
+     "w": "cowherd",
+     "f": 254
+    },
+    {
+     "w": "girls",
+     "f": 269
+    },
+    {
+     "w": "perform",
+     "f": 279
+    },
+    {
+     "w": "a",
+     "f": 294
+    },
+    {
+     "w": "sacred",
+     "f": 296
+    },
+    {
+     "w": "month-long",
+     "f": 309
+    },
+    {
+     "w": "vow.",
+     "f": 328
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "They bathe in the Yamuna at dawn,",
+   "t0": 11.71,
+   "t1": 13.492,
+   "f0": 351,
+   "f1": 405,
+   "words": [
+    {
+     "w": "They",
+     "f": 351
+    },
+    {
+     "w": "bathe",
+     "f": 360
+    },
+    {
+     "w": "in",
+     "f": 370
+    },
+    {
+     "w": "the",
+     "f": 374
+    },
+    {
+     "w": "Yamuna",
+     "f": 380
+    },
+    {
+     "w": "at",
+     "f": 392
+    },
+    {
+     "w": "dawn,",
+     "f": 397
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "praying to Goddess Katyayani for",
+   "t0": 13.492,
+   "t1": 15.412,
+   "f0": 405,
+   "f1": 462,
+   "words": [
+    {
+     "w": "praying",
+     "f": 405
+    },
+    {
+     "w": "to",
+     "f": 419
+    },
+    {
+     "w": "Goddess",
+     "f": 423
+    },
+    {
+     "w": "Katyayani",
+     "f": 438
+    },
+    {
+     "w": "for",
+     "f": 456
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 2,
+   "text": "a pure heart and a worthy companion.",
+   "t0": 15.412,
+   "t1": 17.4,
+   "f0": 462,
+   "f1": 522,
+   "words": [
+    {
+     "w": "a",
+     "f": 462
+    },
+    {
+     "w": "pure",
+     "f": 464
+    },
+    {
+     "w": "heart",
+     "f": 473
+    },
+    {
+     "w": "and",
+     "f": 483
+    },
+    {
+     "w": "a",
+     "f": 489
+    },
+    {
+     "w": "worthy",
+     "f": 491
+    },
+    {
+     "w": "companion.",
+     "f": 503
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 3,
+   "text": "Krishna watches them from",
+   "t0": 18.5,
+   "t1": 19.89,
+   "f0": 555,
+   "f1": 597,
+   "words": [
+    {
+     "w": "Krishna",
+     "f": 555
+    },
+    {
+     "w": "watches",
+     "f": 568
+    },
+    {
+     "w": "them",
+     "f": 582
+    },
+    {
+     "w": "from",
+     "f": 589
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "the branches of a Kadamba tree.",
+   "t0": 19.89,
+   "t1": 21.47,
+   "f0": 597,
+   "f1": 644,
+   "words": [
+    {
+     "w": "the",
+     "f": 597
+    },
+    {
+     "w": "branches",
+     "f": 602
+    },
+    {
+     "w": "of",
+     "f": 618
+    },
+    {
+     "w": "a",
+     "f": 621
+    },
+    {
+     "w": "Kadamba",
+     "f": 623
+    },
+    {
+     "w": "tree.",
+     "f": 637
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 4,
+   "text": "He decides to teach them a lesson about modesty,",
+   "t0": 22.02,
+   "t1": 24.665,
+   "f0": 661,
+   "f1": 740,
+   "words": [
+    {
+     "w": "He",
+     "f": 661
+    },
+    {
+     "w": "decides",
+     "f": 665
+    },
+    {
+     "w": "to",
+     "f": 679
+    },
+    {
+     "w": "teach",
+     "f": 683
+    },
+    {
+     "w": "them",
+     "f": 693
+    },
+    {
+     "w": "a",
+     "f": 701
+    },
+    {
+     "w": "lesson",
+     "f": 703
+    },
+    {
+     "w": "about",
+     "f": 716
+    },
+    {
+     "w": "modesty,",
+     "f": 726
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 4,
+   "text": "surrender, and the illusion of ownership.",
+   "t0": 24.665,
+   "t1": 26.97,
+   "f0": 740,
+   "f1": 809,
+   "words": [
+    {
+     "w": "surrender,",
+     "f": 740
+    },
+    {
+     "w": "and",
+     "f": 758
+    },
+    {
+     "w": "the",
+     "f": 764
+    },
+    {
+     "w": "illusion",
+     "f": 770
+    },
+    {
+     "w": "of",
+     "f": 787
+    },
+    {
+     "w": "ownership.",
+     "f": 791
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "Quietly, he gathers their sarees",
+   "t0": 28.07,
+   "t1": 29.873,
+   "f0": 842,
+   "f1": 896,
+   "words": [
+    {
+     "w": "Quietly,",
+     "f": 842
+    },
+    {
+     "w": "he",
+     "f": 856
+    },
+    {
+     "w": "gathers",
+     "f": 860
+    },
+    {
+     "w": "their",
+     "f": 874
+    },
+    {
+     "w": "sarees",
+     "f": 884
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 5,
+   "text": "and climbs higher into the leafy canopy,",
+   "t0": 29.873,
+   "t1": 32.076,
+   "f0": 896,
+   "f1": 962,
+   "words": [
+    {
+     "w": "and",
+     "f": 896
+    },
+    {
+     "w": "climbs",
+     "f": 902
+    },
+    {
+     "w": "higher",
+     "f": 914
+    },
+    {
+     "w": "into",
+     "f": 926
+    },
+    {
+     "w": "the",
+     "f": 934
+    },
+    {
+     "w": "leafy",
+     "f": 940
+    },
+    {
+     "w": "canopy,",
+     "f": 950
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 5,
+   "text": "leaving the maidens shivering in the cool morning waters.",
+   "t0": 32.076,
+   "t1": 35.28,
+   "f0": 962,
+   "f1": 1058,
+   "words": [
+    {
+     "w": "leaving",
+     "f": 962
+    },
+    {
+     "w": "the",
+     "f": 976
+    },
+    {
+     "w": "maidens",
+     "f": 982
+    },
+    {
+     "w": "shivering",
+     "f": 996
+    },
+    {
+     "w": "in",
+     "f": 1014
+    },
+    {
+     "w": "the",
+     "f": 1018
+    },
+    {
+     "w": "cool",
+     "f": 1024
+    },
+    {
+     "w": "morning",
+     "f": 1032
+    },
+    {
+     "w": "waters.",
+     "f": 1046
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 6,
+   "text": "Panic turns to laughter",
+   "t0": 36.38,
+   "t1": 37.728,
+   "f0": 1091,
+   "f1": 1132,
+   "words": [
+    {
+     "w": "Panic",
+     "f": 1091
+    },
+    {
+     "w": "turns",
+     "f": 1102
+    },
+    {
+     "w": "to",
+     "f": 1112
+    },
+    {
+     "w": "laughter",
+     "f": 1116
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 6,
+   "text": "and awe as the girls emerge,",
+   "t0": 37.728,
+   "t1": 39.211,
+   "f0": 1132,
+   "f1": 1176,
+   "words": [
+    {
+     "w": "and",
+     "f": 1132
+    },
+    {
+     "w": "awe",
+     "f": 1138
+    },
+    {
+     "w": "as",
+     "f": 1144
+    },
+    {
+     "w": "the",
+     "f": 1148
+    },
+    {
+     "w": "girls",
+     "f": 1154
+    },
+    {
+     "w": "emerge,",
+     "f": 1164
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 6,
+   "text": "finding the mischievous cowherd waiting with a gentle,",
+   "t0": 39.211,
+   "t1": 42.311,
+   "f0": 1176,
+   "f1": 1269,
+   "words": [
+    {
+     "w": "finding",
+     "f": 1176
+    },
+    {
+     "w": "the",
+     "f": 1190
+    },
+    {
+     "w": "mischievous",
+     "f": 1197
+    },
+    {
+     "w": "cowherd",
+     "f": 1219
+    },
+    {
+     "w": "waiting",
+     "f": 1233
+    },
+    {
+     "w": "with",
+     "f": 1247
+    },
+    {
+     "w": "a",
+     "f": 1255
+    },
+    {
+     "w": "gentle,",
+     "f": 1257
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 6,
+   "text": "knowing smile.",
+   "t0": 42.311,
+   "t1": 43.12,
+   "f0": 1269,
+   "f1": 1294,
+   "words": [
+    {
+     "w": "knowing",
+     "f": 1269
+    },
+    {
+     "w": "smile.",
+     "f": 1283
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 7,
+   "text": "True purity is not about what we wear,",
+   "t0": 44.22,
+   "t1": 46.332,
+   "f0": 1327,
+   "f1": 1390,
+   "words": [
+    {
+     "w": "True",
+     "f": 1327
+    },
+    {
+     "w": "purity",
+     "f": 1335
+    },
+    {
+     "w": "is",
+     "f": 1348
+    },
+    {
+     "w": "not",
+     "f": 1352
+    },
+    {
+     "w": "about",
+     "f": 1358
+    },
+    {
+     "w": "what",
+     "f": 1369
+    },
+    {
+     "w": "we",
+     "f": 1377
+    },
+    {
+     "w": "wear,",
+     "f": 1382
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 7,
+   "text": "but standing completely naked of ego before the divine.",
+   "t0": 46.332,
+   "t1": 49.57,
+   "f0": 1390,
+   "f1": 1487,
+   "words": [
+    {
+     "w": "but",
+     "f": 1390
+    },
+    {
+     "w": "standing",
+     "f": 1396
+    },
+    {
+     "w": "completely",
+     "f": 1413
+    },
+    {
+     "w": "naked",
+     "f": 1434
+    },
+    {
+     "w": "of",
+     "f": 1445
+    },
+    {
+     "w": "ego",
+     "f": 1449
+    },
+    {
+     "w": "before",
+     "f": 1455
+    },
+    {
+     "w": "the",
+     "f": 1468
+    },
+    {
+     "w": "divine.",
+     "f": 1474
+    }
+   ]
+  }
+ ]
+}

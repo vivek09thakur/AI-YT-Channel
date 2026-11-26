@@ -1,0 +1,63 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 52.57,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Why does the supreme playful god steal the simple garments of village maidens?",
+   "t0": 0.8,
+   "t1": 5.07,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "Deep in the forests of Vrindavan, young cowherd girls perform a sacred month-long vow.",
+   "t0": 6.17,
+   "t1": 11.16,
+   "para": true
+  },
+  {
+   "i": 2,
+   "text": "They bathe in the Yamuna at dawn, praying to Goddess Katyayani for a pure heart and a worthy companion.",
+   "t0": 11.71,
+   "t1": 17.4,
+   "para": false
+  },
+  {
+   "i": 3,
+   "text": "Krishna watches them from the branches of a Kadamba tree.",
+   "t0": 18.5,
+   "t1": 21.47,
+   "para": true
+  },
+  {
+   "i": 4,
+   "text": "He decides to teach them a lesson about modesty, surrender, and the illusion of ownership.",
+   "t0": 22.02,
+   "t1": 26.97,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "Quietly, he gathers their sarees and climbs higher into the leafy canopy, leaving the maidens shivering in the cool morning waters.",
+   "t0": 28.07,
+   "t1": 35.28,
+   "para": true
+  },
+  {
+   "i": 6,
+   "text": "Panic turns to laughter and awe as the girls emerge, finding the mischievous cowherd waiting with a gentle, knowing smile.",
+   "t0": 36.38,
+   "t1": 43.12,
+   "para": true
+  },
+  {
+   "i": 7,
+   "text": "True purity is not about what we wear, but standing completely naked of ego before the divine.",
+   "t0": 44.22,
+   "t1": 49.57,
+   "para": true
+  }
+ ]
+}
