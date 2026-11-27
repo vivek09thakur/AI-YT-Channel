@@ -1,0 +1,971 @@
+{
+ "fps": 30,
+ "duration": 75.2,
+ "total_frames": 2256,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Can a giant bird defeat",
+   "t0": 0.8,
+   "t1": 2.208,
+   "f0": 24,
+   "f1": 66,
+   "words": [
+    {
+     "w": "Can",
+     "f": 24
+    },
+    {
+     "w": "a",
+     "f": 31
+    },
+    {
+     "w": "giant",
+     "f": 33
+    },
+    {
+     "w": "bird",
+     "f": 44
+    },
+    {
+     "w": "defeat",
+     "f": 53
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "an almighty demon flying in a golden chariot...?",
+   "t0": 2.208,
+   "t1": 4.95,
+   "f0": 66,
+   "f1": 148,
+   "words": [
+    {
+     "w": "an",
+     "f": 66
+    },
+    {
+     "w": "almighty",
+     "f": 71
+    },
+    {
+     "w": "demon",
+     "f": 88
+    },
+    {
+     "w": "flying",
+     "f": 100
+    },
+    {
+     "w": "in",
+     "f": 113
+    },
+    {
+     "w": "a",
+     "f": 117
+    },
+    {
+     "w": "golden",
+     "f": 120
+    },
+    {
+     "w": "chariot...?",
+     "f": 133
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "High in the burning sky,",
+   "t0": 6.05,
+   "t1": 7.57,
+   "f0": 182,
+   "f1": 227,
+   "words": [
+    {
+     "w": "High",
+     "f": 182
+    },
+    {
+     "w": "in",
+     "f": 191
+    },
+    {
+     "w": "the",
+     "f": 196
+    },
+    {
+     "w": "burning",
+     "f": 203
+    },
+    {
+     "w": "sky,",
+     "f": 220
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 1,
+   "text": "brave Jatayu spots Ravana fleeing with weeping Sita.",
+   "t0": 7.57,
+   "t1": 11.09,
+   "f0": 227,
+   "f1": 333,
+   "words": [
+    {
+     "w": "brave",
+     "f": 227
+    },
+    {
+     "w": "Jatayu",
+     "f": 239
+    },
+    {
+     "w": "spots",
+     "f": 254
+    },
+    {
+     "w": "Ravana",
+     "f": 266
+    },
+    {
+     "w": "fleeing",
+     "f": 280
+    },
+    {
+     "w": "with",
+     "f": 297
+    },
+    {
+     "w": "weeping",
+     "f": 306
+    },
+    {
+     "w": "Sita.",
+     "f": 323
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "He cannot look away.",
+   "t0": 11.64,
+   "t1": 12.93,
+   "f0": 349,
+   "f1": 388,
+   "words": [
+    {
+     "w": "He",
+     "f": 349
+    },
+    {
+     "w": "cannot",
+     "f": 354
+    },
+    {
+     "w": "look",
+     "f": 369
+    },
+    {
+     "w": "away.",
+     "f": 378
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 3,
+   "text": "This noble vulture remembers",
+   "t0": 13.48,
+   "t1": 15.136,
+   "f0": 404,
+   "f1": 454,
+   "words": [
+    {
+     "w": "This",
+     "f": 404
+    },
+    {
+     "w": "noble",
+     "f": 412
+    },
+    {
+     "w": "vulture",
+     "f": 422
+    },
+    {
+     "w": "remembers",
+     "f": 436
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "a promise made to King Dasharatha.",
+   "t0": 15.136,
+   "t1": 16.99,
+   "f0": 454,
+   "f1": 510,
+   "words": [
+    {
+     "w": "a",
+     "f": 454
+    },
+    {
+     "w": "promise",
+     "f": 456
+    },
+    {
+     "w": "made",
+     "f": 470
+    },
+    {
+     "w": "to",
+     "f": 478
+    },
+    {
+     "w": "King",
+     "f": 482
+    },
+    {
+     "w": "Dasharatha.",
+     "f": 490
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 4,
+   "text": "He vows to protect the house",
+   "t0": 17.54,
+   "t1": 19.045,
+   "f0": 526,
+   "f1": 571,
+   "words": [
+    {
+     "w": "He",
+     "f": 526
+    },
+    {
+     "w": "vows",
+     "f": 530
+    },
+    {
+     "w": "to",
+     "f": 538
+    },
+    {
+     "w": "protect",
+     "f": 542
+    },
+    {
+     "w": "the",
+     "f": 556
+    },
+    {
+     "w": "house",
+     "f": 562
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 4,
+   "text": "of Raghu with his final breath.",
+   "t0": 19.045,
+   "t1": 20.68,
+   "f0": 571,
+   "f1": 620,
+   "words": [
+    {
+     "w": "of",
+     "f": 571
+    },
+    {
+     "w": "Raghu",
+     "f": 575
+    },
+    {
+     "w": "with",
+     "f": 585
+    },
+    {
+     "w": "his",
+     "f": 593
+    },
+    {
+     "w": "final",
+     "f": 599
+    },
+    {
+     "w": "breath.",
+     "f": 609
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 5,
+   "text": "With a mighty roar, Jatayu attacks.",
+   "t0": 21.78,
+   "t1": 24.54,
+   "f0": 653,
+   "f1": 736,
+   "words": [
+    {
+     "w": "With",
+     "f": 653
+    },
+    {
+     "w": "a",
+     "f": 665
+    },
+    {
+     "w": "mighty",
+     "f": 668
+    },
+    {
+     "w": "roar,",
+     "f": 686
+    },
+    {
+     "w": "Jatayu",
+     "f": 698
+    },
+    {
+     "w": "attacks.",
+     "f": 716
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 6,
+   "text": "His razor-sharp talons shatter Ravana's golden chariot.",
+   "t0": 25.09,
+   "t1": 28.24,
+   "f0": 753,
+   "f1": 847,
+   "words": [
+    {
+     "w": "His",
+     "f": 753
+    },
+    {
+     "w": "razor-sharp",
+     "f": 759
+    },
+    {
+     "w": "talons",
+     "f": 779
+    },
+    {
+     "w": "shatter",
+     "f": 792
+    },
+    {
+     "w": "Ravana's",
+     "f": 806
+    },
+    {
+     "w": "golden",
+     "f": 820
+    },
+    {
+     "w": "chariot.",
+     "f": 833
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 7,
+   "text": "Splinters rain down like autumn leaves.",
+   "t0": 28.79,
+   "t1": 31.29,
+   "f0": 864,
+   "f1": 939,
+   "words": [
+    {
+     "w": "Splinters",
+     "f": 864
+    },
+    {
+     "w": "rain",
+     "f": 884
+    },
+    {
+     "w": "down",
+     "f": 893
+    },
+    {
+     "w": "like",
+     "f": 902
+    },
+    {
+     "w": "autumn",
+     "f": 911
+    },
+    {
+     "w": "leaves.",
+     "f": 925
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 8,
+   "text": "The demon king staggers,",
+   "t0": 31.84,
+   "t1": 33.372,
+   "f0": 955,
+   "f1": 1001,
+   "words": [
+    {
+     "w": "The",
+     "f": 955
+    },
+    {
+     "w": "demon",
+     "f": 962
+    },
+    {
+     "w": "king",
+     "f": 974
+    },
+    {
+     "w": "staggers,",
+     "f": 983
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 8,
+   "text": "shocked by the sheer fury of an aged bird.",
+   "t0": 33.372,
+   "t1": 35.9,
+   "f0": 1001,
+   "f1": 1077,
+   "words": [
+    {
+     "w": "shocked",
+     "f": 1001
+    },
+    {
+     "w": "by",
+     "f": 1017
+    },
+    {
+     "w": "the",
+     "f": 1022
+    },
+    {
+     "w": "sheer",
+     "f": 1029
+    },
+    {
+     "w": "fury",
+     "f": 1040
+    },
+    {
+     "w": "of",
+     "f": 1049
+    },
+    {
+     "w": "an",
+     "f": 1054
+    },
+    {
+     "w": "aged",
+     "f": 1059
+    },
+    {
+     "w": "bird.",
+     "f": 1068
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 9,
+   "text": "Enraged, Ravana draws his celestial sword.",
+   "t0": 37.0,
+   "t1": 40.09,
+   "f0": 1110,
+   "f1": 1203,
+   "words": [
+    {
+     "w": "Enraged,",
+     "f": 1110
+    },
+    {
+     "w": "Ravana",
+     "f": 1129
+    },
+    {
+     "w": "draws",
+     "f": 1144
+    },
+    {
+     "w": "his",
+     "f": 1158
+    },
+    {
+     "w": "celestial",
+     "f": 1166
+    },
+    {
+     "w": "sword.",
+     "f": 1189
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 10,
+   "text": "Jatayu fights on, bleeding and battered,",
+   "t0": 40.64,
+   "t1": 43.131,
+   "f0": 1219,
+   "f1": 1294,
+   "words": [
+    {
+     "w": "Jatayu",
+     "f": 1219
+    },
+    {
+     "w": "fights",
+     "f": 1233
+    },
+    {
+     "w": "on,",
+     "f": 1246
+    },
+    {
+     "w": "bleeding",
+     "f": 1251
+    },
+    {
+     "w": "and",
+     "f": 1269
+    },
+    {
+     "w": "battered,",
+     "f": 1276
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 10,
+   "text": "trading flesh and feathers for Sita's freedom.",
+   "t0": 43.131,
+   "t1": 46.0,
+   "f0": 1294,
+   "f1": 1380,
+   "words": [
+    {
+     "w": "trading",
+     "f": 1294
+    },
+    {
+     "w": "flesh",
+     "f": 1310
+    },
+    {
+     "w": "and",
+     "f": 1321
+    },
+    {
+     "w": "feathers",
+     "f": 1328
+    },
+    {
+     "w": "for",
+     "f": 1346
+    },
+    {
+     "w": "Sita's",
+     "f": 1353
+    },
+    {
+     "w": "freedom.",
+     "f": 1364
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 11,
+   "text": "But time and",
+   "t0": 46.55,
+   "t1": 47.317,
+   "f0": 1396,
+   "f1": 1420,
+   "words": [
+    {
+     "w": "But",
+     "f": 1396
+    },
+    {
+     "w": "time",
+     "f": 1403
+    },
+    {
+     "w": "and",
+     "f": 1413
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 11,
+   "text": "the demon's dark boons are too strong.",
+   "t0": 47.317,
+   "t1": 49.62,
+   "f0": 1420,
+   "f1": 1489,
+   "words": [
+    {
+     "w": "the",
+     "f": 1420
+    },
+    {
+     "w": "demon's",
+     "f": 1426
+    },
+    {
+     "w": "dark",
+     "f": 1440
+    },
+    {
+     "w": "boons",
+     "f": 1449
+    },
+    {
+     "w": "are",
+     "f": 1461
+    },
+    {
+     "w": "too",
+     "f": 1468
+    },
+    {
+     "w": "strong.",
+     "f": 1475
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 12,
+   "text": "With one merciless strike,",
+   "t0": 50.17,
+   "t1": 51.859,
+   "f0": 1505,
+   "f1": 1556,
+   "words": [
+    {
+     "w": "With",
+     "f": 1505
+    },
+    {
+     "w": "one",
+     "f": 1514
+    },
+    {
+     "w": "merciless",
+     "f": 1521
+    },
+    {
+     "w": "strike,",
+     "f": 1542
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 12,
+   "text": "the sacred sword severs Jatayu's mighty wing.",
+   "t0": 51.859,
+   "t1": 54.7,
+   "f0": 1556,
+   "f1": 1641,
+   "words": [
+    {
+     "w": "the",
+     "f": 1556
+    },
+    {
+     "w": "sacred",
+     "f": 1563
+    },
+    {
+     "w": "sword",
+     "f": 1577
+    },
+    {
+     "w": "severs",
+     "f": 1588
+    },
+    {
+     "w": "Jatayu's",
+     "f": 1602
+    },
+    {
+     "w": "mighty",
+     "f": 1618
+    },
+    {
+     "w": "wing.",
+     "f": 1632
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 13,
+   "text": "He plummets from the heavens,",
+   "t0": 55.8,
+   "t1": 57.325,
+   "f0": 1674,
+   "f1": 1720,
+   "words": [
+    {
+     "w": "He",
+     "f": 1674
+    },
+    {
+     "w": "plummets",
+     "f": 1678
+    },
+    {
+     "w": "from",
+     "f": 1693
+    },
+    {
+     "w": "the",
+     "f": 1701
+    },
+    {
+     "w": "heavens,",
+     "f": 1706
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 13,
+   "text": "crashing onto the burning earth.",
+   "t0": 57.325,
+   "t1": 59.04,
+   "f0": 1720,
+   "f1": 1771,
+   "words": [
+    {
+     "w": "crashing",
+     "f": 1720
+    },
+    {
+     "w": "onto",
+     "f": 1735
+    },
+    {
+     "w": "the",
+     "f": 1743
+    },
+    {
+     "w": "burning",
+     "f": 1748
+    },
+    {
+     "w": "earth.",
+     "f": 1762
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 14,
+   "text": "Yet, as Sita weeps for her fallen protector,",
+   "t0": 59.59,
+   "t1": 62.238,
+   "f0": 1788,
+   "f1": 1867,
+   "words": [
+    {
+     "w": "Yet,",
+     "f": 1788
+    },
+    {
+     "w": "as",
+     "f": 1795
+    },
+    {
+     "w": "Sita",
+     "f": 1799
+    },
+    {
+     "w": "weeps",
+     "f": 1808
+    },
+    {
+     "w": "for",
+     "f": 1819
+    },
+    {
+     "w": "her",
+     "f": 1826
+    },
+    {
+     "w": "fallen",
+     "f": 1833
+    },
+    {
+     "w": "protector,",
+     "f": 1847
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 14,
+   "text": "Jatayu stays conscious just long enough...",
+   "t0": 62.238,
+   "t1": 64.81,
+   "f0": 1867,
+   "f1": 1944,
+   "words": [
+    {
+     "w": "Jatayu",
+     "f": 1867
+    },
+    {
+     "w": "stays",
+     "f": 1881
+    },
+    {
+     "w": "conscious",
+     "f": 1892
+    },
+    {
+     "w": "just",
+     "f": 1913
+    },
+    {
+     "w": "long",
+     "f": 1922
+    },
+    {
+     "w": "enough...",
+     "f": 1931
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 15,
+   "text": "to tell Rama the truth.",
+   "t0": 65.71,
+   "t1": 67.14,
+   "f0": 1971,
+   "f1": 2014,
+   "words": [
+    {
+     "w": "to",
+     "f": 1971
+    },
+    {
+     "w": "tell",
+     "f": 1976
+    },
+    {
+     "w": "Rama",
+     "f": 1986
+    },
+    {
+     "w": "the",
+     "f": 1995
+    },
+    {
+     "w": "truth.",
+     "f": 2002
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 16,
+   "text": "Even in certain defeat,",
+   "t0": 68.24,
+   "t1": 69.808,
+   "f0": 2047,
+   "f1": 2094,
+   "words": [
+    {
+     "w": "Even",
+     "f": 2047
+    },
+    {
+     "w": "in",
+     "f": 2057
+    },
+    {
+     "w": "certain",
+     "f": 2062
+    },
+    {
+     "w": "defeat,",
+     "f": 2079
+    }
+   ]
+  },
+  {
+   "i": 27,
+   "line": 16,
+   "text": "a hero's duty is his ultimate weapon.",
+   "t0": 69.808,
+   "t1": 72.2,
+   "f0": 2094,
+   "f1": 2166,
+   "words": [
+    {
+     "w": "a",
+     "f": 2094
+    },
+    {
+     "w": "hero's",
+     "f": 2097
+    },
+    {
+     "w": "duty",
+     "f": 2109
+    },
+    {
+     "w": "is",
+     "f": 2119
+    },
+    {
+     "w": "his",
+     "f": 2124
+    },
+    {
+     "w": "ultimate",
+     "f": 2131
+    },
+    {
+     "w": "weapon.",
+     "f": 2151
+    }
+   ]
+  }
+ ]
+}

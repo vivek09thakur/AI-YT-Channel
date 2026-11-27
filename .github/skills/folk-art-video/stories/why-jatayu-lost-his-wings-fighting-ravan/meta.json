@@ -1,0 +1,10 @@
+{
+ "title": "Why Jatayu Lost His Wings",
+ "description": "The tragic and heroic battle of Jatayu against the ten-headed demon king Ravana to protect Sita.",
+ "topic": "Why Jatayu lost his wings fighting Ravana",
+ "voice": "en-GB-RyanNeural",
+ "duration": 75.2,
+ "engine": "folk-art-video",
+ "provider": "gemini",
+ "model": "gemini-3.5-flash-lite"
+}
