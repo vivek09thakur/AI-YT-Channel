@@ -1,5 +1,18 @@
 [
  {
+  "dir": "nlm/how-recommendation-algorithms-predict-wh-31",
+  "slug": "how-recommendation-algorithms-predict-wh",
+  "run": "31",
+  "run_url": "https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45924123177",
+  "title": "How Do Algorithms Know What You Want to Watch?",
+  "topic": "How recommendation algorithms predict what you want to watch",
+  "genre": "ai",
+  "format": "short",
+  "duration": 76.433333,
+  "date": "2026-11-27",
+  "reel_bytes": 7030712
+ },
+ {
   "dir": "nlm/why-the-footprints-on-the-moon-will-last-26",
   "slug": "why-the-footprints-on-the-moon-will-last",
   "run": "26",

@@ -4,6 +4,7 @@ Newest first. Auto-researched 9:16 Video Overviews. Open `nlm/index.html` for th
 
 | Date | Genre | Title | Length | Video | Run |
 |---|---|---|---|---|---|
+| 2026-11-27 | ai | **How Do Algorithms Know What You Want to Watch?** | 1:16 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/how-recommendation-algorithms-predict-wh-31/reel.mp4) (7 MB) | [#31](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45924123177) |
 | 2026-11-26 | space | **Why Do Footprints on the Moon Last Millions of Years?** | 1:10 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-the-footprints-on-the-moon-will-last-26/reel.mp4) (4 MB) | [#26](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45794498202) |
 | 2026-11-26 | science | **How Do Trees Pull Water Hundreds of Feet High?** | 1:14 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/how-trees-pull-water-hundreds-of-feet-hi-25/reel.mp4) (7 MB) | [#25](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45737587386) |
 | 2026-11-25 | technology | **How Do Noise-Canceling Headphones Silence Sound?** | 1:11 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/how-noise-canceling-headphones-silence-s-20/reel.mp4) (9 MB) | [#20](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45587989242) |

@@ -1,0 +1,69 @@
+{
+ "title": "How Do Algorithms Know What You Want to Watch?",
+ "topic": "How recommendation algorithms predict what you want to watch",
+ "genre": "ai",
+ "slug": "how-recommendation-algorithms-predict-wh",
+ "format": "short",
+ "description": "Discover how streaming platforms use collaborative filtering and deep learning to predict your viewing preferences. Learn how recommendation algorithms turn your watch history into personalized content suggestions. Subscribe and follow us for more.",
+ "hashtags": [
+  "#recommendation",
+  "#algorithm",
+  "#streaming",
+  "#netflix",
+  "#youtube",
+  "#ai",
+  "#tech",
+  "#machinelearning",
+  "#personalization",
+  "#analytics",
+  "#data",
+  "#software"
+ ],
+ "cta": "If you learned something new, support us by subscribing to the channel and following us for more.",
+ "caption_youtube": "Discover how streaming platforms use collaborative filtering and deep learning to predict your viewing preferences. Learn how recommendation algorithms turn your watch history into personalized content suggestions. Subscribe and follow us for more.\n\n#recommendation #algorithm #streaming #netflix #youtube #ai #tech #machinelearning #personalization #analytics #data #software #shorts",
+ "caption_instagram": "Discover how streaming platforms use collaborative filtering and deep learning to predict your viewing preferences. Learn how recommendation algorithms turn your watch history into personalized content suggestions. Subscribe and follow us for more.\n\n#recommendation #algorithm #streaming #netflix #youtube #ai #tech #machinelearning #personalization #analytics #data #software #reels #explore #learnsomethingnew",
+ "notebook_id": "b07e73f8-f8a5-4d43-b4a7-7fc5fc806cba",
+ "sources": [
+  {
+   "title": "A Survey on Reinforcement Learning for Recommender Systems - arXiv",
+   "url": "https://arxiv.org/pdf/2109.10665"
+  },
+  {
+   "title": "Because You Watched: How Do Streaming Services' Recommender Systems Influence Aesthetic Choice? - PMC",
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12649538/"
+  },
+  {
+   "title": "Collaborative Filtering vs Content-Based Filtering - Zyneto",
+   "url": "https://zyneto.com/blog/collaborative-filtering-vs-content-based"
+  },
+  {
+   "title": "Deep Neural Networks for YouTube Recommendations - Google Research",
+   "url": "https://research.google.com/pubs/archive/45530.pdf"
+  },
+  {
+   "title": "Foundation Model for Personalized Recommendation | by Netflix Technology Blog",
+   "url": "https://netflixtechblog.com/foundation-model-for-personalized-recommendation-1a0bd8e02d39"
+  },
+  {
+   "title": "How Netflix's Recommendations System Works",
+   "url": "https://help.netflix.com/en/node/100639"
+  },
+  {
+   "title": "How do recommendation algorithms decide what you see? - Craig 'n' Dave",
+   "url": "https://craigndave.org/algorithms-decide-what-you-see/"
+  },
+  {
+   "title": "Introduction to Recommender Systems - Oracle",
+   "url": "https://www.oracle.com/a/ocom/docs/oracle-ds-introduction-to-recommendation-engines.pdf"
+  },
+  {
+   "title": "Recommender System - The Decision Lab",
+   "url": "https://thedecisionlab.com/reference-guide/computer-science/recommender-system"
+  },
+  {
+   "title": "Unbiased Recommender Systems with Implicit Feedback - arXiv",
+   "url": "https://arxiv.org/pdf/2608.16704"
+  }
+ ],
+ "generator": "notebooklm video overview"
+}
