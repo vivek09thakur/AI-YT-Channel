@@ -1,0 +1,960 @@
+{
+ "fps": 30,
+ "duration": 67.68,
+ "total_frames": 2030,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "Would you marry someone who begs you never",
+   "t0": 0.8,
+   "t1": 2.654,
+   "f0": 24,
+   "f1": 80,
+   "words": [
+    {
+     "w": "Would",
+     "f": 24
+    },
+    {
+     "w": "you",
+     "f": 32
+    },
+    {
+     "w": "marry",
+     "f": 37
+    },
+    {
+     "w": "someone",
+     "f": 45
+    },
+    {
+     "w": "who",
+     "f": 56
+    },
+    {
+     "w": "begs",
+     "f": 61
+    },
+    {
+     "w": "you",
+     "f": 67
+    },
+    {
+     "w": "never",
+     "f": 72
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 0,
+   "text": "to question their actions...",
+   "t0": 2.654,
+   "t1": 3.82,
+   "f0": 80,
+   "f1": 115,
+   "words": [
+    {
+     "w": "to",
+     "f": 80
+    },
+    {
+     "w": "question",
+     "f": 83
+    },
+    {
+     "w": "their",
+     "f": 96
+    },
+    {
+     "w": "actions...",
+     "f": 103
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "no matter how cruel they seem?",
+   "t0": 4.72,
+   "t1": 6.53,
+   "f0": 142,
+   "f1": 196,
+   "words": [
+    {
+     "w": "no",
+     "f": 142
+    },
+    {
+     "w": "matter",
+     "f": 146
+    },
+    {
+     "w": "how",
+     "f": 160
+    },
+    {
+     "w": "cruel",
+     "f": 166
+    },
+    {
+     "w": "they",
+     "f": 178
+    },
+    {
+     "w": "seem?",
+     "f": 187
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 2,
+   "text": "King Shantanu falls hopelessly in love with",
+   "t0": 7.63,
+   "t1": 9.973,
+   "f0": 229,
+   "f1": 299,
+   "words": [
+    {
+     "w": "King",
+     "f": 229
+    },
+    {
+     "w": "Shantanu",
+     "f": 236
+    },
+    {
+     "w": "falls",
+     "f": 252
+    },
+    {
+     "w": "hopelessly",
+     "f": 261
+    },
+    {
+     "w": "in",
+     "f": 280
+    },
+    {
+     "w": "love",
+     "f": 284
+    },
+    {
+     "w": "with",
+     "f": 292
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "a breathtaking celestial woman by the riverbank.",
+   "t0": 9.973,
+   "t1": 12.57,
+   "f0": 299,
+   "f1": 377,
+   "words": [
+    {
+     "w": "a",
+     "f": 299
+    },
+    {
+     "w": "breathtaking",
+     "f": 301
+    },
+    {
+     "w": "celestial",
+     "f": 324
+    },
+    {
+     "w": "woman",
+     "f": 341
+    },
+    {
+     "w": "by",
+     "f": 350
+    },
+    {
+     "w": "the",
+     "f": 354
+    },
+    {
+     "w": "riverbank.",
+     "f": 360
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 3,
+   "text": "She agrees to be his queen,",
+   "t0": 13.12,
+   "t1": 14.687,
+   "f0": 394,
+   "f1": 441,
+   "words": [
+    {
+     "w": "She",
+     "f": 394
+    },
+    {
+     "w": "agrees",
+     "f": 400
+    },
+    {
+     "w": "to",
+     "f": 414
+    },
+    {
+     "w": "be",
+     "f": 418
+    },
+    {
+     "w": "his",
+     "f": 423
+    },
+    {
+     "w": "queen,",
+     "f": 429
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "but drops a chilling ultimatum:",
+   "t0": 14.687,
+   "t1": 16.628,
+   "f0": 441,
+   "f1": 499,
+   "words": [
+    {
+     "w": "but",
+     "f": 441
+    },
+    {
+     "w": "drops",
+     "f": 447
+    },
+    {
+     "w": "a",
+     "f": 459
+    },
+    {
+     "w": "chilling",
+     "f": 461
+    },
+    {
+     "w": "ultimatum:",
+     "f": 479
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 3,
+   "text": "he must never ask why",
+   "t0": 16.628,
+   "t1": 17.897,
+   "f0": 499,
+   "f1": 537,
+   "words": [
+    {
+     "w": "he",
+     "f": 499
+    },
+    {
+     "w": "must",
+     "f": 503
+    },
+    {
+     "w": "never",
+     "f": 512
+    },
+    {
+     "w": "ask",
+     "f": 523
+    },
+    {
+     "w": "why",
+     "f": 530
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "she does what she does,",
+   "t0": 17.897,
+   "t1": 19.24,
+   "f0": 537,
+   "f1": 577,
+   "words": [
+    {
+     "w": "she",
+     "f": 537
+    },
+    {
+     "w": "does",
+     "f": 544
+    },
+    {
+     "w": "what",
+     "f": 553
+    },
+    {
+     "w": "she",
+     "f": 562
+    },
+    {
+     "w": "does,",
+     "f": 568
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 4,
+   "text": "or she will vanish forever.",
+   "t0": 19.46,
+   "t1": 20.97,
+   "f0": 584,
+   "f1": 629,
+   "words": [
+    {
+     "w": "or",
+     "f": 584
+    },
+    {
+     "w": "she",
+     "f": 588
+    },
+    {
+     "w": "will",
+     "f": 594
+    },
+    {
+     "w": "vanish",
+     "f": 602
+    },
+    {
+     "w": "forever.",
+     "f": 615
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 5,
+   "text": "The king agrees, blinded by desire.",
+   "t0": 22.07,
+   "t1": 24.5,
+   "f0": 662,
+   "f1": 735,
+   "words": [
+    {
+     "w": "The",
+     "f": 662
+    },
+    {
+     "w": "king",
+     "f": 670
+    },
+    {
+     "w": "agrees,",
+     "f": 680
+    },
+    {
+     "w": "blinded",
+     "f": 696
+    },
+    {
+     "w": "by",
+     "f": 714
+    },
+    {
+     "w": "desire.",
+     "f": 719
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 6,
+   "text": "Yet his heart shatters into pieces when",
+   "t0": 25.05,
+   "t1": 27.219,
+   "f0": 752,
+   "f1": 817,
+   "words": [
+    {
+     "w": "Yet",
+     "f": 752
+    },
+    {
+     "w": "his",
+     "f": 757
+    },
+    {
+     "w": "heart",
+     "f": 763
+    },
+    {
+     "w": "shatters",
+     "f": 773
+    },
+    {
+     "w": "into",
+     "f": 789
+    },
+    {
+     "w": "pieces",
+     "f": 797
+    },
+    {
+     "w": "when",
+     "f": 809
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 6,
+   "text": "his divine bride calmly walks to the rushing river...",
+   "t0": 27.219,
+   "t1": 29.98,
+   "f0": 817,
+   "f1": 899,
+   "words": [
+    {
+     "w": "his",
+     "f": 817
+    },
+    {
+     "w": "divine",
+     "f": 822
+    },
+    {
+     "w": "bride",
+     "f": 834
+    },
+    {
+     "w": "calmly",
+     "f": 844
+    },
+    {
+     "w": "walks",
+     "f": 856
+    },
+    {
+     "w": "to",
+     "f": 866
+    },
+    {
+     "w": "the",
+     "f": 870
+    },
+    {
+     "w": "rushing",
+     "f": 876
+    },
+    {
+     "w": "river...",
+     "f": 890
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 7,
+   "text": "and drowns their first newborn child.",
+   "t0": 30.88,
+   "t1": 33.13,
+   "f0": 926,
+   "f1": 994,
+   "words": [
+    {
+     "w": "and",
+     "f": 926
+    },
+    {
+     "w": "drowns",
+     "f": 933
+    },
+    {
+     "w": "their",
+     "f": 946
+    },
+    {
+     "w": "first",
+     "f": 957
+    },
+    {
+     "w": "newborn",
+     "f": 968
+    },
+    {
+     "w": "child.",
+     "f": 983
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 8,
+   "text": "He stays silent, bound by his promise,",
+   "t0": 34.23,
+   "t1": 36.585,
+   "f0": 1027,
+   "f1": 1098,
+   "words": [
+    {
+     "w": "He",
+     "f": 1027
+    },
+    {
+     "w": "stays",
+     "f": 1032
+    },
+    {
+     "w": "silent,",
+     "f": 1043
+    },
+    {
+     "w": "bound",
+     "f": 1058
+    },
+    {
+     "w": "by",
+     "f": 1069
+    },
+    {
+     "w": "his",
+     "f": 1074
+    },
+    {
+     "w": "promise,",
+     "f": 1081
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 8,
+   "text": "as she repeats this unthinkable act seven more times.",
+   "t0": 36.585,
+   "t1": 40.04,
+   "f0": 1098,
+   "f1": 1201,
+   "words": [
+    {
+     "w": "as",
+     "f": 1098
+    },
+    {
+     "w": "she",
+     "f": 1102
+    },
+    {
+     "w": "repeats",
+     "f": 1109
+    },
+    {
+     "w": "this",
+     "f": 1126
+    },
+    {
+     "w": "unthinkable",
+     "f": 1135
+    },
+    {
+     "w": "act",
+     "f": 1161
+    },
+    {
+     "w": "seven",
+     "f": 1168
+    },
+    {
+     "w": "more",
+     "f": 1180
+    },
+    {
+     "w": "times.",
+     "f": 1189
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 9,
+   "text": "When she lifts their eighth son toward the water,",
+   "t0": 41.14,
+   "t1": 43.83,
+   "f0": 1234,
+   "f1": 1315,
+   "words": [
+    {
+     "w": "When",
+     "f": 1234
+    },
+    {
+     "w": "she",
+     "f": 1242
+    },
+    {
+     "w": "lifts",
+     "f": 1248
+    },
+    {
+     "w": "their",
+     "f": 1258
+    },
+    {
+     "w": "eighth",
+     "f": 1268
+    },
+    {
+     "w": "son",
+     "f": 1281
+    },
+    {
+     "w": "toward",
+     "f": 1287
+    },
+    {
+     "w": "the",
+     "f": 1299
+    },
+    {
+     "w": "water,",
+     "f": 1305
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 9,
+   "text": "the broken father finally breaks",
+   "t0": 43.83,
+   "t1": 45.712,
+   "f0": 1315,
+   "f1": 1371,
+   "words": [
+    {
+     "w": "the",
+     "f": 1315
+    },
+    {
+     "w": "broken",
+     "f": 1321
+    },
+    {
+     "w": "father",
+     "f": 1333
+    },
+    {
+     "w": "finally",
+     "f": 1345
+    },
+    {
+     "w": "breaks",
+     "f": 1359
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 9,
+   "text": "his vow and screams why.",
+   "t0": 45.712,
+   "t1": 46.99,
+   "f0": 1371,
+   "f1": 1410,
+   "words": [
+    {
+     "w": "his",
+     "f": 1371
+    },
+    {
+     "w": "vow",
+     "f": 1377
+    },
+    {
+     "w": "and",
+     "f": 1383
+    },
+    {
+     "w": "screams",
+     "f": 1390
+    },
+    {
+     "w": "why.",
+     "f": 1404
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 10,
+   "text": "She smiles, holding the crying baby alive,",
+   "t0": 48.09,
+   "t1": 50.725,
+   "f0": 1443,
+   "f1": 1522,
+   "words": [
+    {
+     "w": "She",
+     "f": 1443
+    },
+    {
+     "w": "smiles,",
+     "f": 1450
+    },
+    {
+     "w": "holding",
+     "f": 1464
+    },
+    {
+     "w": "the",
+     "f": 1480
+    },
+    {
+     "w": "crying",
+     "f": 1487
+    },
+    {
+     "w": "baby",
+     "f": 1501
+    },
+    {
+     "w": "alive,",
+     "f": 1510
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 10,
+   "text": "and reveals the shocking truth.",
+   "t0": 50.725,
+   "t1": 52.74,
+   "f0": 1522,
+   "f1": 1582,
+   "words": [
+    {
+     "w": "and",
+     "f": 1522
+    },
+    {
+     "w": "reveals",
+     "f": 1529
+    },
+    {
+     "w": "the",
+     "f": 1545
+    },
+    {
+     "w": "shocking",
+     "f": 1552
+    },
+    {
+     "w": "truth.",
+     "f": 1571
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 11,
+   "text": "These weren't murders,",
+   "t0": 53.29,
+   "t1": 54.54,
+   "f0": 1599,
+   "f1": 1636,
+   "words": [
+    {
+     "w": "These",
+     "f": 1599
+    },
+    {
+     "w": "weren't",
+     "f": 1609
+    },
+    {
+     "w": "murders,",
+     "f": 1622
+    }
+   ]
+  },
+  {
+   "i": 22,
+   "line": 11,
+   "text": "but a merciful release from",
+   "t0": 54.54,
+   "t1": 56.137,
+   "f0": 1636,
+   "f1": 1684,
+   "words": [
+    {
+     "w": "but",
+     "f": 1636
+    },
+    {
+     "w": "a",
+     "f": 1642
+    },
+    {
+     "w": "merciful",
+     "f": 1645
+    },
+    {
+     "w": "release",
+     "f": 1661
+    },
+    {
+     "w": "from",
+     "f": 1676
+    }
+   ]
+  },
+  {
+   "i": 23,
+   "line": 11,
+   "text": "a heavy curse for celestial beings.",
+   "t0": 56.137,
+   "t1": 58.15,
+   "f0": 1684,
+   "f1": 1744,
+   "words": [
+    {
+     "w": "a",
+     "f": 1684
+    },
+    {
+     "w": "heavy",
+     "f": 1686
+    },
+    {
+     "w": "curse",
+     "f": 1697
+    },
+    {
+     "w": "for",
+     "f": 1707
+    },
+    {
+     "w": "celestial",
+     "f": 1713
+    },
+    {
+     "w": "beings.",
+     "f": 1732
+    }
+   ]
+  },
+  {
+   "i": 24,
+   "line": 12,
+   "text": "She vanishes into the mist,",
+   "t0": 59.25,
+   "t1": 60.743,
+   "f0": 1778,
+   "f1": 1822,
+   "words": [
+    {
+     "w": "She",
+     "f": 1778
+    },
+    {
+     "w": "vanishes",
+     "f": 1784
+    },
+    {
+     "w": "into",
+     "f": 1800
+    },
+    {
+     "w": "the",
+     "f": 1808
+    },
+    {
+     "w": "mist,",
+     "f": 1814
+    }
+   ]
+  },
+  {
+   "i": 25,
+   "line": 12,
+   "text": "leaving a grieving king and",
+   "t0": 60.743,
+   "t1": 62.304,
+   "f0": 1822,
+   "f1": 1869,
+   "words": [
+    {
+     "w": "leaving",
+     "f": 1822
+    },
+    {
+     "w": "a",
+     "f": 1837
+    },
+    {
+     "w": "grieving",
+     "f": 1839
+    },
+    {
+     "w": "king",
+     "f": 1855
+    },
+    {
+     "w": "and",
+     "f": 1863
+    }
+   ]
+  },
+  {
+   "i": 26,
+   "line": 12,
+   "text": "a child destined to shape the Mahabharata.",
+   "t0": 62.304,
+   "t1": 64.68,
+   "f0": 1869,
+   "f1": 1940,
+   "words": [
+    {
+     "w": "a",
+     "f": 1869
+    },
+    {
+     "w": "child",
+     "f": 1871
+    },
+    {
+     "w": "destined",
+     "f": 1881
+    },
+    {
+     "w": "to",
+     "f": 1898
+    },
+    {
+     "w": "shape",
+     "f": 1902
+    },
+    {
+     "w": "the",
+     "f": 1912
+    },
+    {
+     "w": "Mahabharata.",
+     "f": 1918
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,98 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 67.68,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Would you marry someone who begs you never to question their actions...",
+   "t0": 0.8,
+   "t1": 3.82,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "no matter how cruel they seem?",
+   "t0": 4.72,
+   "t1": 6.53,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "King Shantanu falls hopelessly in love with a breathtaking celestial woman by the riverbank.",
+   "t0": 7.63,
+   "t1": 12.57,
+   "para": true
+  },
+  {
+   "i": 3,
+   "text": "She agrees to be his queen, but drops a chilling ultimatum: he must never ask why she does what she does,",
+   "t0": 13.12,
+   "t1": 19.24,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "or she will vanish forever.",
+   "t0": 19.46,
+   "t1": 20.97,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "The king agrees, blinded by desire.",
+   "t0": 22.07,
+   "t1": 24.5,
+   "para": true
+  },
+  {
+   "i": 6,
+   "text": "Yet his heart shatters into pieces when his divine bride calmly walks to the rushing river...",
+   "t0": 25.05,
+   "t1": 29.98,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "and drowns their first newborn child.",
+   "t0": 30.88,
+   "t1": 33.13,
+   "para": false
+  },
+  {
+   "i": 8,
+   "text": "He stays silent, bound by his promise, as she repeats this unthinkable act seven more times.",
+   "t0": 34.23,
+   "t1": 40.04,
+   "para": true
+  },
+  {
+   "i": 9,
+   "text": "When she lifts their eighth son toward the water, the broken father finally breaks his vow and screams why.",
+   "t0": 41.14,
+   "t1": 46.99,
+   "para": true
+  },
+  {
+   "i": 10,
+   "text": "She smiles, holding the crying baby alive, and reveals the shocking truth.",
+   "t0": 48.09,
+   "t1": 52.74,
+   "para": true
+  },
+  {
+   "i": 11,
+   "text": "These weren't murders, but a merciful release from a heavy curse for celestial beings.",
+   "t0": 53.29,
+   "t1": 58.15,
+   "para": false
+  },
+  {
+   "i": 12,
+   "text": "She vanishes into the mist, leaving a grieving king and a child destined to shape the Mahabharata.",
+   "t0": 59.25,
+   "t1": 64.68,
+   "para": true
+  }
+ ]
+}
