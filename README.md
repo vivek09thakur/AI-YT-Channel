@@ -4,6 +4,7 @@ Newest first. Landscape = YouTube 16:9, Shorts = 9:16. Open `index.html` (or ena
 
 | Date | Title | Topic | Length | Landscape | Shorts | Run |
 |---|---|---|---|---|---|---|
+| 2026-11-27 | **Why Jatayu Lost His Wings** | Why Jatayu lost his wings fighting Ravana | 1:15 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-jatayu-lost-his-wings-fighting-ravan-55/shorts.mp4) (6 MB) | [#55](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45980161614) |
 | 2026-11-27 | **Why Ganga Married King Shantanu on One Condition** | Why Ganga Married King Shantanu on One Condition | 1:07 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-ganga-married-king-shantanu-on-one-c-54/shorts.mp4) (7 MB) | [#54](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45929933449) |
 | 2026-11-26 | **Why Krishna Stole the Clothes of the Gopis** | Why Krishna Stole the Clothes of the Gopis | 0:52 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-krishna-stole-the-clothes-of-the-gop-49/shorts.mp4) (5 MB) | [#49](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45799187525) |
 | 2026-11-26 | **Why Hanuman Forgot His Divine Powers** | Why Hanuman forgot his own divine powers | 1:01 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-hanuman-forgot-his-own-divine-powers-48/shorts.mp4) (7 MB) | [#48](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45750647804) |
