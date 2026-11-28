@@ -1,0 +1,757 @@
+{
+ "fps": 30,
+ "duration": 55.88,
+ "total_frames": 1676,
+ "phrases": [
+  {
+   "i": 0,
+   "line": 0,
+   "text": "What is the true price of ambition?",
+   "t0": 0.8,
+   "t1": 2.54,
+   "f0": 24,
+   "f1": 76,
+   "words": [
+    {
+     "w": "What",
+     "f": 24
+    },
+    {
+     "w": "is",
+     "f": 31
+    },
+    {
+     "w": "the",
+     "f": 35
+    },
+    {
+     "w": "true",
+     "f": 41
+    },
+    {
+     "w": "price",
+     "f": 48
+    },
+    {
+     "w": "of",
+     "f": 58
+    },
+    {
+     "w": "ambition?",
+     "f": 61
+    }
+   ]
+  },
+  {
+   "i": 1,
+   "line": 1,
+   "text": "Young Ekalavya bows before a clay statue of Dronacharya,",
+   "t0": 3.64,
+   "t1": 7.292,
+   "f0": 109,
+   "f1": 219,
+   "words": [
+    {
+     "w": "Young",
+     "f": 109
+    },
+    {
+     "w": "Ekalavya",
+     "f": 121
+    },
+    {
+     "w": "bows",
+     "f": 140
+    },
+    {
+     "w": "before",
+     "f": 149
+    },
+    {
+     "w": "a",
+     "f": 163
+    },
+    {
+     "w": "clay",
+     "f": 165
+    },
+    {
+     "w": "statue",
+     "f": 174
+    },
+    {
+     "w": "of",
+     "f": 188
+    },
+    {
+     "w": "Dronacharya,",
+     "f": 193
+    }
+   ]
+  },
+  {
+   "i": 2,
+   "line": 1,
+   "text": "mastering archery in total solitude.",
+   "t0": 7.292,
+   "t1": 9.7,
+   "f0": 219,
+   "f1": 291,
+   "words": [
+    {
+     "w": "mastering",
+     "f": 219
+    },
+    {
+     "w": "archery",
+     "f": 240
+    },
+    {
+     "w": "in",
+     "f": 256
+    },
+    {
+     "w": "total",
+     "f": 261
+    },
+    {
+     "w": "solitude.",
+     "f": 272
+    }
+   ]
+  },
+  {
+   "i": 3,
+   "line": 2,
+   "text": "Through sheer willpower,",
+   "t0": 10.25,
+   "t1": 11.703,
+   "f0": 308,
+   "f1": 351,
+   "words": [
+    {
+     "w": "Through",
+     "f": 308
+    },
+    {
+     "w": "sheer",
+     "f": 322
+    },
+    {
+     "w": "willpower,",
+     "f": 332
+    }
+   ]
+  },
+  {
+   "i": 4,
+   "line": 2,
+   "text": "he surpasses even the greatest princes",
+   "t0": 11.703,
+   "t1": 13.986,
+   "f0": 351,
+   "f1": 420,
+   "words": [
+    {
+     "w": "he",
+     "f": 351
+    },
+    {
+     "w": "surpasses",
+     "f": 355
+    },
+    {
+     "w": "even",
+     "f": 374
+    },
+    {
+     "w": "the",
+     "f": 382
+    },
+    {
+     "w": "greatest",
+     "f": 388
+    },
+    {
+     "w": "princes",
+     "f": 405
+    }
+   ]
+  },
+  {
+   "i": 5,
+   "line": 2,
+   "text": "of Hastinapura in skill.",
+   "t0": 13.986,
+   "t1": 15.37,
+   "f0": 420,
+   "f1": 461,
+   "words": [
+    {
+     "w": "of",
+     "f": 420
+    },
+    {
+     "w": "Hastinapura",
+     "f": 424
+    },
+    {
+     "w": "in",
+     "f": 447
+    },
+    {
+     "w": "skill.",
+     "f": 451
+    }
+   ]
+  },
+  {
+   "i": 6,
+   "line": 3,
+   "text": "One day,",
+   "t0": 16.47,
+   "t1": 16.927,
+   "f0": 494,
+   "f1": 508,
+   "words": [
+    {
+     "w": "One",
+     "f": 494
+    },
+    {
+     "w": "day,",
+     "f": 501
+    }
+   ]
+  },
+  {
+   "i": 7,
+   "line": 3,
+   "text": "Drona and his royal students discover",
+   "t0": 16.927,
+   "t1": 19.367,
+   "f0": 508,
+   "f1": 581,
+   "words": [
+    {
+     "w": "Drona",
+     "f": 508
+    },
+    {
+     "w": "and",
+     "f": 519
+    },
+    {
+     "w": "his",
+     "f": 526
+    },
+    {
+     "w": "royal",
+     "f": 533
+    },
+    {
+     "w": "students",
+     "f": 544
+    },
+    {
+     "w": "discover",
+     "f": 563
+    }
+   ]
+  },
+  {
+   "i": 8,
+   "line": 3,
+   "text": "the forest archer in action.",
+   "t0": 19.367,
+   "t1": 21.12,
+   "f0": 581,
+   "f1": 634,
+   "words": [
+    {
+     "w": "the",
+     "f": 581
+    },
+    {
+     "w": "forest",
+     "f": 588
+    },
+    {
+     "w": "archer",
+     "f": 602
+    },
+    {
+     "w": "in",
+     "f": 615
+    },
+    {
+     "w": "action.",
+     "f": 620
+    }
+   ]
+  },
+  {
+   "i": 9,
+   "line": 4,
+   "text": "A barking hound interrupts Ekalavya's focus,",
+   "t0": 21.67,
+   "t1": 24.507,
+   "f0": 650,
+   "f1": 735,
+   "words": [
+    {
+     "w": "A",
+     "f": 650
+    },
+    {
+     "w": "barking",
+     "f": 652
+    },
+    {
+     "w": "hound",
+     "f": 668
+    },
+    {
+     "w": "interrupts",
+     "f": 680
+    },
+    {
+     "w": "Ekalavya's",
+     "f": 703
+    },
+    {
+     "w": "focus,",
+     "f": 724
+    }
+   ]
+  },
+  {
+   "i": 10,
+   "line": 4,
+   "text": "and with a blur of arrows,",
+   "t0": 24.507,
+   "t1": 26.04,
+   "f0": 735,
+   "f1": 781,
+   "words": [
+    {
+     "w": "and",
+     "f": 735
+    },
+    {
+     "w": "with",
+     "f": 742
+    },
+    {
+     "w": "a",
+     "f": 751
+    },
+    {
+     "w": "blur",
+     "f": 754
+    },
+    {
+     "w": "of",
+     "f": 763
+    },
+    {
+     "w": "arrows,",
+     "f": 767
+    }
+   ]
+  },
+  {
+   "i": 11,
+   "line": 5,
+   "text": "he seals the dog's mouth without shedding",
+   "t0": 26.26,
+   "t1": 28.457,
+   "f0": 788,
+   "f1": 854,
+   "words": [
+    {
+     "w": "he",
+     "f": 788
+    },
+    {
+     "w": "seals",
+     "f": 792
+    },
+    {
+     "w": "the",
+     "f": 801
+    },
+    {
+     "w": "dog's",
+     "f": 807
+    },
+    {
+     "w": "mouth",
+     "f": 815
+    },
+    {
+     "w": "without",
+     "f": 825
+    },
+    {
+     "w": "shedding",
+     "f": 838
+    }
+   ]
+  },
+  {
+   "i": 12,
+   "line": 5,
+   "text": "a single drop of blood.",
+   "t0": 28.457,
+   "t1": 29.62,
+   "f0": 854,
+   "f1": 889,
+   "words": [
+    {
+     "w": "a",
+     "f": 854
+    },
+    {
+     "w": "single",
+     "f": 856
+    },
+    {
+     "w": "drop",
+     "f": 867
+    },
+    {
+     "w": "of",
+     "f": 875
+    },
+    {
+     "w": "blood.",
+     "f": 879
+    }
+   ]
+  },
+  {
+   "i": 13,
+   "line": 6,
+   "text": "Stunned by this impossible talent,",
+   "t0": 30.72,
+   "t1": 32.776,
+   "f0": 922,
+   "f1": 983,
+   "words": [
+    {
+     "w": "Stunned",
+     "f": 922
+    },
+    {
+     "w": "by",
+     "f": 936
+    },
+    {
+     "w": "this",
+     "f": 941
+    },
+    {
+     "w": "impossible",
+     "f": 949
+    },
+    {
+     "w": "talent,",
+     "f": 971
+    }
+   ]
+  },
+  {
+   "i": 14,
+   "line": 6,
+   "text": "Drona demands a terrible fee for his unspoken mentorship.",
+   "t0": 32.776,
+   "t1": 36.18,
+   "f0": 983,
+   "f1": 1085,
+   "words": [
+    {
+     "w": "Drona",
+     "f": 983
+    },
+    {
+     "w": "demands",
+     "f": 994
+    },
+    {
+     "w": "a",
+     "f": 1009
+    },
+    {
+     "w": "terrible",
+     "f": 1011
+    },
+    {
+     "w": "fee",
+     "f": 1028
+    },
+    {
+     "w": "for",
+     "f": 1034
+    },
+    {
+     "w": "his",
+     "f": 1041
+    },
+    {
+     "w": "unspoken",
+     "f": 1047
+    },
+    {
+     "w": "mentorship.",
+     "f": 1064
+    }
+   ]
+  },
+  {
+   "i": 15,
+   "line": 7,
+   "text": "He asks for Ekalavya's right thumb.",
+   "t0": 36.73,
+   "t1": 38.95,
+   "f0": 1102,
+   "f1": 1168,
+   "words": [
+    {
+     "w": "He",
+     "f": 1102
+    },
+    {
+     "w": "asks",
+     "f": 1107
+    },
+    {
+     "w": "for",
+     "f": 1116
+    },
+    {
+     "w": "Ekalavya's",
+     "f": 1123
+    },
+    {
+     "w": "right",
+     "f": 1145
+    },
+    {
+     "w": "thumb.",
+     "f": 1157
+    }
+   ]
+  },
+  {
+   "i": 16,
+   "line": 8,
+   "text": "Without a moment of hesitation,",
+   "t0": 40.05,
+   "t1": 41.891,
+   "f0": 1202,
+   "f1": 1257,
+   "words": [
+    {
+     "w": "Without",
+     "f": 1202
+    },
+    {
+     "w": "a",
+     "f": 1216
+    },
+    {
+     "w": "moment",
+     "f": 1218
+    },
+    {
+     "w": "of",
+     "f": 1231
+    },
+    {
+     "w": "hesitation,",
+     "f": 1235
+    }
+   ]
+  },
+  {
+   "i": 17,
+   "line": 8,
+   "text": "the loyal hunter draws his knife and severs it,",
+   "t0": 41.891,
+   "t1": 44.583,
+   "f0": 1257,
+   "f1": 1337,
+   "words": [
+    {
+     "w": "the",
+     "f": 1257
+    },
+    {
+     "w": "loyal",
+     "f": 1263
+    },
+    {
+     "w": "hunter",
+     "f": 1274
+    },
+    {
+     "w": "draws",
+     "f": 1286
+    },
+    {
+     "w": "his",
+     "f": 1297
+    },
+    {
+     "w": "knife",
+     "f": 1303
+    },
+    {
+     "w": "and",
+     "f": 1314
+    },
+    {
+     "w": "severs",
+     "f": 1320
+    },
+    {
+     "w": "it,",
+     "f": 1333
+    }
+   ]
+  },
+  {
+   "i": 18,
+   "line": 8,
+   "text": "offering it to the master.",
+   "t0": 44.583,
+   "t1": 46.07,
+   "f0": 1337,
+   "f1": 1382,
+   "words": [
+    {
+     "w": "offering",
+     "f": 1337
+    },
+    {
+     "w": "it",
+     "f": 1354
+    },
+    {
+     "w": "to",
+     "f": 1359
+    },
+    {
+     "w": "the",
+     "f": 1363
+    },
+    {
+     "w": "master.",
+     "f": 1369
+    }
+   ]
+  },
+  {
+   "i": 19,
+   "line": 9,
+   "text": "Skill without a guru is dangerous,",
+   "t0": 47.17,
+   "t1": 49.194,
+   "f0": 1415,
+   "f1": 1476,
+   "words": [
+    {
+     "w": "Skill",
+     "f": 1415
+    },
+    {
+     "w": "without",
+     "f": 1426
+    },
+    {
+     "w": "a",
+     "f": 1441
+    },
+    {
+     "w": "guru",
+     "f": 1443
+    },
+    {
+     "w": "is",
+     "f": 1452
+    },
+    {
+     "w": "dangerous,",
+     "f": 1456
+    }
+   ]
+  },
+  {
+   "i": 20,
+   "line": 9,
+   "text": "but genius without a thumb changes",
+   "t0": 49.194,
+   "t1": 51.29,
+   "f0": 1476,
+   "f1": 1539,
+   "words": [
+    {
+     "w": "but",
+     "f": 1476
+    },
+    {
+     "w": "genius",
+     "f": 1482
+    },
+    {
+     "w": "without",
+     "f": 1495
+    },
+    {
+     "w": "a",
+     "f": 1511
+    },
+    {
+     "w": "thumb",
+     "f": 1513
+    },
+    {
+     "w": "changes",
+     "f": 1524
+    }
+   ]
+  },
+  {
+   "i": 21,
+   "line": 9,
+   "text": "the history of war forever.",
+   "t0": 51.29,
+   "t1": 52.88,
+   "f0": 1539,
+   "f1": 1586,
+   "words": [
+    {
+     "w": "the",
+     "f": 1539
+    },
+    {
+     "w": "history",
+     "f": 1545
+    },
+    {
+     "w": "of",
+     "f": 1560
+    },
+    {
+     "w": "war",
+     "f": 1565
+    },
+    {
+     "w": "forever.",
+     "f": 1571
+    }
+   ]
+  }
+ ]
+}
