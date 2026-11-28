@@ -4,6 +4,7 @@ Newest first. Auto-researched 9:16 Video Overviews. Open `nlm/index.html` for th
 
 | Date | Genre | Title | Length | Video | Run |
 |---|---|---|---|---|---|
+| 2026-11-28 | space | **Why Is a Day on Venus Longer Than Its Year?** | 1:24 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-a-day-on-venus-is-longer-than-a-year-40/reel.mp4) (7 MB) | [#40](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/46132884177) |
 | 2026-11-28 | physics | **Why Does Helium Really Change Your Voice?** | 1:04 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-helium-makes-your-voice-sound-higher-38/reel.mp4) (7 MB) | [#38](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/46094483151) |
 | 2026-11-27 | ai | **How Do Algorithms Know What You Want to Watch?** | 1:16 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/how-recommendation-algorithms-predict-wh-31/reel.mp4) (7 MB) | [#31](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45924123177) |
 | 2026-11-26 | space | **Why Do Footprints on the Moon Last Millions of Years?** | 1:10 | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/nlm/why-the-footprints-on-the-moon-will-last-26/reel.mp4) (4 MB) | [#26](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45794498202) |
