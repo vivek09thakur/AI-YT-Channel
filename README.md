@@ -4,6 +4,7 @@ Newest first. Landscape = YouTube 16:9, Shorts = 9:16. Open `index.html` (or ena
 
 | Date | Title | Topic | Length | Landscape | Shorts | Run |
 |---|---|---|---|---|---|---|
+| 2026-11-28 | **Why Ekalavya Sacrificed His Thumb \| Mahabharata** | Why Ekalavya had to cut off his thumb | 0:55 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-ekalavya-had-to-cut-off-his-thumb-63/shorts.mp4) (7 MB) | [#63](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/46134082328) |
 | 2026-11-28 | **Why Karna's Chariot Wheel Got Stuck in the Mud** | Why Karna's Chariot Wheel Got Stuck in the Mud | 0:57 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-karna-s-chariot-wheel-got-stuck-in-t-62/shorts.mp4) (5 MB) | [#62](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/46104150969) |
 | 2026-11-27 | **Why Jatayu Lost His Wings** | Why Jatayu lost his wings fighting Ravana | 1:15 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-jatayu-lost-his-wings-fighting-ravan-55/shorts.mp4) (6 MB) | [#55](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45980161614) |
 | 2026-11-27 | **Why Ganga Married King Shantanu on One Condition** | Why Ganga Married King Shantanu on One Condition | 1:07 | - | [download](https://github.com/vivek09thakur/AI-YT-Channel/raw/videos/videos/why-ganga-married-king-shantanu-on-one-c-54/shorts.mp4) (7 MB) | [#54](https://github.com/vivek09thakur/AI-YT-Channel/actions/runs/45929933449) |
