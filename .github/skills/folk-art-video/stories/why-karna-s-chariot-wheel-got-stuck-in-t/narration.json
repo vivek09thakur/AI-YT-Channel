@@ -1,0 +1,105 @@
+{
+ "voice": "en-GB-RyanNeural",
+ "engine": "edge",
+ "duration": 57.27,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Imagine the greatest warrior on the battlefield...",
+   "t0": 0.8,
+   "t1": 3.29,
+   "para": true
+  },
+  {
+   "i": 1,
+   "text": "helpless because of a forgotten curse.",
+   "t0": 4.19,
+   "t1": 6.25,
+   "para": false
+  },
+  {
+   "i": 2,
+   "text": "Karna raises his mighty bow, aiming at Arjuna.",
+   "t0": 7.35,
+   "t1": 10.47,
+   "para": true
+  },
+  {
+   "i": 3,
+   "text": "Victory is finally within his grasp.",
+   "t0": 11.02,
+   "t1": 13.36,
+   "para": false
+  },
+  {
+   "i": 4,
+   "text": "Suddenly, the earth groans beneath him.",
+   "t0": 13.91,
+   "t1": 16.17,
+   "para": false
+  },
+  {
+   "i": 5,
+   "text": "The heavy wheel of Karna's chariot sinks deep into the wet mud.",
+   "t0": 17.27,
+   "t1": 20.73,
+   "para": true
+  },
+  {
+   "i": 6,
+   "text": "Desperate, he steps down to lift it with his bare hands.",
+   "t0": 21.28,
+   "t1": 24.6,
+   "para": false
+  },
+  {
+   "i": 7,
+   "text": "Arjuna hesitates, but Lord Krishna urges him forward.",
+   "t0": 25.7,
+   "t1": 29.18,
+   "para": true
+  },
+  {
+   "i": 8,
+   "text": "Remember the innocent cow Karna once struck by accident, and the sorrowful curse the grieving Brahmin laid upon him?",
+   "t0": 29.73,
+   "t1": 35.82,
+   "para": false
+  },
+  {
+   "i": 9,
+   "text": "Now, in the exact moment he drops his weapons to save his chariot, karma catches up.",
+   "t0": 36.92,
+   "t1": 42.33,
+   "para": true
+  },
+  {
+   "i": 10,
+   "text": "An arrow flies through the dust.",
+   "t0": 43.43,
+   "t1": 45.28,
+   "para": true
+  },
+  {
+   "i": 11,
+   "text": "The unconquerable hero falls.",
+   "t0": 45.83,
+   "t1": 47.96,
+   "para": false
+  },
+  {
+   "i": 12,
+   "text": "Not by superior skill...",
+   "t0": 49.06,
+   "t1": 50.75,
+   "para": true
+  },
+  {
+   "i": 13,
+   "text": "but by the unyielding weight of past mistakes.",
+   "t0": 51.65,
+   "t1": 54.27,
+   "para": false
+  }
+ ]
+}
